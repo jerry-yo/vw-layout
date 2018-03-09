@@ -12,6 +12,5 @@ export default {
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
   .home
-    height: 100%
     background-color: red
 </style>

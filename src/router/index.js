@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/login/login'
-import Home from '@/components/home'
-import Mind from '@/components/mind'
+import Home from '@/components/home/home'
+import Mind from '@/components/mind/mind'
 
 Vue.use(Router)
 

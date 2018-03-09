@@ -2,10 +2,6 @@
   <div class="footer" w-750-98 aspectratio aspect-ratio="750/98">
     <router-link :to="{ name: 'home', path: '/home' }" tag="div" class="home"></router-link>
     <router-link :to="{ name: 'mind', path: '/mind' }" tag="div" class="mind"></router-link>
-    <!-- <div class="home">
-    </div>
-    <div class="mind">
-    </div> -->
   </div>
 </template>
 
