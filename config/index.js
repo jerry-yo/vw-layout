@@ -45,10 +45,10 @@ module.exports = {
 
   build: {
     // Template for index.html
-    index: path.resolve(__dirname, '../slider/index.html'),
+    index: path.resolve(__dirname, '../gt1/index.html'),
 
     // Paths
-    assetsRoot: path.resolve(__dirname, '../slider'),
+    assetsRoot: path.resolve(__dirname, '../gt1'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
 

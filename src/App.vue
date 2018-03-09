@@ -1,5 +1,5 @@
 <template>
-  <div id="app" flexContainer>
+  <div id="app" flexContainer @touchmove.prevent.stop>
     <div flexContainer class="container">
       <router-view/>
     </div>

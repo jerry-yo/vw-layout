@@ -24,10 +24,55 @@
       </div>
 
     </div>
+    <div class="user-order" flexContainer>
+      <div class="my-order">
+        <div class="order-title">我的订单</div>
+        <div class="all-order">
+          <span>全部订单</span>
+        </div>
+      </div>
+      <div class="order-states">
+        <div class="dfk-order">
+          <span>待付款</span>
+        </div>
+        <div class="other-order">
+          <div class="box"></div>
+          <div class="yy-order">
+            <span>预约中</span>
+          </div>
+          <div class="box"></div>
+          <div class="dqr-order">
+            <span>待确认</span>
+          </div>
+          <div class="box"></div>
+          <div class="wc-order">
+            <span>已完成</span>
+          </div>
+          <div class="box"></div>
+          <div class="qx-order">
+            <span>已取消</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="use-list">
+      <div class="car">
+
+      </div>
+      <div class="quan">
+
+      </div>
+      <div class="kefu">
+
+      </div>
+      <div class="banben">
+
+      </div>
+    </div>
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 export default {
   name: 'mind',
   data () {
@@ -48,8 +93,8 @@ export default {
     aspect-ratio:'750:240'
   .mind
     width: 750px
-    background-color: green
     .user-core
+      margin-bottom: 20px
       .user-con
         display: flex
         flex-direction: column
@@ -108,7 +153,7 @@ export default {
           .user-card
             width: 88px
         .user-go
-          width: 118px
+          flex: 1
           line-height: 74px
           height: 74px
           font-size: 24px
@@ -118,4 +163,87 @@ export default {
           background-size: 11px 17px
           background-repeat: no-repeat
           background-position: right center
+          span
+            float: right
+            margin-right: 22px
+    .user-order
+      flex-direction: column
+      height: 220px
+      background-color: #fff
+      margin-bottom: 20px
+      .my-order
+        display: flex
+        padding: 0 30px
+        height: 80px
+        border-bottom: 1px solid #d8d8d8
+        line-height: 80px
+        .order-title
+          flex: 1
+          bg-image('mdd')
+          background-size: 25px 25px
+          background-position: left center
+          background-repeat: no-repeat
+          font-size: 28px
+          color: #747474
+          padding-left: 43px
+        .all-order
+          flex: 1
+          width: 126px
+          font-size: 24px
+          color: #bcbcbc
+          bg-image('leftright')
+          background-size: 15px 24px
+          background-position: center right
+          background-repeat: no-repeat
+          span
+            float: right
+            margin-right: 30px
+      .order-states
+        flex: 1
+        padding-top: 31px
+        display: flex
+        align-items: center
+        justify-content: center
+        overflow: hidden
+        span
+          font-size: 20px
+          color: #979696
+          line-height: 52px
+        .dfk-order
+          width: 90px
+          height: 94px
+          padding-top: 42px
+          bg-image('qb')
+          background-size: 42px 42px
+          background-position: center top
+          background-repeat: no-repeat
+          text-align: center
+        .other-order
+          display: flex
+          width: 580px
+          .box
+            flex: 1
+          .yy-order, .dqr-order, .wc-order, .qx-order
+            width: 90px
+            padding-top: 42px
+            background-size: 42px 42px
+            background-position: center top
+            background-repeat: no-repeat
+          .yy-order
+            bg-image('yy')
+          .dqr-order
+            bg-image('dqr')
+          .wc-order
+            bg-image('wc')
+          .qx-order
+            bg-image('qx')
+    .use-list
+      width: 100%
+      height: auto
+      & > div
+        width: 100%
+        height: 90px
+        margin-bottom: 10px
+        background-color: #fff
+
 </style>
