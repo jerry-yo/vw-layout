@@ -1,5 +1,4 @@
 <template>
-
     <div class="order" flexContainer>
       <div class="title">
         <div class="back" @click="goBack" ></div>
@@ -15,17 +14,32 @@
         </ul>
       </div>
       <div class="order-container">
-
+        <div class="wrapper" ref="wrapperOrder" @touchmove.prevent>
+          <ul class="content">
+            <li v-for="item in order" :key="item">{{item}}</li>
+          </ul>
+        </div>
       </div>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
+import BScroll from 'better-scroll'
 export default {
   name: 'order',
   data () {
     return {
-      orderType: 1
+      orderType: 1,
+      scroll: null
+    }
+  },
+  computed: {
+    order () {
+      let arr = []
+      for (let i = 0; i < 100; i++) {
+        arr.push(i)
+      }
+      return arr
     }
   },
   methods: {
@@ -35,6 +49,13 @@ export default {
     setOrderType (id) {
       this.orderType = id
     }
+  },
+  created () {
+    this.$nextTick(() => {
+      this.scroll = new BScroll(this.$refs.wrapperOrder, {
+        click: true
+      })
+    })
   }
 }
 </script>
@@ -44,6 +65,7 @@ export default {
   .order
     flex-direction: column
     background-color: #f4f4f4
+    overflow: hidden
     .title
       position: relative
       height: 86px
@@ -88,7 +110,14 @@ export default {
           &.active-on
             color: #ff8040
     .order-container
-      flex: 1
-      background-color: #fff
+      height: 500px
+      background-color: red
+      overflow: hidden
+      .wrapper
+        width: 100%
+        height: 100%
+        .content
+          width: 100%
+          height: auto
 
 </style>

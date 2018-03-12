@@ -1,7 +1,7 @@
 <template>
-  <div id="main" flexContainer @touchmove.prevent.stop>
+  <div id="main" flexContainer>
     <div flexContainer class="container">
-      <router-view/>
+      <router-view></router-view>
     </div>
     <v-footer/>
   </div>
