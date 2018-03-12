@@ -27,29 +27,29 @@
     <div class="user-order" flexContainer>
       <div class="my-order">
         <div class="order-title">我的订单</div>
-        <div class="all-order">
+        <div class="all-order" @click="_getOrder('all')">
           <span>全部订单</span>
         </div>
       </div>
       <div class="order-states">
-        <div class="dfk-order">
+        <div class="dfk-order" @click="_getOrder(1)">
           <span>待付款</span>
         </div>
         <div class="other-order">
           <div class="box"></div>
-          <div class="yy-order">
+          <div class="yy-order" @click="_getOrder(2)">
             <span>预约中</span>
           </div>
           <div class="box"></div>
-          <div class="dqr-order">
+          <div class="dqr-order" @click="_getOrder(3)">
             <span>待确认</span>
           </div>
           <div class="box"></div>
-          <div class="wc-order">
+          <div class="wc-order" @click="_getOrder(4)">
             <span>已完成</span>
           </div>
           <div class="box"></div>
-          <div class="qx-order">
+          <div class="qx-order" @click="_getOrder(5)">
             <span>已取消</span>
           </div>
         </div>
@@ -90,6 +90,17 @@ export default {
   data () {
     return {
       name: '绿鲤鱼红鲤鱼与驴'
+    }
+  },
+  methods: {
+    _getOrder (id) {
+      let orderType = 0
+      if (id === 'all') {
+        orderType = 1
+      } else {
+        orderType = id
+      }
+      this.$router.push('/order?type=' + orderType)
     }
   }
 }

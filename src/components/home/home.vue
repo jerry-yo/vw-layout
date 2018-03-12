@@ -11,6 +11,4 @@ export default {
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
-  .home
-    background-color: red
 </style>

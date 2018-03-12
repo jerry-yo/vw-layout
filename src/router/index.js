@@ -1,9 +1,50 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/login/login'
-import Home from '@/components/home/home'
-import Mind from '@/components/mind/mind'
+import appMain from '@/components/appmain.vue'
 
+const loginRouter = {
+  path: '/login',
+  name: 'login',
+  meta: {
+    title: 'GT1-登录'
+  },
+  component: resolve => { require(['@/components/login/login'], resolve) }
+}
+const registerRouter = {
+  path: '/register',
+  name: 'register',
+  meta: {
+    title: 'GT1 - 注册'
+  },
+  component: resolve => { require(['@/components/login/register'], resolve) }
+}
+
+const otherRouter = {
+  path: '/',
+  name: 'otherRouter',
+  redirect: '/home',
+  component: appMain,
+  children: [
+    { path: 'home', name: 'home', component: resolve => { require(['@/components/home/home'], resolve) } },
+    { path: 'mind', name: 'mind', component: resolve => { require(['@/components/mind/mind'], resolve) } }
+  ]
+}
+
+const orderRouter = {
+  path: '/order',
+  name: 'order',
+  meta: {
+    title: ''
+  },
+  component: resolve => { require(['@/components/order/all-order'], resolve) }
+}
+
+const routers = [
+  loginRouter,
+  registerRouter,
+  otherRouter,
+  orderRouter
+]
 Vue.use(Router)
 
 export default new Router({
@@ -12,20 +53,5 @@ export default new Router({
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
   },
-  routes: [{
-    path: '/',
-    redirect: '/home'
-  }, {
-    path: '/home',
-    name: 'home',
-    component: Home
-  }, {
-    name: 'login',
-    path: '/login',
-    component: Login
-  }, {
-    name: 'mind',
-    path: '/mind',
-    component: Mind
-  }]
+  routes: routers
 })

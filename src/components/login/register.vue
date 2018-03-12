@@ -1,18 +1,14 @@
 <template>
-  <div class="login" flexContainer>
-    login
+  <div class="register" flexContainer>
+    register
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 export default {
-  name: 'login'
+  name: 'register'
 }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
-  .login
-    height: 500px
-    background: red
-
 </style>
