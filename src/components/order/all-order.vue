@@ -1,22 +1,23 @@
 <template>
-  <div class="order" flexContainer>
-    <div class="title">
-      <div class="back" @click="goBack" ></div>
-      <span>我的订单</span>
-    </div>
-    <div class="tab-bar">
-      <ul>
-        <li :class="{'active-on':orderType === 1}" @click="setOrderType(1)"><span>预约中</span> </li>
-        <li :class="{'active-on':orderType === 2}" @click="setOrderType(2)"><span>待确认</span> </li>
-        <li :class="{'active-on':orderType === 3}" @click="setOrderType(3)"><span>待付款</span></li>
-        <li :class="{'active-on':orderType === 4}" @click="setOrderType(4)"><span>已完成</span></li>
-        <li :class="{'active-on':orderType === 5}" @click="setOrderType(5)"><span>已取消</span></li>
-      </ul>
-    </div>
-    <div class="order-container">
 
+    <div class="order" flexContainer>
+      <div class="title">
+        <div class="back" @click="goBack" ></div>
+        <span>我的订单</span>
+      </div>
+      <div class="tab-bar">
+        <ul>
+          <li :class="{'active-on':orderType === 1}" @click="setOrderType(1)"><span>预约中</span> </li>
+          <li :class="{'active-on':orderType === 2}" @click="setOrderType(2)"><span>待确认</span> </li>
+          <li :class="{'active-on':orderType === 3}" @click="setOrderType(3)"><span>待付款</span></li>
+          <li :class="{'active-on':orderType === 4}" @click="setOrderType(4)"><span>已完成</span></li>
+          <li :class="{'active-on':orderType === 5}" @click="setOrderType(5)"><span>已取消</span></li>
+        </ul>
+      </div>
+      <div class="order-container">
+
+      </div>
     </div>
-  </div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -42,6 +43,7 @@ export default {
   @import "../../common/stylus/mixin.styl"
   .order
     flex-direction: column
+    background-color: #f4f4f4
     .title
       position: relative
       height: 86px

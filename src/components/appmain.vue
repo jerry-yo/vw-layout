@@ -19,6 +19,7 @@ export default {
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
   #main
+    background-color: #f4f4f4
     flex-direction: column
     min-height: 100vh
     .container
