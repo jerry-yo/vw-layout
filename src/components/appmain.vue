@@ -21,7 +21,7 @@ export default {
   #main
     background-color: #f4f4f4
     flex-direction: column
-    min-height: 100vh
+    height: 100vh
     .container
       flex: 1
 </style>

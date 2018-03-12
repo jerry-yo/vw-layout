@@ -13,12 +13,10 @@
           <li :class="{'active-on':orderType === 5}" @click="setOrderType(5)"><span>已取消</span></li>
         </ul>
       </div>
-      <div class="order-container">
-        <div class="wrapper" ref="wrapperOrder" @touchmove.prevent>
-          <ul class="content">
-            <li v-for="item in order" :key="item">{{item}}</li>
-          </ul>
-        </div>
+      <div class="order-container" ref="wrapperOrder">
+        <ul class="content">
+          <li v-for="item in order" :key="item">{{item}}</li>
+        </ul>
       </div>
     </div>
 </template>
@@ -48,9 +46,12 @@ export default {
     },
     setOrderType (id) {
       this.orderType = id
+    },
+    gogo () {
+      console.log('000')
     }
   },
-  created () {
+  mounted () {
     this.$nextTick(() => {
       this.scroll = new BScroll(this.$refs.wrapperOrder, {
         click: true
@@ -64,6 +65,7 @@ export default {
   @import "../../common/stylus/mixin.styl"
   .order
     flex-direction: column
+    height: 100vh
     background-color: #f4f4f4
     overflow: hidden
     .title
@@ -110,14 +112,11 @@ export default {
           &.active-on
             color: #ff8040
     .order-container
-      height: 500px
+      flex: 1
       background-color: red
       overflow: hidden
-      .wrapper
-        width: 100%
-        height: 100%
-        .content
-          width: 100%
-          height: auto
+      .content
+        position: relative
+        overflow: hidden
 
 </style>

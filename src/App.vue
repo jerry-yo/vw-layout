@@ -1,5 +1,5 @@
 <template>
-  <div id="app" flexContainer @touchmove.prevent.stop>
+  <div id="app" flexContainer @touchmove.prevent>
     <transition :name="'screen-' + (direction === 'next' ? 'in' : 'out')">
       <router-view/>
     </transition>
@@ -19,7 +19,7 @@ export default {
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
   #app
-    min-height: 100vh
+    height: 100vh
     .screen-out-enter-active,
     .screen-out-leave-active,
     .screen-in-enter-active,
