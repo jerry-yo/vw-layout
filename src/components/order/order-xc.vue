@@ -4,7 +4,7 @@
     </div>
     <div class="xc-con">
       <h3>普洗</h3>
-      <p>整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘</p>
+      <p>整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘asdfsadad</p>
     </div>
     <div class="xc-right">
       <span>￥30.00</span>
@@ -52,7 +52,12 @@ export default {
       p
         font-size: 22px
         color: #9f9f9f
+        height: 52px
         line-height: 26px
+        display: -webkit-box
+        -webkit-box-orient: vertical
+        -webkit-line-clamp: 2
+        overflow: hidden
     .xc-right
       width: 170px
       height: 70px

@@ -242,11 +242,11 @@ export default {
               .order-set
                 .del-yy
                   border: 1px solid #bcbcbc
-                  border-radius: 3px
+                  border-radius: 5px
                   color: #bcbcbc
                 .call-dz
                   border: 1px solid #ff8040
-                  border-radius: 3px
+                  border-radius: 5px
                   color: #ff8040
             .order-foot-2
               .car-state
@@ -256,12 +256,11 @@ export default {
                 font-size: 20px
               .order-set
                 .ok-go
-                  background-image:linear-gradient(left, #ff9449, #ff7345)
-                  border-radius: 3px
+                  bg-image('../../common/imgs/btn-bg')
                   color: #ff
                 .call-dz
                   border: 1px solid #ff8040
-                  border-radius: 3px
+                  border-radius: 5px
                   color: #ff8040
             .order-foot-3
               .car-state
@@ -271,8 +270,7 @@ export default {
                 font-size: 20px
               .order-set
                 .go-pay
-                  background-image:linear-gradient(left, #ff9449, #ff7345)
-                  border-radius: 3px
+                  bg-image('../../common/imgs/btn-bg')
                   color: #fff
                 .ungo-pay
                   background-image: #c5c5c5
@@ -286,12 +284,12 @@ export default {
                 .look-order
                   width: 160px
                   border: 1px solid #ff8040
-                  border-radius: 3px
+                  border-radius: 5px
                   color: #ff8040
             .order-foot-5
               .order-set
                 .del-order
                   border: 1px solid #5b5b5b
-                  border-radius: 3px
+                  border-radius: 5px
                   color: #5b5b5b
 </style>

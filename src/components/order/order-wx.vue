@@ -7,7 +7,7 @@
     <div class="wx-con">
     </div>
     <div class="wx-right">
-      <p>我是苏DB5463的车主，我的车子的 前面两个大灯碰了一下墙，不亮了。 引擎盖有明显凸起...</p>
+      <p>我是苏DB5463的车主，我的车子的 前面两个大灯碰了一下墙，不亮了。 引擎盖有明显凸起sdsafasdfasfadsadfsafd</p>
     </div>
   </div>
 </template>
@@ -43,17 +43,21 @@ export default {
       background-size: 27px 6px
       background-repeat: no-repeat
       background-position: left center
-      margin-right: 10px
+      margin-right: 30px
     .wx-right
       flex: 1
       display: flex
       align-items: center
-      height: 120px
-      padding-right: 70px
+      height: 90px
+      padding-right: 36px
       bg-image('../mind/leftright')
       background-size: 15px 24px
       background-repeat: no-repeat
       background-position: right center
+      display: -webkit-box
+      -webkit-box-orient: vertical
+      -webkit-line-clamp: 3
+      overflow: hidden
       p
         font-size: 22px
         color: #9f9f9f
