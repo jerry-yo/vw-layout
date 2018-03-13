@@ -15,7 +15,58 @@
       </div>
       <div class="order-container" ref="wrapperOrder">
         <ul class="content">
-          <li v-for="item in order" :key="item">{{item}}</li>
+          <li v-for="item in order" :key="item.index">
+            <div class="order-title">
+              <div class="img"><img src="" alt="">  </div>
+              <span class="car-id">苏DB5463</span>
+              <div class="order-states" :class="{'by': item.state === 1, 'wx': item.state === 2, 'xc': item.state === 3}"></div>
+            </div>
+            <div class="order-content">
+              <orderBy v-if="item.state === 1">
+              </orderBy>
+              <orderWx v-if="item.state === 2">
+              </orderWx>
+              <orderXc v-if="item.state === 3">
+              </orderXc>
+            </div>
+            <div class="order-foot">
+              <div class="order-foot-1 foot" v-if="item.go === 1">
+                <span class="car-state">已完成</span>
+                <div class="order-set">
+                  <div class="del-yy">取消预约</div>
+                  <div class="call-dz">联系店长</div>
+                </div>
+              </div>
+              <div class="order-foot-2 foot" v-if="item.go === 2">
+                <span class="car-state">已完成</span>
+                <div class="order-set">
+                  <div class="del-yy">取消预约</div>
+                  <div class="call-dz">联系店长</div>
+                </div>
+              </div>
+              <div class="order-foot-3 foot" v-if="item.go === 3">
+                <span class="car-state">已完成</span>
+                <div class="order-set">
+                  <div class="del-yy">取消预约</div>
+                  <div class="call-dz">联系店长</div>
+                </div>
+              </div>
+              <div class="order-foot-4 foot" v-if="item.go === 4">
+                <span class="car-state">已完成</span>
+                <div class="order-set">
+                  <div class="del-yy">取消预约</div>
+                  <div class="call-dz">联系店长</div>
+                </div>
+              </div>
+              <div class="order-foot-5 foot" v-if="item.go === 5">
+                <span class="car-state">已完成</span>
+                <div class="order-set">
+                  <div class="del-yy">取消预约</div>
+                  <div class="call-dz">联系店长</div>
+                </div>
+              </div>
+            </div>
+          </li>
         </ul>
       </div>
     </div>
@@ -23,19 +74,27 @@
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
+import orderBy from './order-by'
+import orderWx from './order-wx'
+import orderXc from './order-xc'
 export default {
   name: 'order',
   data () {
     return {
       orderType: 1,
-      scroll: null
+      scroll: null,
+      index: 1
     }
   },
   computed: {
     order () {
       let arr = []
-      for (let i = 0; i < 100; i++) {
-        arr.push(i)
+      for (let i = 0; i < 10; i++) {
+        arr.push({
+          index: i,
+          state: i % 3 === 0 ? 3 : i % 3,
+          go: i % 5 === 0 ? 5 : i % 5
+        })
       }
       return arr
     }
@@ -57,6 +116,11 @@ export default {
         click: true
       })
     })
+  },
+  components: {
+    orderBy,
+    orderWx,
+    orderXc
   }
 }
 </script>
@@ -113,10 +177,78 @@ export default {
             color: #ff8040
     .order-container
       flex: 1
-      background-color: red
       overflow: hidden
       .content
         position: relative
         overflow: hidden
-
+        li
+          overflow: hidden
+          margin-bottom: 10px
+          .order-title
+            display: flex
+            align-items: center
+            height: 70px
+            background-color: #fff
+            line-height: 70px
+            padding: 0px 30px
+            .img
+              width: 40px
+              height: 40px
+              margin-right: 28px
+              background-color: pink
+            .car-id
+              font-size: 26px
+              color: #5b5b5b
+              margin-right: 29px
+            .order-states
+              width: 76px
+              height: 50px
+              background-size: 100% 100%
+              background-repeat: no-repeat
+              background-position: center center
+              &.by
+                bg-image('by')
+              &.wx
+                bg-image('repair')
+              &.xc
+                bg-image('wash')
+          .order-content
+            overflow: hidden
+          .order-foot
+            display: flex
+            height: 78px
+            background-color: #fff
+            padding: 0px 30px
+            .foot
+              flex: 1
+            .order-foot-1
+              .car-state
+                float: left
+                line-height: 78px
+                color: #ff8040
+                font-size: 20px
+              .order-set
+                display: flex
+                height: 78px
+                align-items: center
+                float: right
+                overflow: hidden
+                & > div
+                  width: 120px
+                  height: 48px
+                  margin-left: 18px
+                  font-size: 20px
+                  line-height: 48px
+                  text-align: center
+                  background-size: 100% 100%
+                  background-repeat: no-repeat
+                  background-position: center center
+                .del-yy
+                  bg-image('bor-2')
+                  color: #bcbcbc
+                .call-dz
+                  bg-image('bor-1')
+                  color: #ff8040
+            .order-foot-2
+              
 </style>

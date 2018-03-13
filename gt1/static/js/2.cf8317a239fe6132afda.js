@@ -1,0 +1,2 @@
+webpackJsonp([2],{"5zCw":function(e,t,r){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var n={render:function(){var e=this.$createElement;return(this._self._c||e)("div",{staticClass:"register",attrs:{flexContainer:""}},[this._v("\n  register\n")])},staticRenderFns:[]};var s=r("VU/8")({name:"register"},n,!1,function(e){r("grI4")},"data-v-8a014dca",null);t.default=s.exports},grI4:function(e,t){}});
+//# sourceMappingURL=2.cf8317a239fe6132afda.js.map
