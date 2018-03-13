@@ -31,38 +31,34 @@
             </div>
             <div class="order-foot">
               <div class="order-foot-1 foot" v-if="item.go === 1">
-                <span class="car-state">已完成</span>
+                <span class="car-state">已过期</span>
                 <div class="order-set">
                   <div class="del-yy">取消预约</div>
                   <div class="call-dz">联系店长</div>
                 </div>
               </div>
               <div class="order-foot-2 foot" v-if="item.go === 2">
-                <span class="car-state">已完成</span>
+                <span class="car-state">已到店</span>
                 <div class="order-set">
-                  <div class="del-yy">取消预约</div>
                   <div class="call-dz">联系店长</div>
+                  <div class="ok-go">确认服务</div>
                 </div>
               </div>
               <div class="order-foot-3 foot" v-if="item.go === 3">
-                <span class="car-state">已完成</span>
+                <span class="car-state">服务进行中</span>
                 <div class="order-set">
-                  <div class="del-yy">取消预约</div>
-                  <div class="call-dz">联系店长</div>
+                  <div class="go-pay">付款</div>
                 </div>
               </div>
               <div class="order-foot-4 foot" v-if="item.go === 4">
-                <span class="car-state">已完成</span>
+                <span class="car-state">2017年05月06日 15:30</span>
                 <div class="order-set">
-                  <div class="del-yy">取消预约</div>
-                  <div class="call-dz">联系店长</div>
+                  <div class="look-order">查看该次检测</div>
                 </div>
               </div>
               <div class="order-foot-5 foot" v-if="item.go === 5">
-                <span class="car-state">已完成</span>
                 <div class="order-set">
-                  <div class="del-yy">取消预约</div>
-                  <div class="call-dz">联系店长</div>
+                  <div class="del-order">删除订单</div>
                 </div>
               </div>
             </div>
@@ -221,12 +217,6 @@ export default {
             padding: 0px 30px
             .foot
               flex: 1
-            .order-foot-1
-              .car-state
-                float: left
-                line-height: 78px
-                color: #ff8040
-                font-size: 20px
               .order-set
                 display: flex
                 height: 78px
@@ -243,12 +233,65 @@ export default {
                   background-size: 100% 100%
                   background-repeat: no-repeat
                   background-position: center center
+            .order-foot-1
+              .car-state
+                float: left
+                line-height: 78px
+                color: #acacac
+                font-size: 20px
+              .order-set
                 .del-yy
-                  bg-image('bor-2')
+                  border: 1px solid #bcbcbc
+                  border-radius: 3px
                   color: #bcbcbc
                 .call-dz
-                  bg-image('bor-1')
+                  border: 1px solid #ff8040
+                  border-radius: 3px
                   color: #ff8040
             .order-foot-2
-              
+              .car-state
+                float: left
+                line-height: 78px
+                color: #ff8040
+                font-size: 20px
+              .order-set
+                .ok-go
+                  background-image:linear-gradient(left, #ff9449, #ff7345)
+                  border-radius: 3px
+                  color: #ff
+                .call-dz
+                  border: 1px solid #ff8040
+                  border-radius: 3px
+                  color: #ff8040
+            .order-foot-3
+              .car-state
+                float: left
+                line-height: 78px
+                color: #ff8040
+                font-size: 20px
+              .order-set
+                .go-pay
+                  background-image:linear-gradient(left, #ff9449, #ff7345)
+                  border-radius: 3px
+                  color: #fff
+                .ungo-pay
+                  background-image: #c5c5c5
+            .order-foot-4
+              .car-state
+                float: left
+                line-height: 78px
+                color: #acacac
+                font-size: 20px
+              .order-set
+                .look-order
+                  width: 160px
+                  border: 1px solid #ff8040
+                  border-radius: 3px
+                  color: #ff8040
+            .order-foot-5
+              .order-set
+                .del-order
+                  border: 1px solid #5b5b5b
+                  border-radius: 3px
+                  color: #5b5b5b
 </style>
