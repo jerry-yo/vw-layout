@@ -9,7 +9,7 @@
         </div>
         <div class="user-info">
           <div class="user-img">
-            <img src="./yy@3x.png" alt="">
+            <img src="../../common/imgs/mind/yy@3x.png" alt="">
           </div>
           <div class="user-xm">
             <span>{{name}}</span>
@@ -133,9 +133,9 @@ export default {
           font-weight: 600
           transform: skewX(-15deg)
         .user-xx
-          bg-image('xx')
+          bg-image('../../common/imgs/mind/xx')
         .user-sz
-          bg-image('sz')
+          bg-image('../../common/imgs/mind/sz')
         .user-xx, .user-sz
           display: inline-block
           width: 83px
@@ -181,7 +181,7 @@ export default {
           font-size: 24px
           color: #fff
           text-align: left
-          bg-image('sj')
+          bg-image('../../common/imgs/mind/sj')
           background-size: 11px 17px
           background-repeat: no-repeat
           background-position: right center
@@ -201,7 +201,7 @@ export default {
         line-height: 80px
         .order-title
           flex: 1
-          bg-image('mdd')
+          bg-image('../../common/imgs/mind/mdd')
           background-size: 25px 25px
           background-position: left center
           background-repeat: no-repeat
@@ -213,7 +213,7 @@ export default {
           width: 126px
           font-size: 24px
           color: #bcbcbc
-          bg-image('leftright')
+          bg-image('../../common/imgs/mind/leftright')
           background-size: 15px 24px
           background-position: center right
           background-repeat: no-repeat
@@ -235,7 +235,7 @@ export default {
           width: 70px
           height: 94px
           padding-top: 42px
-          bg-image('qb')
+          bg-image('../../common/imgs/mind/qb')
           background-size: 42px 42px
           background-position: center top
           background-repeat: no-repeat
@@ -253,13 +253,13 @@ export default {
             background-repeat: no-repeat
             text-align: center
           .yy-order
-            bg-image('yy')
+            bg-image('../../common/imgs/mind/yy')
           .dqr-order
-            bg-image('dqr')
+            bg-image('../../common/imgs/mind/dqr')
           .wc-order
-            bg-image('wc')
+            bg-image('../../common/imgs/mind/wc')
           .qx-order
-            bg-image('qx')
+            bg-image('../../common/imgs/mind/qx')
     .use-list
       width: 100%
       height: auto
@@ -287,7 +287,7 @@ export default {
           font-size: 24px
           color: #bcbcbc
           text-align: right
-          bg-image('dh')
+          bg-image('../../common/imgs/mind/dh')
           background-size: 20px 20px
           background-repeat: no-repeat
           background-position: left center
@@ -295,7 +295,7 @@ export default {
           flex: 1
           margin-right: 30px
           padding-right: 32px
-          bg-image('leftright')
+          bg-image('../../common/imgs/mind/leftright')
           background-size: 15px 24px
           background-repeat: no-repeat
           background-position: right center
@@ -304,12 +304,12 @@ export default {
           color: #bcbcbc
           text-align: right
       .car
-        bg-image('mcar')
+        bg-image('../../common/imgs/mind/mcar')
       .quan
-        bg-image('yhq')
+        bg-image('../../common/imgs/mind/yhq')
       .kefu
-        bg-image('kf')
+        bg-image('../../common/imgs/mind/kf')
       .banben
-        bg-image('gt')
+        bg-image('../../common/imgs/mind/gt')
 
 </style>

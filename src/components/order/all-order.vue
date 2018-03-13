@@ -151,7 +151,7 @@ export default {
       .back
         width: 120px
         height: 100%
-        bg-image('back')
+        bg-image('../../common/imgs/order/back')
         background-size: 18px 30px
         background-repeat: no-repeat
         background-position: 30px center
@@ -203,11 +203,11 @@ export default {
               background-repeat: no-repeat
               background-position: center center
               &.by
-                bg-image('by')
+                bg-image('../../common/imgs/order/by')
               &.wx
-                bg-image('repair')
+                bg-image('../../common/imgs/order/repair')
               &.xc
-                bg-image('wash')
+                bg-image('../../common/imgs/order/wash')
           .order-content
             overflow: hidden
           .order-foot

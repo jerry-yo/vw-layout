@@ -4,7 +4,7 @@
     </div>
     <div class="xc-con">
       <h3>普洗</h3>
-      <p>整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘asdfsadad</p>
+      <p>整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘沙发沙发沙发上发生的发生发生沙发的发放</p>
     </div>
     <div class="xc-right">
       <span>￥30.00</span>
@@ -30,7 +30,7 @@ export default {
       width: 124px
       height: 70px
       overflow: hidden
-      bg-image('wash-bg')
+      bg-image('../../common/imgs/order/wash-bg')
       background-size: 124px 70px
       background-repeat: no-repeat
       background-position: right center
@@ -54,10 +54,7 @@ export default {
         color: #9f9f9f
         height: 52px
         line-height: 26px
-        display: -webkit-box
-        -webkit-box-orient: vertical
-        -webkit-line-clamp: 2
-        overflow: hidden
+        no-wrap-many('2')
     .xc-right
       width: 170px
       height: 70px

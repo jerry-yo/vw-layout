@@ -7,7 +7,7 @@
     <div class="wx-con">
     </div>
     <div class="wx-right">
-      <p>我是苏DB5463的车主，我的车子的 前面两个大灯碰了一下墙，不亮了。 引擎盖有明显凸起sdsafasdfasfadsadfsafd</p>
+      <p>我是苏DB5463的车主，我的车子的 前面两个大灯碰了一下墙，不亮了。 引擎盖有明显凸起发来撒斯洛伐克来看卡师傅啦事发时卡沙发上刊登</p>
     </div>
   </div>
 </template>
@@ -50,16 +50,19 @@ export default {
       align-items: center
       height: 90px
       padding-right: 36px
-      bg-image('../mind/leftright')
+      bg-image('../../common/imgs/mind/leftright')
       background-size: 15px 24px
       background-repeat: no-repeat
       background-position: right center
-      display: -webkit-box
-      -webkit-box-orient: vertical
-      -webkit-line-clamp: 3
-      overflow: hidden
       p
         font-size: 22px
         color: #9f9f9f
+        height: 90px
         line-height: 30px
+        word-break: break-all
+        overflow : hidden
+        text-overflow: ellipsis
+        display: -webkit-box
+        -webkit-line-clamp: 3
+        -webkit-box-orient: vertical
 </style>

@@ -34,17 +34,17 @@ export default {
       font-size: 20px
       color: #8a8989
     .home
-      bg-image('home')
+      bg-image('../../common/imgs/footer/home')
       background-size: 55px 63px
       background-position: center center
       background-repeat: no-repeat
       &.active-on
-        bg-image('home-active')
+        bg-image('../../common/imgs/footer/home-active')
     .mind
-      bg-image('mind')
+      bg-image('../../common/imgs/footer/mind')
       background-size: 55px 63px
       background-position: center center
       background-repeat: no-repeat
       &.active-on
-        bg-image('mind-active')
+        bg-image('../../common/imgs/footer/mind-active')
 </style>

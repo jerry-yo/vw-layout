@@ -9,7 +9,7 @@
       </div>
       <div class="by-right">
         <div class="img">
-          <img src="./wash-bg@2x.png" alt="">
+          <img src="../../common/imgs/order/wash-bg@2x.png" alt="">
           <span>赠送</span>
         </div>
       </div>
@@ -59,7 +59,7 @@ export default {
         background-position: left center
       .by-right
         width: 154px
-        bg-image('../mind/leftright')
+        bg-image('../../common/imgs/mind/leftright')
         background-size: 15px 24px
         background-repeat: no-repeat
         background-position: right center

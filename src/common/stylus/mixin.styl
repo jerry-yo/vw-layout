@@ -9,3 +9,10 @@ no-wrap()
   text-overflow: ellipsis
   overflow: hidden
   white-space: nowrap
+// 多行省略
+no-wrap-many($num)
+  overflow : hidden
+  text-overflow: ellipsis
+  display: -webkit-box
+  -webkit-line-clamp: $num
+  -webkit-box-orient: vertical
