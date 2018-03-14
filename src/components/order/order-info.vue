@@ -1,14 +1,25 @@
 <template>
   <div class="order-info" flexContainer>
-    <div class="order-img">
-      <div class="order-bg-1 orderbg">
-      </div>
-      <div class="order-bg-2 orderbg">
-      </div>
-    </div>
     <div class="title">
       <div class="back" @click="goBack" ></div>
       <span>订单详情</span>
+    </div>
+    <div class="order-img" v-if="orderInfo.go >= 4">
+      <div class="order-bg-1 order-bg" v-if="orderInfo.go === 5">
+        <div class="bg-1">
+        </div>
+        <div class="bg-font">
+          预约已取消
+        </div>
+      </div>
+      <div class="order-bg-2 order-bg" v-if="orderInfo.go === 4">
+        <div class="bg-1">
+        </div>
+        <div class="bg-font">
+          <h3>服务完成</h3>
+          <h2>奇特异快速保养-华润店sdsadsa</h2>
+        </div>
+      </div>
     </div>
     <div class="order-title">
       <div class="top">
@@ -71,7 +82,53 @@ export default {
     background-color: #f4f4f4
     overflow: hidden
     .order-img
+      display: flex
+      height: 200px
       margin-bottom: 10px
+      .order-bg
+        position: relative
+        flex: 1
+        background-color: #fff
+        background-size: 750px 200px
+        background-repeat: no-repeat
+        background-position: center center
+        .bg-1
+          position: absolute
+          left: 116px
+          top: 0px
+          width: 184px
+          height: 200px
+          background-repeat: no-repeat
+        .bg-font
+          display: flex
+          flex-direction: column
+          justify-content: center
+          position: absolute
+          height: 200px
+      .order-bg-1
+        bg-image('../../common/imgs/orderinfo/order-infobg-1')
+        .bg-1
+          bg-image('../../common/imgs/orderinfo/order-bg-1')
+          background-position: center center
+          background-size: 114px 120px
+        .bg-font
+          left: 395px
+          line-height: 200px
+          font-size: 24px
+          color: #fff
+      .order-bg-2
+        bg-image('../../common/imgs/orderinfo/order-infobg-2')
+        .bg-1
+          bg-image('../../common/imgs/orderinfo/order-bg-2')
+          background-size: 184px 103px
+          background-position: left 63px
+        .bg-font
+          left: 354px
+          h2, h3
+            font-size: 24px
+            line-height: 38px
+            color: #fff
+
     .title
       position: relative
       height: 86px
@@ -116,7 +173,7 @@ export default {
         .call-dz
           width: 143px
           text-align: right
-          line-height: 40px
+          line-height: 44px
           font-size: 24px
           color: #ababab
           bg-image('../../common/imgs/orderinfo/call-dz')

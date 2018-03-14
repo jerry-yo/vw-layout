@@ -87,7 +87,7 @@ export default {
           width: 47px
           height: 28px
           text-align: center
-          line-height: 28px
+          line-height: 30px
           font-size: 18px
           color: #ffffff
           background-color: #ff8040
