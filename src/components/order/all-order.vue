@@ -16,12 +16,12 @@
       <div class="order-container" ref="wrapperOrder">
         <ul class="content">
           <li v-for="item in order" :key="item.index">
-            <div class="order-title">
+            <div class="order-title" @click="goOrderInfo(item)">
               <div class="img"><img src="" alt="">  </div>
               <span class="car-id">苏DB5463</span>
               <div class="order-states" :class="{'by': item.state === 1, 'wx': item.state === 2, 'xc': item.state === 3}"></div>
             </div>
-            <div class="order-content">
+            <div class="order-content"  @click="goOrderInfo(item)">
               <orderBy v-if="item.state === 1">
               </orderBy>
               <orderWx v-if="item.state === 2">
@@ -104,6 +104,10 @@ export default {
     },
     gogo () {
       console.log('000')
+    },
+    goOrderInfo (res) {
+      console.log(res)
+      this.$router.push('/orderinfo?res=' + JSON.stringify(res))
     }
   },
   mounted () {

@@ -38,12 +38,21 @@ const orderRouter = {
   },
   component: resolve => { require(['@/components/order/all-order'], resolve) }
 }
+const orderInfoRouter = {
+  path: '/orderinfo',
+  name: 'orderInfo',
+  meta: {
+    title: ''
+  },
+  component: resolve => { require(['@/components/order/order-info'], resolve) }
+}
 
 const routers = [
   loginRouter,
   registerRouter,
   otherRouter,
-  orderRouter
+  orderRouter,
+  orderInfoRouter
 ]
 Vue.use(Router)
 
