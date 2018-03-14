@@ -1,12 +1,12 @@
 <template>
-  <div class="order-info-wx">
-    order-info-wx
+  <div class="order-test">
+    order-test
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'orderInfoWx'
+  name: 'orderTest'
 }
 </script>
 

@@ -15,7 +15,7 @@
       </div>
       <div class="order-container" ref="wrapperOrder">
         <ul class="content">
-          <li v-for="item in order" :key="item.index">
+          <li v-for="item in order" :key="item.index" v-if="item.go === orderType">
             <div class="order-title" @click="goOrderInfo(item)">
               <div class="img"><img src="" alt="">  </div>
               <span class="car-id">苏DB5463</span>

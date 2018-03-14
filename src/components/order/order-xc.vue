@@ -25,6 +25,7 @@ export default {
     align-items: center
     height: 147px
     padding-right: 30px
+    background: #fafafa
     .xc-left
       box-sizing: border-box
       width: 124px

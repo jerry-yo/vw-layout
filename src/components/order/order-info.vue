@@ -25,7 +25,10 @@
         </div>
         <div class="order-title">
           <div class="top">
-            <h2>奇特异快速保养-华润店</h2>
+            <div class="top-name">
+              <span>奇特异快速保养-华润店</span>
+              <div class="order-states" :class="{'by': orderInfo.state === 1, 'wx': orderInfo.state === 2, 'xc': orderInfo.state === 3}"></div>
+            </div>
             <div class="call-dz">
               联系店长
             </div>
@@ -44,19 +47,19 @@
           </orderXc>
         </div>
         <div class="order-other">
-          <div class="other-info" v-if="orderInfo.state !== 3 && orderInfo.go === 1">
+          <div class="other-info">
             <div class="other-fw">
               <span>原项目服务费</span>
               <span>{{'￥' + 20.00}}</span>
             </div>
-            <div class="time-yy">
+            <div class="time-yy" v-if="orderInfo.go === 1 || orderInfo.go === 5">
               <span>预约时间</span>
               <div class="time">
                 <span>今天</span>
                 <span>15:55</span>
               </div>
             </div>
-            <div class="time-over">
+            <div class="time-over" v-if="orderInfo.go === 1 || orderInfo.go === 5">
               <span>到期时间</span>
               <div class="time">
                 <span>今天</span>
@@ -64,12 +67,20 @@
               </div>
             </div>
           </div>
+          <div class="order-money" v-if="orderInfo.go === 4">
+            <p v-if="orderInfo.state !== 3"> 配件费 <span>{{'￥' + '200.00'}}</span>  </p>
+            <p v-if="orderInfo.state !== 3">总服务费 <span>{{'￥' + '20.00'}}</span>  </p>
+            <p v-if="orderInfo.state === 3">总金额 <span>{{'￥' + '220.00'}}</span>  </p>
+            <p>优惠 <span class="green">{{'￥' + '5.00'}}</span>  </p>
+            <p>实付 <span class="red">{{'￥' + '215.00'}}</span>  </p>
+          </div>
           <div class="other">
             <p>预约单号:  <span>2055056652555555</span> </p>
             <p>下单时间:  <span>2018年12月12日 15:30</span> </p>
             <p v-if="orderInfo.state !== 3">预约时间:  <span>2018年12月12日 15:30</span> </p>
             <p>到店时间:  <span>2018年12月12日 15:30</span> </p>
             <p>服务时间:  <span>2018年12月12日 15:30</span> </p>
+            <p>取消时间:  <span>2018年12月12日 15:30</span> </p>
           </div>
         </div>
       </div>
@@ -235,13 +246,28 @@ export default {
         padding: 0px 30px
         .top
           display: flex
-          padding-top: 20px
+          padding-top: 10px
           height: 60px
-          h2
+          .top-name
             flex: 1
-            line-height: 40px
+            display: flex
+            line-height: 50px
             font-size: 30px
-            color: #5b5b5b
+            span
+              color: #5b5b5b
+              margin-right: 20px
+            .order-states
+              width: 76px
+              height: 50px
+              background-size: 100% 100%
+              background-repeat: no-repeat
+              background-position: center center
+              &.by
+                bg-image('../../common/imgs/order/by')
+              &.wx
+                bg-image('../../common/imgs/order/repair')
+              &.xc
+                bg-image('../../common/imgs/order/wash')
           .call-dz
             width: 143px
             text-align: right
@@ -314,8 +340,24 @@ export default {
               span
                 margin-left: 10px
                 color: #5b5b5b
+        .order-money
+          padding: 0px 30px
+          overflow: hidden
+          background-color: #fff
+          p
+            height: 60px
+            line-height: 60px
+            font-size: 24px
+            color: #5b5b5b
+            span
+              float: right
+            .green
+              color: #68e07e
+            .red
+              color: #ff7474
         .other
-          padding: 20px 30px 0px 30px
+          padding: 30px
+          background-color: #f2f2f2
           p
             font-size: 20px
             color: #5b5b5b
