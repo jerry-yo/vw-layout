@@ -360,7 +360,7 @@ export default {
           background-color: #f2f2f2
           p
             font-size: 20px
-            color: #5b5b5b
+            color: #9c9c9c
             line-height: 32px
             span
               margin-left: 15px
