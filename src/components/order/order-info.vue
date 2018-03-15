@@ -52,6 +52,15 @@
               <span>原项目服务费</span>
               <span>{{'￥' + 20.00}}</span>
             </div>
+            <div class="other-yhq" v-if="orderInfo.go === 3">
+              <div class="yhq-con">
+                <span>优惠券</span>
+                <div class="yhq">
+                  <span>暂无优惠券</span>
+                </div>
+              </div>
+            </div>
+            <orderTest v-if="orderInfo.go === 2"></orderTest>
             <div class="time-yy" v-if="orderInfo.go === 1 || orderInfo.go === 5">
               <span>预约时间</span>
               <div class="time">
@@ -126,6 +135,7 @@ import BScroll from 'better-scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
 import orderXc from '@/components/order/order-xc'
+import orderTest from '@/components/order/order-test'
 export default {
   name: 'orderInfo',
   data () {
@@ -148,7 +158,8 @@ export default {
   components: {
     orderBy,
     orderWx,
-    orderXc
+    orderXc,
+    orderTest
   }
 }
 </script>
@@ -306,6 +317,32 @@ export default {
               font-size: 24px
               color: #ff6868
               text-align: right
+          .other-yhq
+            display: flex
+            padding: 0px 30px
+            margin-bottom: 10px
+            height: 72px
+            background-color: #fff
+            .yhq-con
+              flex: 1
+              display: flex
+              font-size: 24px
+              color: #868686
+              line-height: 72px
+              bg-image('../../common/imgs/mind/yhq')
+              background-size: 25px 25px
+              background-repeat: no-repeat
+              background-position: left center
+              & > span
+                margin-left: 55px
+              .yhq
+                flex: 1
+                text-align: right
+                padding-right: 35px
+                bg-image('../../common/imgs/mind/leftright')
+                background-size: 15px 24px
+                background-repeat: no-repeat
+                background-position: right center
           .time-yy
             display: flex
             height: 60px
