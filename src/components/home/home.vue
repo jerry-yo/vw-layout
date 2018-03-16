@@ -9,6 +9,11 @@
       <div class="message">
       </div>
     </div>
+    <div class="slider">
+    </div>
+    <div class="car-info">
+
+    </div>
   </div>
 </template>
 
@@ -23,7 +28,7 @@ export default {
   .home
     flex-direction: column
     bg-image('../../common/imgs/home/homebg')
-    background-size: 750px auto
+    background-size: 750px 540px
     background-repeat: no-repeat
     background-position:center top
     .home-top
@@ -73,4 +78,14 @@ export default {
         background-size: 42px 42px
         background-repeat: no-repeat
         background-position: right center
+    .slider
+      height: 300px
+    .car-info
+      height: 187px
+      width: 706px
+      margin: 0 auto
+      bg-image('../../common/imgs/home/carbg')
+      background-size: 706px 187px
+      background-repeat: no-repeat
+      background-position: center center
 </style>
