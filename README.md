@@ -1,6 +1,6 @@
 # vw-layout
 
-> A Vue.js project
+> vw适配方案，主要是用于解决移动端布局的问题。
 
 ## Build Setup
 
