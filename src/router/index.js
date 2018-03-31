@@ -18,6 +18,22 @@ const registerRouter = {
   },
   component: resolve => { require(['@/components/login/register'], resolve) }
 }
+const setpwdRouter = {
+  path: '/setpwd',
+  name: 'setpwd',
+  meta: {
+    title: 'GT1 - 注册'
+  },
+  component: resolve => { require(['@/components/login/set-pwd'], resolve) }
+}
+const setcodeRouter = {
+  path: '/setcode',
+  name: 'setcode',
+  meta: {
+    title: 'GT1 - 注册'
+  },
+  component: resolve => { require(['@/components/login/set-code'], resolve) }
+}
 
 const otherRouter = {
   path: '/',
@@ -50,6 +66,8 @@ const orderInfoRouter = {
 const routers = [
   loginRouter,
   registerRouter,
+  setcodeRouter,
+  setpwdRouter,
   otherRouter,
   orderRouter,
   orderInfoRouter

@@ -1,14 +1,12 @@
 <template>
-  <div id="main" flexContainer>
-    <div flexContainer class="container">
-      <router-view></router-view>
+  <div id="mycar" flexContainer>
+    <div class="">
+
     </div>
-    <v-footer/>
   </div>
 </template>
 
-<script type="text/ecmascript-6">
-import vfooter from '@/components/footer/footer'
+<script>
 export default {
   name: 'appmain',
   components: {

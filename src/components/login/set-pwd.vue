@@ -1,17 +1,25 @@
 <template>
-  <div class="login" flexContainer>
+  <div class="setpwd" flexContainer>
     <div class="title">
       <div class="register">
         注册
       </div>
     </div>
     <div class="section">
-      <h1>欢迎登录GT1养车</h1>
+      <h1>编辑密码</h1>
       <div class="input">
-        <input type="number" name="" value="" placeholder="请输入您的手机号">
+        <input type="number" name="" value="" placeholder="编辑密码">
+        <div class="seen-btn">
+
+        </div>
+      </div>
+      <div class="input">
+        <input type="number" name="" value="" placeholder="确认密码">
+        <div class="seen-btn">
+
+        </div>
       </div>
       <div class="btn">
-
       </div>
     </div>
   </div>
@@ -19,13 +27,13 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'login'
+  name: 'setpwd'
 }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
-  .login
+  .setpwd
     min-height: 100vh
     display: flex
     flex-direction: column
@@ -66,9 +74,12 @@ export default {
         position: relative
         margin-top: 120px
         height: 94px
+        display: flex
         background-color: blue
+        &:nth-child(1)
+          margin-bottom: 34px
         & > input
-          width: 100%
+          flex: 1
           height: 94px
           padding-left: 82px
           bg-image('../../common/imgs/logo60')
@@ -78,6 +89,12 @@ export default {
           &::-webkit-input-placeholder
             font-size: 28px
             color: #9e9e9e
+        .seen-btn
+          width: 60px
+          bg-image('../../common/imgs/logo60')
+          background-size: 24px 38px
+          background-repeat: no-repeat
+          background-position: right center
         &:after
           content: ""
           position: absolute
@@ -89,7 +106,7 @@ export default {
           border-radius: 4px
       .btn
         height: 92px
-        margin-top: 176px
+        margin-top: 147px
         /* bg-image('../../common/imgs') */
         background-color: #ff5c3a
         background-size: 60px 60px
