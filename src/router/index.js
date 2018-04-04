@@ -5,33 +5,21 @@ import appMain from '@/components/appmain.vue'
 const loginRouter = {
   path: '/login',
   name: 'login',
-  meta: {
-    title: 'GT1-登录'
-  },
   component: resolve => { require(['@/components/login/login'], resolve) }
 }
 const registerRouter = {
   path: '/register',
   name: 'register',
-  meta: {
-    title: 'GT1 - 注册'
-  },
   component: resolve => { require(['@/components/login/register'], resolve) }
 }
 const setpwdRouter = {
   path: '/setpwd',
   name: 'setpwd',
-  meta: {
-    title: 'GT1 - 注册'
-  },
   component: resolve => { require(['@/components/login/set-pwd'], resolve) }
 }
 const setcodeRouter = {
   path: '/setcode',
   name: 'setcode',
-  meta: {
-    title: 'GT1 - 注册'
-  },
   component: resolve => { require(['@/components/login/set-code'], resolve) }
 }
 
@@ -49,20 +37,58 @@ const otherRouter = {
 const orderRouter = {
   path: '/order',
   name: 'order',
-  meta: {
-    title: ''
-  },
   component: resolve => { require(['@/components/order/all-order'], resolve) }
 }
 const orderInfoRouter = {
   path: '/orderinfo',
   name: 'orderInfo',
-  meta: {
-    title: ''
-  },
   component: resolve => { require(['@/components/order/order-info'], resolve) }
 }
-
+const addcarAge = {
+  path: '/addcar-age',
+  name: 'addcarAge',
+  component: resolve => { require(['@/components/mycar/addcar-age'], resolve) }
+}
+const addcarBrand = {
+  path: '/addcar-brand',
+  name: 'addcarBrand',
+  component: resolve => { require(['@/components/mycar/addcar-brand'], resolve) }
+}
+const addcarDisplacement = {
+  path: '/addcar-displacement',
+  name: 'addcarDisplacement',
+  component: resolve => { require(['@/components/mycar/addcar-displacement'], resolve) }
+}
+const addcarModels = {
+  path: '/addcar-models',
+  name: 'addcarModels',
+  component: resolve => { require(['@/components/mycar/addcar-models'], resolve) }
+}
+const carOwner = {
+  path: '/car-owner',
+  name: 'carOwner',
+  component: resolve => { require(['@/components/mycar/car-owner'], resolve) }
+}
+const carSharing = {
+  path: '/car-sharing',
+  name: 'carSharing',
+  component: resolve => { require(['@/components/mycar/car-sharing'], resolve) }
+}
+const detectionRecord = {
+  path: '/detection-record',
+  name: 'detectionRecord',
+  component: resolve => { require(['@/components/mycar/detection-record'], resolve) }
+}
+const Garage = {
+  path: '/garage',
+  name: 'Garage',
+  component: resolve => { require(['@/components/mycar/garage'], resolve) }
+}
+const vehicleManagement = {
+  path: '/vehicle-management',
+  name: 'vehicleManagement',
+  component: resolve => { require(['@/components/mycar/vehicle-management'], resolve) }
+}
 const routers = [
   loginRouter,
   registerRouter,
@@ -70,7 +96,16 @@ const routers = [
   setpwdRouter,
   otherRouter,
   orderRouter,
-  orderInfoRouter
+  orderInfoRouter,
+  addcarAge,
+  addcarModels,
+  addcarBrand,
+  addcarDisplacement,
+  carOwner,
+  carSharing,
+  detectionRecord,
+  Garage,
+  vehicleManagement
 ]
 Vue.use(Router)
 

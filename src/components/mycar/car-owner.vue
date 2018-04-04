@@ -1,25 +1,19 @@
-<template>
-  <div id="mycar" flexContainer>
-    <div class="">
+// 车主认证
 
-    </div>
+<template>
+  <div class="car-owner" flexContainer>
   </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 export default {
-  name: 'appmain',
-  components: {
-    'v-footer': vfooter
-  }
+  name: 'carOwner'
 }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
-  #main
+  .car-owner
     background-color: #f4f4f4
     flex-direction: column
     height: 100vh
-    .container
-      flex: 1
 </style>

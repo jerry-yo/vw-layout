@@ -10,19 +10,24 @@
       </div>
     </div>
     <div class="slider">
+      <div class="bb">
+        别动我
+      </div>
     </div>
     <div class="car-info">
-      <div class="car-img">
-        <img src="" alt="">
-      </div>
-      <div class="car-name">
-        <div class="name">东风本田-思域</div>
-        <div class="card-info">
-          <div class="card">苏DB5A68</div>
-          <div class="way">2300km</div>
+      <div class="car-con">
+        <div class="car-img">
+          <img src="" alt="">
         </div>
+        <div class="car-name">
+          <div class="name">东风本田-思域</div>
+          <div class="card-info">
+            <div class="card">苏DB5A68</div>
+            <div class="way">2300km</div>
+          </div>
+        </div>
+        <div class="car-check" data-num="20">查看检测单</div>
       </div>
-      <div class="car-check" data-num="20">查看检测单</div>
     </div>
     <div class="gt1-menu">
       <ul>
@@ -56,6 +61,9 @@
       <div class="beizhu">
         灰色服务还未上线 敬请期待
       </div>
+    </div>
+    <div class="box">
+
     </div>
   </div>
 </template>
@@ -124,79 +132,88 @@ export default {
         background-position: right center
     .slider
       height: 300px
+      background-color: red
+      .bb
+        height: 300px
+        line-height: 300px
     .car-info
       height: 187px
-      width: 706px
-      padding: 4px 7px 12px 7px
-      display: flex
-      margin: 0 auto
-      bg-image('../../common/imgs/home/carbg')
-      background-size: 706px 187px
-      background-repeat: no-repeat
-      background-position: center center
-      .car-img
-        width: 127px
+      .car-con
+        width: 706px
+        height: 187px
+        padding: 4px 7px 12px 7px
+        margin: 0 auto
         display: flex
-        align-items: center
-        justify-content: center
-        img
-          width: 50px
-          height: 50px
-          background-color: red
-      .car-name
-        flex: 1
-        display: flex
-        flex-direction: column
-        align-items: flex-start
-        justify-content: center
-        .name
-          height: 40px
-          line-height: 40px
-          font-size: 30px
-          color: #5b5b5b
-          font-weight: bolder
-          transform: skewX(-10deg)
-        .card-info
-          padding-top: 7px
-          height: 32px
-          display: flex
-          font-size: 24px
-          color: #5b5b5b
-          line-height: 34px
-          .card
-            width: 140px
-            border-right: 1px solid #5b5b5b
-          .way
-            flex: 1
-            padding-left: 28px
-      .car-check
-        position: relative
-        width: 160px
-        bg-image('../../common/imgs/home/jcd')
-        background-size: 67px 65px
+        bg-image('../../common/imgs/home/carbg')
+        background-size: 706px 187px
         background-repeat: no-repeat
-        background-position: center 40px
-        padding-top: 120px
-        line-height: 30px
-        color: #636363
-        font-size: 24px
-        text-align: center
-        border-left: 1px solid #e7e7e7
-        &:after
-          content: attr(data-num)
-          line-height: 20px
+        background-position: center center
+        overflow: hidden
+        .car-img
+          width: 127px
+          display: flex
+          align-items: center
+          justify-content: center
+          img
+            width: 50px
+            height: 50px
+            background-color: red
+        .car-name
+          flex: 1
+          display: flex
+          flex-direction: column
+          align-items: flex-start
+          justify-content: center
+          border-right: 1px solid #e7e7e7
+          .name
+            height: 40px
+            line-height: 40px
+            font-size: 30px
+            color: #5b5b5b
+            font-weight: bolder
+            transform: skewX(-10deg)
+          .card-info
+            padding-top: 7px
+            height: 32px
+            display: flex
+            font-size: 24px
+            color: #5b5b5b
+            line-height: 34px
+            .card
+              width: 140px
+              border-right: 1px solid #5b5b5b
+            .way
+              flex: 1
+              padding-left: 28px
+        .car-check
+          position: relative
+          width: 160px
+          bg-image('../../common/imgs/home/jcd')
+          background-size: 67px 65px
+          background-repeat: no-repeat
+          background-position: center 40px
+          padding-top: 120px
+          line-height: 30px
+          color: #636363
+          font-size: 24px
           text-align: center
-          padding: 5px 10px
-          font-size: 20px
-          color: #fff
-          border-radius: 24px
-          background-color: #ed3f14
-          position: absolute
-          top: 30px
-          right: 20px
+          &:after
+            content: attr(data-num)
+            line-height: 20px
+            text-align: center
+            padding: 5px 10px
+            font-size: 20px
+            color: #fff
+            border-radius: 24px
+            background-color: #ed3f14
+            position: absolute
+            top: 30px
+            right: 20px
     .gt1-menu
+      min-height: 240px
       padding: 0px 30px
       ul
+        min-height: 240px
         border-bottom: 1px solid #f2f2f2
         overflow: hidden
         li
@@ -227,8 +244,10 @@ export default {
             font-size: 20px
             color: #acacac
     .gt1-server
+      min-height: 180px
       padding: 0 30px
       & > ul
+        min-height: 180px
         overflow: hidden
         li
           width: 20%
@@ -259,5 +278,7 @@ export default {
         color: #b9b9b9
         text-align: center
         margin-bottom: 23px
+    .box
+      flex: 1
 
 </style>

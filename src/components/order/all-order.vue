@@ -134,7 +134,7 @@ export default {
     overflow: hidden
     .title
       position: relative
-      height: 86px
+      height: 88px
       background-color: #fff
       & > span
         position: absolute
