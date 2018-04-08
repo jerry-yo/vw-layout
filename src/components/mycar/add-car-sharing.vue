@@ -1,11 +1,13 @@
 // 车辆共有人
 
 <template>
-  <div class="car-sharing" flexContainer>
+  <div class="add-car-sharing" flexContainer>
     <div class="action-bar">
       <div class="go-back"></div>
-      <div class="font">车辆所有人</div>
-      <div class="sharing">添加</div>
+      <div class="search">
+        <input type="text" name="" value="" placeholder="请输入完整手机号" maxlength="11">
+      </div>
+      <div class="sharing">搜索</div>
     </div>
     <div class="list">
       <div class="list-info">
@@ -17,51 +19,51 @@
           <p>1386565683</p>
         </div>
         <div class="btn">
-          <div class="del">
-            删除
+          <div class="add">
+            添加
           </div>
         </div>
       </div>
-      <h2>1/5</h2>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'carSharing'
+  name: 'addCarSharing'
 }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
 @import "../../common/stylus/mixin.styl"
-.car-sharing
+.add-car-sharing
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
   .action-bar
-    position: relative
+    display: flex
     height: 88px
     background-color: #fff
     margin-bottom: 10px
-    .font
-      position: absolute
-      left: 0
-      top: 0
-      right: 0
-      bottom: 0
-      margin: auto
-      width: 180px
-      height: 88px
-      line-height: 88px
-      text-align: center
-      font-size: 36px
-      color: #5b5b5b
-      font-weight: bold
-      transform: skewX(-10deg)
+    .search
+      flex: 1
+      display: flex
+      align-items: center
+      input
+        padding: 0px 30px
+        text-align: center
+        font-size: 26px
+        color: #5b5b5b
+        width: 100%
+        height: 60px
+        outline: none
+        border: 1px solid #cfcfcf
+        background-color: #f2f2f2
+        border-radius: 60px
+        &::-webkit-input-placeholder
+          font-size: 24px
+          color: #bbbbbb
     .go-back
-      display: inline-block
-      float: left
       width: 120px
       height: 88px
       bg-image('../../common/imgs/order/back')
@@ -69,8 +71,6 @@ export default {
       background-position: 30px center
       background-size: 18px 30px
     .sharing
-      display: inline-block
-      float: right
       width: 120px
       height: 88px
       padding-right: 30px
@@ -113,19 +113,13 @@ export default {
         width: 80px
         display: flex
         align-items: center
-        .del
+        .add
           flex: 1
           height: 44px
-          border: 1px solid #bdbdbd
+          border: 1px solid #ff7646
           font-size: 24px
-          color: #b2b2b2
+          color: #ff7646
           text-align: center
           line-height: 44px
           border-radius: 3px
-    & > h2
-      height: 80px
-      line-height: 80px
-      text-align: center
-      font-size: 24px
-      color: #b2b2b2
 </style>

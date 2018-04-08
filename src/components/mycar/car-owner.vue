@@ -2,6 +2,33 @@
 
 <template>
   <div class="car-owner" flexContainer>
+    <div class="action-bar">
+      <div class="go-back"></div>
+      <div class="font">车主认证</div>
+    </div>
+    <div class="example">
+      <div class="img">
+        <img src="" alt="for example">
+      </div>
+      <p>行驶证信息仅用于认证，我们将为您严格保密</p>
+    </div>
+    <div class="car-info">
+      <div class="info-1">
+        <span>车牌号</span>
+        <span>苏DB5463</span>
+      </div>
+      <div class="info-2">
+        <span>发动机号</span>
+        <div class="input">
+          <input type="text" name="" value="" placeholder="用于核实车主本人" maxlength="8">
+        </div>
+      </div>
+    </div>
+    <div class="submit-btn">
+      <div class="btn">
+
+      </div>
+    </div>
   </div>
 </template>
 
@@ -12,8 +39,101 @@ export default {
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
-  .car-owner
-    background-color: #f4f4f4
-    flex-direction: column
-    height: 100vh
+@import "../../common/stylus/mixin.styl"
+.car-owner
+  background-color: #f4f4f4
+  flex-direction: column
+  height: 100vh
+  .action-bar
+    position: relative
+    height: 88px
+    background-color: #fff
+    margin-bottom: 10px
+    .font
+      position: absolute
+      left: 0
+      top: 0
+      right: 0
+      bottom: 0
+      margin: auto
+      width: 180px
+      height: 88px
+      line-height: 88px
+      text-align: center
+      font-size: 36px
+      color: #5b5b5b
+      font-weight: bold
+      transform: skewX(-10deg)
+    .go-back
+      display: inline-block
+      float: left
+      width: 120px
+      height: 88px
+      bg-image('../../common/imgs/order/back')
+      background-repeat: no-repeat
+      background-position: 30px center
+      background-size: 18px 30px
+  .example
+    padding-top: 16px
+    background-color: #fff
+    height: 485px
+    margin-bottom: 20px
+    .img
+      width: 556px
+      height: 384px
+      border: 1px solid #ff673b
+      margin: 0 auto
+      padding: 7px
+      margin-bottom: 32px
+      img
+        display: block
+        width: 100%
+        height: 100%
+        background-color: red
+    p
+      text-align: center
+      font-size: 20px
+      color: #9c9c9c
+      line-height: 20px
+  .car-info
+    height: 161px
+    background-color: #fff
+    margin-bottom: 43px
+    & > div
+      height: 80px
+      line-height: 80px
+      display: flex
+      padding: 0 30px
+    .info-1
+      border-bottom: 1px solid #f2f2f2
+      font-size: 26px
+      color: #5b5b5b
+      span
+        flex: 1
+      span:nth-child(2)
+        text-align: right
+    .info-2
+      font-size: 26px
+      color: #5b5b5b
+      .input
+        flex: 1
+        input
+          height: 80px
+          float: right
+          text-align: right
+          font-size: 26px
+          color: #5b5b5b
+          border: none
+          background: none
+          outline: none
+          &::-webkit-input-placeholder
+            color: #bebebe
+            text-align: right
+  .submit-btn
+    height: 88px
+    display: flex
+    padding: 0 30px
+    .btn
+      flex: 1
+      background-color: red
 </style>
