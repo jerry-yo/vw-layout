@@ -2,6 +2,7 @@
 
 <template>
   <div class="addcar-displacement" flexContainer>
+    pailaing 
   </div>
 </template>
 
