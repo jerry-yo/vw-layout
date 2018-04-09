@@ -64,7 +64,7 @@ export default {
     height: 100%
     display: flex
     background-color: rgba(0,0,0,0)
-    padding-left: 140px
+    padding-left: 114px
     z-index: 100
     .con
       flex: 1

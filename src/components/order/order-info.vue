@@ -185,9 +185,9 @@ export default {
         margin: auto
         display: inline-block
         width: 160px
-        height: 86px
+        height: 88px
         text-align: center
-        line-height: 86px
+        line-height: 88px
         font-weight: 600
         font-size: 36px
         color: #5b5b5b

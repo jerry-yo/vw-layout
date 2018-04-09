@@ -94,6 +94,11 @@ const addCarSharing = {
   name: 'addCarSharing',
   component: resolve => { require(['@/components/mycar/add-car-sharing'], resolve) }
 }
+const addCarIdcard = {
+  path: '/addcar-idcard',
+  name: 'addCarIdcard',
+  component: resolve => { require(['@/components/mycar/addcar-idcard'], resolve) }
+}
 const routers = [
   loginRouter,
   registerRouter,
@@ -111,7 +116,8 @@ const routers = [
   detectionRecord,
   Garage,
   vehicleManagement,
-  addCarSharing
+  addCarSharing,
+  addCarIdcard
 ]
 Vue.use(Router)
 
