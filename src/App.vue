@@ -19,7 +19,7 @@ export default {
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
   #app
-    height: 100vh
+    min-height: 100vh
     .screen-out-enter-active,
     .screen-out-leave-active,
     .screen-in-enter-active,

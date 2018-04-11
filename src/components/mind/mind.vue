@@ -114,7 +114,8 @@ export default {
   [w-750-240]
     aspect-ratio:'750:240'
   .mind
-    width: 750px
+    flex: 1
+    overflow: hidden
     .user-core
       margin-bottom: 20px
       .user-con

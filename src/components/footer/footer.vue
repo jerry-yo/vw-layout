@@ -25,6 +25,7 @@ export default {
   [w-750-98]
     aspect-ratio:'750:98'
   .footer
+    height: 98px
     & > div
       flex: 1
       display: flex

@@ -1,9 +1,7 @@
 <template>
-  <div id="main" flexContainer>
-    <div flexContainer class="container">
-      <router-view></router-view>
-    </div>
-    <v-footer/>
+  <div class="main" flexContainer>
+    <router-view></router-view>
+    <v-footer class="footer"></v-footer>
   </div>
 </template>
 
@@ -18,10 +16,8 @@ export default {
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
-  #main
+  .main
+    height: 100vh
     background-color: #f4f4f4
     flex-direction: column
-    height: 100vh
-    .container
-      flex: 1
 </style>

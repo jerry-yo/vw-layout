@@ -104,6 +104,16 @@ const storeList = {
   name: 'storeList',
   component: resolve => { require(['@/components/store/store-list'], resolve) }
 }
+const repairRouter = {
+  path: '/repair',
+  name: 'repair',
+  component: resolve => { require(['@/components/repair/repair'], resolve) }
+}
+const repairPreOrder = {
+  path: '/repair-pre-order',
+  name: 'repairPreOrder',
+  component: resolve => { require(['@/components/repair/repair-pre-order'], resolve) }
+}
 const routers = [
   loginRouter,
   registerRouter,
@@ -123,7 +133,9 @@ const routers = [
   vehicleManagement,
   addCarSharing,
   addCarIdcard,
-  storeList
+  storeList,
+  repairRouter,
+  repairPreOrder
 ]
 Vue.use(Router)
 
