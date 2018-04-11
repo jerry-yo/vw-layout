@@ -3,8 +3,22 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios'
+import Vueaxios from 'vue-axios'
+import FastClick from 'fastclick'
 
 import '@/common/stylus/reast.css'
+import api from '@/common/js/api'
+
+FastClick.attach(document.body)
+Vue.use(Vueaxios, axios)
+Vue.use(api)
+
+Vue.config.productionTip = false
+
+axios.defaults.baseURL = 'https://www.gt1.shop/'
+Vue.prototype.baseUrl = axios.defaults.baseURL
+
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 
