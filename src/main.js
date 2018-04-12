@@ -10,6 +10,8 @@ import FastClick from 'fastclick'
 import '@/common/stylus/reast.css'
 import api from '@/common/js/api'
 
+import weui from 'weui.js'
+
 FastClick.attach(document.body)
 Vue.use(Vueaxios, axios)
 Vue.use(api)
@@ -18,10 +20,11 @@ Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'https://www.gt1.shop/'
 Vue.prototype.baseUrl = axios.defaults.baseURL
+Vue.prototype.Wx = require('weixin-js-sdk')
+Vue.prototype.weui = weui
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */
-
 new Vue({
   el: '#app',
   router,

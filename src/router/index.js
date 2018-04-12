@@ -114,6 +114,11 @@ const repairPreOrder = {
   name: 'repairPreOrder',
   component: resolve => { require(['@/components/repair/repair-pre-order'], resolve) }
 }
+const Reservations = {
+  path: '/reservations',
+  name: 'Reservations',
+  component: resolve => { require(['@/components/repair/reservations'], resolve) }
+}
 const routers = [
   loginRouter,
   registerRouter,
@@ -135,7 +140,8 @@ const routers = [
   addCarIdcard,
   storeList,
   repairRouter,
-  repairPreOrder
+  repairPreOrder,
+  Reservations
 ]
 Vue.use(Router)
 

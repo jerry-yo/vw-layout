@@ -18,15 +18,21 @@
     </div>
     <div class="container" ref="repair">
       <div class="wrapper">
-        <div class="textarea" flexContainer ref="chatpannel"  @touchmove.stop>
+        <div class="textarea" flexContainer ref="chatpannel" >
           <textarea name="name" rows="5" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
         </div>
-        <div class="box">
+        <uploadPic></uploadPic>
+        <div class="detection-record">
+          <span>车辆检查故障</span>
+          <div class="order">
+            <span>查看检测单</span>
+          </div>
         </div>
+        <seleDetectionMenu :check="true"></seleDetectionMenu>
       </div>
 
     </div>
-    <div class="go-next" @click="gggg">
+    <div class="go-next" @click="goNext">
 
     </div>
   </div>
@@ -34,8 +40,8 @@
 
 <script type="text/ecmascript-6">
 import BScroll from 'better-scroll'
-// import weui from 'weui.js'
-const wx = require('weixin-js-sdk')
+import uploadPic from '@/base/upload-pic'
+import seleDetectionMenu from '@/base/sele-detection-menu'
 export default {
   name: 'repair',
   data () {
@@ -54,46 +60,8 @@ export default {
         pannel.scrollIntoViewIfNeeded(true)
       }, 200)
     },
-    gggg () {
-      wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-        success: function (res) {
-          console.log(res)
-        }
-      })
-      // weui.picker(
-      //   [{
-      //     label: '飞机票',
-      //     value: 0,
-      //     disabled: true // 不可用
-      //   },
-      //   {
-      //     label: '火车票',
-      //     value: 1
-      //   },
-      //   {
-      //     label: '汽车票',
-      //     value: 3
-      //   },
-      //   {
-      //     label: '公车票',
-      //     value: 4
-      //   }],
-      //   {
-      //     className: 'custom-classname',
-      //     container: 'body',
-      //     defaultValue: [3],
-      //     onChange: function (result) {
-      //       console.log(result)
-      //     },
-      //     onConfirm: function (result) {
-      //       console.log(result)
-      //     },
-      //     id: 'singleLinePicker'
-      //   }
-      // )
+    goNext () {
+      this.$router.push('/repair-pre-order')
     }
   },
   mounted: function () {
@@ -102,23 +70,11 @@ export default {
         click: true
       })
       this.clientHeight = document.body.offsetHeight
-      this.api_post('/api/wxPubilc/getJSSDK', (response) => {
-        if (response.errorCode === 0) {
-          this.wxInfo = response.data
-          wx.config({
-            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-            appId: response.data.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
-            timestamp: response.data.timestamp, // 必填，生成签名的时间戳
-            nonceStr: response.data.nonceStr, // 必填，生成签名的随机串
-            signature: response.data.signature, // 必填，签名，见附录1
-            jsApiList: ['chooseImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-          })
-        }
-      }, {
-        url: 'https://www.gt1.shop/gt1/'
-      })
-      console.log(encodeURIComponent(location.href.split('#')[0]))
     })
+  },
+  components: {
+    uploadPic,
+    seleDetectionMenu
   }
 }
 </script>
@@ -206,15 +162,29 @@ export default {
           &:-webkit-input-placeholder
             font-size: 26px
             color: #b2b2b2
-      .box
-        width: 100%
-        background-color: blue
-        height: 900px
+      .detection-record
+        display: flex
+        background-color: #f5f5f5
+        height: 95px
+        line-height: 95px
+        padding: 0 30px
+        & > span
+          flex: 1
+          font-size: 24px
+          color: #9e9e9e
+          font-weight: bold
+        .order
+          flex: 1
+          text-align: right
+          span
+            padding-left: 35px
+            font-size: 24px
+            color: #9e9e9e
+            bg-image('../../common/imgs/orderinfo/test-order')
+            background-size: 22px 26px
+            background-repeat: no-repeat
+            background-position: left center
   .go-next
-    position: absolute
-    left: 0
-    bottom: 0
-    width: 100%
     height: 100px
     bg-image('../../common/imgs/repair/ordered_btn')
     background-size: 750px 100px
