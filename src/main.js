@@ -5,14 +5,14 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import Vueaxios from 'vue-axios'
-import FastClick from 'fastclick'
+// import FastClick from 'fastclick'
 
 import '@/common/stylus/reast.css'
 import api from '@/common/js/api'
 
 import weui from 'weui.js'
 
-FastClick.attach(document.body)
+// FastClick.attach(document.body)
 Vue.use(Vueaxios, axios)
 Vue.use(api)
 

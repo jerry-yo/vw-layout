@@ -7,7 +7,14 @@
       </div>
     </div>
     <div class="container">
+      <div class="bg">
 
+      </div>
+      <div class="info">
+        <div class="store">奇特异快速保养-华润店</div>
+        <div class="time">预约时间：明天  <span>2:30</span></div>
+        <div class="tips">请尽快至门店服务，奇特异祝您用车愉快</div>
+      </div>
     </div>
     <div class="button">
       <div class="go-index">
@@ -55,10 +62,51 @@ export default {
       background-size: 18px 30px
   .container
     height: 200px
+    display: flex
     bg-image('../../common/imgs/mindbg')
     background-size: 100% 200px
     background-repeat: no-repeat
     background-position: center center
+    .bg
+      width: 266px
+      bg-image('../../common/imgs/orderinfo/order-bg-2')
+      background-repeat: no-repeat
+      background-size: 184px 103px
+      background-position: right center
+      margin-right: 84px
+    .info
+      flex: 1
+      display: flex
+      flex-direction: column
+      justify-content: center
+      .store
+        height: 35px
+        line-height: 35px
+        font-size: 26px
+        color: #fffefe
+        font-weight: bold
+      .time
+        height: 36px
+        line-height: 36px
+        color: #fff
+        font-size: 24px
+        font-weight: bold
+        span
+          padding: 5px 8px
+          background-color: #fff
+          margin-left: 10px
+          border-radius: 3px
+          color: #ff815b
+      .tips
+        height: 30px
+        line-height: 30px
+        font-size: 18px
+        color: #fff
+        padding-left: 30px
+        bg-image('../../common/imgs/mind/sj')
+        background-repeat: no-repeat
+        background-size: 15px 15px
+        background-position: left center
   .button
     height: 110px
     padding-top: 40px

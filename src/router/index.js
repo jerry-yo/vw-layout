@@ -119,6 +119,21 @@ const Reservations = {
   name: 'Reservations',
   component: resolve => { require(['@/components/repair/reservations'], resolve) }
 }
+const maintainPreOrder = {
+  path: '/maintain-pre-order',
+  name: 'maintainPreOrder',
+  component: resolve => { require(['@/components/maintain/maintain-pre-order'], resolve) }
+}
+const maintain = {
+  path: '/maintain',
+  name: 'maintain',
+  component: resolve => { require(['@/components/maintain/maintain'], resolve) }
+}
+const addNewServer = {
+  path: '/add-new-server',
+  name: 'addNewServer',
+  component: resolve => { require(['@/components/maintain/add-new-server'], resolve) }
+}
 const routers = [
   loginRouter,
   registerRouter,
@@ -141,7 +156,10 @@ const routers = [
   storeList,
   repairRouter,
   repairPreOrder,
-  Reservations
+  Reservations,
+  maintainPreOrder,
+  maintain,
+  addNewServer
 ]
 Vue.use(Router)
 
