@@ -1,9 +1,8 @@
 <template>
   <div class="counter">
     <div class="cut" @click="cutNum">-</div>
-    <span>{{server.keepServiceSecondItemBean.minCommodityNumber}}</span>
+    <span>{{goodsinfo.keepServiceSecondItemBean.minCommodityNumber}}</span>
     <div class="add" @click="addNum">+</div>
-
   </div>
 </template>
 
@@ -11,24 +10,29 @@
 export default {
   name: 'counter',
   props: {
-    server: {
+    goodsinfo: {
       type: Object
+    }
+  },
+  data () {
+    return {
+      sssss: null
     }
   },
   methods: {
     cutNum () {
-      if (this.server.keepServiceSecondItemBean.minCommodityNumber <= 1) {
-        this.server.keepServiceSecondItemBean.minCommodityNumber = 1
+      if (this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber <= 1) {
+        this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber = 1
       } else {
-        this.server.keepServiceSecondItemBean.minCommodityNumber--
+        this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber--
       }
     },
     addNum () {
-      this.server.keepServiceSecondItemBean.minCommodityNumber++
+      this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber++
     }
   },
   mounted () {
-    console.log(JSON.stringify(this.server.keepServiceSecondItemBean.minCommodityNumber))
+    this.sssss = JSON.parse(sessionStorage.getItem('serverList'))
   }
 }
 </script>

@@ -19,6 +19,12 @@
     <div class="container" ref="maintain">
       <div class="wrapper">
         <serverModel v-for="(item, index) in serverList" :key="index" :server="item" :serverid="index"></serverModel>
+        <div class="add-server">
+          添加新服务
+        </div>
+        <div class="server-tips">
+          不选服务可以下单后到店进行选择哦
+        </div>
       </div>
     </div>
     <div class="place-order">
@@ -28,8 +34,8 @@
           不包含服务费
         </div>
         <div class="money">
-          <span>共{{'1'}}项服务</span>
-          <span>{{'￥2000.00'}}</span>
+          <span>共{{allServerNum}}项服务</span>
+          <span>{{'￥' + allPrice}}</span>
         </div>
       </div>
       <div class="btn">确认下单</div>
@@ -230,9 +236,35 @@ export default {
       ]
     }
   },
+  computed: {
+    allPrice () {
+      let price = 0
+      this.serverList.forEach((item, index) => {
+        if (item.groupItem.isChecked) {
+          item.subItems.forEach((res, id) => {
+            if (res.isChecked) {
+              price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
+            }
+          })
+        }
+      })
+      return price
+    },
+    allServerNum () {
+      let nums = 0
+      this.serverList.forEach((item, index) => {
+        if (item.groupItem.isChecked) {
+          nums++
+        }
+      })
+      return nums
+    }
+  },
+  created () {
+    sessionStorage.setItem('serverList', JSON.stringify(this.serverList))
+  },
   mounted () {
     this.$nextTick(function () {
-      sessionStorage.setItem('serverList', JSON.stringify(this.serverList))
       this.maintainBScroll = new BScorll(this.$refs.maintain, {
         click: true
       })
@@ -310,6 +342,25 @@ export default {
     .wrapper
       position: relative
       padding-top: 20px
+      .add-server
+        margin-top: 30px
+        height: 80px
+        line-height: 80px
+        background-color: #fff
+        padding: 0 30px
+        padding-left: 85px
+        font-size: 26px
+        color: #5b5b5b
+        bg-image('../../common/imgs/repair/add_server')
+        background-size: 20px 20px
+        background-repeat: no-repeat
+        background-position: 30px center
+      .server-tips
+        height: 90px
+        line-height: 90px
+        text-align: center
+        font-size: 22px
+        color: #969696
   .place-order
     height: 98px
     display: flex

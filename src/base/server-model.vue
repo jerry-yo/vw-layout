@@ -50,7 +50,7 @@
           <div class="no-change" v-if="server.groupItem.state === 3">
             <span>￥{{(item.keepServiceSecondItemBean.commodityPrice).toFixed(2)}}</span>
             <div class="input-num">
-              <counter @setnum="setNum" :server="_setCounter(index)"></counter>
+              <counter :goodsinfo="item"></counter>
             </div>
             <div class="change-btn">
               <div class="btn" @click="_changeGood">更换</div>
@@ -81,9 +81,6 @@ export default {
     }
   },
   methods: {
-    _setCounter (index) {
-      return this.locationServerList[this.serverid].subItems[index]
-    },
     _showInfo () {
       this.server.groupItem.action = !this.server.groupItem.action
       if (this.server.groupItem.action) {
@@ -91,9 +88,6 @@ export default {
       } else {
         this.server.groupItem.state = 1
       }
-    },
-    setNum (num) {
-      this.num = num
     },
     _checkGood (index) {
       let flag = false
@@ -126,13 +120,15 @@ export default {
       this.server.groupItem.state = 3
     },
     _saveServer () {
-      sessionStorage.setItem('serverList', JSON.stringify(this.locationServerList))
-      this.$set(this.server, 'subItems', this.locationServerList[this.serverid].subItems)
+      this.locationServerList = JSON.parse(sessionStorage.getItem('serverList'))
       this.server.groupItem.state = 2
+      this.locationServerList[this.serverid] = this.server
+      sessionStorage.setItem('serverList', JSON.stringify(this.locationServerList))
     },
     _cancelServer () {
       this.locationServerList = JSON.parse(sessionStorage.getItem('serverList'))
       this.server.groupItem.state = 2
+      this.$set(this.server, 'subItems', this.locationServerList[this.serverid].subItems)
     },
     _changeGood () {
     }
