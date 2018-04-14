@@ -8,7 +8,7 @@
         <div class="title">{{server.groupItem.keepServiceFirstItemBean.serviceName}}<span v-if="server.groupItem.keepServiceFirstItemBean.isRecommend">推荐</span> </div>
         <div class="tips">{{server.groupItem.keepServiceFirstItemBean.bottomRemark}}</div>
       </div>
-      <div class="operation">
+      <div class="operation" v-if="addServer">
         <div class="state1" v-show="server.groupItem.state === 1">
           {{server.groupItem.keepServiceFirstItemBean.rightRemark}}
         </div>
@@ -24,7 +24,7 @@
     <ul class="good-list" v-if="server.groupItem.action">
       <li v-for="(item, index) in server.subItems" :key="index">
         <div class="tab-check">
-          <div class="btn" :class="item.isChecked ? 'check': 'nocheck'" @click="_checkGood(index)"></div>
+          <div class="btn" :class="item.isChecked ? 'check': 'nocheck'" @click="_checkGood(index)" v-if="addServer"></div>
         </div>
         <div class="img">
           <img src="" alt="">
@@ -47,7 +47,7 @@
               <span>X{{item.keepServiceSecondItemBean.commodityNumber}}</span>
             </div>
           </div>
-          <div class="no-change" v-if="server.groupItem.state === 3">
+          <div class="no-change" v-if="server.groupItem.state === 3  && addServer">
             <span>￥{{(item.keepServiceSecondItemBean.commodityPrice).toFixed(2)}}</span>
             <div class="input-num">
               <counter :goodsinfo="item"></counter>
@@ -72,7 +72,12 @@ export default {
       type: Object
     },
     serverid: {
-      type: Number
+      type: Number,
+      required: true
+    },
+    addServer: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -135,7 +140,6 @@ export default {
   },
   mounted () {
     this.$nextTick(function () {
-      this.locationServerList = JSON.parse(sessionStorage.getItem('serverList'))
     })
   },
   components: {

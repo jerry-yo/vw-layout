@@ -3,17 +3,14 @@
     <div class="action-bar">
       <div class="go-back"></div>
       <div class="font">
-        订单详情
+        添加新服务
       </div>
     </div>
-    <div class="container" ref="maintain">
+    <div class="container" ref="addservice">
       <div class="wrapper">
-        <serverModel v-for="(item, index) in serverList" :key="index" :server="item" :serverid="index"></serverModel>
-        <div class="add-server">
-          添加新服务
-        </div>
-        <div class="server-tips">
-          不选服务可以下单后到店进行选择哦
+        <div class="service-catalog" v-for="(res, resid) in newServer" :key="resid">
+          <div class="service-title">{{res.serviceCatalog}}</div>
+          <serverModel v-for="(item, index) in res.serviceCon" :key="index" :server="item" :serverid="index" :addServer="false"></serverModel>
         </div>
       </div>
     </div>
@@ -28,7 +25,7 @@
           <span>{{'￥' + allPrice}}</span>
         </div>
       </div>
-      <div class="btn">确认下单</div>
+      <div class="btn">添加</div>
     </div>
   </div>
 </template>
@@ -40,186 +37,298 @@ export default {
   name: 'maintain',
   data () {
     return {
-      maintainBScroll: null,
-      serverList: [
+      addNewServerBScroll: null,
+      checkServer: [],
+      newServer: [
         {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '5000km/次',
-              serviceName: '保养常规服务',
-              rightRemark: '共2个商品',
-              isRecommend: true
-            },
-            isChecked: true,
-            action: true,
-            state: 2
-          },
-          subItems: [
+          serviceCatalog: '雨刮器',
+          serviceId: 1,
+          serviceCon: [
             {
-              keepServiceSecondItemBean: {
-                classify: '级别11',
-                commodityImageUrl: 'url',
-                viscosity: '粘度11',
-                trademark: '品牌11',
-                specification: '规格11',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
+              groupItem: {
+                keepServiceFirstItemBean: {
+                  bottomRemark: '5000km/次',
+                  serviceName: '雨刮器',
+                  rightRemark: '共2个商品',
+                  isRecommend: true
+                },
+                isChecked: false,
+                action: false,
+                state: 1
               },
-              isChecked: true,
-              action: true,
-              state: 1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别12',
-                commodityImageUrl: 'url',
-                viscosity: '粘度12',
-                trademark: '品牌12',
-                specification: '规格12',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: true,
-              action: true,
-              state: 1
+              subItems: [
+                {
+                  keepServiceSecondItemBean: {
+                    classify: '级别11',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度11',
+                    trademark: '品牌11',
+                    specification: '规格11',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: true,
+                  action: true,
+                  state: 1
+                }, {
+                  keepServiceSecondItemBean: {
+                    classify: '级别12',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度12',
+                    trademark: '品牌12',
+                    specification: '规格12',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: true,
+                  action: true,
+                  state: 1
+                }
+              ]
             }
           ]
         }, {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '4000km/次',
-              serviceName: '更换空调滤清器',
-              rightRemark: '共3个商品',
-              isRecommend: false
-            },
-            isChecked: false,
-            action: false,
-            state: 1
-          },
-          subItems: [
+          serviceCatalog: '制动系统',
+          serviceId: 2,
+          serviceCon: [
             {
-              keepServiceSecondItemBean: {
-                classify: '级别21',
-                commodityImageUrl: 'url',
-                viscosity: '粘度21',
-                trademark: '品牌21',
-                specification: '规格21',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
+              groupItem: {
+                keepServiceFirstItemBean: {
+                  bottomRemark: '4000km/次',
+                  serviceName: '刹车油',
+                  rightRemark: '共2个商品',
+                  isRecommend: false
+                },
+                isChecked: false,
+                action: false,
+                state: 1
               },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别22',
-                commodityImageUrl: 'url',
-                viscosity: '粘度22',
-                trademark: '品牌22',
-                specification: '规格22',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
+              subItems: [
+                {
+                  keepServiceSecondItemBean: {
+                    classify: '级别21',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度21',
+                    trademark: '品牌21',
+                    specification: '规格21',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }, {
+                  keepServiceSecondItemBean: {
+                    classify: '级别22',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度22',
+                    trademark: '品牌22',
+                    specification: '规格22',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }
+              ]
+            },
+            {
+              groupItem: {
+                keepServiceFirstItemBean: {
+                  bottomRemark: '3000km/次',
+                  serviceName: '刹车片',
+                  rightRemark: '共2个商品',
+                  isRecommend: false
+                },
+                isChecked: false,
+                action: false,
+                state: 1
               },
-              isChecked: false,
-              action: -1,
-              state: -1
+              subItems: [
+                {
+                  keepServiceSecondItemBean: {
+                    classify: '级别31',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度31',
+                    trademark: '品牌31',
+                    specification: '规格31',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }, {
+                  keepServiceSecondItemBean: {
+                    classify: '级别32',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度32',
+                    trademark: '品牌32',
+                    specification: '规格32',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }
+              ]
             }
           ]
         }, {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '3000km/次',
-              serviceName: '更换燃油滤清器',
-              rightRemark: '共4个商品',
-              isRecommend: false
-            },
-            isChecked: false,
-            action: false,
-            state: 1
-          },
-          subItems: [
+          serviceCatalog: '制动系统',
+          serviceId: 3,
+          serviceCon: [
             {
-              keepServiceSecondItemBean: {
-                classify: '级别31',
-                commodityImageUrl: 'url',
-                viscosity: '粘度31',
-                trademark: '品牌31',
-                specification: '规格31',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
+              groupItem: {
+                keepServiceFirstItemBean: {
+                  bottomRemark: '2000km/次',
+                  serviceName: '空调滤清器',
+                  rightRemark: '共2个商品',
+                  isRecommend: false
+                },
+                isChecked: false,
+                action: false,
+                state: 1
               },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别32',
-                commodityImageUrl: 'url',
-                viscosity: '粘度32',
-                trademark: '品牌32',
-                specification: '规格32',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }
-          ]
-        }, {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '2000km/次',
-              serviceName: '更换空气滤清器',
-              rightRemark: '共5个商品',
-              isRecommend: false
+              subItems: [
+                {
+                  keepServiceSecondItemBean: {
+                    classify: '级别41',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度41',
+                    trademark: '品牌41',
+                    specification: '规格41',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }, {
+                  keepServiceSecondItemBean: {
+                    classify: '级别42',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度41',
+                    trademark: '品牌42',
+                    specification: '规格42',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }
+              ]
             },
-            isChecked: false,
-            action: false,
-            state: 1
-          },
-          subItems: [
             {
-              keepServiceSecondItemBean: {
-                classify: '级别41',
-                commodityImageUrl: 'url',
-                viscosity: '粘度41',
-                trademark: '品牌41',
-                specification: '规格41',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
+              groupItem: {
+                keepServiceFirstItemBean: {
+                  bottomRemark: '2000km/次',
+                  serviceName: '空调制冷剂',
+                  rightRemark: '共2个商品',
+                  isRecommend: false
+                },
+                isChecked: false,
+                action: false,
+                state: 1
               },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别42',
-                commodityImageUrl: 'url',
-                viscosity: '粘度41',
-                trademark: '品牌42',
-                specification: '规格42',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
+              subItems: [
+                {
+                  keepServiceSecondItemBean: {
+                    classify: '级别41',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度41',
+                    trademark: '品牌41',
+                    specification: '规格41',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }, {
+                  keepServiceSecondItemBean: {
+                    classify: '级别42',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度41',
+                    trademark: '品牌42',
+                    specification: '规格42',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }
+              ]
+            },
+            {
+              groupItem: {
+                keepServiceFirstItemBean: {
+                  bottomRemark: '2000km/次',
+                  serviceName: '蒸发箱清洗',
+                  rightRemark: '共2个商品',
+                  isRecommend: false
+                },
+                isChecked: false,
+                action: false,
+                state: 1
               },
-              isChecked: false,
-              action: -1,
-              state: -1
+              subItems: [
+                {
+                  keepServiceSecondItemBean: {
+                    classify: '级别41',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度41',
+                    trademark: '品牌41',
+                    specification: '规格41',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }, {
+                  keepServiceSecondItemBean: {
+                    classify: '级别42',
+                    commodityImageUrl: 'url',
+                    viscosity: '粘度41',
+                    trademark: '品牌42',
+                    specification: '规格42',
+                    remarkHint: '',
+                    minCommodityNumber: 1,
+                    commodityPrice: 200.0,
+                    commodityNumber: 1
+                  },
+                  isChecked: false,
+                  action: -1,
+                  state: -1
+                }
+              ]
             }
           ]
         }
@@ -229,33 +338,34 @@ export default {
   computed: {
     allPrice () {
       let price = 0
-      this.serverList.forEach((item, index) => {
-        if (item.groupItem.isChecked) {
-          item.subItems.forEach((res, id) => {
-            if (res.isChecked) {
-              price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
-            }
-          })
-        }
+      this.newServer.forEach((ree) => {
+        ree.serviceCon.forEach((item, index) => {
+          if (item.groupItem.isChecked) {
+            item.subItems.forEach((res, id) => {
+              if (res.isChecked) {
+                price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
+              }
+            })
+          }
+        })
       })
       return price
     },
     allServerNum () {
       let nums = 0
-      this.serverList.forEach((item, index) => {
-        if (item.groupItem.isChecked) {
-          nums++
-        }
+      this.newServer.forEach((ree) => {
+        ree.serviceCon.forEach((item, index) => {
+          if (item.groupItem.isChecked) {
+            nums++
+          }
+        })
       })
       return nums
     }
   },
-  created () {
-    sessionStorage.setItem('serverList', JSON.stringify(this.serverList))
-  },
   mounted () {
     this.$nextTick(function () {
-      this.maintainBScroll = new BScorll(this.$refs.maintain, {
+      this.addNewServerBScroll = new BScorll(this.$refs.addservice, {
         click: true
       })
     })
@@ -301,6 +411,14 @@ export default {
       .wrapper
         position: relative
         padding-top: 20px
+        .service-catalog
+          overflow: hidden
+          .service-title
+            height: 54px
+            line-height: 54px
+            font-size: 20px
+            color: #9e9e9e
+            text-align: center
         .add-server
           margin-top: 30px
           height: 80px
