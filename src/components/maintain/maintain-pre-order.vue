@@ -27,6 +27,19 @@
           <div> <span>车牌号</span><span class="right">苏DB5A68</span> </div>
           <div> <span>联系人</span><span class="right">15251916566</span> </div>
         </div>
+        <div class="server-img">
+          <div class="con">
+            <ul>
+              <li class="imgs"></li>
+              <li class="imgs"></li>
+              <li class="eiss"></li>
+            </ul>
+            <div class="goods-info">
+              <span>共2个配件、1个服务</span>
+              <div >配件总额：<span>{{'￥' + (200.00).toFixed(2)}}</span></div >
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="place-order">
@@ -175,6 +188,47 @@ export default {
               width: 50px
               height: overflow
               margin-right: 15px
+      .server-img
+        height: 190px
+        display: flex
+        background-color: #fff
+        padding: 18px 30px
+        .con
+          flex: 1
+          display: flex
+          flex-direction: column
+          bg-image('../../common/imgs/mind/leftright')
+          background-repeat: no-repeat
+          background-size: 15px 24px
+          background-position: right center
+          ul
+            height: 120px
+            display: flex
+            .imgs
+              box-sizing: border-box
+              width: 120px
+              height: 120px
+              border: 1px solid #d2d2d2
+              background-color: rgba(0,255,126,0.5)
+              margin-right: 10px
+            .eiss
+              width: 27px
+              bg-image('../../common/imgs/ellipsis')
+              background-repeat: no-repeat
+              background-size: 27px 6px
+              background-position: center center
+          .goods-info
+            flex: 1
+            display: flex
+            padding-top: 10px
+            font-size: 18px
+            & > span
+              flex: 1
+              color: #5b5b5b
+            & > div
+              color: #5b5b5b
+              span
+                color: #ff3e3e
   .place-order
     height: 98px
     display: flex

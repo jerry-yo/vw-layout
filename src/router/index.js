@@ -134,6 +134,11 @@ const addNewServer = {
   name: 'addNewServer',
   component: resolve => { require(['@/components/maintain/add-new-server'], resolve) }
 }
+const searchCar = {
+  path: '/search-car',
+  name: 'searchCar',
+  component: resolve => { require(['@/components/mycar/search-car'], resolve) }
+}
 const routers = [
   loginRouter,
   registerRouter,
@@ -159,7 +164,8 @@ const routers = [
   Reservations,
   maintainPreOrder,
   maintain,
-  addNewServer
+  addNewServer,
+  searchCar
 ]
 Vue.use(Router)
 

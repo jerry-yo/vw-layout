@@ -1,3 +1,4 @@
+//toast 显示时间 long 3.5s short 2s
 <template>
   <div class="toast">
     {{message}}
