@@ -7,6 +7,8 @@ import axios from 'axios'
 import Vueaxios from 'vue-axios'
 // import FastClick from 'fastclick'
 
+import Toast from '@/base/toast.js'
+
 import '@/common/stylus/reast.css'
 import api from '@/common/js/api'
 
@@ -22,6 +24,7 @@ axios.defaults.baseURL = 'https://www.gt1.shop/'
 Vue.prototype.baseUrl = axios.defaults.baseURL
 Vue.prototype.Wx = require('weixin-js-sdk')
 Vue.prototype.weui = weui
+Vue.prototype.$Toast = Toast
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */
