@@ -1,18 +1,19 @@
 <template>
   <div class="text">
     <!-- <Badge count="9">
-      <a href="#" class="demo-badge"></a>
+      <a href="#" class="button"></a>
     </Badge>
     <Badge count="100">
-      <a href="#" class="demo-badge"></a>
+      <a href="#" class="button"></a>
     </Badge>
     <Badge count="9">
-      <a href="#" class="demo-badge"></a>
+      <a href="#" class="button"></a>
     </Badge>
     <Badge dot>
-      <a href="#" class="demo-badge"></a>
+      <a href="#" class="button"></a>
     </Badge> -->
-    <div @click="open()"  class="button">adasdfas</div>
+    <div @click="open2()"  class="button" ref="button">adasdfas</div>
+    <div @click="open()"  class="button" ref="button">adasdfas</div>
   </div>
 </template>
 
@@ -28,10 +29,29 @@ export default {
   },
   methods: {
     open () {
-      this.$Toast({
-        duration: 3,
-        message: '有本事你过来啊',
-        position: 'bottom'
+      this.$Modal.confirm({
+        title: 'How are you?',
+        content: 'Do you like mi? Are you OK?',
+        onOk: () => {
+          console.log('你敢来打我吗')
+          this.$Modal.remove()
+        },
+        onCancel: () => {
+          console.log('我是对的')
+        }
+      })
+    },
+    open2 () {
+      this.$Modal.confirm({
+        title: '你敢来打我吗?',
+        content: 'Do you like mi? Are you OK?',
+        onOk: () => {
+          console.log('你敢来打我吗')
+          this.$Modal.remove()
+        },
+        onCancel: () => {
+          console.log('我是对的')
+        }
       })
     }
   },

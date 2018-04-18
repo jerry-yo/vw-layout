@@ -7,7 +7,8 @@ import axios from 'axios'
 import Vueaxios from 'vue-axios'
 // import FastClick from 'fastclick'
 
-import Toast from '@/base/toast.js'
+import Toast from '@/base/toast'
+import Modal from '@/base/modal'
 
 import '@/common/stylus/reast.css'
 import api from '@/common/js/api'
@@ -25,6 +26,7 @@ Vue.prototype.baseUrl = axios.defaults.baseURL
 Vue.prototype.Wx = require('weixin-js-sdk')
 Vue.prototype.weui = weui
 Vue.prototype.$Toast = Toast
+Vue.prototype.$Modal = Modal
 
 Vue.config.productionTip = false
 /* eslint-disable no-new */

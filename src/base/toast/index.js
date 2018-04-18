@@ -7,6 +7,7 @@ ToastConstructor.prototype.close = function () {
   this.visible = false
   let _self = this
   this.$el.addEventListener('transitionend', () => {
+    console.log(_self.$el)
     _self.$el.remove()
   })
 }
