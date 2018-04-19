@@ -6,7 +6,7 @@ import {router} from './router'
 import store from './store'
 import axios from 'axios'
 import Vueaxios from 'vue-axios'
-// import FastClick from 'fastclick'
+import FastClick from 'fastclick'
 
 import Toast from '@/base/toast'
 import Modal from '@/base/modal'
@@ -16,7 +16,7 @@ import api from '@/common/js/api'
 
 import weui from 'weui.js'
 
-// FastClick.attach(document.body)
+FastClick.attach(document.body)
 Vue.use(Vueaxios, axios)
 Vue.use(api)
 
