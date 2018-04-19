@@ -1,7 +1,7 @@
 <template>
   <div class="maintain" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">
         <h2>东风本田-思域</h2>
         <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
@@ -19,7 +19,7 @@
     <div class="container" ref="maintain">
       <div class="wrapper">
         <serverModel v-for="(item, index) in serverList" :key="index" :server="item" :serverid="index"></serverModel>
-        <div class="add-server">
+        <div class="add-server" @click="_goAddServer">
           添加新服务
         </div>
         <div class="server-tips">
@@ -38,7 +38,7 @@
           <span>{{'￥' + allPrice}}</span>
         </div>
       </div>
-      <div class="btn">确认下单</div>
+      <div class="btn" @click="_goMaintainPreOrder">确认下单</div>
     </div>
   </div>
 </template>
@@ -262,6 +262,17 @@ export default {
   },
   created () {
     sessionStorage.setItem('serverList', JSON.stringify(this.serverList))
+  },
+  methods: {
+    _goBack () {
+      this.$router.go(-1)
+    },
+    _goAddServer () {
+      this.$router.push('/add-new-server')
+    },
+    _goMaintainPreOrder () {
+      this.$router.push('/maintain-pre-order')
+    }
   },
   mounted () {
     this.$nextTick(function () {

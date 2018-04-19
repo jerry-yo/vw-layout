@@ -171,7 +171,7 @@ Vue.use(Router)
 
 export default new Router({
   linkActiveClass: 'active-on',
-  history: true,
+  mode: 'history',
   scrollBehavior (to, from, savedPosition) {
     return { x: 0, y: 0 }
   },

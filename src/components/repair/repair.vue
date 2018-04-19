@@ -1,7 +1,7 @@
 <template>
   <div class="repair" flexContainer :style="{height: clientHeight + 'px'}">
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">
         <h2>东风本田-思域</h2>
         <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
@@ -52,6 +52,9 @@ export default {
     }
   },
   methods: {
+    _goBack () {
+      this.$router.go(-1)
+    },
     focusText () {
       let _self = this
       setTimeout(function () {

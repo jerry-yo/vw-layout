@@ -32,19 +32,19 @@
         </div>
         <div class="gt1-menu">
           <ul>
-            <li>
+            <li @click="_goCarWash">
               <h2>洗车</h2>
               <h3>5元洗车活动</h3>
             </li>
-            <li>
+            <li @click="_goMaintain">
               <h2>保养</h2>
               <h3>低价好配件</h3>
             </li>
-            <li>
+            <li @click="_goRepair">
               <h2>维修</h2>
               <h3>一线专业技工</h3>
             </li>
-            <li>
+            <li @click="_goRescue">
               <h2>救援</h2>
               <h3>闪电速达</h3>
             </li>
@@ -76,6 +76,24 @@ export default {
   data () {
     return {
       homeBScroll: null
+    }
+  },
+  methods: {
+    // 洗车
+    _goCarWash () {
+
+    },
+    // 维修
+    _goRepair () {
+      this.$router.push('/repair')
+    },
+    // 保养
+    _goMaintain () {
+      this.$router.push('/maintain')
+    },
+    // 救援
+    _goRescue () {
+
     }
   },
   mounted: function () {
@@ -147,7 +165,6 @@ export default {
     .container_1
       flex: 1
       overflow: hidden
-      background-color: blue
       .con
         position: relative
         overflow: hidden

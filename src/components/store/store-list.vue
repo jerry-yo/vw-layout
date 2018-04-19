@@ -1,7 +1,7 @@
 <template>
   <div class="store" flexContainer>
     <div class="tabbar">
-      <span class="goback"></span>
+      <span class="goback" @click="_goBack"></span>
       <h2 class="title">选择门店</h2>
       <div class="address">
         常州
@@ -45,6 +45,9 @@ export default {
     }
   },
   methods: {
+    _goBack () {
+      this.$router.go(-1)
+    },
     seleStore (id) {
       this.seleIndex = id
     }
