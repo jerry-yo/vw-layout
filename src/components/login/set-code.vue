@@ -7,8 +7,8 @@
     </div>
     <div class="section">
       <h1>验证码已发送</h1>
-      <div class="input">
-        <input type="text" name="" maxlength="6" value="" autofocus v-model="number">
+      <div class="input" @click="foucsInput">
+        <input type="number" name="" maxlength="6" value="" v-model="number" ref="number" pattern="[0-9]*">
         <ul>
           <li>{{codeArr[0] ? codeArr[0] : ''}}</li>
           <li>{{codeArr[1] ? codeArr[1] : ''}}</li>
@@ -40,7 +40,10 @@ export default {
   },
   methods: {
     goBtn () {
-      console.log(this.codeArr)
+      console.log(666)
+    },
+    foucsInput () {
+      this.$refs.number.focus()
     }
   }
 }
@@ -112,9 +115,11 @@ export default {
               border-radius: 4px
               background-color: #5b5b5b
         & > input
-          width: 0px
-          height: 0px
-          opacity: 0
+          position: absolute
+          z-index: -1
+          width: 1px
+          height: 1px
+          opacity: 1
       & > h2
         margin-top: 46px
         font-size: 26px
