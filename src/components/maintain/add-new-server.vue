@@ -1,7 +1,7 @@
 <template>
   <div class="add-new-server" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">
         添加新服务
       </div>
@@ -361,6 +361,11 @@ export default {
         })
       })
       return nums
+    }
+  },
+  methods: {
+    _goBack () {
+      this.$router.go(-1)
     }
   },
   mounted () {

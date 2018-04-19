@@ -1,6 +1,6 @@
 <template>
   <div id="app" flexContainer @touchmove.prevent>
-    <transition :name="'screen-' + (direction === 'next' ? 'in' : 'out')">
+    <transition :name="'screen-' + routerAnimate">
       <router-view/>
     </transition>
   </div>
@@ -11,10 +11,15 @@ export default {
   name: 'App',
   data () {
     return {
-      direction: 'next'
+    }
+  },
+  computed: {
+    routerAnimate () {
+      return this.$store.state.routerAnimate
     }
   },
   mounted: function () {
+    console.log(this.routerAnimate)
     this.api_post('/api/wxPubilc/getJSSDK', (response) => {
       if (response.errorCode === 0) {
         this.Wx.config({

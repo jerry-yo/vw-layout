@@ -1,7 +1,7 @@
 <template>
   <div class="reservations" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">
         预约成功
       </div>
@@ -17,10 +17,10 @@
       </div>
     </div>
     <div class="button">
-      <div class="go-index">
+      <div class="go-index" @click="_goHome">
         返回主页
       </div>
-      <div class="look-order">
+      <div class="look-order" @click="_lookOrder">
         查看订单
       </div>
     </div>
@@ -29,6 +29,18 @@
 
 <script type="text/ecmascript-6">
 export default {
+  name: 'reservations',
+  methods: {
+    _goBack () {
+      this.$router.go(-3)
+    },
+    _goHome () {
+      this.$router.push('/home')
+    },
+    _lookOrder () {
+      this.$router.push('/order')
+    }
+  }
 }
 </script>
 

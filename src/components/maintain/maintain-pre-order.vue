@@ -45,7 +45,7 @@
     <div class="place-order">
       <div class="server">客服</div>
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
-      <div class="btn">确认下单</div>
+      <div class="btn" @click="_goPreOrder">确认下单</div>
     </div>
   </div>
 </template>
@@ -74,6 +74,9 @@ export default {
   methods: {
     _goBack () {
       this.$router.go(-1)
+    },
+    _goPreOrder () {
+      this.$router.push('/reservations')
     }
   },
   mounted () {

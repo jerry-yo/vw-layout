@@ -25,6 +25,7 @@
     "vue": "^2.5.2",
     "vue-axios": "^2.1.1",
     "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
     "wechat-jssdk": "^3.1.0",
     "weui": "^1.1.2",
     "weui.js": "^1.1.3"
