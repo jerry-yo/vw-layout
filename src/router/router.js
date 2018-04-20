@@ -47,10 +47,10 @@ const addcarAge = {
   name: 'addcarAge',
   component: resolve => { require(['@/components/mycar/addcar-age'], resolve) }
 }
-const addcarBrand = {
-  path: '/addcar-brand',
-  name: 'addcarBrand',
-  component: resolve => { require(['@/components/mycar/addcar-brand'], resolve) }
+const addcarTabbar = {
+  path: '/addcar-tabbar',
+  name: 'addcarTabbar',
+  component: resolve => { require(['@/components/mycar/addcar-tabbar'], resolve) }
 }
 const addcarDisplacement = {
   path: '/addcar-displacement',
@@ -137,6 +137,11 @@ const searchCar = {
   name: 'searchCar',
   component: resolve => { require(['@/components/mycar/search-car'], resolve) }
 }
+const payOver = {
+  path: '/pay-over',
+  name: 'payOver',
+  component: resolve => { require(['@/components/pay/pay-over'], resolve) }
+}
 export const routers = [
   loginRouter,
   registerRouter,
@@ -147,7 +152,7 @@ export const routers = [
   orderInfoRouter,
   addcarAge,
   addcarModels,
-  addcarBrand,
+  addcarTabbar,
   addcarDisplacement,
   carOwner,
   carSharing,
@@ -163,5 +168,6 @@ export const routers = [
   maintainPreOrder,
   maintain,
   addNewServer,
-  searchCar
+  searchCar,
+  payOver
 ]

@@ -3,7 +3,7 @@
 <template>
   <div class="addcar-idcard" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="tabbar">
         添加车辆
       </div>
@@ -63,6 +63,9 @@ export default {
     getBackInfo (res) {
       this.areaIndex = res
       this.showAreaBtn = false
+    },
+    _goBack () {
+      this.$router.go(-1)
     }
   },
   components: {

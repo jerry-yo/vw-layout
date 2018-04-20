@@ -2,9 +2,9 @@
 <template>
   <div class="garage" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
-      <div class="vehicle-management">管理</div>
+      <div class="vehicle-management" @click="_goManagement">管理</div>
     </div>
     <div class="container">
       <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
@@ -15,13 +15,13 @@
       </div>
       <div class="car-menu">
         <div class="car-con">
-          <div class="owner">
+          <div class="owner" @click="_goCarOwner">
             <h2>车主认证</h2>
           </div>
-          <div class="sharing">
+          <!-- <div class="sharing" @click="_goCarSharing">
             <h2>车辆共有人</h2>
-          </div>
-          <div class="record">
+          </div> -->
+          <div class="record" @click="_goDetectionRecord">
             <h2>检测记录</h2>
           </div>
         </div>
@@ -84,6 +84,21 @@ export default {
     getBackInfo (res) {
       this.areaIndex = res
       this.showAreaBtn = false
+    },
+    _goBack () {
+      this.$router.go(-1)
+    },
+    _goManagement () {
+      this.$router.push('/vehicle-management')
+    },
+    _goCarOwner () {
+      this.$router.push('/car-owner')
+    },
+    _goCarSharing () {
+      this.$router.push('/car-sharing')
+    },
+    _goDetectionRecord () {
+      this.$router.push('/detection-record')
     }
   },
   components: {

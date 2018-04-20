@@ -162,7 +162,7 @@ export default {
           font-size: 26px
           color: #5b5b5b
           line-height: 46px
-          &:-webkit-input-placeholder
+          &::-webkit-input-placeholder
             font-size: 26px
             color: #b2b2b2
       .detection-record

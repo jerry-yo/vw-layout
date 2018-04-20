@@ -3,7 +3,7 @@
 <template>
   <div class="addcar-displacement" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="tabbar">
         选择发动机排量
       </div>
@@ -38,6 +38,9 @@ export default {
   methods: {
     goAge () {
       this.$router.push('/addcar-age')
+    },
+    _goBack () {
+      this.$router.go(-1)
     }
   },
   mounted: function () {

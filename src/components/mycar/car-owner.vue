@@ -3,7 +3,7 @@
 <template>
   <div class="car-owner" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">车主认证</div>
     </div>
     <div class="example">
@@ -34,7 +34,12 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'carOwner'
+  name: 'carOwner',
+  methods: {
+    _goBack () {
+      this.$router.go(-1)
+    }
+  }
 }
 </script>
 

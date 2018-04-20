@@ -3,7 +3,7 @@
 <template>
   <div class="addcar-age" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="tabbar">
         选择年份
       </div>
@@ -38,6 +38,9 @@ export default {
   methods: {
     goAge () {
       this.$router.push('/addcar-models')
+    },
+    _goBack () {
+      this.$router.go(-1)
     }
   },
   mounted: function () {

@@ -3,13 +3,18 @@
 <template>
   <div class="vehicle-management" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
       <div class="management">编辑</div>
     </div>
     <div class="car-content">
       <ul>
         <li>
+          <div class="check">
+            <div class="check-img">
+
+            </div>
+          </div>
           <div class="img">
             <img src="" alt="">
           </div>
@@ -41,7 +46,7 @@
         </li>
       </ul>
     </div>
-    <div class="submit-btn">
+    <div class="submit-btn" @click="_goAddcarTabbar">
       dd
     </div>
   </div>
@@ -49,7 +54,15 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'vehicleManagement'
+  name: 'vehicleManagement',
+  methods: {
+    _goBack () {
+      this.$router.go(-1)
+    },
+    _goAddcarTabbar () {
+      this.$router.push('/addcar-tabbar')
+    }
+  }
 }
 </script>
 

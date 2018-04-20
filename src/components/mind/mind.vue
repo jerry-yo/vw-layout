@@ -56,7 +56,7 @@
       </div>
     </div>
     <div class="use-list">
-      <div class="car">
+      <div class="car" @click="_goGarage">
         <span>我的车库</span>
         <div class="car-title title">
           <span>4辆爱车</span>
@@ -101,6 +101,9 @@ export default {
         orderType = id
       }
       this.$router.push('/order?type=' + orderType)
+    },
+    _goGarage () {
+      this.$router.push('/garage')
     }
   }
 }
