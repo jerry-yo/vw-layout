@@ -6,39 +6,23 @@
       <div class="go-back" @click="_goBack"></div>
       <div class="font">车主认证</div>
     </div>
-    <div class="example">
-      <div class="img">
-        <img src="" alt="for example">
-      </div>
-      <p>行驶证信息仅用于认证，我们将为您严格保密</p>
-    </div>
-    <div class="car-info">
-      <div class="info-1">
-        <span>车牌号</span>
-        <span>苏DB5463</span>
-      </div>
-      <div class="info-2">
-        <span>发动机号</span>
-        <div class="input">
-          <input type="text" name="" value="" placeholder="用于核实车主本人" maxlength="8">
-        </div>
-      </div>
-    </div>
-    <div class="submit-btn">
-      <div class="btn">
-
-      </div>
+    <div class="container">
+      <vehicleCertification></vehicleCertification>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import vehicleCertification from './vehicle-certification'
 export default {
   name: 'carOwner',
   methods: {
     _goBack () {
       this.$router.go(-1)
     }
+  },
+  components: {
+    vehicleCertification
   }
 }
 </script>
@@ -53,7 +37,6 @@ export default {
     position: relative
     height: 88px
     background-color: #fff
-    margin-bottom: 10px
     .font
       position: absolute
       left: 0
@@ -78,67 +61,7 @@ export default {
       background-repeat: no-repeat
       background-position: 30px center
       background-size: 18px 30px
-  .example
-    padding-top: 16px
-    background-color: #fff
-    height: 485px
-    margin-bottom: 20px
-    .img
-      width: 556px
-      height: 384px
-      border: 1px solid #ff673b
-      margin: 0 auto
-      padding: 7px
-      margin-bottom: 32px
-      img
-        display: block
-        width: 100%
-        height: 100%
-        background-color: red
-    p
-      text-align: center
-      font-size: 20px
-      color: #9c9c9c
-      line-height: 20px
-  .car-info
-    height: 161px
-    background-color: #fff
-    margin-bottom: 43px
-    & > div
-      height: 80px
-      line-height: 80px
-      display: flex
-      padding: 0 30px
-    .info-1
-      border-bottom: 1px solid #f2f2f2
-      font-size: 26px
-      color: #5b5b5b
-      span
-        flex: 1
-      span:nth-child(2)
-        text-align: right
-    .info-2
-      font-size: 26px
-      color: #5b5b5b
-      .input
-        flex: 1
-        input
-          height: 80px
-          float: right
-          text-align: right
-          font-size: 26px
-          color: #5b5b5b
-          border: none
-          background: none
-          outline: none
-          &::-webkit-input-placeholder
-            color: #bebebe
-            text-align: right
-  .submit-btn
-    height: 88px
+  .container
+    flex: 1
     display: flex
-    padding: 0 30px
-    .btn
-      flex: 1
-      background-color: red
 </style>

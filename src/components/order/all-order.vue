@@ -79,7 +79,133 @@ export default {
     return {
       orderType: 1,
       scroll: null,
-      index: 1
+      index: 1,
+      orderList: [
+        {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao1.png',
+          licencePlate: '苏DA111保养',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: false,
+          userOrderFormKeepCarBean: {
+            freeServiceOrProductIconUrl: '',
+            productAllPrice: 1.0,
+            useProductIconUrls: [],
+            useProductNumber: 1,
+            useServiceNumber: 1
+          },
+          whichService: 6
+        }, {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao2.png',
+          licencePlate: '苏DA111保养',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: true,
+          userOrderFormKeepCarBean: {
+            freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
+            productAllPrice: 1.0,
+            useProductIconUrls: [
+              'http://192.168.0.110:8080/product1.jpg',
+              'http://192.168.0.110:8080/product2.jpg'
+            ],
+            useProductNumber: 1,
+            useServiceNumber: 1
+          },
+          whichService: 6
+        }, {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao1.png',
+          licencePlate: '苏DA111保养',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: false,
+          userOrderFormKeepCarBean: {
+            freeServiceOrProductIconUrl: '',
+            productAllPrice: 1.0,
+            useProductIconUrls: [
+              'http://192.168.0.110:8080/product2.jpg'
+            ],
+            useProductNumber: 1,
+            useServiceNumber: 1
+          },
+          whichService: 6
+        }, {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao2.png',
+          licencePlate: '苏DA111普洗',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: true,
+          userOrderFormWashCarBean: {
+            washCarServiceDescribe: '我是普洗的描述，我是普洗的描述，我是普洗的描述',
+            washCarServiceIcon: '',
+            washCarServiceName: '普洗',
+            washCarServicePrice: 36.0
+          },
+          whichService: 5
+        }, {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao1.png',
+          licencePlate: '苏DA111精洗',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: false,
+          userOrderFormWashCarBean: {
+            washCarServiceDescribe: '我是精洗的描述，我是精洗的描述，我是精洗的描述',
+            washCarServiceIcon: '',
+            washCarServiceName: '精洗',
+            washCarServicePrice: 78.0
+          },
+          whichService: 5
+        }, {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao2.png',
+          licencePlate: '苏DA111维修',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: false,
+          userOrderFormMaintainCarBean: {
+            freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free2.jpg',
+            maintainDescribe: '',
+            productAllPrice: 3.0,
+            useProductIconUrls: [],
+            useProductNumber: 1,
+            useServiceNumber: 2
+          },
+          whichService: 7
+        }, {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao1.png',
+          licencePlate: '苏DA111维修',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: true,
+          userOrderFormMaintainCarBean: {
+            freeServiceOrProductIconUrl: '',
+            maintainDescribe: '',
+            productAllPrice: 6.0,
+            useProductIconUrls: [
+              'http://192.168.0.110:8080/product2.jpg'
+            ],
+            useProductNumber: 3,
+            useServiceNumber: 5
+          },
+          whichService: 7
+        }, {
+          busLogoUrl: 'http://192.168.0.110:8080/chebiao2.png',
+          licencePlate: '苏DA111维修',
+          orderFormState: 1,
+          serviceFinishTime: 1524182400000,
+          serviceIsAlreadyFinish: false,
+          userOrderFormMaintainCarBean: {
+            freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
+            maintainDescribe: '',
+            productAllPrice: 12.0,
+            useProductIconUrls: [
+              'http://192.168.0.110:8080/product1.jpg',
+              'http://192.168.0.110:8080/product2.jpg'
+            ],
+            useProductNumber: 8,
+            useServiceNumber: 9
+          },
+          whichService: 7
+        }
+      ]
     }
   },
   computed: {
