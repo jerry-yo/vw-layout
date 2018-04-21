@@ -1,6 +1,6 @@
 <template>
-  <div class="text">
-    <!-- <Badge count="9">
+  <div class="text" flexContainer>
+    <Badge count="9">
       <a href="#" class="button"></a>
     </Badge>
     <Badge count="100">
@@ -11,7 +11,8 @@
     </Badge>
     <Badge dot>
       <a href="#" class="button"></a>
-    </Badge> -->
+    </Badge>
+    <!-- <keepFitTime></keepFitTime> -->
     <div @click="open2()"  class="button" ref="button">adasdfas</div>
     <div @click="open()"  class="button" ref="button">adasdfas</div>
   </div>
@@ -19,6 +20,7 @@
 
 <script type="text/ecmascript-6">
 import Badge from '@/base/badge'
+import keepFitTime from '@/base/keep-fit-time'
 
 export default {
   name: 'searchCar',
@@ -42,21 +44,16 @@ export default {
       })
     },
     open2 () {
-      this.$Modal.confirm({
-        title: '你敢来打我吗?',
-        content: 'Do you like mi? Are you OK?',
-        onOk: () => {
-          console.log('你敢来打我吗')
-          this.$Modal.remove()
-        },
-        onCancel: () => {
-          console.log('我是对的')
-        }
+      this.$Toast({
+        duration: 3000,
+        message: 'Do you  like me? Are you ok?',
+        position: 'top'
       })
     }
   },
   components: {
-    Badge
+    Badge,
+    keepFitTime
   }
 }
 </script>
@@ -64,9 +61,9 @@ export default {
 <style scoped lang="stylus" ref="stylesheet/stylus">
   .text
     position: relative
-    // flex-direction: column
-    // align-items: center
-    // justify-content: center
+    flex-direction: column
+    align-items: center
+    justify-content: center
     height: 100%
     width: 100%
     // background-color: rgba(0, 255, 0, 0.5)
