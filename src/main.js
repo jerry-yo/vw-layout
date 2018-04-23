@@ -26,6 +26,7 @@ axios.defaults.baseURL = 'https://www.gt1.shop/'
 Vue.prototype.baseUrl = axios.defaults.baseURL
 Vue.prototype.Wx = require('weixin-js-sdk')
 Vue.prototype.weui = weui
+// 全局 控件
 Vue.prototype.$Toast = Toast
 Vue.prototype.$Modal = Modal
 
