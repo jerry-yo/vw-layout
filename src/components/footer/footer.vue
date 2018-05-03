@@ -26,6 +26,9 @@ export default {
     aspect-ratio:'750:98'
   .footer
     height: 98px
+    -webkit-box-shadow:0 0 10px rgba(0, 0, 0, .1)
+    -moz-box-shadow:0 0 10px rgba(0, 0, 0, .1)
+    box-shadow:0 0 10px rgba(0, 0, 0, .1)
     & > div
       flex: 1
       display: flex

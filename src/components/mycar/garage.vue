@@ -1,6 +1,6 @@
 // 我的车库
 <template>
-  <div class="garage" flexContainer>
+  <div class="garage">
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
@@ -110,10 +110,10 @@ export default {
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
   .garage
-    flex: 1
+    width: 100%
     background-color: #f2f2f2
     height: 100vh
-    flex-direction: column
+    // flex-direction: column
     bg-image('../../common/imgs/mindbg')
     background-repeat: no-repeat
     background-position: center top
@@ -197,8 +197,8 @@ export default {
           background-repeat: no-repeat
           background-position: center 30px
     .car-idcard
-      height: 90px
       display: flex
+      height: 90px
       line-height: 90px
       margin: 10px 0px
       padding: 0 30px
@@ -225,20 +225,26 @@ export default {
           font-size: 24px
           color: #5b5b5b
     .car-info
-      overflow: hidden
+      height: 360px
+      // display: flex
+      // flex-direction: column
       background-color: #fff
+      overflow: hidden
       .car-models
         height: 90px
         display: flex
         padding: 0 30px
         border-bottom: 1px solid #f2f2f2
+        overflow: hidden
         span:nth-child(1)
           width: 120px
+          height: 90px
           line-height: 90px
           color: #bcbcbc
           font-size: 22px
         span:nth-child(2)
           flex: 1
+          height: 90px
           line-height: 90px
           color: #5b5b5b
           font-size: 26px
@@ -247,6 +253,7 @@ export default {
         height: 90px
         display: flex
         border-bottom: 1px solid #f2f2f2
+        overflow: hidden
         .car-displacement
           flex: 1
           padding: 0 30px
@@ -254,11 +261,13 @@ export default {
           border-right: 1px solid #f2f2f2
           span:nth-child(1)
             width: 120px
+            height: 90px
             line-height: 90px
             color: #bcbcbc
             font-size: 22px
           span:nth-child(2)
             flex: 1
+            height: 90px
             line-height: 90px
             color: #5b5b5b
             font-size: 26px
@@ -267,13 +276,16 @@ export default {
           flex: 1
           padding: 0 30px
           display: flex
+          overflow: hidden
           span:nth-child(1)
             width: 120px
+            height: 90px
             line-height: 90px
             color: #bcbcbc
             font-size: 22px
           span:nth-child(2)
             flex: 1
+            height: 90px
             line-height: 90px
             color: #5b5b5b
             font-size: 26px
@@ -284,6 +296,7 @@ export default {
         padding: 0 30px
         display: flex
         border-bottom: 1px solid #f2f2f2
+        overflow: hidden
         .input
           flex: 1
           input
@@ -305,18 +318,18 @@ export default {
         height: 90px
         padding: 0 30px
         display: flex
+        overflow: hidden
         span:nth-child(1)
           width: 120px
+          height: 90px
           line-height: 90px
           color: #bcbcbc
           font-size: 22px
         span:nth-child(2)
           flex: 1
+          height: 90px
           line-height: 90px
           color: #5b5b5b
           font-size: 26px
           text-align: right
-    .box
-      flex: 1
-      background-color: pink
 </style>

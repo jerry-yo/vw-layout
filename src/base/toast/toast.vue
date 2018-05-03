@@ -20,12 +20,6 @@ export default {
     }
   },
   methods: {
-    ssss () {
-      console.log('666')
-    },
-    ssssa () {
-      console.log('7777')
-    }
   }
 }
 </script>
@@ -50,7 +44,7 @@ export default {
       opacity: 0
     &.top
       top: 10%
-    &.top
+    &.middle
       top: 50%
     &.bottom
       bottom: 10%

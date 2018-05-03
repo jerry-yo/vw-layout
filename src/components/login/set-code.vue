@@ -1,5 +1,5 @@
 <template>
-  <div class="setcode" flexContainer>
+  <div class="setcode">
     <div class="title">
       <div class="register">
         注册
@@ -19,7 +19,9 @@
         </ul>
       </div>
       <h2>请输入验证短信中的验证码</h2>
-      <div class="btn" @click="goBtn"></div>
+      <div @click="goBtn" class="btn" :class="flag ? 'active' : 'unactive'">
+        {{flag ? seconds + 's后重新获取' : '重新获取'}}
+      </div>
     </div>
   </div>
 </template>
@@ -30,7 +32,10 @@ export default {
   data () {
     return {
       number: null,
-      codeArr: []
+      codeArr: [],
+      flag: true,
+      timer: null,
+      seconds: 60
     }
   },
   watch: {
@@ -40,11 +45,32 @@ export default {
   },
   methods: {
     goBtn () {
-      console.log(666)
+      if (!this.flag) {
+        this.seconds = 60
+        this.flag = true
+        this._setTimeout()
+      }
     },
     foucsInput () {
       this.$refs.number.focus()
+    },
+    _setTimeout () {
+      this.timer = setTimeout(() => {
+        if (this.seconds < 2) {
+          clearTimeout(this.timer)
+          this.flag = false
+        } else {
+          this.seconds--
+          this._setTimeout()
+        }
+      }, 1000)
     }
+  },
+  mounted () {
+    this._setTimeout()
+  },
+  destroy () {
+    clearTimeout(this.timer)
   }
 }
 </script>
@@ -52,24 +78,23 @@ export default {
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
   .setcode
-    min-height: 100vh
-    display: flex
-    flex-direction: column
+    height: 100vh
+    width: 100%
     background-color: #fff
     .title
       padding: 0 30px
       height: 88px
       display: flex
       justify-content: flex-end
+      align-items: center
       .register
         width: 180px
-        /* bg-image('../../common/') */
+        bg-image('../../common/imgs/login/goregister')
         background-repeat: no-repeat
         background-size: 16px 28px
         background-position: right center
         padding-right: 40px
         text-align: right
-        line-height: 88px
         font-size: 36px
         color: #ff7240
     .section
@@ -125,11 +150,23 @@ export default {
         font-size: 26px
         color: #b6b6b6
       .btn
-        height: 92px
+        width: 230px
+        height: 60px
         margin-top: 102px
-        /* bg-image('../../common/imgs') */
-        background-color: #ff5c3a
-        background-size: 60px 60px
-        background-repeat: no-repeat
-        background-position: 70px 65px
+        display: flex
+        justify-content: center
+        align-items: center
+        border-radius: 60px
+        overflow: hidden
+        &.unactive
+          font-size: 26px
+          color: #fff
+          background: -webkit-linear-gradient(left, #ff974a, #ff5c3a)
+        &.active
+          font-size: 26px
+          color: #ff8445
+          bg-image('../../common/imgs/login/getpwd')
+          background-size: 230px 60px
+          background-repeat: no-repeat
+          background-position: center center
 </style>

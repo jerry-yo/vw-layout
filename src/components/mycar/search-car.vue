@@ -45,9 +45,9 @@ export default {
     },
     open2 () {
       this.$Toast({
-        duration: 3000,
+        duration: 2,
         message: 'Do you  like me? Are you ok?',
-        position: 'top'
+        position: 'middle'
       })
     }
   },
