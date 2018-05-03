@@ -33,23 +33,38 @@
       </div>
       <div class="order-states">
         <div class="dfk-order" @click="_getOrder(1)">
+          <Badge count="9" :solid="false" :color="'#ff623d'">
+            <div class="img"></div>
+          </Badge>
           <span>待付款</span>
         </div>
         <div class="other-order">
           <div class="box"></div>
           <div class="yy-order" @click="_getOrder(2)">
+            <Badge  count="22" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
             <span>预约中</span>
           </div>
           <div class="box"></div>
           <div class="dqr-order" @click="_getOrder(3)">
+            <Badge  count="33" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
             <span>待确认</span>
           </div>
           <div class="box"></div>
           <div class="wc-order" @click="_getOrder(4)">
+            <Badge  count="40" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
             <span>已完成</span>
           </div>
           <div class="box"></div>
           <div class="qx-order" @click="_getOrder(5)">
+            <Badge  count="99+" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
             <span>已取消</span>
           </div>
         </div>
@@ -85,6 +100,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Badge from '@/base/badge'
 export default {
   name: 'mind',
   data () {
@@ -105,6 +121,9 @@ export default {
     _goGarage () {
       this.$router.push('/garage')
     }
+  },
+  components: {
+    Badge
   }
 }
 </script>
@@ -202,9 +221,10 @@ export default {
         padding: 0 30px
         height: 80px
         border-bottom: 1px solid #d8d8d8
-        line-height: 80px
         .order-title
           flex: 1
+          display: flex
+          align-items: center
           bg-image('../../common/imgs/mind/mdd')
           background-size: 25px 25px
           background-position: left center
@@ -214,6 +234,9 @@ export default {
           padding-left: 43px
         .all-order
           flex: 1
+          display: flex
+          align-items: center
+          justify-content: flex-end
           width: 126px
           font-size: 24px
           color: #bcbcbc
@@ -238,12 +261,18 @@ export default {
         .dfk-order
           width: 70px
           height: 94px
-          padding-top: 42px
-          bg-image('../../common/imgs/mind/qb')
-          background-size: 42px 42px
-          background-position: center top
-          background-repeat: no-repeat
-          text-align: center
+          display: flex
+          flex-direction: column
+          justify-content: center
+          align-items: center
+          .img
+            width: 42px
+            height: 42px
+            bg-image('../../common/imgs/mind/qb')
+            background-size: 42px 42px
+            background-position: center top
+            background-repeat: no-repeat
+            text-align: center
         .other-order
           display: flex
           width: 580px
@@ -251,19 +280,29 @@ export default {
             flex: 1
           .yy-order, .dqr-order, .wc-order, .qx-order
             width: 70px
-            padding-top: 42px
-            background-size: 42px 42px
-            background-position: center top
-            background-repeat: no-repeat
-            text-align: center
+            display: flex
+            flex-direction: column
+            justify-content: center
+            align-items: center
+            .img
+              width: 42px
+              height: 42px
+              background-size: 42px 42px
+              background-position: center top
+              background-repeat: no-repeat
+              text-align: center
           .yy-order
-            bg-image('../../common/imgs/mind/yy')
+            .img
+              bg-image('../../common/imgs/mind/yy')
           .dqr-order
-            bg-image('../../common/imgs/mind/dqr')
+            .img
+              bg-image('../../common/imgs/mind/dqr')
           .wc-order
-            bg-image('../../common/imgs/mind/wc')
+            .img
+              bg-image('../../common/imgs/mind/wc')
           .qx-order
-            bg-image('../../common/imgs/mind/qx')
+            .img
+              bg-image('../../common/imgs/mind/qx')
     .use-list
       width: 100%
       height: auto
@@ -297,16 +336,17 @@ export default {
           background-position: left center
         .title
           flex: 1
+          display: flex
+          justify-content: flex-end
+          align-items: center
           margin-right: 30px
           padding-right: 32px
           bg-image('../../common/imgs/mind/leftright')
           background-size: 15px 24px
           background-repeat: no-repeat
           background-position: right center
-          line-height: 90px
           font-size: 24px
           color: #bcbcbc
-          text-align: right
       .car
         bg-image('../../common/imgs/mind/mcar')
       .quan

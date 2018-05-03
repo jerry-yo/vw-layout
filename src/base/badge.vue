@@ -5,7 +5,7 @@
   </span>
   <span v-else :class="classes" ref="badge">
     <slot></slot>
-    <sup v-if="count" :class="countClasses" v-show="badge">{{ finalCount }}</sup>
+    <sup v-if="count" :class="countClasses" v-show="badge" :style="{backgroundColor: solid ? color : '#fff', borderColor: color, color: solid ? '#fff' : color}">{{ finalCount }}</sup>
   </span>
 </template>
 <script type="text/ecmascript-6">
@@ -17,6 +17,14 @@ export default {
     dot: {
       type: Boolean,
       default: false
+    },
+    solid: {
+      type: Boolean,
+      default: true
+    },
+    color: {
+      type: String,
+      default: '#ed3f14'
     },
     overflowCount: {
       type: [Number, String],
@@ -65,38 +73,34 @@ export default {
   line-height: 1
   vertical-align: middle
   .ivu-badge-count
-      position: absolute
-      transform: translateX(50%)
-      top: -10px
-      right: 0
-      height: 30px
-      border-radius: 15px
-      min-width: 30px
-      background: #ed3f14
-      color: #fff
-      line-height: 30px
-      text-align: center
-      padding: 0 9px
-      font-size: 20px
-      white-space: nowrap
-      transform-origin: -10% center
-      z-index: 10
-      a,a:hover
-          color: #fff
-      .ivu-badge-alone
-          top: auto
-          display: block
-          position: relative
-          transform: translateX(0)
+    box-sizing: border-box
+    position: absolute
+    transform: translateX(50%)
+    top: -10px
+    right: 0
+    height: 30px
+    border-radius: 15px
+    min-width: 30px
+    line-height: 28px
+    padding: 0 8px
+    font-size: 20px
+    white-space: nowrap
+    transform-origin: -10% center
+    z-index: 10
+    border: 1px solid
+    .ivu-badge-alone
+      top: auto
+      display: block
+      position: relative
+      transform: translateX(0)
   .ivu-badge-dot
-      position: absolute
-      transform: translateX(-50%)
-      transform-origin: 0 center
-      top: -8px
-      right: -16px
-      height: 16px
-      width: 16px
-      border-radius: 100%
-      background: #ed3f14
-      z-index: 10
+    position: absolute
+    transform: translateX(-50%)
+    transform-origin: 0 center
+    top: -8px
+    right: -16px
+    height: 16px
+    width: 16px
+    border-radius: 100%
+    z-index: 10
 </style>

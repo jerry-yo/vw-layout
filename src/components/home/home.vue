@@ -1,4 +1,4 @@
-<template>
+ <template>
   <div class="home">
     <div class="home-top">
       <div class="sele-city">
@@ -31,7 +31,7 @@
               </div>
             </div>
             <div class="car-check">
-              <Badge count="9" class="badge">
+              <Badge count="9">
                 <img src="../../common/imgs/home/jcd@2x.png" alt="" >
               </Badge>
               <p>查看检测单</p>
@@ -77,9 +77,7 @@
             <li><h2>违章查询</h2></li>
             <li><h2>年检代办</h2></li>
             <li><h2>买车险</h2></li>
-            <li><h2>买车险</h2></li>
           </ul>
-
         </div>
         <div class="beizhu">
           灰色服务还未上线 敬请期待
