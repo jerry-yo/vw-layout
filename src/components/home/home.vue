@@ -134,7 +134,7 @@ export default {
   methods: {
     // 洗车
     _goCarWash () {
-
+      this.$router.push('/washcar')
     },
     // 维修
     _goRepair () {

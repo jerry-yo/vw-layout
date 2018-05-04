@@ -142,6 +142,11 @@ const payOver = {
   name: 'payOver',
   component: resolve => { require(['@/components/pay/pay-over'], resolve) }
 }
+const washCar = {
+  path: '/washcar',
+  name: 'washCar',
+  component: resolve => { require(['@/components/washcar/washcar'], resolve) }
+}
 export const routers = [
   loginRouter,
   registerRouter,
@@ -169,5 +174,6 @@ export const routers = [
   maintain,
   addNewServer,
   searchCar,
-  payOver
+  payOver,
+  washCar
 ]
