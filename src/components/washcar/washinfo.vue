@@ -1,9 +1,30 @@
-<template>
+  <template>
   <transition name="show">
     <div class="wash-info">
       <div class="header">
         <h2>洗车服务详情</h2>
         <div class="close" @click="closewindow"></div>
+      </div>
+      <div class="content">
+        <ul>
+          <li v-for="(item, index) in washinfo" :key="index">
+            <div class="left">
+              <div class="img" :class="'bg' + item.type"></div>
+              <div class="info">
+                <h2>{{item.name}}</h2>
+                <p>{{item.info}}</p>
+              </div>
+            </div>
+            <div class="right">
+              ￥{{item.price.toFixed(2)}}
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="footer">
+        <div class="bg">
+          去这里
+        </div>
       </div>
     </div>
   </transition>
@@ -11,10 +32,19 @@
 
 <script type="text/ecmascript-6">
 export default {
+  props: {
+    washinfo: {
+      type: Array,
+      required: true
+    }
+  },
   methods: {
     closewindow () {
       this.$emit('closewindow', false)
     }
+  },
+  mounted () {
+    console.log(this.washinfo)
   }
 }
 </script>
@@ -27,6 +57,8 @@ export default {
     transform: translateY(100%)
     opacity: 0
   .wash-info
+    display: flex
+    flex-direction: column
     position: absolute
     left: 0
     bottom: 0
@@ -53,4 +85,64 @@ export default {
         background-position: center center
         background-repeat: no-repeat
         background-size: 20px 20px
+    .content
+      flex: 1
+      ul
+        overflow: hidden
+        li
+          display: flex
+          height: 170px
+          padding: 0 30px
+          .right
+            width: 100px
+            display: flex
+            justify-content: flex-end
+            align-items: center
+            font-size: 22px
+            color: #ff7a7a
+          .left
+            flex: 1
+            display: flex
+            .img
+              width: 154px
+              background-repeat: no-repeat
+              background-position: left center
+              background-size: 133px 90px
+              &.bg1
+                bg-image('../../common/imgs/washcar/p_wash')
+              &.bg2
+                bg-image('../../common/imgs/washcar/j_wash')
+              &.bg3
+                bg-image('../../common/imgs/washcar/super_wash')
+            .info
+              flex: 1
+              display: flex
+              flex-direction: column
+              h2
+                font-size: 28px
+                color: #5b5b5b
+                font-weight: bold
+              p
+                margin-top: 21px
+                width: 395px
+                font-size: 22px
+                color: #9f9f9f
+                line-height: 24px
+    .footer
+      display: flex
+      height: 100px
+      bg-image('../../common/imgs/washcar/btn_bg')
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: 750px 100px
+      .bg
+        flex: 1
+        bg-image('../../common/imgs/washcar/btn_bg')
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: 750px 100px
+        font-size: 30px
+        color: #fffefe
+        line-height: 100px
+        text-align: center
 </style>

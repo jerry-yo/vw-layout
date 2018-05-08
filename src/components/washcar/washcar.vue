@@ -36,7 +36,7 @@
         </div>
       </div> -->
     </div>
-    <washInfo v-show="washinfoShow" @closewindow="_closeAll"></washInfo>
+    <washInfo v-if="washinfoShow" @closewindow="_closeAll" :washinfo="washForShow"></washInfo>
   </div>
 </template>
 
@@ -55,6 +55,7 @@ export default {
       preMarkerId: -1,
       infoWindow: null,
       washinfoShow: false,
+      washForShow: null,
       markers: [
         {
           lng: 119.981649,
@@ -62,23 +63,70 @@ export default {
           new: true,
           state: 1,
           title: '新北中心公园',
-          icon: './static/active_by_store@2x.png'
+          icon: './static/active_by_store@2x.png',
+          way: 3.6,
+          mostfar: true,
+          address: '常州市新北区汉江路299号',
+          washinfo: [{
+            type: 1,
+            name: '普洗',
+            info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
+            price: 30.00
+          }, {
+            type: 2,
+            name: '精洗',
+            info: '整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、边缝清洗、发动机舱清洁、车内精致清洁',
+            price: 60.00
+          }]
         }, {
           lng: 120.004995,
           lat: 31.791868,
           new: false,
           state: 1,
           title: '紫荆公园',
-          icon: './static/active_by_store@2x.png'
+          icon: './static/active_by_store@2x.png',
+          way: 4.2,
+          mostfar: false,
+          address: '常州市天宁区竹林北路紫荆公园',
+          washinfo: [{
+            type: 1,
+            name: '普洗',
+            info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
+            price: 30.00
+          }, {
+            type: 2,
+            name: '精洗',
+            info: '整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、边缝清洗、发动机舱清洁、车内精致清洁',
+            price: 60.00
+          }, {
+            type: 3,
+            name: '超精洗',
+            info: '边缝清洗、发动机舱清洁、车内精致清洁，整车泡沫冲洗擦干、轮胎轮毂冲洗清洁',
+            price: 90.00
+          }]
         }, {
           lng: 120.000531,
           lat: 31.823816,
           new: false,
           state: 2,
           title: '中华恐龙园',
-          icon: './static/active_by_store@2x.png'
+          icon: './static/active_by_store@2x.png',
+          way: 8.3,
+          mostfar: false,
+          address: '常州市新北区河海东路60号',
+          washinfo: [{
+            type: 1,
+            name: '普洗',
+            info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
+            price: 30.00
+          }]
         }
       ]
+    }
+  },
+  watch: {
+    preMarkerId: function (newQuestion, oldQuestion) {
+      this.washForShow = this.markers[newQuestion].washinfo
     }
   },
   methods: {
@@ -199,11 +247,11 @@ export default {
         offset: new AMap.Pixel(0, -34),
         content: `<div class="window-info">
                     <div class="left">
-                      <h2>奇特异快速保养-丽华店addads</h2>
-                      <p>常州市丽华南村XX街XX路X号奇特异快速保养-丽华店</p>
+                      <h2>奇特异保养店${item.title}</h2>
+                      <p>${item.address}</p>
                     </div>
-                    <div class="right"><h2>4.2km</h2><span>距您最近</span></div>
-                    <div class="state bg1">空闲</div>
+                    <div class="right"><h2>${item.way}km</h2><span class="${item.mostfar ? 'show' : ''}">距您最近</span></div>
+                    <div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div>
                   </div>`
       })
       this.infoWindow.open(this.map, [item.lng, item.lat])
@@ -355,6 +403,9 @@ export default {
         font-size: 22px
         color: #ff8d48
         margin-top: 10px
+        display: none
+        &.show
+          display: block
     .state
       position: absolute
       right: 0px
