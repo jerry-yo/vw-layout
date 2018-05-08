@@ -14,41 +14,69 @@
         <div class="bor"></div>
         <div class="map-kf"></div>
       </div>
+      <!-- marker 样式 -->
+      <!-- <div class="marker-com bg1">
+        <span class="marker-txt">中华恐龙园
+          <div class="state bg1"></div>
+        </span>
+        <div class="new">NEW</div>
+      </div> -->
+      <!-- 信息窗体 样式 -->
+      <!-- <div class="window-info">
+        <div class="left">
+          <h2>奇特异快速保养-丽华店addads</h2>
+          <p>常州市丽华南村XX街XX路X号奇特异快速保养-丽华店</p>
+        </div>
+        <div class="right">
+          <h2>4.2km</h2>
+          <span>距您最近</span>
+        </div>
+        <div class="state bg1">
+          空闲
+        </div>
+      </div> -->
     </div>
+    <washInfo v-show="washinfoShow" @closewindow="_closeAll"></washInfo>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import AMap from 'AMap'
-// import AMapUI from 'AMapUI'
+import washInfo from './washinfo'
 export default {
   data () {
     return {
       map: null,
       geolocation: null,
       customMarker: null,
-      toolBar: null,
       my_position: {},
       showMap: false,
+      markerDom: [],
+      preMarkerId: -1,
+      infoWindow: null,
+      washinfoShow: false,
       markers: [
         {
-          lng: 119.988081,
-          lat: 31.810535,
+          lng: 119.981649,
+          lat: 31.826587,
           new: true,
           state: 1,
-          title: '兰陵瑾萱店'
+          title: '新北中心公园',
+          icon: './static/active_by_store@2x.png'
         }, {
-          lng: 119.99572,
-          lat: 31.799994,
+          lng: 120.004995,
+          lat: 31.791868,
           new: false,
           state: 1,
-          title: '景瑞店'
+          title: '紫荆公园',
+          icon: './static/active_by_store@2x.png'
         }, {
-          lng: 120.013787,
-          lat: 31.81564,
+          lng: 120.000531,
+          lat: 31.823816,
           new: false,
-          state: 0,
-          title: '恐龙园店'
+          state: 2,
+          title: '中华恐龙园',
+          icon: './static/active_by_store@2x.png'
         }
       ]
     }
@@ -58,12 +86,15 @@ export default {
       this.$router.go(-1)
     },
     _setMap () {
+      let _self = this
       this.map = new AMap.Map(this.$refs.container, {
         resizeEnable: true,
-        layers: [
-          new AMap.TileLayer()
-        ],
-        zoom: 13
+        jogEnable: false,
+        zoom: 13,
+        zooms: [12, 19]
+      })
+      AMap.event.addListener(_self.map, 'click', (e) => {
+        _self._closeAll()
       })
     },
     _onComplete (data) {
@@ -78,7 +109,7 @@ export default {
           position: [_self.my_position.lng, _self.my_position.lat],
           offset: new AMap.Pixel(-11, -34),
           icon: new AMap.Icon({
-            image: 'http://192.168.0.101/own_marker@2x.png',
+            image: './static/own_marker@2x.png',
             size: new AMap.Size(22, 34)
           })
         })
@@ -86,6 +117,37 @@ export default {
     },
     _onError (data) {
       console.log(data)
+    },
+    _onClick (e) {
+      this.washinfoShow = true
+      let _self = this
+      this._reductionMarker()
+      // 激活点击
+      let id = e.target.getExtData()
+      this.markerDom[id].setMap(null)
+      this.markerDom[id] = new AMap.Marker({
+        map: _self.map,
+        offset: new AMap.Pixel(-22, -22),
+        position: [_self.markers[id].lng, _self.markers[id].lat],
+        icon: new AMap.Icon({
+          image: _self.markers[id].icon,
+          size: new AMap.Size(44, 44)
+        }),
+        extData: id,
+        clickable: true
+      })
+      this.preMarkerId = id
+
+      // 显示信息窗体
+      this._setInfoWindow(this.markers[id])
+    },
+    _reductionMarker () {
+      // 还原上一个
+      let preId = this.preMarkerId
+      if (preId !== -1) {
+        this.markerDom[preId].setMap(null)
+        this._setMarker(this.markers[preId], preId)
+      }
     },
     _getLocation () {
       let _self = this
@@ -109,33 +171,105 @@ export default {
     },
     _getMarker () {
       let _self = this
-      this.markers.forEach((item) => {
-        new AMap.Marker({
-          map: _self.map,
-          position: [item.lng, item.lat],
-          offset: new AMap.Pixel(-12, -36),
-          content: `<span class="txt">${item.title}<div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div><div class="marker-com bg${item.state === 1 ? '1' : '2'}"><div class="new ${item.new ? '' : 'show'}" >NEW</div></div></span>`
-        })
+      this.markers.forEach((item, index) => {
+        _self._setMarker(item, index)
       })
+    },
+    _setMarker (item, index) {
+      let _self = this
+      _self.markerDom[index] = new AMap.Marker({
+        map: _self.map,
+        offset: new AMap.Pixel(-17, -17),
+        position: [item.lng, item.lat],
+        content: `<div class="marker-com bg1">
+                    <div class="new ${item.new ? '' : 'show'}" >NEW</div>
+                    <div class="marker-txt">
+                      <span>${item.title}</span>
+                      <div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div>
+                    </div>
+                  </div>`,
+        extData: index,
+        clickable: true
+      })
+      _self.markerDom[index].on('click', this._onClick)
+    },
+    _setInfoWindow (item) {
+      this.infoWindow = new AMap.InfoWindow({
+        isCustom: true,
+        offset: new AMap.Pixel(0, -34),
+        content: `<div class="window-info">
+                    <div class="left">
+                      <h2>奇特异快速保养-丽华店addads</h2>
+                      <p>常州市丽华南村XX街XX路X号奇特异快速保养-丽华店</p>
+                    </div>
+                    <div class="right"><h2>4.2km</h2><span>距您最近</span></div>
+                    <div class="state bg1">空闲</div>
+                  </div>`
+      })
+      this.infoWindow.open(this.map, [item.lng, item.lat])
+      this.map.panTo([item.lng, item.lat])
+      this.map.panBy(0, -150)
+    },
+    _closeInfoWindow () {
+      this.infoWindow.close()
+    },
+    _closeAll () {
+      this.washinfoShow = false
+      this.infoWindow.close()
+      this._reductionMarker()
     }
   },
   mounted () {
     this._setMap()
     this._getLocation()
     this._getMarker()
+  },
+  components: {
+    washInfo
   }
 }
 </script>
 
 <style lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
-  .amap-markers
-    .txt
+  .marker-com
+    position: relative
+    width: 68px
+    height: 68px
+    z-index: 100
+    background-position: center center
+    background-repeat: no-repeat
+    background-size: 68px 68px
+    &.bg1
+      bg-image('../../common/imgs/washcar/by_store')
+    &.bg2
+      bg-image('../../common/imgs/washcar/repair_store')
+    .new
       position: absolute
-      left: 100px
-      top: 200px
-      padding: 14px 20px !important
+      right: 0px
+      top: 0px
+      width: 44px
+      height: 20px
+      text-align: center
+      line-height: 20px
+      font-size: 14px
+      color: #ffffff
+      background-color: #ff4141
+      border-radius: 20px
+      overflow: hidden
+      transform: translate3d(50%, -10%, 0)
+      &.show
+        display: none
+    .marker-txt
+      display: block
+      position: absolute
+      left: -55px
+      top: -68px
+      width: 178px
+      height: 60px
       font-size:24px
+      line-height: 60px
+      text-align: center
       color: #fff
       background-color: #616161
       z-index: 100
@@ -167,38 +301,75 @@ export default {
           background-color: #85e7ac
         &.bg2
           background-color: #ff8474
-      .marker-com
-        position: absolute
-        left: 50%
-        transform: translateX(-50%)
-        bottom: -72px
-        width: 68px
-        height: 68px
-        z-index: 100
-        background-position: center center
-        background-repeat: no-repeat
-        background-size: 68px 68px
-        &.bg1
-          bg-image('../../common/imgs/washcar/by_store')
-        &.bg2
-          bg-image('../../common/imgs/washcar/repair_store')
-        .new
-          position: absolute
-          right: 0px
-          top: 0px
-          width: 44px
-          height: 20px
-          text-align: center
-          line-height: 20px
-          font-size: 14px
-          color: #ffffff
-          background-color: #ff4141
-          border-radius: 20px
-          overflow: hidden
-          transform: translate3d(50%, -20%, 0)
-          &.show
-            display: none
-
+  .window-info
+    position: relative
+    display: flex
+    width: 500px
+    height: 140px
+    background-color: #fff
+    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2)
+    z-index: 101
+    &::after
+      content: ''
+      position: absolute
+      left: 50%
+      bottom: -35px
+      transform: translateX(-50%)
+      border: 20px solid
+      width: 1px
+      height: 1px
+      border-top-color: #fff
+      border-bottom-color: rgba(0, 0, 0, 0)
+      border-left-color: rgba(0, 0, 0, 0)
+      border-right-color: rgba(0, 0, 0, 0)
+    .left
+      flex: 1
+      display: flex
+      padding-left: 25px
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      h2
+        width: 330px
+        height: 34px
+        font-size: 28px
+        color: #6c6c6c
+        line-height: 34px
+        overflow: hidden
+        text-overflow: ellipsis
+        white-space: nowrap
+      p
+        font-size: 22px
+        color: #bebebe
+        line-height: 30px
+    .right
+      display: flex
+      flex-direction: column
+      justify-content: center
+      align-items: center
+      width: 140px
+      .h2
+        font-size: 26px
+        color: #bebebe
+      span
+        font-size: 22px
+        color: #ff8d48
+        margin-top: 10px
+    .state
+      position: absolute
+      right: 0px
+      top: -18px
+      width: 70px
+      height: 30px
+      font-size: 20px
+      color: #FFF
+      line-height: 30px
+      text-align: center
+      transform: translateX(-50%)
+      &.bg1
+        background-color: #85e7ac
+      &.bg2
+        background-color: #ff8474
 </style>
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
