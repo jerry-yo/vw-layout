@@ -6,14 +6,14 @@
         添加新服务
       </div>
     </div>
-    <div class="container" ref="addservice">
+    <Scroll class="container" ref="addservice">
       <div class="wrapper">
         <div class="service-catalog" v-for="(res, resid) in newServer" :key="resid">
           <div class="service-title">{{res.serviceCatalog}}</div>
           <serverModel v-for="(item, index) in res.serviceCon" :key="index" :server="item" :serverid="index" :addServer="false"></serverModel>
         </div>
       </div>
-    </div>
+    </Scroll>
     <div class="place-order">
       <div class="server">客服</div>
       <div class="tips">
@@ -32,12 +32,11 @@
 
 <script type="text/ecmascript-6">
 import serverModel from '@/base/server-model'
-import BScorll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'maintain',
   data () {
     return {
-      addNewServerBScroll: null,
       checkServer: [],
       newServer: [
         {
@@ -369,14 +368,10 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(function () {
-      this.addNewServerBScroll = new BScorll(this.$refs.addservice, {
-        click: true
-      })
-    })
   },
   components: {
-    serverModel
+    serverModel,
+    Scroll
   }
 }
 </script>

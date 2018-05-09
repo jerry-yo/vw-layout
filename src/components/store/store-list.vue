@@ -7,7 +7,7 @@
         常州
       </div>
     </div>
-    <div class="store-list" ref="storelist">
+    <Scroll class="store-list" ref="storelist">
       <ul>
         <li :class="{'active': seleIndex === index}" v-for="(item, index) in storeArray" :key="index" @click="seleStore(index)">
           <div class="top">
@@ -29,12 +29,12 @@
           </div>
         </li>
       </ul>
-    </div>
+    </Scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'storeList',
   data () {
@@ -52,12 +52,8 @@ export default {
       this.seleIndex = id
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
-      this.storeListBScroll = new BScroll(this.$refs.storelist, {
-        click: true
-      })
-    })
+  components: {
+    Scroll
   }
 }
 </script>

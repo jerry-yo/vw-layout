@@ -7,8 +7,8 @@
       <div class="font">我的车库</div>
       <div class="management">编辑</div>
     </div>
-    <div class="car-content">
-      <ul>
+    <Scroll class="car-content">
+      <ul class="con">
         <li>
           <div class="check">
             <div class="check-img">
@@ -44,8 +44,143 @@
             </div>
           </div>
         </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
+        <li>
+          <div class="img">
+            <img src="" alt="">
+          </div>
+          <div class="con">
+            <h2>东风本田-思域</h2>
+            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
+            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
+          </div>
+          <div class="right">
+            <div class="btn">
+              已设为默认
+            </div>
+          </div>
+        </li>
       </ul>
-    </div>
+    </Scroll>
     <div class="submit-btn" @click="_goAddcarTabbar">
       dd
     </div>
@@ -53,6 +188,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'vehicleManagement',
   methods: {
@@ -62,6 +198,9 @@ export default {
     _goAddcarTabbar () {
       this.$router.push('/addcar-tabbar')
     }
+  },
+  components: {
+    Scroll
   }
 }
 </script>
@@ -118,10 +257,9 @@ export default {
       line-height: 100px
     .car-content
       flex: 1
-      display: flex
+      overflow: hidden
       ul
-        flex: 1
-        overflow: hidden
+        position: relative
         li
           display: flex
           height: 208px

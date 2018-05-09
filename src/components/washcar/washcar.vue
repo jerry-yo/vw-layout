@@ -126,7 +126,7 @@ export default {
   },
   watch: {
     preMarkerId: function (newQuestion, oldQuestion) {
-      this.washForShow = this.markers[newQuestion].washinfo
+      this.washForShow = this.markers[newQuestion]
     }
   },
   methods: {
@@ -244,7 +244,7 @@ export default {
     _setInfoWindow (item) {
       this.infoWindow = new AMap.InfoWindow({
         isCustom: true,
-        offset: new AMap.Pixel(0, -34),
+        offset: new AMap.Pixel(0, -24),
         content: `<div class="window-info">
                     <div class="left">
                       <h2>奇特异保养店${item.title}</h2>
@@ -256,7 +256,7 @@ export default {
       })
       this.infoWindow.open(this.map, [item.lng, item.lat])
       this.map.panTo([item.lng, item.lat])
-      this.map.panBy(0, -150)
+      this.map.panBy(0, -100)
     },
     _closeInfoWindow () {
       this.infoWindow.close()
@@ -352,24 +352,14 @@ export default {
   .window-info
     position: relative
     display: flex
-    width: 500px
-    height: 140px
-    background-color: #fff
-    box-shadow: 0 5px 8px rgba(0, 0, 0, 0.2)
+    width: 512px
+    height: 165px
+    bg-image('../../common/imgs/washcar/infowindow')
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: 512px 165px
+    padding-bottom: 25px
     z-index: 101
-    &::after
-      content: ''
-      position: absolute
-      left: 50%
-      bottom: -35px
-      transform: translateX(-50%)
-      border: 20px solid
-      width: 1px
-      height: 1px
-      border-top-color: #fff
-      border-bottom-color: rgba(0, 0, 0, 0)
-      border-left-color: rgba(0, 0, 0, 0)
-      border-right-color: rgba(0, 0, 0, 0)
     .left
       flex: 1
       display: flex
@@ -377,6 +367,7 @@ export default {
       flex-direction: column
       justify-content: center
       align-items: center
+      border-bottom: 1px solid #f2f2f2
       h2
         width: 330px
         height: 34px

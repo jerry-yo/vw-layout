@@ -14,7 +14,7 @@
           <li v-for="(item, index) in logo" :key="item.type" @click="selectMenu(index, $event)">{{item.type}}</li>
         </ul>
       </div>
-      <div class="wrapper" ref="logolist">
+      <Scroll class="wrapper" ref="logolist">
         <div class="list-con">
           <div class="hot-logo type-index">
             <h2>热门品牌</h2>
@@ -33,13 +33,13 @@
             </li>
           </ul>
         </div>
-      </div>
+      </Scroll>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 import brandMask from './addcar-brand-mask'
 export default {
   name: 'addcarBrand',
@@ -142,15 +142,9 @@ export default {
       console.log('666')
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
-      this.logoList = new BScroll(this.$refs.logolist, {
-        click: true
-      })
-    })
-  },
   components: {
-    brandMask
+    brandMask,
+    Scroll
   }
 }
 </script>

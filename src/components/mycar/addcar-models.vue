@@ -15,23 +15,22 @@
     <div class="sele-next">
       <span>2.5L</span><span class="between">-</span><span>2012年</span><span class="between">-</span>选择车型
     </div>
-    <div class="models" ref="modelsCar">
+    <Scroll class="models" ref="modelsCar">
       <div class="con">
         <div class="text" v-for="(item, index) in models" :key="index" @click="goAge">
           {{item}}
         </div>
       </div>
-    </div>
+    </Scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'addcarModels',
   data () {
     return {
-      modelsBScorll: null,
       models: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015']
     }
   },
@@ -43,12 +42,8 @@ export default {
       this.$router.go(-1)
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
-      this.modelsBScorll = new BScroll(this.$refs.modelsCar, {
-        click: true
-      })
-    })
+  components: {
+    Scroll
   }
 }
 </script>

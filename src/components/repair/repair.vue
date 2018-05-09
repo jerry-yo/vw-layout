@@ -16,7 +16,7 @@
       <span>-</span>
       <span class="bg bg4">到店服务</span>
     </div>
-    <div class="container" ref="repair">
+    <Scroll class="container" ref="repair">
       <div class="wrapper">
         <div class="textarea" flexContainer ref="chatpannel" >
           <textarea name="name" rows="5" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
@@ -31,7 +31,7 @@
         <seleDetectionMenu :check="true"></seleDetectionMenu>
       </div>
 
-    </div>
+    </Scroll>
     <div class="go-next" @click="goNext">
 
     </div>
@@ -39,7 +39,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 import uploadPic from '@/base/upload-pic'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 export default {
@@ -69,15 +69,13 @@ export default {
   },
   mounted: function () {
     this.$nextTick(function () {
-      this.repairBScroll = new BScroll(this.$refs.repair, {
-        click: true
-      })
       this.clientHeight = document.body.offsetHeight
     })
   },
   components: {
     uploadPic,
-    seleDetectionMenu
+    seleDetectionMenu,
+    Scroll
   }
 }
 </script>

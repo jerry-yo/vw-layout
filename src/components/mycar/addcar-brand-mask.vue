@@ -1,6 +1,6 @@
 <template>
   <div class="addcar-brand-mask">
-    <div class="con" ref="addcarBrandMask">
+    <Scroll class="con" ref="addcarBrandMask">
       <div class="wrapper">
         <div class="title">
           <img src="" alt="">
@@ -13,12 +13,12 @@
           </li>
         </ul>
       </div>
-    </div>
+    </Scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'addcarBrandMask',
   data () {
@@ -45,12 +45,8 @@ export default {
       this.$router.push('/addcar-displacement')
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
-      this.addcarBrand_1 = new BScroll(this.$refs.addcarBrandMask, {
-        click: true
-      })
-    })
+  components: {
+    Scroll
   }
 }
 </script>

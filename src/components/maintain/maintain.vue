@@ -16,7 +16,7 @@
       <span>-</span>
       <span class="bg bg4">到店服务</span>
     </div>
-    <div class="container" ref="maintain">
+    <Scroll class="container" ref="maintain">
       <div class="wrapper">
         <serverModel v-for="(item, index) in serverList" :key="index" :server="item" :serverid="index"></serverModel>
         <div class="add-server" @click="_goAddServer">
@@ -26,7 +26,7 @@
           不选服务可以下单后到店进行选择哦
         </div>
       </div>
-    </div>
+    </Scroll>
     <div class="place-order">
       <div class="server">客服</div>
       <div class="tips">
@@ -45,12 +45,11 @@
 
 <script type="text/ecmascript-6">
 import serverModel from '@/base/server-model'
-import BScorll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'maintain',
   data () {
     return {
-      maintainBScroll: null,
       serverList: [
         {
           groupItem: {
@@ -275,14 +274,10 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(function () {
-      this.maintainBScroll = new BScorll(this.$refs.maintain, {
-        click: true
-      })
-    })
   },
   components: {
-    serverModel
+    serverModel,
+    Scroll
   }
 }
 </script>

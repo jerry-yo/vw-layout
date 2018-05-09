@@ -13,7 +13,7 @@
           <li :class="{'active-on':orderType === 5}" @click="setOrderType(5)"><span>已取消</span></li>
         </ul>
       </div>
-      <div class="order-container" ref="wrapperOrder">
+      <Scroll class="order-container" ref="wrapperOrder">
         <ul class="content">
           <li v-for="item in order" :key="item.index" v-if="item.go === orderType">
             <div class="order-title" @click="goOrderInfo(item)">
@@ -64,12 +64,12 @@
             </div>
           </li>
         </ul>
-      </div>
+      </Scroll>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 import orderBy from './order-by'
 import orderWx from './order-wx'
 import orderXc from './order-xc'
@@ -78,7 +78,6 @@ export default {
   data () {
     return {
       orderType: 1,
-      scroll: null,
       index: 1,
       orderList: [
         {
@@ -237,16 +236,12 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(() => {
-      this.scroll = new BScroll(this.$refs.wrapperOrder, {
-        click: true
-      })
-    })
   },
   components: {
     orderBy,
     orderWx,
-    orderXc
+    orderXc,
+    Scroll
   }
 }
 </script>

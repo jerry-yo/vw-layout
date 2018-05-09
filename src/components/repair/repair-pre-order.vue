@@ -15,7 +15,7 @@
       <span>-</span>
       <span class="bg bg4">到店服务</span>
     </div>
-    <div class="container" ref="repairPre">
+    <Scroll class="container" ref="repairPre">
       <div class="wrapper">
         <storeInfo></storeInfo>
         <div class="bespoke-date">
@@ -50,7 +50,7 @@
           <seleDetectionMenu :check="false"></seleDetectionMenu>
         </div>
       </div>
-    </div>
+    </Scroll>
     <div class="place-order">
       <div class="server">客服</div>
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
@@ -60,14 +60,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 export default {
   name: 'repairPreOrder',
   data () {
     return {
-      repairPreOrderBScroll: null,
       imgs: [0, 1, 2, 3]
     }
   },
@@ -82,15 +81,11 @@ export default {
     }
   },
   mounted () {
-    this.$nextTick(function () {
-      this.repairPreOrderBScroll = new BScroll(this.$refs.repairPre, {
-        click: true
-      })
-    })
   },
   components: {
     storeInfo,
-    seleDetectionMenu
+    seleDetectionMenu,
+    Scroll
   }
 }
 </script>

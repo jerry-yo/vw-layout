@@ -9,28 +9,34 @@
       </div>
       <div class="sharing">搜索</div>
     </div>
-    <div class="list">
-      <div class="list-info">
-        <div class="img">
-          <img src="" alt="">
-        </div>
-        <div class="list-title">
-          <h2>绿驴驴驴驴驴</h2>
-          <p>1386565683</p>
-        </div>
-        <div class="btn">
-          <div class="add">
-            添加
+    <Scroll class="list">
+      <ul class="list-con">
+        <li  class="list-info">
+          <div class="img">
+            <img src="" alt="">
           </div>
-        </div>
-      </div>
-    </div>
+          <div class="list-title">
+            <h2>绿驴驴驴驴驴</h2>
+            <p>1386565683</p>
+          </div>
+          <div class="btn">
+            <div class="add">
+              添加
+            </div>
+          </div>
+        </li>
+      </ul>
+    </Scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Scroll from '@/base/scroll/scroll'
 export default {
-  name: 'addCarSharing'
+  name: 'addCarSharing',
+  components: {
+    Scroll
+  }
 }
 </script>
 
@@ -82,6 +88,8 @@ export default {
   .list
     flex: 1
     overflow: hidden
+    .list-con
+      position: relative
     .list-info
       height:172px
       display: flex

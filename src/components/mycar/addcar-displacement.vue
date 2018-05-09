@@ -15,18 +15,18 @@
     <div class="sele-next">
       选择发动机排量
     </div>
-    <div class="displacement" ref="displacementCar">
+    <Scroll class="displacement" ref="displacementCar">
       <div class="con">
         <div class="text" v-for="(item, index) in displacement" :key="index" @click="goAge">
           {{item}}
         </div>
       </div>
-    </div>
+    </Scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'addcarDisplacement',
   data () {
@@ -43,12 +43,8 @@ export default {
       this.$router.go(-1)
     }
   },
-  mounted: function () {
-    this.$nextTick(function () {
-      this.displacementBScorll = new BScroll(this.$refs.displacementCar, {
-        click: true
-      })
-    })
+  components: {
+    Scroll
   }
 }
 </script>

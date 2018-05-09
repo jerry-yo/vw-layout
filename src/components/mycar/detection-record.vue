@@ -9,40 +9,155 @@
         <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
       </div>
     </div>
-    <div class="list">
-      <div class="list-info">
-        <div class="left">
-          <div class="time">
-            <span>2018年01月01日 10:30</span>
-            <span v-if="isflag">经检查您的爱车没有异常</span>
+    <Scroll class="list">
+      <ul class="con">
+        <li  class="list-info">
+          <div class="left">
+            <div class="time">
+              <span>2018年01月01日 10:30</span>
+              <span v-if="isflag">经检查您的爱车没有异常</span>
+            </div>
+            <div class="abnormal"  v-if="!isflag">
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>远光灯</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>轮胎胎压异常</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>雨刮器</span><span class="success"></span></div>
+              </div>
+              <div class="err-info">
+                <div>处理完成</div>
+                <div><span>远光灯</span><span class="success"></span></div>
+              </div>
+            </div>
           </div>
-          <div class="abnormal"  v-if="!isflag">
-            <div class="err-info">
-              <div>新增</div>
-              <div><span>远光灯</span><span class="err"></span></div>
+          <div class="right"  v-if="!isflag">
+          </div>
+        </li>
+        <li  class="list-info">
+          <div class="left">
+            <div class="time">
+              <span>2018年01月01日 10:30</span>
+              <span v-if="isflag">经检查您的爱车没有异常</span>
             </div>
-            <div class="err-info">
-              <div>新增</div>
-              <div><span>轮胎胎压异常</span><span class="err"></span></div>
-            </div>
-            <div class="err-info">
-              <div>新增</div>
-              <div><span>雨刮器</span><span class="success"></span></div>
-            </div>
-            <div class="err-info">
-              <div>处理完成</div>
-              <div><span>远光灯</span><span class="success"></span></div>
+            <div class="abnormal"  v-if="!isflag">
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>远光灯</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>轮胎胎压异常</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>雨刮器</span><span class="success"></span></div>
+              </div>
+              <div class="err-info">
+                <div>处理完成</div>
+                <div><span>远光灯</span><span class="success"></span></div>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="right"  v-if="!isflag">
-        </div>
-      </div>
-    </div>
+          <div class="right"  v-if="!isflag">
+          </div>
+        </li>
+        <li  class="list-info">
+          <div class="left">
+            <div class="time">
+              <span>2018年01月01日 10:30</span>
+              <span v-if="isflag">经检查您的爱车没有异常</span>
+            </div>
+            <div class="abnormal"  v-if="!isflag">
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>远光灯</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>轮胎胎压异常</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>雨刮器</span><span class="success"></span></div>
+              </div>
+              <div class="err-info">
+                <div>处理完成</div>
+                <div><span>远光灯</span><span class="success"></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="right"  v-if="!isflag">
+          </div>
+        </li>
+        <li  class="list-info">
+          <div class="left">
+            <div class="time">
+              <span>2018年01月01日 10:30</span>
+              <span v-if="isflag">经检查您的爱车没有异常</span>
+            </div>
+            <div class="abnormal"  v-if="!isflag">
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>远光灯</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>轮胎胎压异常</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>雨刮器</span><span class="success"></span></div>
+              </div>
+              <div class="err-info">
+                <div>处理完成</div>
+                <div><span>远光灯</span><span class="success"></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="right"  v-if="!isflag">
+          </div>
+        </li>
+        <li  class="list-info">
+          <div class="left">
+            <div class="time">
+              <span>2018年01月01日 10:30</span>
+              <span v-if="isflag">经检查您的爱车没有异常</span>
+            </div>
+            <div class="abnormal"  v-if="!isflag">
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>远光灯</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>轮胎胎压异常</span><span class="err"></span></div>
+              </div>
+              <div class="err-info">
+                <div>新增</div>
+                <div><span>雨刮器</span><span class="success"></span></div>
+              </div>
+              <div class="err-info">
+                <div>处理完成</div>
+                <div><span>远光灯</span><span class="success"></span></div>
+              </div>
+            </div>
+          </div>
+          <div class="right"  v-if="!isflag">
+          </div>
+        </li>
+      </ul>
+    </Scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'detectionRecord',
   data () {
@@ -54,6 +169,9 @@ export default {
     _goBack () {
       this.$router.go(-1)
     }
+  },
+  components: {
+    Scroll
   }
 }
 </script>
@@ -98,6 +216,8 @@ export default {
   .list
     flex: 1
     overflow: hidden
+    .con
+      position: relative
     .list-info
       padding: 17px 30px
       display: flex

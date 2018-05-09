@@ -132,11 +132,11 @@ const addNewServer = {
   name: 'addNewServer',
   component: resolve => { require(['@/components/maintain/add-new-server'], resolve) }
 }
-const searchCar = {
-  path: '/search-car',
-  name: 'searchCar',
-  component: resolve => { require(['@/components/mycar/search-car'], resolve) }
-}
+// const searchCar = {
+//   path: '/search-car',
+//   name: 'searchCar',
+//   component: resolve => { require(['@/components/mycar/search-car'], resolve) }
+// }
 const payOver = {
   path: '/pay-over',
   name: 'payOver',
@@ -146,6 +146,11 @@ const washCar = {
   path: '/washcar',
   name: 'washCar',
   component: resolve => { require(['@/components/washcar/washcar'], resolve) }
+}
+const searchWashStore = {
+  path: '/search-wash-store',
+  name: 'searchWashStore',
+  component: resolve => { require(['@/components/washcar/search_wash_store'], resolve) }
 }
 export const routers = [
   loginRouter,
@@ -173,7 +178,8 @@ export const routers = [
   maintainPreOrder,
   maintain,
   addNewServer,
-  searchCar,
+  // searchCar,
   payOver,
-  washCar
+  washCar,
+  searchWashStore
 ]

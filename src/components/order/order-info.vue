@@ -4,7 +4,7 @@
       <div class="back" @click="goBack" ></div>
       <span>订单详情</span>
     </div>
-    <div class="order-content" ref="orderWarpper">
+    <Scroll class="order-content" ref="orderWarpper">
       <div class="order-con">
         <div class="order-img" v-if="orderInfo.go >= 4">
           <div class="order-bg-1 order-bg" v-if="orderInfo.go === 5">
@@ -93,7 +93,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </Scroll>
     <div class="order-btn">
       <div class="order-foot-1 foot" v-if="orderInfo.go === 1">
         <span class="car-state">已过期</span>
@@ -131,7 +131,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import BScroll from 'better-scroll'
+import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
 import orderXc from '@/components/order/order-xc'
@@ -151,15 +151,13 @@ export default {
   },
   mounted () {
     this.orderInfo = JSON.parse(this.$route.query.res)
-    this.orderScroll = new BScroll(this.$refs.orderWarpper, {
-      click: true
-    })
   },
   components: {
     orderBy,
     orderWx,
     orderXc,
-    orderTest
+    orderTest,
+    Scroll
   }
 }
 </script>
