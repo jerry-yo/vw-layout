@@ -48,4 +48,5 @@ router.beforeEach((to, from, next) => {
     }
   }
   next()
+  console.log(window.history)
 })

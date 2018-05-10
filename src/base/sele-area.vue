@@ -46,6 +46,7 @@ export default {
     display: flex
     flex-direction: column-reverse
     background-color: rgba(0, 0, 0, 0.5)
+    z-index: 10
     .container
       background-color: #fff
       display: flex

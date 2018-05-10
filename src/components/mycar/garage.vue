@@ -8,10 +8,8 @@
     </div>
     <div class="container">
       <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
-      <div class="slider">
-        <div class="bb">
-          dds
-        </div>
+      <div class="swiper">
+        <Slider  :recommends="recommends"></Slider>
       </div>
       <div class="car-menu">
         <div class="car-con">
@@ -68,12 +66,14 @@
 
 <script type="text/ecmascript-6">
 import seleArea from '@/base/sele-area'
+import Slider from '@/base/slider/slider-view'
 export default {
   name: 'garage',
   data () {
     return {
       showAreaBtn: false,
       areaIndex: 3,
+      recommends: [],
       area: ['京', '沪', '浙', '苏', '粤', '鲁', '晋', '冀', '渝', '川', '豫', '辽', '吉', '黑', '皖', '鄂', '湘', '赣', '闽', '陕', '甘', '宁', '蒙', '津', '桂', '云', '贵', '琼', '青', '新', '藏', '港', '澳']
     }
   },
@@ -86,7 +86,7 @@ export default {
       this.showAreaBtn = false
     },
     _goBack () {
-      this.$router.go(-1)
+      this.$router.push('/mind')
     },
     _goManagement () {
       this.$router.push('/vehicle-management')
@@ -102,7 +102,8 @@ export default {
     }
   },
   components: {
-    seleArea
+    seleArea,
+    Slider
   }
 }
 </script>
@@ -160,12 +161,8 @@ export default {
       display: flex
       flex-direction: column
       position: relative
-    .slider
+    .swiper
       height: 275px
-      line-height: 275px
-      margin-bottom: 18px
-      .bb
-        height: 275px
     .car-menu
       height: 154px
       padding: 0 30px

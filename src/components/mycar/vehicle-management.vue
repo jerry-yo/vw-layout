@@ -5,184 +5,35 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
-      <div class="management">编辑</div>
+      <div class="management" @click="_editCar">{{editState ?'取消' : '编辑'}}</div>
     </div>
     <Scroll class="car-content">
       <ul class="con">
-        <li>
-          <div class="check">
-            <div class="check-img">
-
+        <li v-for="(item, index) in cars" :key="index">
+          <div class="li-con" :style="{transform: editState ? 'translateX(28px)' : 'translateX(0px)', transition: 'all .3s'}">
+            <div class="check-btn" v-show="editState">
+              <div class="check-img" :class="item.check ? 'check': 'nocheck'"  @click="_checkCar(index)">
+              </div>
             </div>
-          </div>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
+            <div class="img">
+              <img src="" alt="">
             </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
+            <div class="con">
+              <h2>{{item.name}}</h2>
+              <p class="p1"><span>{{item.year}}</span>&nbsp;&nbsp;<span>{{item.oil}}</span>&nbsp;&nbsp;<span>{{item.modal}}</span></p>
+              <p class="p2"><span>{{item.idcard}}</span><span>丨</span> <span>{{item.way}}km</span></p>
             </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
-            </div>
-          </div>
-        </li>
-        <li>
-          <div class="img">
-            <img src="" alt="">
-          </div>
-          <div class="con">
-            <h2>东风本田-思域</h2>
-            <p class="p1"><span>2016款</span>&nbsp;&nbsp;<span>1.5T</span>&nbsp;&nbsp;<span>自动豪华版</span></p>
-            <p class="p2"><span>苏DB5A68</span><span>丨</span> <span>2300km</span></p>
-          </div>
-          <div class="right">
-            <div class="btn">
-              已设为默认
+            <div class="right"  v-if="!editState">
+              <div class="btn" :class="item.default ? 'active' : 'common'" @click="_setCarDefault(index)">
+              {{item.default ? '已设为默认' : '设为默认'}}
+              </div>
             </div>
           </div>
         </li>
       </ul>
     </Scroll>
     <div class="submit-btn" @click="_goAddcarTabbar">
-      dd
+      <span>{{editState ?'删除车辆' : '新增车辆'}}</span>
     </div>
   </div>
 </template>
@@ -191,13 +42,89 @@
 import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'vehicleManagement',
+  data () {
+    return {
+      editState: false,
+      cars: [{
+        id: 1,
+        name: '东风本田-思域',
+        year: '2012款',
+        oil: '1.5T',
+        modal: '自动豪华版',
+        default: true,
+        check: false,
+        idcard: '苏OP5869',
+        way: '6523.26'
+      }, {
+        id: 2,
+        name: '比亚迪-霸道',
+        year: '2016款',
+        oil: '3.0T',
+        modal: '超级无敌豪华版',
+        default: false,
+        check: false,
+        idcard: '沪521885',
+        way: '456.88'
+      }, {
+        id: 3,
+        name: '奔驰-无敌',
+        year: '2014款',
+        oil: '2.0T',
+        modal: '优雅奢华牛逼版',
+        default: false,
+        check: false,
+        idcard: '苏BB8888',
+        way: '3691.48'
+      }],
+      copyCars: []
+    }
+  },
+  computed: {
+
+  },
   methods: {
+    _setCheckCars () {
+      this.cars.forEach((item, index) => {
+        this.copyCars.push(false)
+      })
+    },
     _goBack () {
       this.$router.go(-1)
     },
     _goAddcarTabbar () {
-      this.$router.push('/addcar-tabbar')
+      if (this.editState) {
+        let arr = []
+        this.cars.forEach((item, index) => {
+          if (!item.check) {
+            arr.push(item)
+          }
+        })
+        this.cars = arr
+        this.editState = false
+      } else {
+        this.$router.push('/addcar-tabbar')
+      }
+    },
+    _editCar () {
+      this.editState = !this.editState
+      // if (this.editState) {
+      //   this._setCheckCars()
+      // }
+    },
+    _setCarDefault (id) {
+      this.cars.forEach((item, index) => {
+        if (index === id) {
+          item.default = true
+        } else {
+          item.default = false
+        }
+      })
+    },
+    _checkCar (id) {
+      this.cars[id].check = !this.cars[id].check
     }
+  },
+  mounted () {
   },
   components: {
     Scroll
@@ -252,9 +179,19 @@ export default {
         text-align: right
         background-color: #fff
     .submit-btn
-      background-color: #f24847
+      bg-image('../../common/imgs/washcar/btn_bg')
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: 750px 100px
       height: 100px
       line-height: 100px
+      text-align: center
+      span
+        display: inline-block
+        font-size: 36px
+        font-weight: bold
+        color: #ffffff
+        transform: skewX(-10deg)
     .car-content
       flex: 1
       overflow: hidden
@@ -266,6 +203,27 @@ export default {
           background-color: #fff
           margin-bottom: 10px
           padding: 0 30px
+          .li-con
+            flex: 1
+            display: flex
+          .check-btn
+            width: 57px
+            display: flex
+            justify-content: center
+            align-items: center
+            .check-img
+              width: 57px
+              height: 57px
+              &.check
+                bg-image('../../common/imgs/repair/sele')
+                background-repeat: no-repeat
+                background-size: 30px 30px
+                background-position: center center
+              &.nocheck
+                bg-image('../../common/imgs/repair/unsele')
+                background-repeat: no-repeat
+                background-size: 30px 30px
+                background-position: center center
           .img
             display: flex
             justify-content: center
@@ -301,13 +259,20 @@ export default {
             width: 147px
             display: flex
             align-items: center
+            justify-content: flex-end
             .btn
-              width: 100%
+              box-sizing: border-box
+              width: 147px
               height: 42px
               font-size: 24px
-              color: #fff
               text-align: center
               line-height: 42px
-              background-color: red
+              border-radius: 2px
+              &.active
+                color: #fff
+                background: -webkit-linear-gradient(left, #ff964a, #ff673d)
+              &.common
+                color: #ff7d43
+                border: 1px solid #ff673b
 
 </style>

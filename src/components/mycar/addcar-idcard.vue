@@ -39,6 +39,9 @@
         </div>
       </div>
     </div>
+    <div class="addcar-btn" @click="_addCar">
+      <span>确认添加</span>
+    </div>
   </div>
 </template>
 
@@ -66,6 +69,9 @@ export default {
     },
     _goBack () {
       this.$router.go(-1)
+    },
+    _addCar () {
+      this.$router.replace('/garage')
     }
   },
   components: {
@@ -120,72 +126,85 @@ export default {
       margin-top: 23px
       font-size: 24px
       color: #3b3b3b
-  .car-name
-    height: 100px
-    display: flex
-    align-items: center
-    padding-left: 30px
-    background-color: #fff
-    margin-bottom: 1px
-    img
-      width: 60px
-      height: 60px
-      background-color: rgba(255, 0, 255, 0.5)
-      margin-right: 25px
-    & > h2
-      font-size: 24px
-      color: #707070
-      span
-        margin-right: 10px
-  .idcard
-    height: 90px
-    display: flex
-    line-height: 70px
-    padding: 10px 30px
-    background-color: #fff
-    font-size: 24px
-    color: #3b3b3b
-    .idcard-area
-      flex: 1
-      padding-right: 47px
-      text-align: right
-      border-right: 1px solid #f2f2f2
-    .idcard-num
-      width: 147px
-      text-align: right
-  .car-way
-    height: 90px
-    line-height: 90px
-    padding: 0 30px
-    display: flex
-    margin-bottom: 1px
-    background-color: #fff
-    font-size: 24px
-    color: #3b3b3b
-    .input
-      flex: 1
-      input
-        background: none
-        float: right
-        text-align: right
-        border: none
-        outline: none
-        height: 100%
+    .car-name
+      height: 100px
+      display: flex
+      align-items: center
+      padding-left: 30px
+      background-color: #fff
+      margin-bottom: 1px
+      img
+        width: 60px
+        height: 60px
+        background-color: rgba(255, 0, 255, 0.5)
+        margin-right: 25px
+      & > h2
         font-size: 24px
-        color: #3b3b3b
-  .car-date
-    height: 90px
-    line-height: 90px
-    padding: 0 30px
-    display: flex
-    background-color: #ffffff
-    span
+        color: #707070
+        span
+          margin-right: 10px
+    .idcard
+      height: 90px
+      display: flex
+      line-height: 70px
+      padding: 10px 30px
+      background-color: #fff
       font-size: 24px
       color: #3b3b3b
-    .btn
-      flex: 1
+      .idcard-area
+        flex: 1
+        padding-right: 47px
+        text-align: right
+        border-right: 1px solid #f2f2f2
+      .idcard-num
+        width: 147px
+        text-align: right
+    .car-way
+      height: 90px
+      line-height: 90px
+      padding: 0 30px
+      display: flex
+      margin-bottom: 1px
+      background-color: #fff
       font-size: 24px
-      color: #b6b6b6
-      text-align: right
-
+      color: #3b3b3b
+      .input
+        flex: 1
+        input
+          background: none
+          float: right
+          text-align: right
+          border: none
+          outline: none
+          height: 100%
+          font-size: 24px
+          color: #3b3b3b
+    .car-date
+      height: 90px
+      line-height: 90px
+      padding: 0 30px
+      display: flex
+      background-color: #ffffff
+      span
+        font-size: 24px
+        color: #3b3b3b
+      .btn
+        flex: 1
+        font-size: 24px
+        color: #b6b6b6
+        text-align: right
+  .addcar-btn
+    height: 100px
+    bg-image('../../common/imgs/washcar/btn_bg')
+    background-repeat: no-repeat
+    background-position: center center
+    background-size: 750px 100px
+    text-align: center
+    line-height: 100px
+    span
+      display: inline-block
+      font-size: 36px
+      color: #ffffff
+      font-weight: bold
+      transform: skewX(-10deg)
 </style>
