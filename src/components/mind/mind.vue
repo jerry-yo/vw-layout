@@ -5,7 +5,7 @@
         <div class="user-head">
           <span>个人中心</span>
           <div class="user-xx"></div>
-          <div class="user-sz"></div>
+          <div class="user-sz" @click="_goSetUp"></div>
         </div>
         <div class="user-info">
           <div class="user-img">
@@ -17,7 +17,7 @@
               <span></span>
             </div>
           </div>
-          <div class="user-go">
+          <div class="user-go" @click="_goMyInfo">
             <span>个人资料</span>
           </div>
         </div>
@@ -120,6 +120,12 @@ export default {
     },
     _goGarage () {
       this.$router.push('/garage')
+    },
+    _goSetUp () {
+      this.$router.push('/set-up')
+    },
+    _goMyInfo () {
+      this.$router.push('/my-info')
     }
   },
   components: {

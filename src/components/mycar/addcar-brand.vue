@@ -174,7 +174,7 @@ export default {
         padding-left: 40px
         font-size: 26px
         color: #bfbfbf
-        bg-image('../../common/imgs/default')
+        bg-image('../../common/imgs/car/search')
         background-size: 27px 27px
         background-repeat: no-repeat
         background-position: left center

@@ -14,7 +14,7 @@
             <img src="" alt="">
             <div class="top-right">
               <div class="store-name">
-                <p>奇特异快速保养-华润店</p>
+                <p :class="index % 2 === 1 ? 'by' : 'repair'">奇特异快速保养-华润店</p>
                 <h2>4.6km</h2>
               </div>
               <div class="store-address">
@@ -126,18 +126,21 @@ export default {
               flex-direction: column
               justify-content: cneter
               .store-name
-                height: 34px
+                height: 50px
                 display: flex
-                line-height: 34px
+                line-height: 50px
                 & > p
-                  padding-right: 57px
+                  padding-right: 76px
                   font-size: 24px
                   color: #5b5b5b
                   font-weight: bold
-                  bg-image('../../common/imgs/order/by')
-                  background-size: 44px 22px
+                  background-size: 76px 50px
                   background-repeat: no-repeat
                   background-position: right center
+                  &.by
+                    bg-image('../../common/imgs/order/by')
+                  &.repair
+                    bg-image('../../common/imgs/order/repair')
                 & > h2
                   flex: 1
                   text-align: right

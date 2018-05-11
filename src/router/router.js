@@ -152,6 +152,21 @@ const searchWashStore = {
   name: 'searchWashStore',
   component: resolve => { require(['@/components/washcar/search_wash_store'], resolve) }
 }
+const setUp = {
+  path: '/set-up',
+  name: 'setUp',
+  component: resolve => { require(['@/components/mind/set-up'], resolve) }
+}
+const myInfo = {
+  path: '/my-info',
+  name: 'myInfo',
+  component: resolve => { require(['@/components/mind/my-info'], resolve) }
+}
+const checkList = {
+  path: '/check-list',
+  name: 'checkList',
+  component: resolve => { require(['@/components/checklist/checklist'], resolve) }
+}
 export const routers = [
   loginRouter,
   registerRouter,
@@ -181,5 +196,8 @@ export const routers = [
   // searchCar,
   payOver,
   washCar,
-  searchWashStore
+  searchWashStore,
+  setUp,
+  myInfo,
+  checkList
 ]

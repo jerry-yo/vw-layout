@@ -106,7 +106,6 @@ export default {
     },
     // 手指移开触发
     touchE (event) {
-      console.log('touchE')
       let _touchEnd = event.changedTouches[0]
       this.touchInfo.endX = _touchEnd.pageX
       this.touchInfo.endY = _touchEnd.pageY
@@ -141,7 +140,6 @@ export default {
     },
     // 手指触屏移动触发
     touchM (event) {
-      console.log('touchM')
       let _touchMove = event.touches[0]
       this.touchInfo.moveX = _touchMove.pageX
       this.touchInfo.moveY = _touchMove.pageY
@@ -219,7 +217,6 @@ export default {
         time = parseInt((this.sliderGroupNow - Math.abs(this.bridge)) / this.sliderGroupNow * this.duration)
       }
       this.animateImg(true, time)
-      console.log(this.addwidth, this.cutwidth, '-----next')
     },
     // 左向右滑动， 下一页
     prevImg (text) {
@@ -234,7 +231,6 @@ export default {
         time = parseInt((this.sliderGroupNow - Math.abs(this.bridge)) / this.sliderGroupNow * this.duration)
       }
       this.animateImg(true, time)
-      console.log(this.addwidth, this.cutwidth)
     },
     flipNumber (text) {
       if (text === 'next') {
@@ -267,7 +263,6 @@ export default {
     // 动画效果，设置移动后的坐标 和 动画时间
     animateImg (flag, time) {
       if (flag) {
-        console.log(time)
         this.goBackImg(Math.abs(time))
         this.groupAnimate(time)
       } else {

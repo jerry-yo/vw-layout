@@ -35,6 +35,7 @@ export default {
     align-items: center
     transform: translate(0)
     opacity: 1
+    z-index: 9999
     &.slide-fade-enter-active
       transition: all .3s ease
     &.slide-fade-leave-active
