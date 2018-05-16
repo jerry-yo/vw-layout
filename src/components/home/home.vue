@@ -169,6 +169,7 @@ export default {
     background-size: 750px 540px
     background-repeat: no-repeat
     background-position:center top
+    background-color: #fff
     overflow: hidden
     .home-top
       position: relative
