@@ -167,6 +167,11 @@ const checkList = {
   name: 'checkList',
   component: resolve => { require(['@/components/checklist/checklist'], resolve) }
 }
+const seleCity = {
+  path: '/sele-city',
+  name: 'seleCity',
+  component: resolve => { require(['@/components/city/sele-city'], resolve) }
+}
 export const routers = [
   loginRouter,
   registerRouter,
@@ -193,7 +198,7 @@ export const routers = [
   maintainPreOrder,
   maintain,
   addNewServer,
-  // searchCar,
+  seleCity,
   payOver,
   washCar,
   searchWashStore,
