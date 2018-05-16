@@ -230,7 +230,7 @@ export default {
         offset: new AMap.Pixel(-17, -17),
         position: [item.lng, item.lat],
         content: `<div class="marker-com bg1">
-                    <div class="new ${item.new ? '' : 'show'}" >NEW</div>
+                    <div class="new ${item.new ? '' : 'show'}" ></div>
                     <div class="marker-txt">
                       <span>${item.title}</span>
                       <div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div>
@@ -296,14 +296,12 @@ export default {
       position: absolute
       right: 0px
       top: 0px
-      width: 44px
+      width: 43px
       height: 20px
-      text-align: center
-      line-height: 20px
-      font-size: 14px
-      color: #ffffff
-      background-color: #ff4141
-      border-radius: 20px
+      bg-image('../../common/imgs/washcar/new')
+      background-position: center center
+      background-repeat: no-repeat
+      background-size: 43px 20px
       overflow: hidden
       transform: translate3d(50%, -10%, 0)
       &.show
