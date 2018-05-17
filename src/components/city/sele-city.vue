@@ -4,7 +4,10 @@
         <div class="back" @click="_goBack" ></div>
         <span>选择城市</span>
       </div>
-      <div class="">
+      <div class="search-bar">
+
+      </div>
+      <div class="location-bar">
 
       </div>
     </div>
