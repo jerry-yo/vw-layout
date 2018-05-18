@@ -6,7 +6,7 @@
         <h2>东风本田-思域</h2>
         <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
       </div>
-      <div class="search"></div>
+      <div class="search" @click="_goSearch"></div>
     </div>
     <div class="container" ref="container" :class="showMap ? 'show' : ''">
       <div class="map-btn">
@@ -130,6 +130,9 @@ export default {
     }
   },
   methods: {
+    _goSearch () {
+      this.$router.push('/search-wash-store')
+    },
     _goBack () {
       this.$router.go(-1)
     },

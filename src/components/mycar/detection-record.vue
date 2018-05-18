@@ -11,7 +11,7 @@
     </div>
     <Scroll class="list">
       <ul class="con">
-        <li  class="list-info">
+        <li  class="list-info" @click="_goLookInfo">
           <div class="left">
             <div class="time">
               <span>2018年01月01日 10:30</span>
@@ -168,6 +168,9 @@ export default {
   methods: {
     _goBack () {
       this.$router.go(-1)
+    },
+    _goLookInfo () {
+      this.$router.push('/check-list')
     }
   },
   components: {
@@ -224,6 +227,7 @@ export default {
       min-height: 90px
       background-color: #fff
       overflow: hidden
+      margin-bottom: 10px
       .left
         flex: 1
         display: flex

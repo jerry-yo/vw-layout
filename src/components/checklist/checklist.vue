@@ -1,6 +1,7 @@
 // 检测单
 <template>
   <div class="check-list" flexContainer>
+    <CheckMask v-if="showInfo" @closemask="_closeMask"></CheckMask>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
@@ -53,7 +54,7 @@
         </div>
         <div class="check-detection">
           <h2>车辆异常</h2>
-          <SeleDetection :check="true"></SeleDetection>
+          <SeleDetection :check="true" @showinfo="_showInfo"></SeleDetection>
         </div>
       </div>
     </Scroll>
@@ -63,16 +64,29 @@
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
 import SeleDetection from '@/base/sele-detection-menu'
+import CheckMask from './check-info'
 export default {
   name: 'checklist',
+  data () {
+    return {
+      showInfo: false
+    }
+  },
   methods: {
     _goBack () {
       this.$router.go(-1)
+    },
+    _showInfo (val) {
+      this.showInfo = true
+    },
+    _closeMask () {
+      this.showInfo = false
     }
   },
   components: {
     Scroll,
-    SeleDetection
+    SeleDetection,
+    CheckMask
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="detection-menu">
     <ul>
-      <li v-for="(item, index) in menus" :key="index">
+      <li v-for="(item, index) in menus" :key="index" @click="_showInfoId(index)">
         <div class="select-btn" v-if="check">
           <div class="sele-btn" :class="item.check ? 'check': 'nocheck'" @click="checkMenu(index)">
           </div>
@@ -84,6 +84,9 @@ export default {
     },
     checkMenu (index) {
       this.menus[index].check = !this.menus[index].check
+    },
+    _showInfoId (id) {
+      this.$emit('showinfo', id)
     }
   }
 
