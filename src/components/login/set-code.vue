@@ -1,14 +1,13 @@
 <template>
   <div class="setcode">
     <div class="title">
-      <div class="register">
-        注册
+      <div class="register" @click="_goBack">
       </div>
     </div>
     <div class="section">
       <h1>验证码已发送</h1>
       <div class="input" @click="foucsInput">
-        <input type="number" name="" maxlength="6" value="" v-model="number" ref="number" pattern="[0-9]*">
+        <input type="number" name="" v-model="number" ref="number" pattern="[0-9]*" @input="_filterCode">
         <ul>
           <li>{{codeArr[0] ? codeArr[0] : ''}}</li>
           <li>{{codeArr[1] ? codeArr[1] : ''}}</li>
@@ -44,6 +43,9 @@ export default {
     }
   },
   methods: {
+    _goBack () {
+      this.$router.go(-1)
+    },
     goBtn () {
       if (!this.flag) {
         this.seconds = 60
@@ -64,6 +66,12 @@ export default {
           this._setTimeout()
         }
       }, 1000)
+    },
+    _filterCode (val) {
+      if (this.number.length > 6) {
+        this.number = this.number.slice(0, 6)
+        this.$router.push('/home')
+      }
     }
   },
   mounted () {
@@ -82,18 +90,14 @@ export default {
     width: 100%
     background-color: #fff
     .title
-      padding: 0 30px
       height: 88px
       display: flex
-      justify-content: flex-end
-      align-items: center
       .register
-        width: 180px
-        bg-image('../../common/imgs/login/goregister')
+        width: 160px
+        bg-image('../../common/imgs/repair/back')
         background-repeat: no-repeat
-        background-size: 16px 28px
-        background-position: right center
-        padding-right: 40px
+        background-size: 18px 30px
+        background-position: 30px center
         text-align: right
         font-size: 36px
         color: #ff7240

@@ -86,7 +86,7 @@
       <div class="kefu">
         <span>客服热线</span>
         <div class="kefu-title">
-          <span>400-180-8811</span>
+          <a href="tel:400-180-8811">400-180-8811</a>
         </div>
       </div>
       <div class="banben">

@@ -18,11 +18,11 @@
         </div>
         <div class="car-info">
           <div class="car-con">
-            <div class="info-tab" :class="carInfo.id ? '' : 'nocar'">
-              <div class="car-img" v-show="carInfo.id ? true : false">
+            <div class="info-tab" :class="carInfo.carName ? '' : 'nocar'" @click="_addCar">
+              <div class="car-img" v-show="carInfo.carName ? true : false">
                 <img src="" alt="">
               </div>
-              <div class="car-name"  v-show="carInfo.id ? true : false">
+              <div class="car-name"  v-show="carInfo.carName ? true : false">
                 <div class="name">{{carInfo.carName}}</div>
                 <div class="card-info">
                   <div class="card">{{carInfo.carCard}}</div>
@@ -30,7 +30,7 @@
                 </div>
               </div>
             </div>
-            <div class="car-check">
+            <div class="car-check" @click="_goCheckList">
               <Badge count="9">
                 <img src="../../common/imgs/home/jcd@2x.png" alt="" >
               </Badge>
@@ -147,6 +147,16 @@ export default {
     // 救援
     _goRescue () {
 
+    },
+    _goCheckList () {
+      this.$router.push('/check-list')
+    },
+    _addCar () {
+      if (this.carInfo.carName) {
+        this.$router.push('/garage')
+      } else {
+        this.$router.push('/addcar-tabbar')
+      }
     }
   },
   mounted () {
@@ -166,10 +176,10 @@ export default {
     display: flex
     flex-direction: column
     bg-image('../../common/imgs/home/homebg')
-    background-size: 750px 540px
+    background-size: 750px 600px
     background-repeat: no-repeat
     background-position:center top
-    background-color: #fff
+    background-color: #f2f2f2
     overflow: hidden
     .home-top
       position: relative
@@ -304,6 +314,7 @@ export default {
       .gt1-menu
         min-height: 240px
         padding: 0px 30px
+        background-color: #fff
         ul
           min-height: 240px
           border-bottom: 1px solid #f2f2f2
@@ -359,6 +370,7 @@ export default {
       .gt1-server
         overflow: hidden
         padding: 0 30px
+        background-color: #fff
         & > ul
           min-height: 180px
           overflow: hidden
@@ -390,7 +402,7 @@ export default {
         font-size: 20px
         color: #b9b9b9
         text-align: center
-        line-height: 40px
+        line-height: 60px
         background-color: #f2f2f2
         margin-bottom: 23px
 

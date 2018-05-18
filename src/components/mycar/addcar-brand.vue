@@ -142,6 +142,8 @@ export default {
       console.log('666')
     }
   },
+  mounted () {
+  },
   components: {
     brandMask,
     Scroll

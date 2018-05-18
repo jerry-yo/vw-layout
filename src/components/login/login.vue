@@ -1,16 +1,20 @@
 <template>
   <div class="login">
     <div class="title">
-      <div class="register">
+      <div class="goback" @click="_goBack">
+
+      </div>
+      <span></span>
+      <div class="register" @click="_goRegister">
         注册
       </div>
     </div>
     <div class="section">
       <h1>欢迎登录GT1养车</h1>
       <div class="input">
-        <input type="number" name="" value="" placeholder="请输入您的手机号"  pattern="[0-9]*">
+        <input type="number" name="" v-model="tel" placeholder="请输入您的手机号"  pattern="[0-9]*" @input="_maxlength">
       </div>
-      <div class="btn">
+      <div class="btn" @click="_getCode">
         获取验证码
       </div>
     </div>
@@ -19,7 +23,35 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'login'
+  name: 'login',
+  data () {
+    return {
+      tel: ''
+    }
+  },
+  methods: {
+    _goBack () {
+      this.$router.go(-1)
+    },
+    _goRegister () {
+      this.$router.push('/register')
+    },
+    _getCode () {
+      if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.tel)) {
+        this.$router.push('/setcode')
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '手机号格式错误！'
+        })
+      }
+    },
+    _maxlength (val) {
+      if (this.tel.length > 11) {
+        this.tel = this.tel.slice(0, 11)
+      }
+    }
+  }
 }
 </script>
 
@@ -30,18 +62,20 @@ export default {
     height: 100vh
     background-color: #fff
     .title
-      padding: 0 30px
       height: 88px
       display: flex
-      justify-content: flex-end
-      align-items: center
+      .goback
+        width: 160px
+        bg-image('../../common/imgs/repair/back')
+        background-repeat: no-repeat
+        background-size: 18px 30px
+        background-position: 30px center
+      span
+        flex: 1
       .register
         width: 180px
-        bg-image('../../common/imgs/login/goregister')
-        background-repeat: no-repeat
-        background-size: 16px 28px
-        background-position: right center
-        padding-right: 40px
+        line-height: 88px
+        padding-right: 30px
         text-align: right
         font-size: 36px
         color: #ff7240
