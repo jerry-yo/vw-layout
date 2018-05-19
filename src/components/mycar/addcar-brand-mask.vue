@@ -1,7 +1,7 @@
 <template>
   <div class="addcar-brand-mask" @click="closeMask">
     <div class="con" @click.prevent.stop>
-      <Scroll ref="addcarBrandMask" class="scroll">
+      <Scroll ref="addcarBrandMask" class="scroll" :data="getSeriesType">
         <div class="wrapper">
           <div class="title">
             <img src="" alt="">

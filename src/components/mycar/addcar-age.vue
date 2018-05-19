@@ -15,10 +15,10 @@
     <div class="sele-next">
       <span>2.5L</span><span class="between">-</span>选择年份
     </div>
-    <Scroll class="age" ref="ageCar">
+    <Scroll class="age" ref="ageCar" :data="ages">
       <div class="con">
-        <div class="text" v-for="(item, index) in ages" :key="index" @click="goAge">
-          {{item}}
+        <div class="text" v-for="(item, index) in ages" :key="index" @click="goModelsDetail(item)">
+          {{item.onMarketYear}}
         </div>
       </div>
     </Scroll>
@@ -31,16 +31,32 @@ export default {
   name: 'addcarAge',
   data () {
     return {
-      ages: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015']
+      sid: 0,
+      ev: 0,
+      ages: []
     }
   },
   methods: {
-    goAge () {
-      this.$router.push('/addcar-models')
+    goModelsDetail (item) {
+      this.$router.push('/addcar-models?sid=' + this.sid + '&ev=' + this.ev + '&year=' + item.onMarketYear)
     },
     _goBack () {
       this.$router.go(-1)
+    },
+    getRelateYear () {
+      this.api_post('/api/carzone/getRelateYearBySid', (res) => {
+        if (res.errorCode === 0) {
+          this.ages = res.data.data.detail
+        }
+      }, {
+        sid: this.sid
+      })
     }
+  },
+  created () {
+    this.sid = this.$route.query.sid
+    this.ev = this.$route.query.ev
+    this.getRelateYear()
   },
   components: {
     Scroll

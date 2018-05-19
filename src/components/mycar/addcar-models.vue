@@ -15,10 +15,10 @@
     <div class="sele-next">
       <span>2.5L</span><span class="between">-</span><span>2012年</span><span class="between">-</span>选择车型
     </div>
-    <Scroll class="models" ref="modelsCar">
+    <Scroll class="models" ref="modelsCar" :data="models">
       <div class="con">
         <div class="text" v-for="(item, index) in models" :key="index" @click="goAge">
-          {{item}}
+          {{item.manufacturerName}}
         </div>
       </div>
     </Scroll>
@@ -31,7 +31,10 @@ export default {
   name: 'addcarModels',
   data () {
     return {
-      models: ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2015']
+      sid: 0,
+      ev: 0,
+      year: 0,
+      models: []
     }
   },
   methods: {
@@ -40,7 +43,25 @@ export default {
     },
     _goBack () {
       this.$router.go(-1)
+    },
+    getModelsDetail () {
+      this.api_post('/api/carzone/findModelsDetailBySidAndVolumeAndYear', (res) => {
+        if (res.errorCode === 0) {
+          this.models = res.data.data.detail
+          console.log(this.models)
+        }
+      }, {
+        sid: this.sid,
+        exhaustVolume: this.ev,
+        year: this.year
+      })
     }
+  },
+  created () {
+    this.sid = this.$route.query.sid
+    this.ev = this.$route.query.ev
+    this.year = this.$route.query.year
+    this.getModelsDetail()
   },
   components: {
     Scroll

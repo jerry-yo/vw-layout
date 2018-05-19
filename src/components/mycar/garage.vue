@@ -1,13 +1,13 @@
 // 我的车库
 <template>
   <div class="garage">
+    <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
       <div class="vehicle-management" @click="_goManagement">管理</div>
     </div>
     <div class="container">
-      <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
       <div class="swiper">
         <Slider  :recommends="recommends"></Slider>
       </div>

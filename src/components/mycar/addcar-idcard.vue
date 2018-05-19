@@ -2,6 +2,7 @@
 
 <template>
   <div class="addcar-idcard" flexContainer>
+    <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="tabbar">
@@ -9,7 +10,6 @@
       </div>
     </div>
     <div class="container">
-      <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
       <div class="car-name">
         <img src="" alt="">
         <h2><span>东风本田思域</span><span>2.5L</span><span>2016款</span><span>无级变速自动尊耀版</span> </h2>

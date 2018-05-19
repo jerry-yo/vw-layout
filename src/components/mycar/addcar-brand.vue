@@ -14,12 +14,12 @@
           <li v-for="(item, index) in getFirstLetter" :key="item.type" @click="selectMenu(index, $event)">{{item}}</li>
         </ul>
       </div>
-      <Scroll class="wrapper" ref="logolist">
+      <Scroll class="wrapper" ref="logolist" :data="getLogo">
         <div class="list-con">
           <ul class="logo-class type-index" v-for="item in getLogo" :key="item.id" ref="logo">
             <li class="title">{{item.firstLetter}}</li>
             <li class="info" v-for="logo in item.logos" :key="logo.id" @click="showBrandMask(logo.pbid)">
-              <img src="" alt="">
+              <img :src="'http://image.carzone.cn' + logo.imageSrc" alt="">
               <h2>{{logo.name}}</h2>
             </li>
           </ul>

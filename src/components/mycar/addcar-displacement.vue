@@ -15,10 +15,10 @@
     <div class="sele-next">
       选择发动机排量
     </div>
-    <Scroll class="displacement" ref="displacementCar">
+    <Scroll class="displacement" ref="displacementCar" :data="displacement">
       <div class="con">
-        <div class="text" v-for="(item, index) in displacement" :key="index" @click="goAge">
-          {{item}}
+        <div class="text" v-for="(item, index) in displacement" :key="index" @click="goAge(item)">
+          {{item.exhaustVolume}}
         </div>
       </div>
     </Scroll>
@@ -31,17 +31,30 @@ export default {
   name: 'addcarDisplacement',
   data () {
     return {
-      displacementBScorll: null,
-      displacement: ['1.0L', '1.5L', '2.0L', '2.5L', '3.0L', '3.5L', '1.5L', '2.0L', '2.5L', '3.0L', '3.5L', '1.5L', '2.0L', '2.5L', '3.0L', '3.5L', '1.5L', '2.0L', '2.5L', '3.0L', '3.5L', '1.5L', '2.0L', '2.5L', '3.0L', '3.5L', '1.5L', '2.0L', '2.5L', '3.0L', '3.5L', '1.5L', '2.0L', '2.5L', '3.0L', '3.5L']
+      displacementId: 0,
+      displacement: []
     }
   },
   methods: {
-    goAge () {
-      this.$router.push('/addcar-age')
+    goAge (item) {
+      this.$router.push('/addcar-age?sid=' + item.sid + '&ev=' + item.exhaustVolume)
     },
     _goBack () {
       this.$router.go(-1)
+    },
+    getExhaustVolume () {
+      this.api_post('/api/carzone/findExhaustVolume', (res) => {
+        if (res.errorCode === 0) {
+          this.displacement = res.data.data.detail
+        }
+      }, {
+        sid: this.displacementId
+      })
     }
+  },
+  created () {
+    this.displacementId = this.$route.query.sid
+    this.getExhaustVolume()
   },
   components: {
     Scroll
