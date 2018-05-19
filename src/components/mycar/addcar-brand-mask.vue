@@ -1,19 +1,21 @@
 <template>
-  <div class="addcar-brand-mask">
-    <Scroll class="con" ref="addcarBrandMask">
-      <div class="wrapper">
-        <div class="title">
-          <img src="" alt="">
-          <h2>{{logosName.name}}</h2>
+  <div class="addcar-brand-mask" @click="closeMask">
+    <div class="con" @click.prevent.stop>
+      <Scroll ref="addcarBrandMask" class="scroll">
+        <div class="wrapper">
+          <div class="title">
+            <img src="" alt="">
+            <h2>奥迪</h2>
+          </div>
+          <ul class="logo-type" v-for="(item, index) in getSeriesType" :key="index">
+            <li class="logo-title">{{item.sbName}}</li>
+            <li class="logo-text" v-for="(res, id) in item.vehicleSystems" :key="id" @click="goDisplacement(res[0])">
+              {{res[1]}}
+            </li>
+          </ul>
         </div>
-        <ul class="logo-type" v-for="(item, index) in logosName.logoType" :key="index">
-          <li class="logo-title">{{item.title}}</li>
-          <li class="logo-text" v-for="(res, id) in item.text" :key="id" @click="goDisplacement">
-            {{res}}
-          </li>
-        </ul>
-      </div>
-    </Scroll>
+      </Scroll>
+    </div>
   </div>
 </template>
 
@@ -21,28 +23,58 @@
 import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'addcarBrandMask',
+  props: {
+    pbid: {
+      type: Number,
+      required: true
+    }
+  },
   data () {
     return {
-      addcarBrand_1: null,
-      logosName: {
-        name: '奥迪',
-        logo: '',
-        logoType: [{
-          title: 'Audi Sport',
-          text: ['奥迪RS 3', '奥迪RS 4', '奥迪RS 5', '奥迪RS 6', '奥迪RS 7', '奥迪RS 8', '奥迪RS 9', '奥迪RS TT']
-        }, {
-          title: '一汽-大众奥迪',
-          text: ['奥迪A6L', '奥迪A4', '奥迪Q5', '奥迪A3', '奥迪Q3', '奥迪A4L', '奥迪A6', '奥迪A6新能源']
-        }, {
-          title: '奥迪（进口）',
-          text: ['奥迪SQ5', '奥迪A5', '奥迪Q5（进口）', '奥迪A1', '奥迪A8', '奥迪TT', '奥迪Q7', '奥迪TTS']
-        }]
-      }
+      addcarBrand_1: '',
+      carSeries: []
     }
   },
   methods: {
-    goDisplacement () {
-      this.$router.push('/addcar-displacement')
+    goDisplacement (id) {
+      this.$router.push('/addcar-displacement?sid=' + id)
+    },
+    getSeries () {
+      this.api_post('/api/carzone/findSeriesByBrandId', (res) => {
+        if (res.errorCode === 0) {
+          this.carSeries = res.data.data.detail
+        }
+      }, {
+        pbid: this.pbid
+      })
+    },
+    closeMask () {
+      this.$emit('closemask', false)
+    }
+  },
+  created () {
+    this.getSeries()
+  },
+  computed: {
+    getSeriesType () {
+      let arr = []
+      this.carSeries.forEach((item) => {
+        let series = item.vehicleSystems
+        let seriesNum = []
+        series = series.split(',')
+        series.forEach((item) => {
+          seriesNum.push(item.split('|'))
+        })
+        arr.push({
+          countryId: item.countryId,
+          sbName: item.sbName,
+          sbid: item.sbid,
+          sid: item.sid,
+          status: item.status,
+          vehicleSystems: seriesNum
+        })
+      })
+      return arr
     }
   },
   components: {
@@ -64,12 +96,16 @@ export default {
     z-index: 100
     .con
       flex: 1
+      display: flex
       background-color: #fff
       -webkit-box-shadow:-10px 0 10px rgba(0,0,0,0.05), /*左边阴影*/
            0px 0 0px #fff, /*右边阴影*/
            0 0px 0px #fff, /*顶部阴影*/
            0 0px 0px #fff; /*底边阴影*/
       overflow: hidden
+      .scroll
+        flex: 1
+        overflow: hidden
       .wrapper
         position: relative
         .title
