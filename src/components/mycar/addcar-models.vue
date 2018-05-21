@@ -15,18 +15,20 @@
     <div class="sele-next">
       <span>2.5L</span><span class="between">-</span><span>2012年</span><span class="between">-</span>选择车型
     </div>
-    <Scroll class="models" ref="modelsCar" :data="models">
+    <div class="models" ref="modelsCar" :data="models">
       <div class="con">
         <div class="text" v-for="(item, index) in models" :key="index" @click="goAge">
-          {{item.manufacturerName}}
+          {{item.salesVersion}}
+        </div>
+        <div class="tips" v-if="flag">
+          抱歉，没有查询到相关数据！！！
         </div>
       </div>
-    </Scroll>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'addcarModels',
   data () {
@@ -34,7 +36,8 @@ export default {
       sid: 0,
       ev: 0,
       year: 0,
-      models: []
+      models: [],
+      flag: false
     }
   },
   methods: {
@@ -47,8 +50,11 @@ export default {
     getModelsDetail () {
       this.api_post('/api/carzone/findModelsDetailBySidAndVolumeAndYear', (res) => {
         if (res.errorCode === 0) {
-          this.models = res.data.data.detail
-          console.log(this.models)
+          if (res.data.data.result === '0000') {
+            this.models = res.data.data.detail
+          } else {
+            this.flag = true
+          }
         }
       }, {
         sid: this.sid,
@@ -62,9 +68,6 @@ export default {
     this.ev = this.$route.query.ev
     this.year = this.$route.query.year
     this.getModelsDetail()
-  },
-  components: {
-    Scroll
   }
 }
 </script>
@@ -131,4 +134,9 @@ export default {
       color: #5a5a5a
       margin-bottom: 1px
       background-color: #fff
+    .tips
+      line-height: 150px
+      font-size: 24px
+      color: #999
+      text-align: center
 </style>
