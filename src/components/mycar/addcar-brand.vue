@@ -18,8 +18,8 @@
         <div class="list-con">
           <ul class="logo-class type-index" v-for="item in getLogo" :key="item.id" ref="logo">
             <li class="title">{{item.firstLetter}}</li>
-            <li class="info" v-for="logo in item.logos" :key="logo.id" @click="showBrandMask(logo.pbid)">
-              <img :src="'http://image.carzone.cn' + logo.imageSrc" alt="">
+            <li class="info" v-for="logo in item.logos" :key="logo.id" @click="showBrandMask(logo)">
+              <img :src="carLogoUrl + logo.imageSrc" alt="">
               <h2>{{logo.name}}</h2>
             </li>
           </ul>
@@ -32,6 +32,7 @@
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
 import brandMask from './addcar-brand-mask'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'addcarBrand',
   data () {
@@ -45,25 +46,26 @@ export default {
     selectMenu (index, event) {
       this.$refs.logolist.scrollToElement(this.$refs.logo[index], 300)
     },
-    showBrandMask (id) {
+    showBrandMask (logo) {
       this.showMask = true
-      this.brandId = id
-    },
-    getCarBrand () {
-      this.api_post('/api/carzone/getCarAllBrand', (res) => {
-        if (res.errorCode === 0) {
-          this.logo = res.data.data.detail
-        }
+      this.brandId = logo.pbid
+      this.setAddCar({
+        name: logo.name,
+        imageSrc: logo.imageSrc,
+        pbid: logo.pbid
       })
     },
     _closeMask () {
       this.showMask = false
-    }
+    },
+    ...mapMutations({
+      setAddCar: 'SET_ADDCAR'
+    })
   },
   computed: {
     getFirstLetter () {
       let arr = []
-      this.logo.forEach((item, index) => {
+      this.carBrand.forEach((item, index) => {
         arr.push(item.firstLetter)
       })
       arr = new Set(arr)
@@ -73,7 +75,7 @@ export default {
       let arr = []
       this.getFirstLetter.forEach((letter) => {
         let logoType = []
-        this.logo.forEach((item, index) => {
+        this.carBrand.forEach((item, index) => {
           if (letter === item.firstLetter) {
             logoType.push(item)
           }
@@ -84,10 +86,10 @@ export default {
         })
       })
       return arr
-    }
-  },
-  created () {
-    this.getCarBrand()
+    },
+    ...mapGetters([
+      'carBrand'
+    ])
   },
   components: {
     brandMask,

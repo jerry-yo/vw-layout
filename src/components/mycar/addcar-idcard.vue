@@ -11,8 +11,8 @@
     </div>
     <div class="container">
       <div class="car-name">
-        <img src="" alt="">
-        <h2><span>东风本田思域</span><span>2.5L</span><span>2016款</span><span>无级变速自动尊耀版</span> </h2>
+        <img :src="carLogoUrl + addCar.imageSrc" alt="">
+        <h2><span>{{addCar.series.sbName + ' - ' + addCar.series.vehicleSystem[1]}}</span><span>{{addCar.year}}</span><span>{{addCar.salesVersion}}</span> </h2>
       </div>
       <div class="idcard">
         <span>车牌号</span>
@@ -20,7 +20,7 @@
           {{area[areaIndex]}}
         </div>
         <div class="idcard-num">
-          385185
+          <input type="text" v-model.trim="carid"  maxlength="6" @change="setUppercase">
         </div>
       </div>
       <p>请输入真实车牌 以便后续服务</p>
@@ -28,7 +28,7 @@
       <div class="car-way">
         <span>行驶里程</span>
         <div class="input">
-          <input type="text" name="" value="">
+          <input type="text" v-model="way">
         </div>
         <span>km</span>
       </div>
@@ -36,6 +36,7 @@
         <span>注册日期</span>
         <div class="btn">
           请填写行驶证上真实注册日期
+          <!-- {{}} -->
         </div>
       </div>
     </div>
@@ -47,18 +48,21 @@
 
 <script type="text/ecmascript-6">
 import seleArea from '@/base/sele-area'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'addcarIdcard',
   data () {
     return {
       showAreaBtn: false,
-      areaIndex: 3,
-      area: ['京', '沪', '浙', '苏', '粤', '鲁', '晋', '冀', '渝', '川', '豫', '辽', '吉', '黑', '皖', '鄂', '湘', '赣', '闽', '陕', '甘', '宁', '蒙', '津', '桂', '云', '贵', '琼', '青', '新', '藏', '港', '澳']
+      areaIndex: 0,
+      carid: '',
+      way: 0,
+      time: '2016-12-20'
     }
   },
   methods: {
-    goAge () {
-      this.$router.push('/addcar-idcard')
+    setUppercase () {
+      this.carid = this.carid.toUpperCase()
     },
     goSeleArea () {
       this.showAreaBtn = true
@@ -71,8 +75,36 @@ export default {
       this.$router.go(-1)
     },
     _addCar () {
-      this.$router.replace('/garage')
-    }
+      if (this.carid === '') {
+        this.$Toast({
+          message: '请输入车牌号码',
+          position: 'bottom'
+        })
+      } else {
+        this.setAddCar({
+          idCard: this.area[this.areaIndex] + this.carid,
+          way: this.way,
+          time: this.year
+        })
+        this.setMyCar({
+          idCard: this.area[this.areaIndex] + this.carid,
+          way: this.way,
+          time: this.year
+        })
+        this.$router.replace('/garage')
+      }
+    },
+    ...mapMutations({
+      setAddCar: 'SET_ADDCAR',
+      setMyCar: 'SET_MYCAR'
+    })
+  },
+  computed: {
+    ...mapGetters([
+      'addCar',
+      'area',
+      'myCar'
+    ])
   },
   components: {
     seleArea
@@ -159,6 +191,15 @@ export default {
       .idcard-num
         width: 147px
         text-align: right
+        input
+          width: 100%
+          height: 100%
+          background-color: none
+          outline: none
+          border: none
+          text-align: right
+          font-size: 24px
+          color: #999
     .car-way
       height: 90px
       line-height: 90px

@@ -34,9 +34,9 @@ router.beforeEach((to, from, next) => {
 
   if (toIndex) {
     if (!fromIndex || parseInt(toIndex, 10) > parseInt(fromIndex, 10) || (toIndex === '0' && fromIndex === '0')) {
-      store.commit('setRouterAnimate', {direction: 'in'})
+      store.commit('SET_ANIMATETYPE', {direction: 'in'})
     } else {
-      store.commit('setRouterAnimate', {direction: 'out'})
+      store.commit('SET_ANIMATETYPE', {direction: 'out'})
     }
   } else {
     ++historyCount
@@ -44,7 +44,7 @@ router.beforeEach((to, from, next) => {
     paths.push({path: to.path, index: historyCount})
     history.setItem('routers', JSON.stringify(paths))
     if (from.path !== '/') {
-      store.commit('setRouterAnimate', {direction: 'in'})
+      store.commit('SET_ANIMATETYPE', {direction: 'in'})
     }
   }
   next()

@@ -9,16 +9,16 @@
       </div>
     </div>
     <div class="car-name">
-      <img src="" alt="">
-      <h2>奥迪A6</h2>
+      <img :src="carLogoUrl + addCar.imageSrc" alt="">
+      <h2>{{addCar.series.sbName + ' - ' + addCar.series.vehicleSystem[1]}}</h2>
     </div>
     <div class="sele-next">
-      <span>2.5L</span><span class="between">-</span>选择年份
+      <span>{{addCar.exhaustVolume}}</span><span class="between">-</span>选择年份
     </div>
     <Scroll class="age" ref="ageCar" :data="ages">
       <div class="con">
         <div class="text" v-for="(item, index) in ages" :key="index" @click="goModelsDetail(item)">
-          {{item.onMarketYear}}
+          {{item.onMarketYear + ' - ' + item.onMarketMonth}}
         </div>
       </div>
     </Scroll>
@@ -27,6 +27,7 @@
 
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
+import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'addcarAge',
   data () {
@@ -39,6 +40,10 @@ export default {
   methods: {
     goModelsDetail (item) {
       this.$router.push('/addcar-models?sid=' + this.sid + '&ev=' + this.ev + '&year=' + item.onMarketYear)
+      this.setAddCar({
+        year: item.onMarketYear,
+        month: item.onMarketMonth
+      })
     },
     _goBack () {
       this.$router.go(-1)
@@ -51,12 +56,20 @@ export default {
       }, {
         sid: this.sid
       })
-    }
+    },
+    ...mapMutations({
+      setAddCar: 'SET_ADDCAR'
+    })
   },
   created () {
     this.sid = this.$route.query.sid
     this.ev = this.$route.query.ev
     this.getRelateYear()
+  },
+  computed: {
+    ...mapGetters([
+      'addCar'
+    ])
   },
   components: {
     Scroll

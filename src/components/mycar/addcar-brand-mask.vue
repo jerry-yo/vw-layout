@@ -4,12 +4,12 @@
       <Scroll ref="addcarBrandMask" class="scroll" :data="getSeriesType">
         <div class="wrapper">
           <div class="title">
-            <img src="" alt="">
-            <h2>奥迪</h2>
+            <img :src="carLogoUrl + addCar.imageSrc" alt="">
+            <h2>{{addCar.name}}</h2>
           </div>
           <ul class="logo-type" v-for="(item, index) in getSeriesType" :key="index">
             <li class="logo-title">{{item.sbName}}</li>
-            <li class="logo-text" v-for="(res, id) in item.vehicleSystems" :key="id" @click="goDisplacement(res[0])">
+            <li class="logo-text" v-for="(res, id) in item.vehicleSystems" :key="id" @click="goDisplacement(item, id)">
               {{res[1]}}
             </li>
           </ul>
@@ -21,6 +21,7 @@
 
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
+import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'addcarBrandMask',
   props: {
@@ -36,8 +37,14 @@ export default {
     }
   },
   methods: {
-    goDisplacement (id) {
-      this.$router.push('/addcar-displacement?sid=' + id)
+    goDisplacement (res, id) {
+      this.$router.push('/addcar-displacement?sid=' + res.vehicleSystems[id][0])
+      this.setAddCar({
+        series: {
+          sbName: res.sbName,
+          vehicleSystem: res.vehicleSystems[id]
+        }
+      })
     },
     getSeries () {
       this.api_post('/api/carzone/findSeriesByBrandId', (res) => {
@@ -50,7 +57,10 @@ export default {
     },
     closeMask () {
       this.$emit('closemask', false)
-    }
+    },
+    ...mapMutations({
+      setAddCar: 'SET_ADDCAR'
+    })
   },
   created () {
     this.getSeries()
@@ -75,7 +85,10 @@ export default {
         })
       })
       return arr
-    }
+    },
+    ...mapGetters([
+      'addCar'
+    ])
   },
   components: {
     Scroll

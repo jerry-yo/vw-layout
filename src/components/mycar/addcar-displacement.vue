@@ -9,8 +9,8 @@
       </div>
     </div>
     <div class="car-name">
-      <img src="" alt="">
-      <h2>奥迪A6</h2>
+      <img :src="carLogoUrl + addCar.imageSrc" alt="">
+      <h2>{{addCar.series.sbName + ' - ' + addCar.series.vehicleSystem[1]}}</h2>
     </div>
     <div class="sele-next">
       选择发动机排量
@@ -27,6 +27,7 @@
 
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'addcarDisplacement',
   data () {
@@ -38,6 +39,9 @@ export default {
   methods: {
     goAge (item) {
       this.$router.push('/addcar-age?sid=' + item.sid + '&ev=' + item.exhaustVolume)
+      this.setAddCar({
+        exhaustVolume: item.exhaustVolume
+      })
     },
     _goBack () {
       this.$router.go(-1)
@@ -50,11 +54,19 @@ export default {
       }, {
         sid: this.displacementId
       })
-    }
+    },
+    ...mapMutations({
+      setAddCar: 'SET_ADDCAR'
+    })
   },
   created () {
     this.displacementId = this.$route.query.sid
     this.getExhaustVolume()
+  },
+  computed: {
+    ...mapGetters([
+      'addCar'
+    ])
   },
   components: {
     Scroll

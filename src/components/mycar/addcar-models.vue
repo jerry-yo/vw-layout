@@ -9,15 +9,15 @@
       </div>
     </div>
     <div class="car-name">
-      <img src="" alt="">
-      <h2>奥迪A6</h2>
+      <img :src="carLogoUrl + addCar.imageSrc" alt="">
+      <h2>{{addCar.series.sbName + ' - ' + addCar.series.vehicleSystem[1]}}</h2>
     </div>
     <div class="sele-next">
-      <span>2.5L</span><span class="between">-</span><span>2012年</span><span class="between">-</span>选择车型
+      <span>{{addCar.exhaustVolume}}</span><span class="between">-</span><span>{{addCar.year}}</span><span class="between">-</span>选择车型
     </div>
     <div class="models" ref="modelsCar" :data="models">
       <div class="con">
-        <div class="text" v-for="(item, index) in models" :key="index" @click="goAge">
+        <div class="text" v-for="(item, index) in models" :key="index" @click="goAge(item)">
           {{item.salesVersion}}
         </div>
         <div class="tips" v-if="flag">
@@ -29,6 +29,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'addcarModels',
   data () {
@@ -41,8 +42,11 @@ export default {
     }
   },
   methods: {
-    goAge () {
+    goAge (item) {
       this.$router.push('/addcar-idcard')
+      this.setAddCar({
+        salesVersion: item.salesVersion
+      })
     },
     _goBack () {
       this.$router.go(-1)
@@ -61,13 +65,21 @@ export default {
         exhaustVolume: this.ev,
         year: this.year
       })
-    }
+    },
+    ...mapMutations({
+      setAddCar: 'SET_ADDCAR'
+    })
   },
   created () {
     this.sid = this.$route.query.sid
     this.ev = this.$route.query.ev
     this.year = this.$route.query.year
     this.getModelsDetail()
+  },
+  computed: {
+    ...mapGetters([
+      'addCar'
+    ])
   }
 }
 </script>

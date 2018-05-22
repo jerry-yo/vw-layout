@@ -67,6 +67,7 @@
 <script type="text/ecmascript-6">
 import seleArea from '@/base/sele-area'
 import Slider from '@/base/slider/slider-view'
+import {mapMutations} from 'vuex'
 export default {
   name: 'garage',
   data () {
@@ -99,7 +100,21 @@ export default {
     },
     _goDetectionRecord () {
       this.$router.push('/detection-record')
-    }
+    },
+    getCarBrand () {
+      this.api_post('/api/carzone/getCarAllBrand', (res) => {
+        if (res.errorCode === 0) {
+          this.logo = res.data.data.detail
+          this.setCarBrand(this.logo)
+        }
+      })
+    },
+    ...mapMutations({
+      setCarBrand: 'SET_CARBRAND'
+    })
+  },
+  created () {
+    this.getCarBrand()
   },
   components: {
     seleArea,

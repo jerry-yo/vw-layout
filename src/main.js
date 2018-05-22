@@ -25,12 +25,13 @@ Vue.config.productionTip = false
 axios.defaults.baseURL = 'https://www.gt1.shop/'
 // axios.defaults.baseURL = 'http://192.168.0.105:8080/gt/'
 Vue.prototype.baseUrl = axios.defaults.baseURL
+
 Vue.prototype.Wx = require('weixin-js-sdk')
 Vue.prototype.weui = weui
 // 全局 控件
 Vue.prototype.$Toast = Toast
 Vue.prototype.$Modal = Modal
-
+Vue.prototype.carLogoUrl = 'http://image.carzone.cn'
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 new Vue({

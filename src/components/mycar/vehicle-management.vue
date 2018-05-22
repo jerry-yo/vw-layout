@@ -9,19 +9,19 @@
     </div>
     <Scroll class="car-content">
       <ul class="con">
-        <li v-for="(item, index) in cars" :key="index">
+        <li v-for="(item, index) in myCar" :key="index" v-if="check.length > 0">
           <div class="li-con" :style="{transform: editState ? 'translateX(28px)' : 'translateX(0px)', transition: 'all .3s'}">
             <div class="check-btn" v-show="editState">
-              <div class="check-img" :class="item.check ? 'check': 'nocheck'"  @click="_checkCar(index)">
+              <div class="check-img" :class="check[index].check ? 'check': 'nocheck'"  @click="_checkCar(index)">
               </div>
             </div>
             <div class="img">
-              <img src="" alt="">
+              <img :src="carLogoUrl + item.imageSrc" alt="">
             </div>
             <div class="con">
-              <h2>{{item.name}}</h2>
-              <p class="p1"><span>{{item.year}}</span>&nbsp;&nbsp;<span>{{item.oil}}</span>&nbsp;&nbsp;<span>{{item.modal}}</span></p>
-              <p class="p2"><span>{{item.idcard}}</span><span>丨</span> <span>{{item.way}}km</span></p>
+              <h2>{{item.series.sbName + ' - ' + item.series.vehicleSystem[1]}}</h2>
+              <p class="p1"><span>{{item.year}}</span>&nbsp;&nbsp;<span>{{item.salesVersion}}</span></p>
+              <p class="p2"><span>{{item.idCard}}</span><span v-if="item.way !== 0">丨</span> <span v-if="item.way !== 0">{{item.way}}km</span></p>
             </div>
             <div class="right"  v-if="!editState">
               <div class="btn" :class="item.default ? 'active' : 'common'" @click="_setCarDefault(index)">
@@ -40,66 +40,21 @@
 
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
+import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'vehicleManagement',
   data () {
     return {
       editState: false,
-      cars: [{
-        id: 1,
-        name: '东风本田-思域',
-        year: '2012款',
-        oil: '1.5T',
-        modal: '自动豪华版',
-        default: true,
-        check: false,
-        idcard: '苏OP5869',
-        way: '6523.26'
-      }, {
-        id: 2,
-        name: '比亚迪-霸道',
-        year: '2016款',
-        oil: '3.0T',
-        modal: '超级无敌豪华版',
-        default: false,
-        check: false,
-        idcard: '沪521885',
-        way: '456.88'
-      }, {
-        id: 3,
-        name: '奔驰-无敌',
-        year: '2014款',
-        oil: '2.0T',
-        modal: '优雅奢华牛逼版',
-        default: false,
-        check: false,
-        idcard: '苏BB8888',
-        way: '3691.48'
-      }],
-      copyCars: []
+      check: []
     }
   },
-  computed: {
-
-  },
   methods: {
-    _setCheckCars () {
-      this.cars.forEach((item, index) => {
-        this.copyCars.push(false)
-      })
-    },
     _goBack () {
       this.$router.go(-1)
     },
     _goAddcarTabbar () {
       if (this.editState) {
-        let arr = []
-        this.cars.forEach((item, index) => {
-          if (!item.check) {
-            arr.push(item)
-          }
-        })
-        this.cars = arr
         this.editState = false
       } else {
         this.$router.push('/addcar-tabbar')
@@ -107,24 +62,44 @@ export default {
     },
     _editCar () {
       this.editState = !this.editState
-      // if (this.editState) {
-      //   this._setCheckCars()
-      // }
     },
     _setCarDefault (id) {
-      this.cars.forEach((item, index) => {
-        if (index === id) {
-          item.default = true
-        } else {
-          item.default = false
-        }
-      })
+      // this.cars.forEach((item, index) => {
+      //   if (index === id) {
+      //     item.default = true
+      //   } else {
+      //     item.default = false
+      //   }
+      // })
     },
     _checkCar (id) {
-      this.cars[id].check = !this.cars[id].check
+      if (this.check[id].check) {
+        this.$set(this.check[id], 'check', false)
+      } else {
+        this.$set(this.check[id], 'check', true)
+      }
+    },
+    ...mapMutations({
+      setMyCar: 'SET_MYCAR'
+    }),
+    checkArr () {
+      let arr = []
+      for (let i = 0; i < this.myCar.length; i++) {
+        arr[i] = {
+          check: false
+        }
+      }
+      this.check = arr
     }
   },
+  computed: {
+    ...mapGetters([
+      'myCar'
+    ])
+  },
   mounted () {
+    this.checkArr()
+    console.log(this.check)
   },
   components: {
     Scroll
@@ -244,9 +219,14 @@ export default {
               font-weight: bold
               line-height: 44px
             p.p1
+              width: 350px
+              height: 36px
+              overflow: hidden
               font-size: 22px
               color: #5b5b5b
               line-height: 36px
+              text-overflow:ellipsis
+              white-space: nowrap
             p.p2
               font-size: 22px
               color: #9d9d9d
