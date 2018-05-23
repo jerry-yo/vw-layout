@@ -2,7 +2,7 @@
 
 <template>
   <div class="addcar-idcard" flexContainer>
-    <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
+    <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex"></seleArea>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="tabbar">
@@ -86,11 +86,8 @@ export default {
           way: this.way,
           time: this.year
         })
-        this.setMyCar({
-          idCard: this.area[this.areaIndex] + this.carid,
-          way: this.way,
-          time: this.year
-        })
+        let car = JSON.parse(sessionStorage.getItem('addCar'))
+        this.setMyCar(car)
         this.$router.replace('/garage')
       }
     },

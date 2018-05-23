@@ -2,20 +2,20 @@
   <div class="slider" @touchmove.prevent ref="slider">
     <div class="slider-group" ref="sliderGroup" @transitionend="transitionEnd" :style="{transform: translate3d, transitionDuration: animateTime + 'ms'}"  @touchstart="touchS" @touchend="touchE" @touchmove="touchM">
       <div class="slider-dots" v-for="(item, index) in imgs" :key="index">
-        <div class="dot-con" :class="imgs.length ? '' : 'nocar'">
+        <div class="dot-con">
           <div class="left">
-            <img src="" alt="">
+            <img v-lazy="carLogoUrl + item.imageSrc" alt="">
           </div>
           <div class="right">
-            <h2>东风本田-思域</h2>
-            <p>苏DB5A68<span>l</span>2300km</p>
-            <div class="default-btn">
-              设为当前车辆
+            <h2>{{item.series.sbName + ' - ' + item.series.vehicleSystem[1]}}</h2>
+            <p>{{item.idCard}}<span>l</span>{{item.way}}km</p>
+            <div :class="item.default ? 'default' : 'default-btn'" @click.prevent="setDefault(index)">
+              {{item.default ? '已设为默认车辆' : '设为默认车辆'}}
             </div>
           </div>
         </div>
       </div>
-      <div class="slider-dots" v-if="imgs.length ? false: true">
+      <div class="slider-dots" v-if="imgs.length ? false: true" @click="tapDom">
         <div class="dot-con" :class="imgs.length ? '' : 'nocar'">
         </div>
       </div>
@@ -87,16 +87,20 @@ export default {
         if (X > 0) {
           if (moveTime > 20 && moveTime < 300) {
             this.nextImg()
+            this.$emit('carid', this.imgIndex)
           } else if (X >= this.sliderGroupDom / 2) {
             this.nextImg()
+            this.$emit('carid', this.imgIndex)
           } else {
             this.goBackImg(parseInt(Math.abs(this.bridge) / this.sliderGroupDom * this.duration))
           }
         } else {
           if (moveTime > 20 && moveTime < 300) {
             this.prevImg()
+            this.$emit('carid', this.imgIndex)
           } else if (Math.abs(X) >= this.sliderGroupDom / 2) {
             this.prevImg()
+            this.$emit('carid', this.imgIndex)
           } else {
             this.goBackImg(parseInt(Math.abs(this.bridge) / this.sliderGroupDom * this.duration))
           }
@@ -115,8 +119,11 @@ export default {
         this.animateImg(false, 0)
       }
     },
-    tapDom (index) {
-      this.$emit('tapcard', index)
+    tapDom () {
+      this.$emit('tapcard', true)
+    },
+    setDefault (index) {
+      this.$emit('setdefault', index)
     },
     /*  动画结束监听   */
     transitionEnd () {
@@ -188,7 +195,7 @@ export default {
     position: relative
     width: 100%
     padding: 5px 0px
-    // overflow: hidden
+    overflow: hidden
     .slider-group
       height: 100%
       width: 100%
@@ -239,6 +246,13 @@ export default {
               margin-bottom: 25px
               span
                 margin: 0 15px
+            .default
+              width: 100%
+              height: 44px
+              font-size: 22px
+              color: #ff834e
+              line-height: 44px
+              background: #fff
             .default-btn
               width: 160px
               height: 44px

@@ -7,7 +7,7 @@
       <div class="font">车主认证</div>
     </div>
     <div class="container">
-      <vehicleCertification></vehicleCertification>
+      <vehicleCertification :vin-type="vinType"></vehicleCertification>
     </div>
   </div>
 </template>
@@ -16,10 +16,18 @@
 import vehicleCertification from './vehicle-certification'
 export default {
   name: 'carOwner',
+  data () {
+    return {
+      vinType: 0
+    }
+  },
   methods: {
     _goBack () {
       this.$router.go(-1)
     }
+  },
+  mounted () {
+    this.vinType = parseInt(this.$route.query.carid)
   },
   components: {
     vehicleCertification

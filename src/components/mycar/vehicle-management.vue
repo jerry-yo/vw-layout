@@ -5,7 +5,7 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
-      <div class="management" @click="_editCar">{{editState ?'取消' : '编辑'}}</div>
+      <div class="management" @click="_editCar" v-if="myCar.length > 0">{{editState ?'取消' : '编辑'}}</div>
     </div>
     <Scroll class="car-content">
       <ul class="con">
@@ -56,21 +56,21 @@ export default {
     _goAddcarTabbar () {
       if (this.editState) {
         this.editState = false
+        this.deleteMyCar(this.check)
       } else {
         this.$router.push('/addcar-tabbar')
       }
     },
     _editCar () {
       this.editState = !this.editState
+      if (this.editState) {
+        this.checkArr()
+      }
     },
     _setCarDefault (id) {
-      // this.cars.forEach((item, index) => {
-      //   if (index === id) {
-      //     item.default = true
-      //   } else {
-      //     item.default = false
-      //   }
-      // })
+      this.setDefaultCar({
+        id: id
+      })
     },
     _checkCar (id) {
       if (this.check[id].check) {
@@ -80,7 +80,9 @@ export default {
       }
     },
     ...mapMutations({
-      setMyCar: 'SET_MYCAR'
+      setMyCar: 'SET_MYCAR',
+      setDefaultCar: 'SET_DEFAULTCAR',
+      deleteMyCar: 'DELETE_MYCAR'
     }),
     checkArr () {
       let arr = []
@@ -99,7 +101,6 @@ export default {
   },
   mounted () {
     this.checkArr()
-    console.log(this.check)
   },
   components: {
     Scroll

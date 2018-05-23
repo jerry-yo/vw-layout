@@ -17,7 +17,7 @@
     </div>
     <div class="container">
       <addCarBrand v-if="tabActive"></addCarBrand>
-      <vehicleCertification v-else></vehicleCertification>
+      <vehicleCertification v-else :vin-type="vinType"></vehicleCertification>
     </div>
   </div>
 </template>
@@ -29,7 +29,8 @@ export default {
   name: 'addcarTabbar',
   data () {
     return {
-      tabActive: true
+      tabActive: true,
+      vinType: -1
     }
   },
   methods: {

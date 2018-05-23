@@ -9,12 +9,12 @@
       <div class="info-2">
         <span>VIN号</span>
         <div class="input">
-          <input type="text" name="" value="" placeholder="用于获取车辆信息" maxlength="8">
+          <input type="text" v-model="vin" placeholder="用于获取车辆信息" maxlength="17">
         </div>
       </div>
     </div>
     <div class="submit-btn">
-      <div class="btn">
+      <div class="btn" @click="this.getCarInfoByVin">
         <span>开始认证</span>
       </div>
     </div>
@@ -22,8 +22,107 @@
 </template>
 
 <script type="text/ecmascript-6">
+import {mapMutations, mapGetters} from 'vuex'
 export default {
-  name: 'vehicleCertification'
+  name: 'vehicleCertification',
+  props: {
+    vinType: {
+      type: Number
+    }
+  },
+  data () {
+    return {
+      vin: '',
+      carinfo: {},
+      promise: null
+    }
+  },
+  methods: {
+    getCarInfoByVin () {
+      let _self = this
+      this.promise = new Promise((resolve, reject) => {
+        this.api_post('/api/carzone/vincode', (res) => {
+          if (res.errorCode === 0) {
+            if (res.data.data.result === '0000') {
+              _self.carinfo = res.data.data.detail
+              resolve()
+            } else {
+              return reject
+            }
+          }
+        }, {
+          vinCode: this.vin
+        })
+      })
+      if (this.vinType === -1) {
+        this.addMyCar()
+      } else {
+        this.modifyCarInfo()
+      }
+    },
+    addMyCar () {
+      let _self = this
+      this.promise.then(() => {
+        let img = ''
+        _self.carBrand.forEach((item) => {
+          if (item.pbid === _self.carinfo.pbid) {
+            img = item.imageSrc
+          }
+        })
+        this.setAddCar({
+          exhaustVolume: _self.carinfo.exhaustVolume,
+          imageSrc: img,
+          month: _self.carinfo.onMarketMonth,
+          name: _self.carinfo.brandName,
+          pbid: _self.carinfo.pbid,
+          salesVersion: _self.carinfo.salesVersion,
+          series: {
+            sbName: _self.carinfo.manufacturerName,
+            vehicleSystem: [_self.carinfo.sid, _self.carinfo.vehicleSystem, _self.carinfo.status]
+          },
+          year: _self.carinfo.onMarketYear
+        })
+        this.$router.push('/addcar-idcard')
+      })
+    },
+    modifyCarInfo () {
+      let _self = this
+      this.promise.then(() => {
+        let img = ''
+        _self.carBrand.forEach((item) => {
+          if (item.pbid === _self.carinfo.pbid) {
+            img = item.imageSrc
+          }
+        })
+        this.modifyMyCar({
+          id: this.vinType,
+          carinfo: {
+            exhaustVolume: _self.carinfo.exhaustVolume,
+            imageSrc: img,
+            month: _self.carinfo.onMarketMonth,
+            name: _self.carinfo.brandName,
+            pbid: _self.carinfo.pbid,
+            salesVersion: _self.carinfo.salesVersion,
+            series: {
+              sbName: _self.carinfo.manufacturerName,
+              vehicleSystem: [_self.carinfo.sid, _self.carinfo.vehicleSystem, _self.carinfo.status]
+            },
+            year: _self.carinfo.onMarketYear
+          }
+        })
+        this.$router.back()
+      })
+    },
+    ...mapMutations({
+      setAddCar: 'SET_ADDCAR',
+      modifyMyCar: 'MODIFY_MYCAR'
+    })
+  },
+  computed: {
+    ...mapGetters([
+      'carBrand'
+    ])
+  }
 }
 </script>
 

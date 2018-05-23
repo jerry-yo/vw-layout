@@ -1,7 +1,7 @@
 // 我的车库
 <template>
   <div class="garage">
-    <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex" :area="area"></seleArea>
+    <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex"></seleArea>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
@@ -9,7 +9,7 @@
     </div>
     <div class="container">
       <div class="swiper">
-        <Slider  :recommends="recommends"></Slider>
+        <Slider :recommends="myCar" @tapcard="tapCard" @carid="getCarId" @setdefault="setDefault"></Slider>
       </div>
       <div class="car-menu">
         <div class="car-con">
@@ -24,40 +24,40 @@
           </div>
         </div>
       </div>
-      <div class="car-idcard">
+      <div class="car-idcard" v-if="myCar.length > 0">
         <span>车牌号</span>
         <div class="area" @click="goSeleArea">
-          {{area[areaIndex]}}
+          {{myCar[carId].idCard.slice(0, 1)}}
         </div>
         <div class="number">
-          <input type="text" name="" value="Jd8462">
+          <input type="text" name="" :placeholder="myCar[carId].idCard.slice(1, 7)">
         </div>
       </div>
-      <div class="car-info">
+      <div class="car-info" v-if="myCar.length > 0">
         <div class="car-models">
           <span>具体车型</span>
-          <span>2016款 1.5T 自动尊耀版</span>
+          <span>{{myCar[carId].salesVersion}}</span>
         </div>
         <div class="car-others">
           <div class="car-displacement">
             <span>发动机排量</span>
-            <span>1.5T</span>
+            <span>{{myCar[carId].exhaustVolume}}</span>
           </div>
           <div class="car-age">
             <span>生产年份</span>
-            <span>2008年</span>
+            <span>{{myCar[carId].year}}</span>
           </div>
         </div>
         <div class="car-far">
           <span>行驶里程</span>
           <div class="input">
-            <input type="number" name="" value="">
+            <input type="number" name="" :placeholder="myCar[carId].way">
           </div>
           <span>km</span>
         </div>
         <div class="car-time">
           <span>注册时间</span>
-          <span>2016年12月18日</span>
+          <span>未添加信息</span>
         </div>
       </div>
     </div>
@@ -67,15 +67,14 @@
 <script type="text/ecmascript-6">
 import seleArea from '@/base/sele-area'
 import Slider from '@/base/slider/slider-view'
-import {mapMutations} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'garage',
   data () {
     return {
       showAreaBtn: false,
       areaIndex: 3,
-      recommends: [],
-      area: ['京', '沪', '浙', '苏', '粤', '鲁', '晋', '冀', '渝', '川', '豫', '辽', '吉', '黑', '皖', '鄂', '湘', '赣', '闽', '陕', '甘', '宁', '蒙', '津', '桂', '云', '贵', '琼', '青', '新', '藏', '港', '澳']
+      carId: 0
     }
   },
   methods: {
@@ -86,6 +85,19 @@ export default {
       this.areaIndex = res
       this.showAreaBtn = false
     },
+    tapCard (id) {
+      if (this.myCar.length < 1) {
+        this.$router.push('/addcar-tabbar')
+      }
+    },
+    setDefault (id) {
+      this.setDefaultCar({
+        id: id
+      })
+    },
+    getCarId (id) {
+      this.carId = id
+    },
     _goBack () {
       this.$router.push('/mind')
     },
@@ -93,28 +105,36 @@ export default {
       this.$router.push('/vehicle-management')
     },
     _goCarOwner () {
-      this.$router.push('/car-owner')
+      if (this.myCar.length < 1) {
+        this.$Toast({
+          message: '请先添加车辆！',
+          position: 'bottom'
+        })
+        return
+      }
+      this.$router.push('/car-owner?carid=' + this.carId)
     },
     _goCarSharing () {
       this.$router.push('/car-sharing')
     },
     _goDetectionRecord () {
+      if (this.myCar.length < 1) {
+        this.$Toast({
+          message: '请先添加车辆！',
+          position: 'bottom'
+        })
+        return
+      }
       this.$router.push('/detection-record')
     },
-    getCarBrand () {
-      this.api_post('/api/carzone/getCarAllBrand', (res) => {
-        if (res.errorCode === 0) {
-          this.logo = res.data.data.detail
-          this.setCarBrand(this.logo)
-        }
-      })
-    },
     ...mapMutations({
-      setCarBrand: 'SET_CARBRAND'
+      setDefaultCar: 'SET_DEFAULTCAR'
     })
   },
-  created () {
-    this.getCarBrand()
+  computed: {
+    ...mapGetters([
+      'myCar'
+    ])
   },
   components: {
     seleArea,

@@ -9,12 +9,10 @@
 </template>
 
 <script type="text/ecmascript-6">
+import {mapGetters} from 'vuex'
 export default {
   name: 'seleArea',
   props: {
-    area: {
-      type: Array
-    },
     areaindex: {
       type: Number
     }
@@ -32,6 +30,11 @@ export default {
     goBack () {
       this.$emit('goback', this.active)
     }
+  },
+  computed: {
+    ...mapGetters([
+      'area'
+    ])
   }
 }
 </script>

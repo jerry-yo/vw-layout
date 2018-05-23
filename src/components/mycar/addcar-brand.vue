@@ -19,7 +19,7 @@
           <ul class="logo-class type-index" v-for="item in getLogo" :key="item.id" ref="logo">
             <li class="title">{{item.firstLetter}}</li>
             <li class="info" v-for="logo in item.logos" :key="logo.id" @click="showBrandMask(logo)">
-              <img :src="carLogoUrl + logo.imageSrc" alt="">
+              <img v-lazy="carLogoUrl + logo.imageSrc" alt="">
               <h2>{{logo.name}}</h2>
             </li>
           </ul>
@@ -58,9 +58,21 @@ export default {
     _closeMask () {
       this.showMask = false
     },
+    getCarBrand () {
+      this.api_post('/api/carzone/getCarAllBrand', (res) => {
+        if (res.errorCode === 0) {
+          this.logo = res.data.data.detail
+          this.setCarBrand(this.logo)
+        }
+      })
+    },
     ...mapMutations({
-      setAddCar: 'SET_ADDCAR'
+      setAddCar: 'SET_ADDCAR',
+      setCarBrand: 'SET_CARBRAND'
     })
+  },
+  created () {
+    this.getCarBrand()
   },
   computed: {
     getFirstLetter () {
@@ -178,7 +190,6 @@ export default {
             padding-right: 30px
             img
               display: block
-              background-color: rgba(255,255,0,0.5)
               width: 60px
               height: 60px
               margin: 0 auto
@@ -213,7 +224,6 @@ export default {
           & > img
             width: 60px
             height: 60px
-            background-color: rgba(255, 0, 255, 0.5)
             margin-right: 30px
           & > h2
             font-size: 20px

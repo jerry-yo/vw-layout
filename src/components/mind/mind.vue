@@ -74,7 +74,7 @@
       <div class="car" @click="_goGarage">
         <span>我的车库</span>
         <div class="car-title title">
-          <span>4辆爱车</span>
+          <span>{{myCar.length > 0 ? `${myCar.length}辆爱车` : '去添加车辆'}}</span>
         </div>
       </div>
       <div class="quan">
@@ -101,6 +101,7 @@
 
 <script type="text/ecmascript-6">
 import Badge from '@/base/badge'
+import {mapGetters} from 'vuex'
 export default {
   name: 'mind',
   data () {
@@ -127,6 +128,11 @@ export default {
     _goMyInfo () {
       this.$router.push('/my-info')
     }
+  },
+  computed: {
+    ...mapGetters([
+      'myCar'
+    ])
   },
   components: {
     Badge

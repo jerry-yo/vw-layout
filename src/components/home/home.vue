@@ -18,15 +18,15 @@
         </div>
         <div class="car-info">
           <div class="car-con">
-            <div class="info-tab" :class="carInfo.carName ? '' : 'nocar'" @click="_addCar">
-              <div class="car-img" v-show="carInfo.carName ? true : false">
-                <img src="" alt="">
+            <div class="info-tab" :class="carInfo.pbid ? '' : 'nocar'" @click="_addCar">
+              <div class="car-img" v-show="carInfo.pbid ? true : false">
+                <img v-lazy="carLogoUrl + carInfo.imageSrc" alt="">
               </div>
-              <div class="car-name"  v-show="carInfo.carName ? true : false">
-                <div class="name">{{carInfo.carName}}</div>
+              <div class="car-name"  v-if="carInfo.pbid ? true : false">
+                <div class="name">{{carInfo.series.sbName + ' - ' + carInfo.series.vehicleSystem[1]}}</div>
                 <div class="card-info">
-                  <div class="card">{{carInfo.carCard}}</div>
-                  <div class="way">{{carInfo.carWay}}</div>
+                  <div class="card">{{carInfo.idCard}}</div>
+                  <div class="way">{{carInfo.way}}km</div>
                 </div>
               </div>
             </div>
@@ -91,18 +91,13 @@
 import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
+import {mapGetters} from 'vuex'
 export default {
   name: 'home',
   data () {
     return {
       homeBScroll: null,
-      carInfo: {
-        imgUrl: '',
-        id: 0,
-        carName: '东风本田-思域',
-        carWay: '2300km',
-        carCard: '苏DB5A68'
-      },
+      carInfo: {},
       recommends: [{
         id: 1,
         linkUrl: 'https://y.qq.com/m/act/chunwan2018/v3/index.html?ADTAG=jiaodiantu',
@@ -152,14 +147,24 @@ export default {
       this.$router.push('/check-list')
     },
     _addCar () {
-      if (this.carInfo.carName) {
+      if (this.carInfo.pbid) {
         this.$router.push('/garage')
       } else {
         this.$router.push('/addcar-tabbar')
       }
     }
   },
+  computed: {
+    ...mapGetters([
+      'myCar'
+    ])
+  },
   mounted () {
+    this.myCar.forEach((item) => {
+      if (item.default) {
+        this.carInfo = item
+      }
+    })
   },
   components: {
     Badge,
