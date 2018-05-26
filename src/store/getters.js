@@ -21,6 +21,9 @@ const getters = {
     // let mycar = sessionStorage.getItem('myCar')
     // state.myCar = mycar
     return state.myCar
+  },
+  cityInfo (state) {
+    return state.cityInfo
   }
 }
 

@@ -1,8 +1,8 @@
  <template>
   <div class="home">
     <div class="home-top">
-      <div class="sele-city">
-        常州发的
+      <div class="sele-city" @click="_goSeleCity">
+        {{cityShow}}
         <span></span>
       </div>
       <span>GT1养车</span>
@@ -12,8 +12,7 @@
     <Scroll class="container_1" ref="home">
       <div class="con">
         <div class="slider">
-          <Swiper  :autoplay="autoPlay" :duration="duration" :slidetype="slideType" :recommends="recommends" :color="color" :pagination="pagination">
-
+          <Swiper :autoplay="autoPlay" :duration="duration" :slidetype="slideType" :recommends="recommends" :color="color" :pagination="pagination">
           </Swiper>
         </div>
         <div class="car-info">
@@ -91,7 +90,8 @@
 import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
+import AMap from 'AMap'
 export default {
   name: 'home',
   data () {
@@ -127,6 +127,10 @@ export default {
     }
   },
   methods: {
+    // 选择城市
+    _goSeleCity () {
+      this.$router.push('/sele-city')
+    },
     // 洗车
     _goCarWash () {
       this.$router.push('/washcar')
@@ -152,19 +156,66 @@ export default {
       } else {
         this.$router.push('/addcar-tabbar')
       }
-    }
+    },
+    _setMap () {
+      let geolocation = new AMap.Geolocation({
+        enableHighAccuracy: true,
+        timeout: 1000,
+        maximumAge: 0,
+        convert: true,
+        showButton: false,
+        showMarker: false,
+        showCircle: false,
+        panToLocation: true,
+        zoomToAccuracy: false
+      })
+      geolocation.getCurrentPosition((status, result) => {
+        if (status === 'complete' && result.info === 'SUCCESS') {
+          if (result.addressComponent && result.addressComponent.city) {
+            let city = {
+              city: result.addressComponent.city,
+              address: result.formattedAddress,
+              citycode: result.addressComponent.citycode,
+              district: result.addressComponent.district,
+              province: result.addressComponent.province,
+              street: result.addressComponent.street,
+              township: result.addressComponent.township,
+              lng: result.position.lng,
+              lat: result.position.lat
+            }
+            this.setCityInfo(city)
+          }
+        } else {
+          this.$Toast({
+            message: '定位失败，请手动选择城市',
+            position: 'bottom'
+          })
+        }
+      })
+    },
+    ...mapMutations({
+      setCityInfo: 'SET_CITYINFO'
+    })
   },
   computed: {
+    cityShow () {
+      let city = ''
+      if (this.cityInfo.city) {
+        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
+      } else {
+        return '定位中···'
+      }
+      return city.length >= 4 ? city.slice(0, 3) + '···' : city
+    },
     ...mapGetters([
-      'myCar'
+      'myCar',
+      'cityInfo'
     ])
   },
-  mounted () {
-    this.myCar.forEach((item) => {
-      if (item.default) {
-        this.carInfo = item
-      }
-    })
+  created () {
+    if (!this.cityInfo.city) {
+      this._setMap()
+    }
   },
   components: {
     Badge,

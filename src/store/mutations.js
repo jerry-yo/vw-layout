@@ -58,6 +58,14 @@ const mutations = {
     let obj = {}
     obj = Object.assign(state.myCar[car.id], car.carinfo)
     state.myCar[car.id] = obj
+  },
+  [type.SET_CITYINFO] (state, city) {
+    state.cityInfo = city
+  },
+  [type.MODIFY_CITYINFO] (state, city) {
+    let obj = {}
+    obj = Object.assign(state.cityInfo, city)
+    state.cityInfo = obj
   }
 }
 

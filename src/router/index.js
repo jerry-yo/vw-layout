@@ -8,7 +8,7 @@ Vue.use(VueRouter)
 // 路由配置
 const RouterConfig = {
   linkActiveClass: 'active-on',
-  // mode: 'history',
+  mode: 'history',
   routes: routers
 }
 

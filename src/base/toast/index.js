@@ -15,7 +15,10 @@ const Toast = (options = {}) => {
   let duration = options.duration || 2.5
   instance.message = typeof options === 'string' ? options : options.message
   instance.position = options.position || 'middle'
-  document.body.appendChild(instance.$el)
+  let toastList = document.getElementsByClassName('toast-mask')
+  if (toastList.length < 1) {
+    document.body.appendChild(instance.$el)
+  }
   Vue.nextTick(() => {
     instance.visible = true
     instance.timer = setTimeout(function () {

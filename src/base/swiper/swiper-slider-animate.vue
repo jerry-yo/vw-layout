@@ -134,8 +134,6 @@ export default {
           }
         }
       } else {
-        // this.goBackImg(parseInt(Math.abs(this.bridge) / this.sliderGroupNow * this.duration))
-        // this.goBackGroup(parseInt(Math.abs(this.bridge) / this.sliderGroupNow * this.duration))
       }
     },
     // 手指触屏移动触发

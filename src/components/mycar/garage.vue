@@ -220,12 +220,12 @@ export default {
           background-position: center 30px
         .sharing
           bg-image('../../common/imgs/car/sharing')
-          background-size: 56px 55px
+          background-size: 58px 55px
           background-repeat: no-repeat
           background-position: center 30px
         .owner
           bg-image('../../common/imgs/car/owner')
-          background-size: 56px 55px
+          background-size: 72px 54px
           background-repeat: no-repeat
           background-position: center 30px
     .car-idcard

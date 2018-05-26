@@ -1,5 +1,5 @@
 <template>
-  <div class="detection-record" flexContainer>
+  <div class="detection-record" flexContainer ref="amap">
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
@@ -43,6 +43,7 @@
 <script type="text/ecmascript-6">
 import AMap from 'AMap'
 import washInfo from './washinfo'
+import {mapGetters} from 'vuex'
 export default {
   data () {
     return {
@@ -129,6 +130,11 @@ export default {
       this.washForShow = this.markers[newQuestion]
     }
   },
+  computed: {
+    ...mapGetters([
+      'cityInfo'
+    ])
+  },
   methods: {
     _goSearch () {
       this.$router.push('/search-wash-store')
@@ -141,6 +147,7 @@ export default {
       this.map = new AMap.Map(this.$refs.container, {
         resizeEnable: true,
         jogEnable: false,
+        center: [this.cityInfo.lng, this.cityInfo.lat],
         zoom: 13,
         zooms: [12, 19]
       })
@@ -150,14 +157,13 @@ export default {
     },
     _onComplete (data) {
       let _self = this
-      this.my_position = data.position
       if (this.showMap) {
-        // this.map.panTo([_self.my_position.lng, _self.my_position.lat])
+        this.map.panTo([data.lng, data.lat])
       } else {
         this.showMap = true
         this.customMarker = new AMap.Marker({
           map: _self.map,
-          position: [_self.my_position.lng, _self.my_position.lat],
+          position: [data.lng, data.lat],
           offset: new AMap.Pixel(-11, -34),
           icon: new AMap.Icon({
             image: './static/own_marker@2x.png',
@@ -165,9 +171,6 @@ export default {
           })
         })
       }
-    },
-    _onError (data) {
-      console.log(data)
     },
     _onClick (e) {
       this.washinfoShow = true
@@ -201,23 +204,26 @@ export default {
       }
     },
     _getLocation () {
-      let _self = this
-      this.map.plugin('AMap.Geolocation', function () {
-        _self.geolocation = new AMap.Geolocation({
-          enableHighAccuracy: true,
-          timeout: 1000,
-          maximumAge: 0,
-          convert: true,
-          showButton: false,
-          showMarker: false,
-          showCircle: false,
-          panToLocation: true,
-          zoomToAccuracy: false
-        })
-        _self.map.addControl(_self.geolocation)
-        _self.geolocation.getCurrentPosition()
-        AMap.event.addListener(_self.geolocation, 'complete', _self._onComplete)
-        AMap.event.addListener(_self.geolocation, 'error', _self._onError)
+      let geolocation = new AMap.Geolocation({
+        enableHighAccuracy: true,
+        timeout: 1000,
+        maximumAge: 0,
+        convert: true,
+        showButton: false,
+        showMarker: false,
+        showCircle: false,
+        panToLocation: true,
+        zoomToAccuracy: false
+      })
+      geolocation.getCurrentPosition((status, result) => {
+        if (status === 'complete' && result.info === 'SUCCESS') {
+          let pos = {
+            lng: result.position.lng,
+            lat: result.position.lat
+          }
+          this.my_position = pos
+          this._onComplete(pos)
+        }
       })
     },
     _getMarker () {
@@ -272,7 +278,7 @@ export default {
   },
   mounted () {
     this._setMap()
-    this._getLocation()
+    this._onComplete({lng: this.cityInfo.lng, lat: this.cityInfo.lat})
     this._getMarker()
   },
   components: {
