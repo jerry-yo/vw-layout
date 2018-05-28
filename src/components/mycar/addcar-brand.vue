@@ -2,7 +2,7 @@
 
 <template>
   <div class="addcar-brand" flexContainer>
-    <div class="search-car">
+    <div class="search-car" @click="goSearch">
       <div class="btn">
         <span>搜索</span>
       </div>
@@ -43,6 +43,9 @@ export default {
     }
   },
   methods: {
+    goSearch () {
+      this.$router.push('/search-list?format=' + 'brand')
+    },
     selectMenu (index, event) {
       this.$refs.logolist.scrollToElement(this.$refs.logo[index], 300)
     },

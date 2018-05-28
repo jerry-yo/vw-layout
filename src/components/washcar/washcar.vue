@@ -1,10 +1,10 @@
 <template>
-  <div class="detection-record" flexContainer ref="amap">
+  <div class="detection-record" flexContainer>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>东风本田-思域</h2>
-        <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
+        <h2>{{item.series.sbName + ' - ' + item.series.vehicleSystem[1]}}</h2>
+        <p><span>{{}}</span><span>丨</span><span>{{}}</span></p>
       </div>
       <div class="search" @click="_goSearch"></div>
     </div>
@@ -43,86 +43,37 @@
 <script type="text/ecmascript-6">
 import AMap from 'AMap'
 import washInfo from './washinfo'
-import {mapGetters} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 export default {
   data () {
     return {
       map: null,
       geolocation: null,
       customMarker: null,
-      my_position: {},
       showMap: false,
       markerDom: [],
       preMarkerId: -1,
       infoWindow: null,
       washinfoShow: false,
       washForShow: null,
-      markers: [
-        {
-          lng: 119.981649,
-          lat: 31.826587,
-          new: true,
-          state: 1,
-          title: '新北中心公园',
-          icon: './static/active_by_store@2x.png',
-          way: 3.6,
-          mostfar: true,
-          address: '常州市新北区汉江路299号',
-          washinfo: [{
-            type: 1,
-            name: '普洗',
-            info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
-            price: 30.00
-          }, {
-            type: 2,
-            name: '精洗',
-            info: '整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、边缝清洗、发动机舱清洁、车内精致清洁',
-            price: 60.00
-          }]
-        }, {
-          lng: 120.004995,
-          lat: 31.791868,
-          new: false,
-          state: 1,
-          title: '紫荆公园',
-          icon: './static/active_by_store@2x.png',
-          way: 4.2,
-          mostfar: false,
-          address: '常州市天宁区竹林北路紫荆公园',
-          washinfo: [{
-            type: 1,
-            name: '普洗',
-            info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
-            price: 30.00
-          }, {
-            type: 2,
-            name: '精洗',
-            info: '整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、边缝清洗、发动机舱清洁、车内精致清洁',
-            price: 60.00
-          }, {
-            type: 3,
-            name: '超精洗',
-            info: '边缝清洗、发动机舱清洁、车内精致清洁，整车泡沫冲洗擦干、轮胎轮毂冲洗清洁',
-            price: 90.00
-          }]
-        }, {
-          lng: 120.000531,
-          lat: 31.823816,
-          new: false,
-          state: 2,
-          title: '中华恐龙园',
-          icon: './static/active_by_store@2x.png',
-          way: 8.3,
-          mostfar: false,
-          address: '常州市新北区河海东路60号',
-          washinfo: [{
-            type: 1,
-            name: '普洗',
-            info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
-            price: 30.00
-          }]
-        }
-      ]
+      storeList: [],
+      markers: [],
+      washinfo: [{
+        type: 1,
+        name: '普洗',
+        info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
+        price: 30.00
+      }, {
+        type: 2,
+        name: '精洗',
+        info: '整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、边缝清洗、发动机舱清洁、车内精致清洁',
+        price: 60.00
+      }, {
+        type: 3,
+        name: '超精洗',
+        info: '边缝清洗、发动机舱清洁、车内精致清洁，整车泡沫冲洗擦干、轮胎轮毂冲洗清洁',
+        price: 90.00
+      }]
     }
   },
   watch: {
@@ -130,14 +81,9 @@ export default {
       this.washForShow = this.markers[newQuestion]
     }
   },
-  computed: {
-    ...mapGetters([
-      'cityInfo'
-    ])
-  },
   methods: {
     _goSearch () {
-      this.$router.push('/search-wash-store')
+      this.$router.push('/search-list?format=' + 'store')
     },
     _goBack () {
       this.$router.go(-1)
@@ -154,6 +100,7 @@ export default {
       AMap.event.addListener(_self.map, 'click', (e) => {
         _self._closeAll()
       })
+      _self._onComplete(this.cityInfo)
     },
     _onComplete (data) {
       let _self = this
@@ -191,7 +138,6 @@ export default {
         clickable: true
       })
       this.preMarkerId = id
-
       // 显示信息窗体
       this._setInfoWindow(this.markers[id])
     },
@@ -204,33 +150,54 @@ export default {
       }
     },
     _getLocation () {
-      let geolocation = new AMap.Geolocation({
-        enableHighAccuracy: true,
-        timeout: 1000,
-        maximumAge: 0,
-        convert: true,
-        showButton: false,
-        showMarker: false,
-        showCircle: false,
-        panToLocation: true,
-        zoomToAccuracy: false
-      })
-      geolocation.getCurrentPosition((status, result) => {
-        if (status === 'complete' && result.info === 'SUCCESS') {
-          let pos = {
-            lng: result.position.lng,
-            lat: result.position.lat
+      let _self = this
+      this.map.plugin('AMap.Geolocation', function () {
+        _self.geolocation = new AMap.Geolocation({
+          enableHighAccuracy: true,
+          timeout: 1000,
+          maximumAge: 0,
+          convert: true,
+          showButton: false,
+          showMarker: false,
+          showCircle: false,
+          panToLocation: true,
+          zoomToAccuracy: false
+        })
+        _self.map.addControl(_self.geolocation)
+        _self.geolocation.getCurrentPosition((status, result) => {
+          if (result.type === 'complete' && result.info === 'SUCCESS') {
+            _self._onComplete(result.position)
           }
-          this.my_position = pos
-          this._onComplete(pos)
-        }
+        })
       })
     },
     _getMarker () {
-      let _self = this
-      this.markers.forEach((item, index) => {
-        _self._setMarker(item, index)
+      let reg = /维修/
+      let lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
+      this.storeList.forEach((item, index) => {
+        let flag = reg.test(item.name)
+        item = Object.assign(item, {
+          washinfo: this.setWashinfo(flag),
+          icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
+          way: lnglat1.distance([item.lng, item.lat]),
+          type: flag ? 1 : 2
+        })
+        this._setMarker(item, index)
       })
+      this.markers = this.storeList
+    },
+    setWashinfo (flag) {
+      if (flag) {
+        return this.washinfo
+      } else {
+        let arr = []
+        this.washinfo.forEach((item, index) => {
+          if (index !== 2) {
+            arr.push(item)
+          }
+        })
+        return arr
+      }
     },
     _setMarker (item, index) {
       let _self = this
@@ -241,7 +208,7 @@ export default {
         content: `<div class="marker-com bg1">
                     <div class="new ${item.new ? '' : 'show'}" ></div>
                     <div class="marker-txt">
-                      <span>${item.title}</span>
+                      <span>${item.name.slice(8, item.length)}</span>
                       <div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div>
                     </div>
                   </div>`,
@@ -251,15 +218,16 @@ export default {
       _self.markerDom[index].on('click', this._onClick)
     },
     _setInfoWindow (item) {
+      let km = this.formatKm(item.way)
       this.infoWindow = new AMap.InfoWindow({
         isCustom: true,
         offset: new AMap.Pixel(0, -24),
         content: `<div class="window-info">
                     <div class="left">
-                      <h2>奇特异保养店${item.title}</h2>
+                      <h2>${item.name.slice(8, item.length)}</h2>
                       <p>${item.address}</p>
                     </div>
-                    <div class="right"><h2>${item.way}km</h2><span class="${item.mostfar ? 'show' : ''}">距您最近</span></div>
+                    <div class="right"><h2>${km}km</h2><span class="${item.mostfar ? 'show' : ''}">距您最近</span></div>
                     <div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div>
                   </div>`
       })
@@ -274,12 +242,36 @@ export default {
       this.washinfoShow = false
       this.infoWindow.close()
       this._reductionMarker()
-    }
+    },
+    getStoreList (lng, lat) {
+      this.api_post('api/store/storeList', (res) => {
+        if (res.errorCode === 0) {
+          this.storeList = res.data
+          this._setMap()
+          this._getMarker()
+          this.setStoreList(res.data)
+        }
+      }, {
+        page: 1,
+        limit: 50,
+        lng: lng || '',
+        lat: lat || ''
+      })
+    },
+    formatKm (way) {
+      return (parseInt(way) / 1000).toFixed(2)
+    },
+    ...mapMutations({
+      setStoreList: 'SET_STORELIST'
+    })
   },
-  mounted () {
-    this._setMap()
-    this._onComplete({lng: this.cityInfo.lng, lat: this.cityInfo.lat})
-    this._getMarker()
+  computed: {
+    ...mapGetters([
+      'cityInfo'
+    ])
+  },
+  created () {
+    this.getStoreList()
   },
   components: {
     washInfo
@@ -463,7 +455,6 @@ export default {
         background-repeat: no-repeat
         background-position: 54px center
         background-size: 36px 36px
-
     .container
       flex: 1
       transition: all .3s
@@ -498,5 +489,4 @@ export default {
           background-repeat: no-repeat
           background-position: center center
           background-size: 30px 33px
-
 </style>

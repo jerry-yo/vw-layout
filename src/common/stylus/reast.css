@@ -36,7 +36,9 @@ body {
 blockquote, q {
     quotes: none;
 }
-
+input {
+  -webkit-appearance: none;
+}
 blockquote:before, blockquote:after,
 q:before, q:after {
     content: none;

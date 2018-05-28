@@ -91,7 +91,7 @@ import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
-import AMap from 'AMap'
+// import AMap from 'AMap'
 export default {
   name: 'home',
   data () {
@@ -158,40 +158,41 @@ export default {
       }
     },
     _setMap () {
-      let geolocation = new AMap.Geolocation({
-        enableHighAccuracy: true,
-        timeout: 1000,
-        maximumAge: 0,
-        convert: true,
-        showButton: false,
-        showMarker: false,
-        showCircle: false,
-        panToLocation: true,
-        zoomToAccuracy: false
-      })
-      geolocation.getCurrentPosition((status, result) => {
-        if (status === 'complete' && result.info === 'SUCCESS') {
-          if (result.addressComponent && result.addressComponent.city) {
-            let city = {
-              city: result.addressComponent.city,
-              address: result.formattedAddress,
-              citycode: result.addressComponent.citycode,
-              district: result.addressComponent.district,
-              province: result.addressComponent.province,
-              street: result.addressComponent.street,
-              township: result.addressComponent.township,
-              lng: result.position.lng,
-              lat: result.position.lat
-            }
-            this.setCityInfo(city)
-          }
-        } else {
-          this.$Toast({
-            message: '定位失败，请手动选择城市',
-            position: 'bottom'
-          })
-        }
-      })
+      // // this.map.plugin('AMap.Geolocation', function () {
+      // let geolocation = new AMap.Geolocation({
+      //   enableHighAccuracy: true,
+      //   timeout: 1000,
+      //   maximumAge: 0,
+      //   convert: true,
+      //   showButton: false,
+      //   showMarker: false,
+      //   showCircle: false,
+      //   panToLocation: true,
+      //   zoomToAccuracy: false
+      // })
+      // geolocation.getCurrentPosition((status, result) => {
+      //   if (status === 'complete' && result.info === 'SUCCESS') {
+      //     if (result.addressComponent && result.addressComponent.city) {
+      //       let city = {
+      //         city: result.addressComponent.city,
+      //         address: result.formattedAddress,
+      //         citycode: result.addressComponent.citycode,
+      //         district: result.addressComponent.district,
+      //         province: result.addressComponent.province,
+      //         street: result.addressComponent.street,
+      //         township: result.addressComponent.township,
+      //         lng: result.position.lng,
+      //         lat: result.position.lat
+      //       }
+      //       this.setCityInfo(city)
+      //     }
+      //   } else {
+      //     this.$Toast({
+      //       message: '定位失败，请手动选择城市',
+      //       position: 'bottom'
+      //     })
+      //   }
+      // })
     },
     ...mapMutations({
       setCityInfo: 'SET_CITYINFO'

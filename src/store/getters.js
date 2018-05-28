@@ -24,6 +24,9 @@ const getters = {
   },
   cityInfo (state) {
     return state.cityInfo
+  },
+  cityList (state) {
+    return state.cityList
   }
 }
 

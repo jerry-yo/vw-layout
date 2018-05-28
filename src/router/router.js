@@ -147,11 +147,6 @@ const washCar = {
   name: 'washCar',
   component: resolve => { require(['@/components/washcar/washcar'], resolve) }
 }
-const searchWashStore = {
-  path: '/search-wash-store',
-  name: 'searchWashStore',
-  component: resolve => { require(['@/components/washcar/search_wash_store'], resolve) }
-}
 const setUp = {
   path: '/set-up',
   name: 'setUp',
@@ -171,6 +166,11 @@ const seleCity = {
   path: '/sele-city',
   name: 'seleCity',
   component: resolve => { require(['@/components/city/sele-city'], resolve) }
+}
+const searchList = {
+  path: '/search-list',
+  name: 'searchList',
+  component: resolve => { require(['@/components/search/search-list'], resolve) }
 }
 export const routers = [
   loginRouter,
@@ -201,8 +201,8 @@ export const routers = [
   seleCity,
   payOver,
   washCar,
-  searchWashStore,
   setUp,
   myInfo,
-  checkList
+  checkList,
+  searchList
 ]

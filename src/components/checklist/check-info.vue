@@ -1,6 +1,6 @@
 <template>
   <transition name="slide" >
-    <div class="check-info-mask" @click.prevent.stop="_closeMask">
+    <div class="check-info-mask">
       <div class="mask-con">
         <h2 class="title">
           <span :class="'err'">照明系统-近光灯</span>
@@ -35,7 +35,7 @@ export default {
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import '../../common/stylus/mixin.styl'
   .slide-enter-active, .slide-leave-active
-    transition: opacity .3
+    opacity: 1
   .slide-enter, .slide-leave-to
     opacity: 0
   .check-info-mask
@@ -49,12 +49,13 @@ export default {
     bottom: 0
     background-color: rgba(0,0,0,.5)
     z-index: 101
-    opacity: 1
+    transition: all .3s
     .mask-con
       padding: 45px 30px
       width: 630px
       overflow: hidden
       background-color: #fff
+      border-radius: 10px
       .title
         display: flex
         align-items: center

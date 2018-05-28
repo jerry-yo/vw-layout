@@ -66,6 +66,12 @@ const mutations = {
     let obj = {}
     obj = Object.assign(state.cityInfo, city)
     state.cityInfo = obj
+  },
+  [type.SET_CITYLIST] (state, list) {
+    state.cityList = list
+  },
+  [type.SET_STORELIST] (state, list) {
+    state.storeList = list
   }
 }
 

@@ -4,7 +4,7 @@
         <div class="back" @click="_goBack" ></div>
         <span>选择城市</span>
       </div>
-      <div class="search-bar">
+      <div class="search-bar" @click="goSearchCity">
         <div class="btn">
           <span>搜索</span>
         </div>
@@ -76,6 +76,9 @@ export default {
     _goBack () {
       this.$router.back()
     },
+    goSearchCity () {
+      this.$router.push('/search-list?format=' + 'city')
+    },
     selectMenu (index, event) {
       this.$refs.cityDom.scrollToElement(this.$refs.city[index], 300)
     },
@@ -88,13 +91,16 @@ export default {
     getCityList () {
       this.api_post('/api/carzone/getCity', (res) => {
         if (res.errorCode === 0) {
-          var list = res.data.data.replace(new RegExp(/'/g), '"')
-          this.cityList = JSON.parse(list).data
+          let list = res.data.data.replace(new RegExp(/'/g), '"')
+          list = JSON.parse(list).data
+          this.cityList = list
+          this.setCityList(list)
         }
       })
     },
     ...mapMutations({
-      modifyCityInfo: 'MODIFY_CITYINFO'
+      modifyCityInfo: 'MODIFY_CITYINFO',
+      setCityList: 'SET_CITYLIST'
     })
   },
   created () {

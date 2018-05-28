@@ -9,23 +9,23 @@
     </div>
     <Scroll class="store-list" ref="storelist">
       <ul>
-        <li :class="{'active': seleIndex === index}" v-for="(item, index) in storeArray" :key="index" @click="seleStore(index)">
+        <li :class="{'active': seleIndex === index}" v-for="(item, index) in storeList" :key="index" @click="seleStore(index)">
           <div class="top">
-            <img src="" alt="">
+            <img v-lazy="'https://www.gt1.shop/api/common/download?id=' + item.img" alt="">
             <div class="top-right">
               <div class="store-name">
-                <p :class="index % 2 === 1 ? 'by' : 'repair'">奇特异快速保养-华润店</p>
-                <h2>4.6km</h2>
+                <p :class="index % 2 === 1 ? 'by' : 'repair'">{{item.name.slice(8, item.name.length)}}</p>
+                <h2>{{item.distance}}</h2>
               </div>
               <div class="store-address">
-                <p>常州市天宁区XXX路202-2号</p>
+                <p>{{item.address}}</p>
                 <h2 :class="{'active': seleIndex === index, 'nosele': seleIndex !== index}">{{seleIndex  === index ? '当前门店':'选择'}}</h2>
               </div>
             </div>
           </div>
           <div class="bottom">
             <div class="get-loc"><span>查看定位</span>  </div>
-            <div class="call-dz">联系店长</div>
+            <div class="call-dz"><a :href="'tel:' + item.phone"></a>联系店长</div>
           </div>
         </li>
       </ul>
@@ -35,13 +35,13 @@
 
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
+import {mapGetters} from 'vuex'
 export default {
   name: 'storeList',
   data () {
     return {
-      storeListBScroll: null,
       seleIndex: 0,
-      storeArray: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+      storeList: []
     }
   },
   methods: {
@@ -50,7 +50,28 @@ export default {
     },
     seleStore (id) {
       this.seleIndex = id
+    },
+    getStoreList (lng, lat) {
+      this.api_post('api/store/storeList', (res) => {
+        if (res.errorCode === 0) {
+          this.storeList = res.data
+        }
+        console.log(res)
+      }, {
+        page: 1,
+        limit: 50,
+        lng: lng || '',
+        lat: lat || ''
+      })
     }
+  },
+  created () {
+    this.getStoreList(this.cityInfo.lng, this.cityInfo.lat)
+  },
+  computed: {
+    ...mapGetters([
+      'cityInfo'
+    ])
   },
   components: {
     Scroll
@@ -98,6 +119,7 @@ export default {
       overflow: hidden
       & > ul
         position: relative
+        padding-bottom: 200px
         li
           height: 206px
           display: flex
@@ -118,7 +140,6 @@ export default {
               display: block
               width: 146px
               height: 100px
-              background-color: rgba(255, 0, 255, 0.5)
               margin-right: 20px
             .top-right
               flex: 1
