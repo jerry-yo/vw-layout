@@ -72,6 +72,43 @@ const mutations = {
   },
   [type.SET_STORELIST] (state, list) {
     state.storeList = list
+  },
+  [type.SET_SERACHHIS] (state, list) {
+    if (list.type === 'store') {
+      state.serachHis.store.push(list.search)
+    } else if (list.type === 'brand') {
+      state.serachHis.brand.push(list.search)
+    } else if (list.type === 'city') {
+      state.serachHis.city.push(list.search)
+    }
+  },
+  [type.DELETE_SERACHHIS] (state, list) {
+    let arr = []
+    if (list.type === 'store') {
+      state.serachHis.store.forEach((item, index) => {
+        if (index !== list.index) {
+          arr.push(item)
+        }
+      })
+      state.serachHis.store = arr
+    } else if (list.type === 'brand') {
+      state.serachHis.brand.forEach((item, index) => {
+        if (index !== list.index) {
+          arr.push(item)
+        }
+      })
+      state.serachHis.brand = arr
+    } else if (list.type === 'city') {
+      state.serachHis.city.forEach((item, index) => {
+        if (index !== list.index) {
+          arr.push(item)
+        }
+      })
+      state.serachHis.city = arr
+    }
+  },
+  [type.SET_SERACHINFO] (state, info) {
+    state.serachInfo = info
   }
 }
 

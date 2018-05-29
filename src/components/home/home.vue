@@ -201,7 +201,7 @@ export default {
   computed: {
     cityShow () {
       let city = ''
-      if (this.cityInfo.city) {
+      if (this.cityInfo.selecity) {
         city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
       } else {
         return '定位中···'
@@ -214,7 +214,7 @@ export default {
     ])
   },
   created () {
-    if (!this.cityInfo.city) {
+    if (!this.cityInfo.selecity) {
       this._setMap()
     }
   },
