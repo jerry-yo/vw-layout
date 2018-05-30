@@ -236,6 +236,7 @@ export default {
   .place-order
     height: 98px
     display: flex
+    background-color: #fff
     .server
       width: 133px
       text-align: center

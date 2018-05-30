@@ -187,8 +187,7 @@ export default {
           way: lnglat1.distance([item.lng, item.lat]),
           type: flag ? 1 : 2
         })
-        console.log(item)
-        this._setMarker(item, index)
+        this._setMarker(item, index, flag)
       })
       this.markers = this.storeList
       if (this.washType === 'serach' && this.serachInfo.address) {
@@ -208,13 +207,13 @@ export default {
         return arr
       }
     },
-    _setMarker (item, index) {
+    _setMarker (item, index, flag) {
       let _self = this
       _self.markerDom[index] = new AMap.Marker({
         map: _self.map,
         offset: new AMap.Pixel(-17, -17),
         position: [item.lng, item.lat],
-        content: `<div class="marker-com bg1">
+        content: `<div class="marker-com ${flag ? 'wx' : 'by'}">
                     <div class="new ${item.new ? '' : 'show'}" ></div>
                     <div class="marker-txt">
                       <span>${item.name.slice(8, item.length)}</span>
@@ -311,9 +310,9 @@ export default {
     background-position: center center
     background-repeat: no-repeat
     background-size: 68px 68px
-    &.bg1
+    &.by
       bg-image('../../common/imgs/washcar/by_store')
-    &.bg2
+    &.wx
       bg-image('../../common/imgs/washcar/repair_store')
     .new
       position: absolute
