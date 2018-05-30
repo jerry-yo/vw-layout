@@ -20,26 +20,26 @@
       </div>
       <div class="list-con" v-else>
         <ul class="brand-list" v-if="format === 'brand'">
-          <li  class="list-info" v-for="(item, index) in showList" :key="index" @click="seleCity(item)">
+          <li  class="list-info" v-for="(item, index) in showList" :key="index" @click="seleItem(item)">
             <div class="img">
               <img :src="carLogoUrl + item.imageSrc" alt="">
             </div>
-            <div class="list-title">{{item.name}}</div>
+            <div class="list-title" v-html="item.spanname"></div>
           </li>
         </ul>
-        <ul class="store-list" v-for="(item, index) in showList" :key="index" v-else-if="format === 'store'">
-          <li>
+        <ul class="store-list" v-else-if="format === 'store'">
+          <li  v-for="(item, index) in showList" :key="index" @click="seleItem(item)">
             <div class="left">
-              <h2>邹区<span>朝城</span>店</h2>
-              <p>常州市<span>新北区</span> 汉江路299号  4.6km</p>
+              <h2 v-html="item.spanname"></h2>
+              <p v-html="item.spanaddress"></p>
             </div>
             <div class="right">
-              4.6km
+              {{(item.way / 1000).toFixed(2)}}km
             </div>
           </li>
         </ul>
         <ul class="city-list" v-for="(item, index) in showList" :key="index"  v-else-if="format === 'city'">
-          <li class="list-info" v-html="item.spancityName" @click="seleCity(item)">
+          <li class="list-info" v-html="item.spancityName" @click="seleItem(item)">
           </li>
         </ul>
       </div>
@@ -127,7 +127,7 @@ export default {
           flag = false
         }
       })
-      if (flag) {
+      if (flag && this.serachVal.length > 0) {
         this.setSerachHis({
           type: this.format,
           search: this.serachVal
@@ -150,16 +150,17 @@ export default {
         this.lists = this.carBrand
       }
     },
-    seleCity (item) {
+    seleItem (item) {
+      this.setSerachInfo(item)
       if (this.format === 'store') {
-        this.lists = this.storeList
+        this.$router.push('/washcar?type=serach')
       } else if (this.format === 'city') {
         this.modifyCityInfo({
           selecity: item.cityName
         })
         this.$router.push('/home')
       } else if (this.format === 'brand') {
-        this.$router.push('/addcar-tabbar?type=' + 2)
+        this.$router.push('/addcar-tabbar?type=' + 'sele')
       }
       this.searchBtn()
     },
@@ -176,6 +177,7 @@ export default {
     ...mapMutations({
       modifyCityInfo: 'MODIFY_CITYINFO',
       setSerachHis: 'SET_SERACHHIS',
+      setSerachInfo: 'SET_SERACHINFO',
       deleteSerachHis: 'DELETE_SERACHHIS'
     })
   },

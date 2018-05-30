@@ -9,7 +9,7 @@
           <div class="right">
             <h2>{{item.series.sbName + ' - ' + item.series.vehicleSystem[1]}}</h2>
             <p>{{item.idCard}}<span>l</span>{{item.way}}km</p>
-            <div :class="item.default ? 'default' : 'default-btn'" @click.prevent="setDefault(index)">
+            <div :class="item.default ? 'default' : 'default-btn'" @click.prevent="setDefault(item, index)">
               {{item.default ? '已设为默认车辆' : '设为默认车辆'}}
             </div>
           </div>
@@ -122,8 +122,11 @@ export default {
     tapDom () {
       this.$emit('tapcard', true)
     },
-    setDefault (index) {
-      this.$emit('setdefault', index)
+    setDefault (item, index) {
+      this.$emit('setdefault', {
+        index: index,
+        item: item
+      })
     },
     /*  动画结束监听   */
     transitionEnd () {

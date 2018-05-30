@@ -16,7 +16,7 @@
       </div>
     </div>
     <div class="container">
-      <addCarBrand v-if="tabActive"></addCarBrand>
+      <addCarBrand v-if="tabActive" :add-type="addType"></addCarBrand>
       <vehicleCertification v-else :vin-type="vinType"></vehicleCertification>
     </div>
   </div>
@@ -30,7 +30,8 @@ export default {
   data () {
     return {
       tabActive: true,
-      vinType: -1
+      vinType: -1,
+      addType: ''
     }
   },
   methods: {
@@ -44,6 +45,7 @@ export default {
     }
   },
   mounted: function () {
+    this.addType = this.$route.query.type
   },
   components: {
     addCarBrand,

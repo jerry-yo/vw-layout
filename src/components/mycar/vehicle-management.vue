@@ -24,7 +24,7 @@
               <p class="p2"><span>{{item.idCard}}</span><span v-if="item.way !== 0">丨</span> <span v-if="item.way !== 0">{{item.way}}km</span></p>
             </div>
             <div class="right"  v-if="!editState">
-              <div class="btn" :class="item.default ? 'active' : 'common'" @click="_setCarDefault(index)">
+              <div class="btn" :class="item.default ? 'active' : 'common'" @click="_setCarDefault(item, index)">
               {{item.default ? '已设为默认' : '设为默认'}}
               </div>
             </div>
@@ -58,7 +58,7 @@ export default {
         this.editState = false
         this.deleteMyCar(this.check)
       } else {
-        this.$router.push('/addcar-tabbar')
+        this.$router.push('/addcar-tabbar?type=add')
       }
     },
     _editCar () {
@@ -67,9 +67,10 @@ export default {
         this.checkArr()
       }
     },
-    _setCarDefault (id) {
+    _setCarDefault (item, id) {
       this.setDefaultCar({
-        id: id
+        id: id,
+        item: item
       })
     },
     _checkCar (id) {

@@ -58,6 +58,7 @@ export default {
       washForShow: null,
       storeList: [],
       markers: [],
+      washType: '',
       washinfo: [{
         type: 1,
         name: '普洗',
@@ -121,10 +122,14 @@ export default {
     },
     _onClick (e) {
       this.washinfoShow = true
-      let _self = this
       this._reductionMarker()
       // 激活点击
       let id = e.target.getExtData()
+      this.markerActive(id)
+    },
+    // 响应点击
+    markerActive (id) {
+      let _self = this
       this.markerDom[id].setMap(null)
       this.markerDom[id] = new AMap.Marker({
         map: _self.map,
@@ -182,9 +187,13 @@ export default {
           way: lnglat1.distance([item.lng, item.lat]),
           type: flag ? 1 : 2
         })
+        console.log(item)
         this._setMarker(item, index)
       })
       this.markers = this.storeList
+      if (this.washType === 'serach' && this.serachInfo.address) {
+        this.serachActive()
+      }
     },
     setWashinfo (flag) {
       if (flag) {
@@ -261,6 +270,16 @@ export default {
     formatKm (way) {
       return (parseInt(way) / 1000).toFixed(2)
     },
+    serachActive () {
+      let id = 0
+      this.storeList.forEach((item, index) => {
+        if (item.id === this.serachInfo.id) {
+          id = index
+        }
+      })
+      this.washinfoShow = true
+      this.markerActive(id)
+    },
     ...mapMutations({
       setStoreList: 'SET_STORELIST'
     })
@@ -268,11 +287,13 @@ export default {
   computed: {
     ...mapGetters([
       'cityInfo',
-      'myCar'
+      'myCar',
+      'serachInfo'
     ])
   },
   created () {
     this.getStoreList()
+    this.washType = this.$route.query.type
   },
   components: {
     washInfo

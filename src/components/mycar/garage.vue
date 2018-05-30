@@ -87,12 +87,13 @@ export default {
     },
     tapCard (id) {
       if (this.myCar.length < 1) {
-        this.$router.push('/addcar-tabbar')
+        this.$router.push('/addcar-tabbar?type=add')
       }
     },
-    setDefault (id) {
+    setDefault (car) {
       this.setDefaultCar({
-        id: id
+        id: car.index,
+        item: car.item
       })
     },
     getCarId (id) {

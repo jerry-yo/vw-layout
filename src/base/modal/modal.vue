@@ -62,7 +62,7 @@ export default {
         flex: 1
         font-size: 26px
         line-height: 40px
-        padding: 0px 60px
+        padding: 30px 60px
         overflow: hidden
         text-align: center
       .bor

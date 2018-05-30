@@ -35,6 +35,12 @@ import brandMask from './addcar-brand-mask'
 import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'addcarBrand',
+  props: {
+    addType: {
+      type: String,
+      required: true
+    }
+  },
   data () {
     return {
       brandId: 0,
@@ -66,6 +72,9 @@ export default {
         if (res.errorCode === 0) {
           this.logo = res.data.data.detail
           this.setCarBrand(this.logo)
+          if (this.addType === 'sele' && this.serachInfo.pbid) {
+            this.showBrandMask(this.serachInfo)
+          }
         }
       })
     },
@@ -103,7 +112,8 @@ export default {
       return arr
     },
     ...mapGetters([
-      'carBrand'
+      'carBrand',
+      'serachInfo'
     ])
   },
   components: {

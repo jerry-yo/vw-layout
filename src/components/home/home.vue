@@ -17,11 +17,11 @@
         </div>
         <div class="car-info">
           <div class="car-con">
-            <div class="info-tab" :class="carInfo.pbid ? '' : 'nocar'" @click="_addCar">
-              <div class="car-img" v-show="carInfo.pbid ? true : false">
+            <div class="info-tab" :class="carIndex !== -1 ? '' : 'nocar'" @click="_addCar">
+              <div class="car-img" v-if="carIndex !== -1 ? true : false">
                 <img v-lazy="carLogoUrl + carInfo.imageSrc" alt="">
               </div>
-              <div class="car-name"  v-if="carInfo.pbid ? true : false">
+              <div class="car-name"  v-if="carIndex !== -1 ? true : false">
                 <div class="name">{{carInfo.series.sbName + ' - ' + carInfo.series.vehicleSystem[1]}}</div>
                 <div class="card-info">
                   <div class="card">{{carInfo.idCard}}</div>
@@ -91,6 +91,7 @@ import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
+import {getDefaultIndex} from '@/common/js/arr'
 // import AMap from 'AMap'
 export default {
   name: 'home',
@@ -98,6 +99,7 @@ export default {
     return {
       homeBScroll: null,
       carInfo: {},
+      carIndex: -1,
       recommends: [{
         id: 1,
         linkUrl: 'https://y.qq.com/m/act/chunwan2018/v3/index.html?ADTAG=jiaodiantu',
@@ -133,15 +135,57 @@ export default {
     },
     // 洗车
     _goCarWash () {
-      this.$router.push('/washcar')
+      if (this.myCar.length === 0) {
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '该服务需要先添加车辆，是否立即添加车辆？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/addcar-tabbar?type=add')
+            this.$Modal.remove()
+          }
+        })
+      } else {
+        this.$router.push('/washcar?type=show')
+      }
     },
     // 维修
     _goRepair () {
-      this.$router.push('/repair')
+      if (this.myCar.length === 0) {
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '该服务需要先添加车辆，是否立即添加车辆？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/addcar-tabbar?type=add')
+            this.$Modal.remove()
+          }
+        })
+      } else {
+        this.$router.push('/repair')
+      }
     },
     // 保养
     _goMaintain () {
-      this.$router.push('/maintain')
+      if (this.myCar.length === 0) {
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '该服务需要先添加车辆，是否立即添加车辆？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/addcar-tabbar?type=add')
+            this.$Modal.remove()
+          }
+        })
+      } else {
+        this.$router.push('/maintain')
+      }
     },
     // 救援
     _goRescue () {
@@ -151,14 +195,14 @@ export default {
       this.$router.push('/check-list')
     },
     _addCar () {
-      if (this.carInfo.pbid) {
+      if (this.carIndex !== -1) {
         this.$router.push('/garage')
       } else {
-        this.$router.push('/addcar-tabbar')
+        this.$router.push('/addcar-tabbar?type=add')
       }
     },
     _setMap () {
-      // // this.map.plugin('AMap.Geolocation', function () {
+      // this.map.plugin('AMap.Geolocation', function () {
       // let geolocation = new AMap.Geolocation({
       //   enableHighAccuracy: true,
       //   timeout: 1000,
@@ -216,6 +260,8 @@ export default {
   created () {
     if (!this.cityInfo.selecity) {
       this._setMap()
+      this.carIndex = getDefaultIndex(this.myCar)
+      this.carInfo = this.myCar[this.carIndex]
     }
   },
   components: {

@@ -25,13 +25,17 @@ const mutations = {
     }
   },
   [type.SET_DEFAULTCAR] (state, car) {
+    let arr = []
     state.myCar.forEach((item, index) => {
       if (index === car.id) {
         item.default = true
       } else {
+        arr.push(item)
         item.default = false
       }
     })
+    arr.unshift(car.item)
+    state.myCar = arr
   },
   [type.DELETE_MYCAR] (state, car) {
     car.forEach((item, index) => {
