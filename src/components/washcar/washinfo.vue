@@ -21,10 +21,10 @@
           </li>
         </ul>
       </div>
-      <div class="footer">
-        <div class="bg" @click="_openLocation">
+      <div class="footer" @click="_openLocation">
+        <span class="bg" >
           去这里
-        </div>
+        </span>
       </div>
     </div>
   </transition>
@@ -138,19 +138,19 @@ export default {
                 line-height: 24px
     .footer
       display: flex
+      justify-content: center
+      align-items: center
       height: 100px
       bg-image('../../common/imgs/washcar/btn_bg')
       background-repeat: no-repeat
       background-position: center center
       background-size: 750px 100px
       .bg
-        flex: 1
-        bg-image('../../common/imgs/washcar/btn_bg')
+        bg-image('../../common/imgs/washcar/now_lat')
         background-repeat: no-repeat
-        background-position: center center
-        background-size: 750px 100px
+        background-position: left center
+        background-size: 20px 26px
         font-size: 30px
         color: #fffefe
-        line-height: 100px
-        text-align: center
+        padding-left: 40px
 </style>

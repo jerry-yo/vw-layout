@@ -15,7 +15,7 @@
   </transition>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 export default {
   name: 'my-info-mask',
   props: {

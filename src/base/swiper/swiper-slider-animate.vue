@@ -141,14 +141,18 @@ export default {
       let _touchMove = event.touches[0]
       this.touchInfo.moveX = _touchMove.pageX
       this.touchInfo.moveY = _touchMove.pageY
-      this.bridge = this.touchInfo.startX - this.touchInfo.moveX
-      this.groupAnimate(0)
-      if (this.touchInfo.startX > this.touchInfo.moveX) {
-        this.animateImg(false, 0)
-        this.setGroupWidth('next')
-      } else {
-        this.animateImg(false, 0)
-        this.setGroupWidth('prev')
+      let X = this.touchInfo.startX - this.touchInfo.moveX
+      let Y = this.touchInfo.startY - this.touchInfo.moveY
+      if (Math.abs(X) > Math.abs(Y)) {
+        this.bridge = this.touchInfo.startX - this.touchInfo.moveX
+        this.groupAnimate(0)
+        if (this.touchInfo.startX > this.touchInfo.moveX) {
+          this.animateImg(false, 0)
+          this.setGroupWidth('next')
+        } else {
+          this.animateImg(false, 0)
+          this.setGroupWidth('prev')
+        }
       }
     },
     tapDom () {

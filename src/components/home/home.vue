@@ -244,7 +244,7 @@ export default {
   computed: {
     cityShow () {
       let city = ''
-      if (this.cityInfo.selecity) {
+      if (this.cityInfo.selecity || this.cityInfo.city) {
         city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
       } else {
         return '定位中···'

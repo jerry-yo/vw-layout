@@ -10,7 +10,7 @@
         <div class="avatar">
           <img src="../../common/imgs/default.png" alt="">
         </div>
-        <div class="title">
+        <div class="title" @click="toggleAvatar">
           更换头像
         </div>
       </div>
@@ -95,6 +95,25 @@ export default {
           this.info.name = res.info
           break
       }
+    },
+    toggleAvatar () {
+      let localId = ''
+      let _self = this
+      this.Wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        success: function (res) {
+          localId = res.localIds
+          console.log(localId)
+          _self.Wx.getLocalImgData({
+            localId: localId, // 图片的localID
+            success: function (res) {
+              console.log(res)
+            }
+          })
+        }
+      })
     }
   },
   components: {
