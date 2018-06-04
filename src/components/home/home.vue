@@ -367,7 +367,6 @@ export default {
               img
                 width: 50px
                 height: 50px
-                background-color: red
             .car-name
               flex: 1
               display: flex

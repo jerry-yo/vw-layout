@@ -207,9 +207,9 @@ export default {
             align-items: center
             width: 172px
             img
+              display: block
               width: 50px
               height: 50px
-              background-color: blue
           .con
             flex: 1
             display: flex

@@ -95,7 +95,6 @@ export default {
           display: inline-block
           width: 90px
           height: 90px
-          background-color: #ccc
       .list-title
         flex: 1
         display: flex

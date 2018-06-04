@@ -189,7 +189,6 @@ export default {
           width: 98px
           height: 98px
           border: 4px solid #fff
-          background-color: #999
           margin-right: 32px
           float: left
         .user-xm

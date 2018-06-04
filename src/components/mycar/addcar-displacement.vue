@@ -109,7 +109,6 @@ export default {
     img
       width: 60px
       height: 60px
-      background-color: rgba(255, 0, 255, 0.5)
       margin-right: 25px
     & > h2
       font-size: 24px

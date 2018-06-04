@@ -234,7 +234,6 @@ export default {
               display: block
               width: 70px
               height: 70px
-              background-color: blue
           .right
             flex: 1
             h2

@@ -152,7 +152,6 @@ export default {
           display: block
           width: 100%
           height: 100%
-          background-color: red
       p
         text-align: center
         font-size: 20px
