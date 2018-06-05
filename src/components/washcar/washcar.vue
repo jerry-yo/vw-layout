@@ -241,7 +241,7 @@ export default {
       })
       this.infoWindow.open(this.map, [item.lng, item.lat])
       this.map.panTo([item.lng, item.lat])
-      this.map.panBy(0, -100)
+      this.map.panBy(0, -80)
     },
     _closeInfoWindow () {
       this.infoWindow.close()

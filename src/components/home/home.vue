@@ -1,12 +1,13 @@
  <template>
   <div class="home">
+    <Picker></Picker>
     <div class="home-top">
       <div class="sele-city" @click="_goSeleCity">
         {{cityShow}}
         <span></span>
       </div>
       <span>GT1养车</span>
-      <div class="message">
+      <div class="message" @click="_goSeleData">
       </div>
     </div>
     <Scroll class="container_1" ref="home">
@@ -92,6 +93,7 @@ import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
 import {getDefaultIndex} from '@/common/js/arr'
+import Picker from '@/base/picker/picker'
 import AMap from 'AMap'
 export default {
   name: 'home',
@@ -129,6 +131,10 @@ export default {
     }
   },
   methods: {
+    // 选择日期
+    _goSeleData () {
+
+    },
     // 选择城市
     _goSeleCity () {
       this.$router.push('/sele-city')
@@ -256,7 +262,7 @@ export default {
       'cityInfo'
     ])
   },
-  created () {
+  mounted () {
     if (!this.cityInfo.selecity) {
       this._setMap()
       this.carIndex = getDefaultIndex(this.myCar)
@@ -266,7 +272,8 @@ export default {
   components: {
     Badge,
     Swiper,
-    Scroll
+    Scroll,
+    Picker
   }
 }
 </script>

@@ -7,7 +7,7 @@ import store from './store'
 import axios from 'axios'
 import Vueaxios from 'vue-axios'
 import FastClick from 'fastclick'
-import VueLazyload from 'vue-lazyload'
+import VueLazyLoad from 'vue-lazyload'
 
 import Toast from '@/base/toast'
 import Modal from '@/base/modal'
@@ -20,7 +20,11 @@ import weui from 'weui.js'
 FastClick.attach(document.body)
 Vue.use(Vueaxios, axios)
 Vue.use(api)
-Vue.use(VueLazyload)
+
+Vue.use(VueLazyLoad, {
+  error: require('@/common/imgs/default.png'),
+  loading: require('@/common/imgs/default.png')
+})
 
 Vue.config.productionTip = false
 
@@ -36,9 +40,6 @@ Vue.prototype.$Modal = Modal
 Vue.prototype.carLogoUrl = 'http://image.carzone.cn'
 Vue.config.productionTip = false
 /* eslint-disable no-new */
-Vue.use(VueLazyload, {
-  loading: './common/imgs/default.png'
-})
 
 new Vue({
   el: '#app',

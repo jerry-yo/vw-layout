@@ -44,8 +44,8 @@ export default {
     },
     _openLocation () {
       this.Wx.openLocation({
-        latitude: this.washinfo.lat, // 纬度，浮点数，范围为90 ~ -90
-        longitude: this.washinfo.lng, // 经度，浮点数，范围为180 ~ -180。
+        latitude: parseFloat(this.washinfo.lat), // 纬度，浮点数，范围为90 ~ -90
+        longitude: parseFloat(this.washinfo.lng), // 经度，浮点数，范围为180 ~ -180。
         name: this.washinfo.title, // 位置名
         address: this.washinfo.address, // 地址详情说明
         scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大

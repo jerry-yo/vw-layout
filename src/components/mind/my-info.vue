@@ -8,7 +8,7 @@
     <div class="container">
       <div class="my_avatar">
         <div class="avatar">
-          <img src="../../common/imgs/default.png" alt="">
+          <img v-lazy="localId" alt="">
         </div>
         <div class="title" @click="toggleAvatar">
           更换头像
@@ -48,7 +48,8 @@ export default {
         nickname: '朕最爱朱佩琪',
         phone: '18772815385'
       },
-      id: 0
+      id: 0,
+      localId: ''
     }
   },
   computed: {
@@ -97,21 +98,23 @@ export default {
       }
     },
     toggleAvatar () {
-      let localId = ''
       let _self = this
       this.Wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
         success: function (res) {
-          localId = res.localIds
-          console.log(localId)
-          _self.Wx.getLocalImgData({
-            localId: localId, // 图片的localID
-            success: function (res) {
-              console.log(res)
-            }
-          })
+          _self.localId = res.localIds[0]
+          if (window.__wxjs_is_wkwebview) {
+            _self.Wx.getLocalImgData({
+              localId: _self.localId,
+              success: function (res) {
+                var localData = res.localData
+                _self.localId = localData.replace('jgp', 'jpeg')
+              },
+              fail: function (res) {
+              }
+            })
+          } else {
+            _self.localId = res.localIds[0]
+          }
         }
       })
     }
