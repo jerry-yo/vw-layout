@@ -3,8 +3,8 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>东风本田-思域</h2>
-        <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
+        <h2>{{myCar[0].series.sbName + ' - ' + myCar[0].series.vehicleSystem[1]}}</h2>
+        <p><span>{{myCar[0].idCard}}</span><span>丨</span><span>{{myCar[0].way}}km</span></p>
       </div>
     </div>
     <div class="service-flow">
@@ -46,193 +46,11 @@
 <script type="text/ecmascript-6">
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
+import {mapGetters} from 'vuex'
 export default {
   name: 'maintain',
   data () {
     return {
-      serverList: [
-        {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '5000km/次',
-              serviceName: '保养常规服务',
-              rightRemark: '共2个商品',
-              isRecommend: true
-            },
-            isChecked: true,
-            action: true,
-            state: 2
-          },
-          subItems: [
-            {
-              keepServiceSecondItemBean: {
-                classify: '级别11',
-                commodityImageUrl: 'url',
-                viscosity: '粘度11',
-                trademark: '品牌11',
-                specification: '规格11',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: true,
-              action: true,
-              state: 1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别12',
-                commodityImageUrl: 'url',
-                viscosity: '粘度12',
-                trademark: '品牌12',
-                specification: '规格12',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: true,
-              action: true,
-              state: 1
-            }
-          ]
-        }, {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '4000km/次',
-              serviceName: '更换空调滤清器',
-              rightRemark: '共3个商品',
-              isRecommend: false
-            },
-            isChecked: false,
-            action: false,
-            state: 1
-          },
-          subItems: [
-            {
-              keepServiceSecondItemBean: {
-                classify: '级别21',
-                commodityImageUrl: 'url',
-                viscosity: '粘度21',
-                trademark: '品牌21',
-                specification: '规格21',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别22',
-                commodityImageUrl: 'url',
-                viscosity: '粘度22',
-                trademark: '品牌22',
-                specification: '规格22',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }
-          ]
-        }, {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '3000km/次',
-              serviceName: '更换燃油滤清器',
-              rightRemark: '共4个商品',
-              isRecommend: false
-            },
-            isChecked: false,
-            action: false,
-            state: 1
-          },
-          subItems: [
-            {
-              keepServiceSecondItemBean: {
-                classify: '级别31',
-                commodityImageUrl: 'url',
-                viscosity: '粘度31',
-                trademark: '品牌31',
-                specification: '规格31',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别32',
-                commodityImageUrl: 'url',
-                viscosity: '粘度32',
-                trademark: '品牌32',
-                specification: '规格32',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }
-          ]
-        }, {
-          groupItem: {
-            keepServiceFirstItemBean: {
-              bottomRemark: '2000km/次',
-              serviceName: '更换空气滤清器',
-              rightRemark: '共5个商品',
-              isRecommend: false
-            },
-            isChecked: false,
-            action: false,
-            state: 1
-          },
-          subItems: [
-            {
-              keepServiceSecondItemBean: {
-                classify: '级别41',
-                commodityImageUrl: 'url',
-                viscosity: '粘度41',
-                trademark: '品牌41',
-                specification: '规格41',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }, {
-              keepServiceSecondItemBean: {
-                classify: '级别42',
-                commodityImageUrl: 'url',
-                viscosity: '粘度41',
-                trademark: '品牌42',
-                specification: '规格42',
-                remarkHint: '',
-                minCommodityNumber: 1,
-                commodityPrice: 200.0,
-                commodityNumber: 1
-              },
-              isChecked: false,
-              action: -1,
-              state: -1
-            }
-          ]
-        }
-      ]
     }
   },
   computed: {
@@ -240,11 +58,15 @@ export default {
       let price = 0
       this.serverList.forEach((item, index) => {
         if (item.groupItem.isChecked) {
-          item.subItems.forEach((res, id) => {
-            if (res.isChecked) {
-              price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
-            }
-          })
+          if (item.subItems.length > 0) {
+            item.subItems.forEach((res, id) => {
+              if (res.isChecked) {
+                price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
+              }
+            })
+          } else {
+            price += item.groupItem.keepServiceFirstItemBean.serverPrice
+          }
         }
       })
       return price
@@ -257,7 +79,11 @@ export default {
         }
       })
       return nums
-    }
+    },
+    ...mapGetters([
+      'serverList',
+      'myCar'
+    ])
   },
   created () {
     sessionStorage.setItem('serverList', JSON.stringify(this.serverList))

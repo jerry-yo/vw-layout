@@ -3,8 +3,8 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>{{myCar[0].series.sbName + ' - ' + myCar[0].series.vehicleSystem[1]}}</h2>
-        <p><span>{{myCar[0].idCard}}</span><span>丨</span><span>{{myCar[0].way}}km</span></p>
+        <!-- <h2>{{myCar[0].series.sbName + ' - ' + myCar[0].series.vehicleSystem[1]}}</h2>
+        <p><span>{{myCar[0].idCard}}</span><span>丨</span><span>{{myCar[0].way}}km</span></p> -->
       </div>
       <div class="search" @click="_goSearch"></div>
     </div>
@@ -286,7 +286,6 @@ export default {
   computed: {
     ...mapGetters([
       'cityInfo',
-      'myCar',
       'serachInfo'
     ])
   },

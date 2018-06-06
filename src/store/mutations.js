@@ -113,6 +113,35 @@ const mutations = {
   },
   [type.SET_SERACHINFO] (state, info) {
     state.serachInfo = info
+  },
+  [type.MODIFY_MY_SERVER] (state, list) {
+    state.serverList = state.serverList.concat(list)
+  },
+  [type.DELETE_ALL_SERVER] (state, arr) {
+    let ret = []
+    arr.forEach((item) => {
+      if (item.subnav.length > 0) {
+        item.subnav.forEach((res) => {
+          delete state.allServerList[item.nav].serviceCon[res]
+        })
+      }
+    })
+    state.allServerList.forEach((item) => {
+      let server = []
+      item.serviceCon.forEach((res) => {
+        if (typeof res !== 'undefined') {
+          server.push(res)
+        }
+      })
+      if (server.length > 0) {
+        ret.push({
+          serviceCatalog: item.serviceCatalog,
+          serviceId: item.serviceId,
+          serviceCon: server
+        })
+      }
+    })
+    state.allServerList = ret
   }
 }
 

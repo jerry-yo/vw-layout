@@ -30,6 +30,12 @@ const getters = {
   },
   serachInfo (state) {
     return state.serachInfo
+  },
+  serverList (state) {
+    return state.serverList
+  },
+  allServerList (state) {
+    return state.allServerList
   }
 }
 

@@ -1,6 +1,5 @@
  <template>
   <div class="home">
-    <Picker></Picker>
     <div class="home-top">
       <div class="sele-city" @click="_goSeleCity">
         {{cityShow}}
@@ -93,7 +92,7 @@ import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
 import {getDefaultIndex} from '@/common/js/arr'
-import Picker from '@/base/picker/picker'
+import Picker from 'better-picker'
 import AMap from 'AMap'
 export default {
   name: 'home',
@@ -127,13 +126,45 @@ export default {
       duration: 500,
       slideType: 'left',
       color: '#fff',
-      pagination: true
+      pagination: true,
+      data1: [{
+        text: '小美',
+        value: 1
+      }, {
+        text: '猪猪',
+        value: 2
+      }],
+      data2: [{
+        text: '张三',
+        value: 1
+      }, {
+        text: '李四',
+        value: 2
+      }],
+      data3: [{
+        text: '开心',
+        value: 1
+      }, {
+        text: '生气',
+        value: 2
+      }, {
+        text: '搞笑',
+        value: 3
+      }, {
+        text: '难过',
+        value: 4
+      }]
     }
   },
   methods: {
     // 选择日期
     _goSeleData () {
-
+      var picker = new Picker({
+        data: [this.data1, this.data2, this.data3],
+        selectedIndex: [0, 1, 2],
+        title: '我们都是小学生'
+      })
+      picker.show()
     },
     // 选择城市
     _goSeleCity () {
@@ -141,21 +172,7 @@ export default {
     },
     // 洗车
     _goCarWash () {
-      if (this.myCar.length === 0) {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '该服务需要先添加车辆，是否立即添加车辆？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/addcar-tabbar?type=add')
-            this.$Modal.remove()
-          }
-        })
-      } else {
-        this.$router.push('/washcar?type=show')
-      }
+      this.$router.push('/washcar?type=show')
     },
     // 维修
     _goRepair () {
@@ -272,8 +289,7 @@ export default {
   components: {
     Badge,
     Swiper,
-    Scroll,
-    Picker
+    Scroll
   }
 }
 </script>

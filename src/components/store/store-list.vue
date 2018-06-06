@@ -3,13 +3,13 @@
     <div class="tabbar">
       <span class="goback" @click="_goBack"></span>
       <h2 class="title">选择门店</h2>
-      <div class="address">
-        常州
+      <div class="address" @click="_seleCity">
+        {{cityShow}}
       </div>
     </div>
     <Scroll class="store-list" ref="storelist">
       <ul>
-        <li :class="{'active': seleIndex === index}" v-for="(item, index) in storeList" :key="index" @click="seleStore(index)">
+        <li :class="{'active': seleIndex === index}" v-for="(item, index) in storeList" :key="index" >
           <div class="top">
             <img v-lazy="'https://www.gt1.shop/api/common/download?id=' + item.img" alt="">
             <div class="top-right">
@@ -19,12 +19,14 @@
               </div>
               <div class="store-address">
                 <p>{{item.address}}</p>
-                <h2 :class="{'active': seleIndex === index, 'nosele': seleIndex !== index}">{{seleIndex  === index ? '当前门店':'选择'}}</h2>
+                <div>
+                  <h2 :class="{'active': seleIndex === index, 'nosele': seleIndex !== index}"  @click="seleStore(index)">{{seleIndex  === index ? '当前门店':'选择'}}</h2>
+                </div>
               </div>
             </div>
           </div>
           <div class="bottom">
-            <div class="get-loc"><span>查看定位</span>  </div>
+            <div class="get-loc" @click="_goLocaltion(item)"><span>查看定位</span>  </div>
             <div class="call-dz"><a :href="'tel:' + item.phone"></a>联系店长</div>
           </div>
         </li>
@@ -56,19 +58,39 @@ export default {
         if (res.errorCode === 0) {
           this.storeList = res.data
         }
-        console.log(res)
       }, {
         page: 1,
         limit: 50,
         lng: lng || '',
         lat: lat || ''
       })
+    },
+    _goLocaltion (item) {
+      this.Wx.openLocation({
+        latitude: parseFloat(item.lat), // 纬度，浮点数，范围为90 ~ -90
+        longitude: parseFloat(item.lng), // 经度，浮点数，范围为180 ~ -180。
+        name: item.name, // 位置名
+        address: item.address, // 地址详情说明
+        scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大
+      })
+    },
+    _seleCity () {
+      this.$router.push('sele-city')
     }
   },
   created () {
     this.getStoreList(this.cityInfo.lng, this.cityInfo.lat)
   },
   computed: {
+    cityShow () {
+      let city = ''
+      if (this.cityInfo.selecity || this.cityInfo.city) {
+        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
+      } else {
+        return '定位中···'
+      }
+      return city.length >= 4 ? city.slice(0, 3) + '···' : city
+    },
     ...mapGetters([
       'cityInfo'
     ])
@@ -119,7 +141,6 @@ export default {
       overflow: hidden
       & > ul
         position: relative
-        padding-bottom: 200px
         li
           height: 206px
           display: flex
@@ -173,10 +194,18 @@ export default {
                 display: flex
                 align-items: center
                 & > p
-                  flex: 1
+                  height: 32px
                   font-size: 22px
                   color: #ababab
-                & > h2
+                  width: 415px
+                  overflow: hidden
+                  white-space: nowrap
+                  text-overflow: ellipsis
+                div
+                  flex: 1
+                  display: flex
+                  justify-content: flex-end
+                h2
                   height: 30px
                   font-size: 18px
                   color: #fff

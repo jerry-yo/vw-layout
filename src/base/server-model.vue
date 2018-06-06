@@ -8,7 +8,7 @@
         <div class="title">{{server.groupItem.keepServiceFirstItemBean.serviceName}}<span v-if="server.groupItem.keepServiceFirstItemBean.isRecommend">推荐</span> </div>
         <div class="tips">{{server.groupItem.keepServiceFirstItemBean.bottomRemark}}</div>
       </div>
-      <div class="operation" v-if="addServer">
+      <!-- <div class="operation" v-if="addServer">
         <div class="state1" v-show="server.groupItem.state === 1">
           {{server.groupItem.keepServiceFirstItemBean.rightRemark}}
         </div>
@@ -19,7 +19,7 @@
           <div class="sort" @click.stop="_saveServer">保存</div>
           <div class="change" @click.stop="_cancelServer">取消</div>
         </div>
-      </div>
+      </div> -->
     </div>
     <ul class="good-list" v-if="server.groupItem.action">
       <li v-for="(item, index) in server.subItems" :key="index">
