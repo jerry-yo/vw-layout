@@ -36,6 +36,9 @@ const getters = {
   },
   allServerList (state) {
     return state.allServerList
+  },
+  defaultStoreId (state) {
+    return state.defaultStoreId
   }
 }
 

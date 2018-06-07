@@ -2,11 +2,11 @@
   <div class="store-info">
     <div class="top">
       <div class="left">
-        <img src="" alt="">
+        <img v-lazy="'https://www.gt1.shop/api/common/download?id=' + storeInfo.img" alt="">
       </div>
       <div class="center">
-        <h2>常州奇特异养车-华润店</h2>
-        <p>常州市天宁区XXX路202-2号</p>
+        <h2>{{storeInfo.name}}</h2>
+        <p>{{storeInfo.address}}</p>
       </div>
       <div class="right" @click="goStoreList">
         <span>选择门店</span>
@@ -14,18 +14,41 @@
     </div>
     <div class="bottom">
       <span>联系店长</span>
-      <span>18772815385</span>
+      <a :href="'tel:' + storeInfo.phone">{{storeInfo.phone}}</a>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import {mapGetters} from 'vuex'
 export default {
   name: 'store-info',
+  data () {
+    return {
+    }
+  },
+  computed: {
+    storeInfo () {
+      let ret = {}
+      this.storeList.forEach((item, index) => {
+        if (index === this.defaultStoreId) {
+          ret = item
+        }
+      })
+      return JSON.stringify(ret) === '{}' ? {} : ret
+    },
+    ...mapGetters([
+      'defaultStoreId',
+      'cityInfo',
+      'storeList'
+    ])
+  },
   methods: {
     goStoreList () {
       this.$router.push('/store-list')
     }
+  },
+  created () {
   }
 }
 </script>
@@ -64,7 +87,12 @@ export default {
         p
           font-size: 22px
           color: #5b5b5b
+          width: 350px
           line-height: 44px
+          height: 44px
+          overflow: hidden
+          white-space: nowrap
+          text-overflow: ellipsis
       .right
         width: 168px
         display: flex
@@ -85,11 +113,14 @@ export default {
         font-size: 24px
         color: #ababab
         line-height: 80px
-        &:nth-child(2)
-          text-align: right
-          padding-right: 50px
-          bg-image('../common/imgs/orderinfo/call-dz')
-          background-repeat: no-repeat
-          background-size: 29px 28px
-          background-position: right center
+      a
+        font-size: 24px
+        color: #ababab
+        line-height: 80px
+        text-align: right
+        padding-right: 50px
+        bg-image('../common/imgs/orderinfo/call-dz')
+        background-repeat: no-repeat
+        background-size: 29px 28px
+        background-position: right center
 </style>

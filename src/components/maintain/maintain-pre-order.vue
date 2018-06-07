@@ -20,11 +20,11 @@
         <storeInfo></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span>2017年3月26日</span>
+          <span @click="showFitTime">{{dateTime}}</span>
         </div>
         <div class="car-info">
-          <div> <span>服务车辆</span><div class="right"><img src="../../common/imgs/default.png" alt="">东风本田思域2016款1.5T自动尊耀版</div> </div>
-          <div> <span>车牌号</span><span class="right">苏DB5A68</span> </div>
+          <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{carInfo}}</div> </div>
+          <div> <span>车牌号</span><span class="right">{{myCar[0].idCard}}</span> </div>
           <div> <span>联系人</span><span class="right">15251916566</span> </div>
         </div>
         <div class="server-img">
@@ -35,8 +35,8 @@
               <li class="eiss"></li>
             </ul>
             <div class="goods-info">
-              <span>共2个配件、1个服务</span>
-              <div >配件总额：<span>{{'￥' + (200.00).toFixed(2)}}</span></div >
+              <span>共{{getServerSum.num}}个配件、{{getServerSum.server}}个服务</span>
+              <div >配件总额：<span>{{'￥' + getServerSum.price}}</span></div >
             </div>
           </div>
         </div>
@@ -47,18 +47,23 @@
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn" @click="_goPreOrder">确认下单</div>
     </div>
+    <keepFitTime v-if="fitTime" @close="closeMask"></keepFitTime>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
+import {mapGetters} from 'vuex'
+import keepFitTime from '@/base/keep-fit-time'
 export default {
   name: 'maintain-pre',
   data () {
     return {
       repairPreOrderBScroll: null,
-      imgs: [0, 1, 2, 3]
+      imgs: [0, 1, 2, 3],
+      fitTime: false,
+      seleTime: {}
     }
   },
   computed: {
@@ -69,7 +74,47 @@ export default {
       } else {
         return this.imgs
       }
-    }
+    },
+    carInfo () {
+      let car = this.myCar[0].name + this.myCar[0].salesVersion
+      return car
+    },
+    dateTime () {
+      if (JSON.stringify(this.seleTime) === '{}') {
+        return '未选择预约时间'
+      } else {
+        return `${this.seleTime.today ? '今' : '明'}天  ${this.seleTime.time}`
+      }
+    },
+    getServerSum () {
+      let price = 0
+      let server = 0
+      let num = 0
+      this.serverList.forEach((item) => {
+        if (item.groupItem.isChecked) {
+          server++
+          if (item.subItems.length > 0) {
+            item.subItems.forEach((res, id) => {
+              if (res.isChecked) {
+                price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
+                num += res.keepServiceSecondItemBean.minCommodityNumber
+              }
+            })
+          } else {
+            price += item.groupItem.keepServiceFirstItemBean.serverPrice
+          }
+        }
+      })
+      return {
+        price: price,
+        server: server,
+        num: num
+      }
+    },
+    ...mapGetters([
+      'myCar',
+      'serverList'
+    ])
   },
   methods: {
     _goBack () {
@@ -77,19 +122,29 @@ export default {
     },
     _goPreOrder () {
       this.$router.push('/reservations')
+    },
+    showFitTime () {
+      this.fitTime = true
+    },
+    closeMask (res) {
+      if (res.time !== 0 && res.time) {
+        this.$set(this.seleTime, 'time', res.time)
+        this.$set(this.seleTime, 'today', res.today)
+      }
+      this.fitTime = false
     }
-  },
-  mounted () {
   },
   components: {
     storeInfo,
-    Scroll
+    Scroll,
+    keepFitTime
   }
 }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
 @import "../../common/stylus/mixin.styl"
+
 .maintain-pre
   background-color: #f4f4f4
   flex-direction: column

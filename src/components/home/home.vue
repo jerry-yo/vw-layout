@@ -60,12 +60,14 @@
               <h2>维修</h2>
               <h3>一线专业技工</h3>
             </li>
-            <li @click="_goRescue">
-              <div class="img">
-                <div class="action"></div>
-              </div>
-              <h2>救援</h2>
-              <h3>闪电速达</h3>
+            <li>
+              <a :href="'tel:' + getPhone">
+                <div class="img">
+                  <div class="action"></div>
+                </div>
+                <h2>救援</h2>
+                <h3>闪电速达</h3>
+              </a>
             </li>
           </ul>
         </div>
@@ -127,33 +129,7 @@ export default {
       slideType: 'left',
       color: '#fff',
       pagination: true,
-      data1: [{
-        text: '小美',
-        value: 1
-      }, {
-        text: '猪猪',
-        value: 2
-      }],
-      data2: [{
-        text: '张三',
-        value: 1
-      }, {
-        text: '李四',
-        value: 2
-      }],
-      data3: [{
-        text: '开心',
-        value: 1
-      }, {
-        text: '生气',
-        value: 2
-      }, {
-        text: '搞笑',
-        value: 3
-      }, {
-        text: '难过',
-        value: 4
-      }]
+      storeList: []
     }
   },
   methods: {
@@ -210,10 +186,6 @@ export default {
         this.$router.push('/maintain')
       }
     },
-    // 救援
-    _goRescue () {
-
-    },
     _goCheckList () {
       this.$router.push('/check-list')
     },
@@ -260,9 +232,39 @@ export default {
         }
       })
     },
+    getStoreList (lng, lat) {
+      this.api_post('api/store/storeList', (res) => {
+        if (res.errorCode === 0) {
+          this.storeList = this._setStoreList(res.data)
+          this.setStoreList(this.storeList)
+        }
+      }, {
+        page: 1,
+        limit: 50
+      })
+    },
+    _setStoreList (data) {
+      let reg = /维修/
+      let lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
+      data.forEach((item, index) => {
+        let flag = reg.test(item.name)
+        item = Object.assign(item, {
+          icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
+          way: lnglat1.distance([item.lng, item.lat]),
+          type: flag ? 1 : 2
+        })
+      })
+      return data.sort((a, b) => {
+        return a.way > b.way
+      })
+    },
     ...mapMutations({
-      setCityInfo: 'SET_CITYINFO'
+      setCityInfo: 'SET_CITYINFO',
+      setStoreList: 'SET_STORELIST'
     })
+  },
+  created () {
+    this.getStoreList()
   },
   computed: {
     cityShow () {
@@ -274,9 +276,15 @@ export default {
       }
       return city.length >= 4 ? city.slice(0, 3) + '···' : city
     },
+    getPhone () {
+      if (this.storeList.length > 1) {
+        return this.storeList[this.defaultStoreId].phone
+      }
+    },
     ...mapGetters([
       'myCar',
-      'cityInfo'
+      'cityInfo',
+      'defaultStoreId'
     ])
   },
   mounted () {
@@ -481,12 +489,12 @@ export default {
                 background-size: 63px 46px
                 background-repeat: no-repeat
                 background-position: center center
-            & > h2
+            h2
               padding-top: 16px
               text-align: center
               font-size: 24px
               color: #636363
-            & > h3
+            h3
               padding-top: 11px
               text-align: center
               font-size: 20px

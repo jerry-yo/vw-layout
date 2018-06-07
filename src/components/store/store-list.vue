@@ -9,18 +9,18 @@
     </div>
     <Scroll class="store-list" ref="storelist">
       <ul>
-        <li :class="{'active': seleIndex === index}" v-for="(item, index) in storeList" :key="index" >
+        <li :class="{'active': defaultStoreId === index}" v-for="(item, index) in storeList" :key="index" >
           <div class="top">
             <img v-lazy="'https://www.gt1.shop/api/common/download?id=' + item.img" alt="">
             <div class="top-right">
               <div class="store-name">
-                <p :class="index % 2 === 1 ? 'by' : 'repair'">{{item.name.slice(8, item.name.length)}}</p>
+                <p :class="item.type === 2 ? 'by' : 'repair'">{{item.name.slice(8, item.name.length)}}</p>
                 <h2>{{item.distance}}</h2>
               </div>
               <div class="store-address">
                 <p>{{item.address}}</p>
                 <div>
-                  <h2 :class="{'active': seleIndex === index, 'nosele': seleIndex !== index}"  @click="seleStore(index)">{{seleIndex  === index ? '当前门店':'选择'}}</h2>
+                  <h2 :class="{'active': defaultStoreId === index, 'nosele': defaultStoreId !== index}"  @click="seleStore(index)">{{defaultStoreId  === index ? '当前门店':'选择'}}</h2>
                 </div>
               </div>
             </div>
@@ -37,33 +37,21 @@
 
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'storeList',
   data () {
     return {
-      seleIndex: 0,
-      storeList: []
     }
   },
   methods: {
     _goBack () {
       this.$router.go(-1)
     },
-    seleStore (id) {
+    seleStore (id, item) {
       this.seleIndex = id
-    },
-    getStoreList (lng, lat) {
-      this.api_post('api/store/storeList', (res) => {
-        if (res.errorCode === 0) {
-          this.storeList = res.data
-        }
-      }, {
-        page: 1,
-        limit: 50,
-        lng: lng || '',
-        lat: lat || ''
-      })
+      this.setDefaultStoreId(id)
+      this.$router.back()
     },
     _goLocaltion (item) {
       this.Wx.openLocation({
@@ -76,10 +64,10 @@ export default {
     },
     _seleCity () {
       this.$router.push('sele-city')
-    }
-  },
-  created () {
-    this.getStoreList(this.cityInfo.lng, this.cityInfo.lat)
+    },
+    ...mapMutations({
+      setDefaultStoreId: 'SET_DEFAULTSTORE_ID'
+    })
   },
   computed: {
     cityShow () {
@@ -92,7 +80,9 @@ export default {
       return city.length >= 4 ? city.slice(0, 3) + '···' : city
     },
     ...mapGetters([
-      'cityInfo'
+      'cityInfo',
+      'storeList',
+      'defaultStoreId'
     ])
   },
   components: {

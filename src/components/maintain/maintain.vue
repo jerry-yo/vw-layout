@@ -38,7 +38,7 @@
           <span>{{'￥' + allPrice}}</span>
         </div>
       </div>
-      <div class="btn" @click="_goMaintainPreOrder">确认下单</div>
+      <div class="btn" @click="_goMaintainPreOrder">去预约</div>
     </div>
   </div>
 </template>

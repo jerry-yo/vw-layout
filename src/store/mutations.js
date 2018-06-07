@@ -142,6 +142,15 @@ const mutations = {
       }
     })
     state.allServerList = ret
+  },
+  [type.SET_MY_SERVER] (state) {
+    state.serverList = state.staticServerList
+  },
+  [type.SET_ALL_SERVER] (state) {
+    state.allServerList = state.staticAllServerList
+  },
+  [type.SET_DEFAULTSTORE_ID] (state, id) {
+    state.defaultStoreId = id
   }
 }
 
