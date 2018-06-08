@@ -467,6 +467,65 @@ const state = {
       ]
     }
   ],
-  defaultStoreId: 0
+  defaultStoreId: 0,
+  subscribeInfo: {},
+  detectionMenus: [
+    {
+      id: 1,
+      time: '2018年2月28日 12:38:16',
+      lastTime: '2017年12月26日 15:26:36',
+      faultGroupItem: []
+    }, {
+      id: 0,
+      time: '2017年12月26日 15:26:36',
+      lastTime: '',
+      faultGroupItem: [
+        {
+          faultType: 1,
+          title: '左侧车漆耗损',
+          state: 1,
+          textarea: '我是真的故障了，相信我',
+          imgs: ['', '', ''],
+          carPaintPlace: 'right',
+          repairResults: 0
+        }, {
+          faultType: 1,
+          title: '车顶漆耗损',
+          state: 2,
+          textarea: '我是真的故障了，相信我',
+          imgs: ['', '', ''],
+          carPaintPlace: 'up-before',
+          repairResults: 1
+        }, {
+          faultType: 0,
+          title: '车圈松了',
+          state: 2,
+          textarea: '我是真的故障了，相信我',
+          imgs: ['', '', ''],
+          repairResults: 0
+        }, {
+          faultType: 0,
+          title: '车圈松了',
+          state: 2,
+          textarea: '我是真的故障了，相信我',
+          imgs: [''],
+          repairResults: 0
+        }, {
+          faultType: 0,
+          title: '车圈松了',
+          state: 1,
+          textarea: '我是真的故障了，相信我',
+          imgs: ['', '', ''],
+          repairResults: 2
+        }
+      ]
+    }
+  ]
 }
 export default state
+/* 故障单
+  falutType : 1 漆面 0 其他
+  state: 0 安全 1 预警 2 紧急
+  carPaintPlace: 车漆耗损部位： left  right before after up-before up-after
+  repairResults:  0 处理成功  1 新增  2 遗留
+*/

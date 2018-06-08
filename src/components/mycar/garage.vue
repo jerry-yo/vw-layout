@@ -126,7 +126,7 @@ export default {
         })
         return
       }
-      this.$router.push('/detection-record')
+      this.$router.push('/detection-record?carid=' + this.carId)
     },
     ...mapMutations({
       setDefaultCar: 'SET_DEFAULTCAR'

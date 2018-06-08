@@ -1,77 +1,46 @@
 <template>
-  <div class="detection-menu">
-    <ul>
-      <li v-for="(item, index) in menus" :key="index" @click="_showInfoId(index)">
-        <div class="select-btn" v-if="check">
-          <div class="sele-btn" :class="item.check ? 'check': 'nocheck'" @click="checkMenu(index)">
+  <div class="menu">
+    <div class="detection-menu">
+      <ul>
+        <li v-for="(item, index) in data" :key="index">
+          <div class="select-btn" v-if="check">
+            <div class="sele-btn" :class="item.check ? 'check': 'nocheck'" @click="checkMenu(index)">
+            </div>
           </div>
-        </div>
-        <div class="select-info" :class="showState(item.id)">
-          {{item.name}}
-        </div>
-        <div class="select-box">
-        </div>
-        <div class="go-info">
-          {{item.info}}
-        </div>
-      </li>
-    </ul>
+          <div class="sele-right" @click="_showInfoId(index, item)">
+            <div class="select-info" :class="showState(item.state)">
+              {{item.title}}
+            </div>
+            <div class="select-box">
+            </div>
+            <div class="go-info">
+              {{item.textarea}}
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <CheckMask v-if="showInfo" @closemask="_closeMask" :data="faultInfo"></CheckMask>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import CheckMask from './check-info'
 export default {
   name: 'detectionMenu',
   props: {
     check: {
       type: Boolean
+    },
+    data: {
+      type: Array,
+      required: true
     }
   },
   data () {
     return {
-      menus: [{
-        check: false,
-        id: 0,
-        name: '景观灯',
-        state: 0,
-        info: '别来烦我了真的很烦'
-      }, {
-        check: true,
-        id: 1,
-        name: '发动机丢了',
-        state: 2,
-        info: '别来烦我了真的很烦'
-      }, {
-        check: false,
-        id: 2,
-        name: '方向盘松了',
-        state: 2,
-        info: '别来烦我了真的很烦'
-      }, {
-        check: false,
-        id: 3,
-        name: '车门剐蹭',
-        state: 1,
-        info: '别来烦我了真的很烦'
-      }, {
-        check: true,
-        id: 4,
-        name: '尾灯不亮了',
-        state: 2,
-        info: '别来烦我了真的很烦'
-      }, {
-        check: false,
-        id: 5,
-        name: '刹车片消失了',
-        state: 2,
-        info: '别来烦我了真的很烦'
-      }, {
-        check: true,
-        id: 6,
-        name: '要命了',
-        state: 1,
-        info: '别来烦我了真的很烦'
-      }]
+      faultInfo: {},
+      showInfo: false
     }
   },
   methods: {
@@ -85,11 +54,18 @@ export default {
     checkMenu (index) {
       this.menus[index].check = !this.menus[index].check
     },
-    _showInfoId (id) {
+    _showInfoId (id, item) {
+      this.faultInfo = item
+      this.showInfo = true
       this.$emit('showinfo', id)
+    },
+    _closeMask () {
+      this.showInfo = false
     }
+  },
+  components: {
+    CheckMask
   }
-
 }
 </script>
 
@@ -119,6 +95,9 @@ export default {
               bg-image('../common/imgs/repair/sele')
             &.nocheck
               bg-image('../common/imgs/repair/unsele')
+        .sele-right
+          flex: 1
+          display: flex
         .select-info
           padding-right: 86px
           line-height: 90px
@@ -130,9 +109,9 @@ export default {
           &.error
             bg-image('../common/imgs/orderinfo/err')
           &.warn
-            bg-image('../common/imgs/orderinfo/err')
+            bg-image('../common/imgs/orderinfo/warn')
           &.safe
-            bg-image('../common/imgs/orderinfo/err')
+            bg-image('../common/imgs/orderinfo/safe')
         .select-box
           flex: 1
         .go-info

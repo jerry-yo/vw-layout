@@ -1,7 +1,7 @@
 <template>
   <div class="repair-pre" flexContainer>
     <div class="action-bar">
-      <div class="go-back"></div>
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">
         订单详情
       </div>
@@ -78,6 +78,11 @@ export default {
       } else {
         return this.imgs
       }
+    }
+  },
+  methods: {
+    _goBack () {
+      this.$router.back()
     }
   },
   mounted () {

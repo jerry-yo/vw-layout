@@ -54,7 +54,7 @@
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 import keepFitTime from '@/base/keep-fit-time'
 export default {
   name: 'maintain-pre',
@@ -113,7 +113,9 @@ export default {
     },
     ...mapGetters([
       'myCar',
-      'serverList'
+      'serverList',
+      'storeList',
+      'defaultStoreId'
     ])
   },
   methods: {
@@ -121,7 +123,21 @@ export default {
       this.$router.go(-1)
     },
     _goPreOrder () {
-      this.$router.push('/reservations')
+      if (JSON.stringify(this.seleTime) === '{}') {
+        this.$Toast({
+          message: '请选择预约时间',
+          position: 'bottom'
+        })
+      } else {
+        let _self = this
+        this.setSubscribeInfo({
+          store: _self.storeList[_self.defaultStoreId],
+          time: _self.seleTime
+        })
+        this.setMyServer()
+        this.setAllServer()
+        this.$router.push('/reservations?type=by')
+      }
     },
     showFitTime () {
       this.fitTime = true
@@ -132,7 +148,12 @@ export default {
         this.$set(this.seleTime, 'today', res.today)
       }
       this.fitTime = false
-    }
+    },
+    ...mapMutations({
+      setSubscribeInfo: 'SET_SUBSCRIBE_INFO',
+      setMyServer: 'SET_MY_SERVER',
+      setAllServer: 'SET_ALL_SERVER'
+    })
   },
   components: {
     storeInfo,

@@ -187,7 +187,14 @@ export default {
       }
     },
     _goCheckList () {
-      this.$router.push('/check-list')
+      if (this.detectionMenus.length > 0) {
+        this.$router.push('/check-list?id=0&carid=0')
+      } else {
+        this.$Toast({
+          message: '暂时没有车辆检测单',
+          position: 'bottom'
+        })
+      }
     },
     _addCar () {
       if (this.carIndex !== -1) {
@@ -284,7 +291,8 @@ export default {
     ...mapGetters([
       'myCar',
       'cityInfo',
-      'defaultStoreId'
+      'defaultStoreId',
+      'detectionMenus'
     ])
   },
   mounted () {

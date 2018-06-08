@@ -96,7 +96,14 @@ export default {
       this.$router.push('/add-new-server')
     },
     _goMaintainPreOrder () {
-      this.$router.push('/maintain-pre-order')
+      if (this.allServerNum > 0) {
+        this.$router.push('/maintain-pre-order')
+      } else {
+        this.$Toast({
+          message: '请选择保养服务',
+          position: 'bottom'
+        })
+      }
     }
   },
   mounted () {

@@ -1,60 +1,60 @@
 // 检测单
 <template>
   <div class="check-list" flexContainer>
-    <CheckMask v-if="showInfo" @closemask="_closeMask"></CheckMask>
+    <CheckMask v-if="showInfo" @closemask="_closeMask" :data="faultInfo"></CheckMask>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>东风本田-思域</h2>
-        <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
+        <h2>{{myCar[carId].series.sbName + ' - ' + myCar[carId].series.vehicleSystem[1]}}</h2>
+        <p><span>{{myCar[carId].idCard}}</span><span>丨</span><span>{{myCar[carId].way}}km</span></p>
       </div>
     </div>
     <Scroll class="container">
       <div  class="con">
         <div class="prev-detection">
-          <span>上次检查</span>
+          <span>检查时间</span>
           <div class="info">
-            2018年6月19日
+            {{detectionMenu.time}}
           </div>
         </div>
         <div class="testing-img">
           <h2>漆面耗损</h2>
           <div class="image-block">
             <div class="block_1">
-              <div class="left">
-                <div class="state_1 error"></div>
+              <div class="left" @click="_showInfo(faultState.left, 'left')">
+                <div class="state_1" :class="faultState.left"></div>
                 左侧
               </div>
-              <div class="right">
-                <div class="state_1 error"></div>
+              <div class="right" @click="_showInfo(faultState.right, 'right')">
+                <div class="state_1" :class="faultState.right"></div>
                 右侧
               </div>
             </div>
             <div class="block_2">
               <div class="up">
-                <div class="up-1">
-                  <div class="state_2 error"></div>
+                <div class="up-1" @click="_showInfo(faultState.upBefore, 'up-before')">
+                  <div class="state_2" :class="faultState.upBefore"></div>
                   <span>引擎盖面</span>
                 </div>
-                <div class="up-2">
-                  <div class="state_2 error"></div>
+                <div class="up-2" @click="_showInfo(faultState.upAfter, 'up-after')">
+                  <div class="state_2" :class="faultState.upAfter"></div>
                   <span>后备箱面</span>
                 </div>
               </div>
-              <div class="before">
-                <div class="state_2 error"></div>
+              <div class="before" @click="_showInfo(faultState.before, 'before')">
+                <div class="state_2" :class="faultState.before"></div>
                 <span>车头</span>
               </div>
-              <div class="after">
-                <div class="state_2 error"></div>
+              <div class="after" @click="_showInfo(faultState.after), 'up-after'">
+                <div class="state_2" :class="faultState.after"></div>
                 <span>车尾</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="check-detection">
+        <div class="check-detection" v-if="detectionMenu.faultGroupItem.length > 0">
           <h2>车辆异常</h2>
-          <SeleDetection :check="true" @showinfo="_showInfo"></SeleDetection>
+          <SeleDetection :check="false" :data="detectionMenu.faultGroupItem"></SeleDetection>
         </div>
       </div>
     </Scroll>
@@ -64,20 +64,80 @@
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
 import SeleDetection from '@/base/sele-detection-menu'
-import CheckMask from './check-info'
+import CheckMask from '@/base/check-info'
+import {mapGetters} from 'vuex'
 export default {
   name: 'checklist',
   data () {
     return {
-      showInfo: false
+      showInfo: false,
+      detectionMenuId: -1,
+      carId: 0,
+      faultInfo: {}
     }
+  },
+  created () {
+    this.detectionMenuId = this.$route.query.id
+    this.carId = this.$route.query.carid
+  },
+  computed: {
+    detectionMenu () {
+      return this.detectionMenus[this.detectionMenuId]
+    },
+    faultState () {
+      let arr = this.detectionMenu.faultGroupItem
+      let state = {
+        left: 0,
+        right: 0,
+        upAfter: 0,
+        upBefore: 0,
+        after: 0,
+        before: 0
+      }
+      arr.forEach((item) => {
+        if (item.carPaintPlace) {
+          if (item.carPaintPlace === 'left') {
+            state.left = item.state
+          } else if (item.carPaintPlace === 'right') {
+            state.right = item.state
+          } else if (item.carPaintPlace === 'after') {
+            state.after = item.state
+          } else if (item.carPaintPlace === 'before') {
+            state.before = item.state
+          } else if (item.carPaintPlace === 'up-before') {
+            state.upBefore = item.state
+          } else if (item.carPaintPlace === 'up-after') {
+            state.upAfter = item.state
+          }
+        }
+      })
+      return {
+        left: state.left === 0 ? 'safe' : state.left === 1 ? 'warn' : 'err',
+        right: state.right === 0 ? 'safe' : state.right === 1 ? 'warn' : 'err',
+        upAfter: state.upAfter === 0 ? 'safe' : state.upAfter === 1 ? 'warn' : 'err',
+        upBefore: state.upBefore === 0 ? 'safe' : state.upBefore === 1 ? 'warn' : 'err',
+        after: state.after === 0 ? 'safe' : state.after === 1 ? 'warn' : 'err',
+        before: state.before === 0 ? 'safe' : state.before === 1 ? 'warn' : 'err'
+      }
+    },
+    ...mapGetters([
+      'myCar',
+      'detectionMenus'
+    ])
   },
   methods: {
     _goBack () {
       this.$router.go(-1)
     },
-    _showInfo (val) {
-      this.showInfo = true
+    _showInfo (val, type) {
+      if (val === 'err' || val === 'warn') {
+        this.showInfo = true
+        this.detectionMenu.faultGroupItem.forEach((item) => {
+          if (item.carPaintPlace && type === item.carPaintPlace) {
+            this.faultInfo = item
+          }
+        })
+      }
     },
     _closeMask () {
       this.showInfo = false
@@ -173,10 +233,12 @@ export default {
               background-position: center center
               background-repeat: no-repeat
               background-size: 78px 56px
-              &.error
+              &.err
                 bg-image('../../common/imgs/orderinfo/err')
               &.warn
                 bg-image('../../common/imgs/orderinfo/warn')
+              &.safe
+                bg-image('../../common/imgs/orderinfo/safe')
             .state_2
               position: absolute
               left: 0
@@ -186,10 +248,12 @@ export default {
               background-position: center center
               background-repeat: no-repeat
               background-size: 78px 56px
-              &.error
+              &.err
                 bg-image('../../common/imgs/orderinfo/err')
               &.warn
                 bg-image('../../common/imgs/orderinfo/warn')
+              &.safe
+                bg-image('../../common/imgs/orderinfo/safe')
             .block_1
               display: flex
               height: 160px

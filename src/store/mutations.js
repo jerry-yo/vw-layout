@@ -151,6 +151,9 @@ const mutations = {
   },
   [type.SET_DEFAULTSTORE_ID] (state, id) {
     state.defaultStoreId = id
+  },
+  [type.SET_SUBSCRIBE_INFO] (state, info) {
+    state.subscribeInfo = info
   }
 }
 

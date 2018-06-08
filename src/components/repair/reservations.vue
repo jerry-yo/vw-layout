@@ -1,7 +1,7 @@
 <template>
   <div class="reservations" flexContainer>
     <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
+      <!-- <div class="go-back" @click="_goBack"></div> -->
       <div class="font">
         预约成功
       </div>
@@ -11,8 +11,8 @@
 
       </div>
       <div class="info">
-        <div class="store">奇特异快速保养-华润店</div>
-        <div class="time">预约时间：明天  <span>2:30</span></div>
+        <div class="store">{{subscribeInfo.store.name}}</div>
+        <div class="time">预约时间：{{getDate}}<span>{{subscribeInfo.time.time}}</span></div>
         <div class="tips">请尽快至门店服务，奇特异祝您用车愉快</div>
       </div>
     </div>
@@ -28,12 +28,35 @@
 </template>
 
 <script type="text/ecmascript-6">
+import {mapGetters} from 'vuex'
 export default {
   name: 'reservations',
-  methods: {
-    _goBack () {
-      this.$router.go(-3)
+  data () {
+    return {
+      type: ''
+    }
+  },
+  computed: {
+    getDate () {
+      let date = ''
+      if (this.type === 'by') {
+        date = this.subscribeInfo.time.today ? '今天' : '明天'
+      } else if (this.type === 'wx') {
+        date = '2017'
+      }
+      return date
     },
+    ...mapGetters([
+      'subscribeInfo'
+    ])
+  },
+  created () {
+    this.type = this.$route.query.type
+  },
+  methods: {
+    // _goBack () {
+    //   this.$router.go(-3)
+    // },
     _goHome () {
       this.$router.push('/home')
     },

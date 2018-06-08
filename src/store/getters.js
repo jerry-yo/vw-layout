@@ -39,6 +39,12 @@ const getters = {
   },
   defaultStoreId (state) {
     return state.defaultStoreId
+  },
+  subscribeInfo (state) {
+    return state.subscribeInfo
+  },
+  detectionMenus (state) {
+    return state.detectionMenus
   }
 }
 

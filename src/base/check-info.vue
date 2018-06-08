@@ -3,15 +3,13 @@
     <div class="check-info-mask">
       <div class="mask-con">
         <h2 class="title">
-          <span :class="'err'">照明系统-近光灯</span>
+          <span :class="data.state === 1 ? 'wran' : 'err'">{{data.title}}</span>
         </h2>
         <div class="content">
-          <p>车辆近光灯线路故障，切换近光灯时，线路接触问题导致近光灯忽明忽暗，为了您的行车安全建议您及时更换近光灯。</p>
+          <p>{{data.textarea}}</p>
         </div>
         <ul class="imgs">
-          <li><img src="../../common/imgs/default.png" alt=""> </li>
-          <li><img src="../../common/imgs/default.png" alt=""></li>
-          <li><img src="../../common/imgs/default.png" alt=""></li>
+          <li v-for="(item, index) in data.imgs" :key="index"><img v-lazy="item" alt=""> </li>
         </ul>
         <div class="close-btn" @click="_closeMask">
           知道了
@@ -24,6 +22,12 @@
 <script type="text/ecmascript-6">
 export default {
   name: 'checkInfo',
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
   methods: {
     _closeMask () {
       this.$emit('closemask', false)
@@ -33,7 +37,7 @@ export default {
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
-  @import '../../common/stylus/mixin.styl'
+  @import '../common/stylus/mixin.styl'
   .slide-enter-active, .slide-leave-active
     opacity: 1
   .slide-enter, .slide-leave-to
@@ -69,9 +73,9 @@ export default {
           color: #585858
           font-weight: bold
           &.err
-            bg-image('../../common/imgs/orderinfo/err')
-          &.warn
-            bg-image('../../common/imgs/orderinfo/warn')
+            bg-image('../common/imgs/orderinfo/err')
+          &.wran
+            bg-image('../common/imgs/orderinfo/warn')
       .content
         max-height: 138px
         overflow: hidden
