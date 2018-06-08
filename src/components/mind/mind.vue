@@ -38,35 +38,29 @@
           </Badge>
           <span>待付款</span>
         </div>
-        <div class="other-order">
-          <div class="box"></div>
-          <div class="yy-order" @click="_getOrder(2)">
-            <Badge  count="22" :solid="false" :color="'#ff623d'">
-              <div class="img"></div>
-            </Badge>
-            <span>预约中</span>
-          </div>
-          <div class="box"></div>
-          <div class="dqr-order" @click="_getOrder(3)">
-            <Badge  count="33" :solid="false" :color="'#ff623d'">
-              <div class="img"></div>
-            </Badge>
-            <span>待确认</span>
-          </div>
-          <div class="box"></div>
-          <div class="wc-order" @click="_getOrder(4)">
-            <Badge  count="40" :solid="false" :color="'#ff623d'">
-              <div class="img"></div>
-            </Badge>
-            <span>已完成</span>
-          </div>
-          <div class="box"></div>
-          <div class="qx-order" @click="_getOrder(5)">
-            <Badge  count="99+" :solid="false" :color="'#ff623d'">
-              <div class="img"></div>
-            </Badge>
-            <span>已取消</span>
-          </div>
+        <div class="yy-order" @click="_getOrder(2)">
+          <Badge  count="22" :solid="false" :color="'#ff623d'">
+            <div class="img"></div>
+          </Badge>
+          <span>预约中</span>
+        </div>
+        <!-- <div class="dqr-order" @click="_getOrder(3)">
+          <Badge  count="33" :solid="false" :color="'#ff623d'">
+            <div class="img"></div>
+          </Badge>
+          <span>待确认</span>
+        </div> -->
+        <div class="wc-order" @click="_getOrder(4)">
+          <Badge  count="40" :solid="false" :color="'#ff623d'">
+            <div class="img"></div>
+          </Badge>
+          <span>已完成</span>
+        </div>
+        <div class="qx-order" @click="_getOrder(5)">
+          <Badge  count="99+" :solid="false" :color="'#ff623d'">
+            <div class="img"></div>
+          </Badge>
+          <span>已取消</span>
         </div>
       </div>
     </div>
@@ -269,9 +263,8 @@ export default {
           font-size: 20px
           color: #979696
           line-height: 52px
-        .dfk-order
-          width: 70px
-          height: 94px
+        .dfk-order, .yy-order, .dqr-order, .wc-order, .qx-order
+          flex: 1
           display: flex
           flex-direction: column
           justify-content: center
@@ -279,41 +272,25 @@ export default {
           .img
             width: 42px
             height: 42px
-            bg-image('../../common/imgs/mind/qb')
             background-size: 42px 42px
             background-position: center top
             background-repeat: no-repeat
             text-align: center
-        .other-order
-          display: flex
-          width: 580px
-          .box
-            flex: 1
-          .yy-order, .dqr-order, .wc-order, .qx-order
-            width: 70px
-            display: flex
-            flex-direction: column
-            justify-content: center
-            align-items: center
-            .img
-              width: 42px
-              height: 42px
-              background-size: 42px 42px
-              background-position: center top
-              background-repeat: no-repeat
-              text-align: center
-          .yy-order
-            .img
-              bg-image('../../common/imgs/mind/yy')
-          .dqr-order
-            .img
-              bg-image('../../common/imgs/mind/dqr')
-          .wc-order
-            .img
-              bg-image('../../common/imgs/mind/wc')
-          .qx-order
-            .img
-              bg-image('../../common/imgs/mind/qx')
+        .dfk-order
+          .img
+            bg-image('../../common/imgs/mind/qb')
+        .yy-order
+          .img
+            bg-image('../../common/imgs/mind/yy')
+        .dqr-order
+          .img
+            bg-image('../../common/imgs/mind/dqr')
+        .wc-order
+          .img
+            bg-image('../../common/imgs/mind/wc')
+        .qx-order
+          .img
+            bg-image('../../common/imgs/mind/qx')
     .use-list
       width: 100%
       height: auto

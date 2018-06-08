@@ -9,7 +9,7 @@
           <p>{{data.textarea}}</p>
         </div>
         <ul class="imgs">
-          <li v-for="(item, index) in data.imgs" :key="index"><img v-lazy="item" alt=""> </li>
+          <li v-for="(item, index) in data.imgs" :key="index"><img v-lazy="item" alt="" @click="showImgs(item)"> </li>
         </ul>
         <div class="close-btn" @click="_closeMask">
           知道了
@@ -31,6 +31,13 @@ export default {
   methods: {
     _closeMask () {
       this.$emit('closemask', false)
+    },
+    showImgs (item) {
+      let _self = this
+      this.Wx.previewImage({
+        current: item, // 当前显示图片的http链接
+        urls: _self.data.imgs // 需要预览的图片http链接列表
+      })
     }
   }
 }

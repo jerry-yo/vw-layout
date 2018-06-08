@@ -7,7 +7,7 @@
       <div class="tab-bar">
         <ul>
           <li :class="{'active-on':orderType === 1}" @click="setOrderType(1)"><span>预约中</span> </li>
-          <li :class="{'active-on':orderType === 2}" @click="setOrderType(2)"><span>待确认</span> </li>
+          <!-- <li :class="{'active-on':orderType === 2}" @click="setOrderType(2)"><span>待确认</span> </li> -->
           <li :class="{'active-on':orderType === 3}" @click="setOrderType(3)"><span>待付款</span></li>
           <li :class="{'active-on':orderType === 4}" @click="setOrderType(4)"><span>已完成</span></li>
           <li :class="{'active-on':orderType === 5}" @click="setOrderType(5)"><span>已取消</span></li>
@@ -37,13 +37,13 @@
                   <div class="call-dz">联系店长</div>
                 </div>
               </div>
-              <div class="order-foot-2 foot" v-if="item.go === 2">
+              <!-- <div class="order-foot-2 foot" v-if="item.go === 2">
                 <span class="car-state">已到店</span>
                 <div class="order-set">
                   <div class="call-dz">联系店长</div>
                   <div class="ok-go">确认服务</div>
                 </div>
-              </div>
+              </div> -->
               <div class="order-foot-3 foot" v-if="item.go === 3">
                 <span class="car-state">服务进行中</span>
                 <div class="order-set">
@@ -282,18 +282,21 @@ export default {
         background-position: 30px center
     .tab-bar
       display: flex
-      justify-content: center
       height: 82px
       background-color: #fafafa
       margin-bottom: 10px
       & > ul
+        flex: 1
         display: flex
         height: 82px
         li
+          flex: 1
           margin: 0px 31px
           font-size: 26px
           color: #5b5b5b
-          line-height: 82px
+          display: flex
+          justify-content: center
+          align-items: center
           &.active-on
             color: #ff8040
     .order-container
