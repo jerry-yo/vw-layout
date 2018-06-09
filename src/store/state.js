@@ -520,6 +520,269 @@ const state = {
         }
       ]
     }
+  ],
+  orderList: [
+    {
+      orderFormState: 1,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 1,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
+        productAllPrice: 1.0,
+        useProductIconUrls: [
+          'http://192.168.0.110:8080/product1.jpg',
+          'http://192.168.0.110:8080/product2.jpg'
+        ],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 1,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 1,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 3.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 2
+      },
+      whichService: 2
+    }, {
+      orderFormState: 1,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 6.0,
+        useProductIconUrls: [],
+        useProductNumber: 3,
+        useServiceNumber: 5
+      },
+      whichService: 2
+    }, {
+      orderFormState: 3,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 3,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
+        productAllPrice: 1.0,
+        useProductIconUrls: [
+          'http://192.168.0.110:8080/product1.jpg',
+          'http://192.168.0.110:8080/product2.jpg'
+        ],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 3,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 3,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 3.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 2
+      },
+      whichService: 2
+    }, {
+      orderFormState: 3,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 6.0,
+        useProductIconUrls: [],
+        useProductNumber: 3,
+        useServiceNumber: 5
+      },
+      whichService: 2
+    }, {
+      orderFormState: 4,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 4,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
+        productAllPrice: 1.0,
+        useProductIconUrls: [
+          'http://192.168.0.110:8080/product1.jpg',
+          'http://192.168.0.110:8080/product2.jpg'
+        ],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 4,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 4,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 3.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 2
+      },
+      whichService: 2
+    }, {
+      orderFormState: 4,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 6.0,
+        useProductIconUrls: [],
+        useProductNumber: 3,
+        useServiceNumber: 5
+      },
+      whichService: 2
+    }, {
+      orderFormState: 5,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 5,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
+        productAllPrice: 1.0,
+        useProductIconUrls: [
+          'http://192.168.0.110:8080/product1.jpg',
+          'http://192.168.0.110:8080/product2.jpg'
+        ],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 5,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 1
+      },
+      whichService: 1
+    }, {
+      orderFormState: 5,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: false,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 3.0,
+        useProductIconUrls: [],
+        useProductNumber: 1,
+        useServiceNumber: 2
+      },
+      whichService: 2
+    }, {
+      orderFormState: 5,
+      serviceFinishTime: 1524182400000,
+      serviceIsAlreadyFinish: true,
+      userOrderFormMaintainCarBean: {
+        freeServiceOrProductIconUrl: '',
+        maintainDescribe: '',
+        productAllPrice: 6.0,
+        useProductIconUrls: [],
+        useProductNumber: 3,
+        useServiceNumber: 5
+      },
+      whichService: 2
+    }
   ]
 }
 export default state

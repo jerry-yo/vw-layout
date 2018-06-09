@@ -35,7 +35,14 @@ const otherRouter = {
 const orderRouter = {
   path: '/order',
   name: 'order',
-  component: resolve => { require(['@/components/order/all-order'], resolve) }
+  component: resolve => { require(['@/components/order/all-order'], resolve) },
+  children: [
+    { path: '/order/subscribe', name: 'subscribe', component: resolve => { require(['@/components/order/subscribe'], resolve) } },
+    { path: '/order/confirmed', name: 'confirmed', component: resolve => { require(['@/components/order/confirmed'], resolve) } },
+    { path: '/order/obligation', name: 'obligation', component: resolve => { require(['@/components/order/obligation'], resolve) } },
+    { path: '/order/complete', name: 'complete', component: resolve => { require(['@/components/order/complete'], resolve) } },
+    { path: '/order/cancel', name: 'cancel', component: resolve => { require(['@/components/order/cancel'], resolve) } }
+  ]
 }
 const orderInfoRouter = {
   path: '/orderinfo',

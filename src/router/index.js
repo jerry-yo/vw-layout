@@ -47,5 +47,7 @@ router.beforeEach((to, from, next) => {
       store.commit('SET_ANIMATETYPE', {direction: 'in'})
     }
   }
+  // console.log(window.history)
+
   next()
 })

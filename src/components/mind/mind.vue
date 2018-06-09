@@ -27,40 +27,52 @@
     <div class="user-order" flexContainer>
       <div class="my-order">
         <div class="order-title">我的订单</div>
-        <div class="all-order" @click="_getOrder('all')">
-          <span>全部订单</span>
+        <div class="all-order">
+          <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }">
+            <span>全部订单</span>
+          </router-link>
         </div>
       </div>
       <div class="order-states">
-        <div class="dfk-order" @click="_getOrder(1)">
-          <Badge count="9" :solid="false" :color="'#ff623d'">
-            <div class="img"></div>
-          </Badge>
-          <span>待付款</span>
+        <div class="dfk-order">
+          <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }" class="link-a">
+            <Badge count="9" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
+            <span>预约中</span>
+          </router-link>
         </div>
-        <div class="yy-order" @click="_getOrder(2)">
-          <Badge  count="22" :solid="false" :color="'#ff623d'">
-            <div class="img"></div>
-          </Badge>
-          <span>预约中</span>
-        </div>
-        <!-- <div class="dqr-order" @click="_getOrder(3)">
-          <Badge  count="33" :solid="false" :color="'#ff623d'">
-            <div class="img"></div>
-          </Badge>
-          <span>待确认</span>
+        <!-- <div class="yy-order">
+          <router-link :to="{ name: 'confirmed', path: '/order/confirmed' }" class="link-a">
+            <Badge  count="22" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
+            <span>待确认</span>
+          </router-link>
         </div> -->
-        <div class="wc-order" @click="_getOrder(4)">
-          <Badge  count="40" :solid="false" :color="'#ff623d'">
-            <div class="img"></div>
-          </Badge>
-          <span>已完成</span>
+        <div class="dqr-order">
+          <router-link :to="{ name: 'obligation', path: '/order/obligation'}" class="link-a">
+            <Badge  count="33" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
+            <span>待付款</span>
+          </router-link>
         </div>
-        <div class="qx-order" @click="_getOrder(5)">
-          <Badge  count="99+" :solid="false" :color="'#ff623d'">
-            <div class="img"></div>
-          </Badge>
-          <span>已取消</span>
+        <div class="wc-order">
+          <router-link :to="{ name: 'complete', path: '/order/complete' }" class="link-a">
+            <Badge  count="40" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
+            <span>已完成</span>
+          </router-link>
+        </div>
+        <div class="qx-order">
+          <router-link :to="{ name: 'cancel', path: '/order/cancel' }" class="link-a">
+            <Badge  count="99+" :solid="false" :color="'#ff623d'">
+              <div class="img"></div>
+            </Badge>
+            <span>已取消</span>
+          </router-link>
         </div>
       </div>
     </div>
@@ -104,15 +116,6 @@ export default {
     }
   },
   methods: {
-    _getOrder (id) {
-      let orderType = 0
-      if (id === 'all') {
-        orderType = 1
-      } else {
-        orderType = id
-      }
-      this.$router.push('/order?type=' + orderType)
-    },
     _goGarage () {
       this.$router.push('/garage')
     },
@@ -266,9 +269,13 @@ export default {
         .dfk-order, .yy-order, .dqr-order, .wc-order, .qx-order
           flex: 1
           display: flex
-          flex-direction: column
           justify-content: center
           align-items: center
+          .link-a
+            display: flex
+            flex-direction: column
+            justify-content: center
+            align-items: center
           .img
             width: 42px
             height: 42px

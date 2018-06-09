@@ -45,6 +45,9 @@ const getters = {
   },
   detectionMenus (state) {
     return state.detectionMenus
+  },
+  orderList (state) {
+    return state.orderList
   }
 }
 
