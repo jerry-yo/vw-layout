@@ -24,36 +24,11 @@ export default {
   name: 'order',
   data () {
     return {
-      orderType: 1,
-      index: 1
-    }
-  },
-  computed: {
-    order () {
-      let arr = []
-      for (let i = 0; i < 10; i++) {
-        arr.push({
-          index: i,
-          state: i % 3 === 0 ? 3 : i % 3,
-          go: i % 5 === 0 ? 5 : i % 5
-        })
-      }
-      return arr
     }
   },
   methods: {
     goBack () {
       this.$router.replace('/mind')
-    },
-    setOrderType (id) {
-      this.orderType = id
-    },
-    gogo () {
-      console.log('000')
-    },
-    goOrderInfo (res) {
-      console.log(res)
-      this.$router.push('/orderinfo?res=' + JSON.stringify(res))
     }
   }
 }

@@ -6,53 +6,53 @@
     </div>
     <Scroll class="order-content" ref="orderWarpper">
       <div class="order-con">
-        <div class="order-img" v-if="orderInfo.go >= 4">
-          <div class="order-bg-1 order-bg" v-if="orderInfo.go === 5">
+        <div class="order-img" v-if="orderInfo.orderFormState >= 4">
+          <div class="order-bg-1 order-bg" v-if="orderInfo.orderFormState === 5">
             <div class="bg-1">
             </div>
             <div class="bg-font">
               预约已取消
             </div>
           </div>
-          <div class="order-bg-2 order-bg" v-if="orderInfo.go === 4">
+          <div class="order-bg-2 order-bg" v-if="orderInfo.orderFormState === 4">
             <div class="bg-1">
             </div>
             <div class="bg-font">
               <span>服务完成</span>
-              <h2>奇特异快速保养-华润店sdsadsa</h2>
+              <h2>{{orderInfo.store.name}}</h2>
             </div>
           </div>
         </div>
         <div class="order-title">
           <div class="top">
             <div class="top-name">
-              <span>奇特异快速保养-华润店</span>
-              <div class="order-states" :class="{'by': orderInfo.state === 1, 'wx': orderInfo.state === 2, 'xc': orderInfo.state === 3}"></div>
+              <span>{{orderInfo.store.name.slice(8, orderInfo.store.name.length)}}</span>
+              <div class="order-states" :class="{'by': orderInfo.whichService === 1, 'wx': orderInfo.whichService === 2}"></div>
             </div>
             <div class="call-dz">
-              联系店长
+              <a :href="'tel:' + orderInfo.store.phone">联系店长</a>
             </div>
           </div>
           <div class="bottom">
             <span>倪家汇</span>
-            <span>苏DB5463</span>
+            <span>{{myCar[0].idCard}}</span>
           </div>
         </div>
         <div class="order-con">
-          <orderBy v-if="orderInfo.state === 1">
+          <orderBy v-if="orderInfo.orderFormState === 1 && orderInfo.whichService === 1" :data="orderInfo.userOrderFormKeepCarBean">
           </orderBy>
-          <orderWx v-if="orderInfo.state === 2">
+          <orderBy v-if="orderInfo.orderFormState !== 1" :data="orderInfo.userOrderFormRepairCarBean || orderInfo.userOrderFormKeepCarBean">
+          </orderBy>
+          <orderWx v-if="orderInfo.orderFormState === 1 && orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean">
           </orderWx>
-          <orderXc v-if="orderInfo.state === 3">
-          </orderXc>
         </div>
         <div class="order-other">
           <div class="other-info">
             <div class="other-fw">
               <span>原项目服务费</span>
-              <span>{{'￥' + 20.00}}</span>
+              <span>{{'￥' + orderInfo.userOrderFormKeepCarBean.useServicePrice}}</span>
             </div>
-            <div class="other-yhq" v-if="orderInfo.go === 3">
+            <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
               <div class="yhq-con">
                 <span>优惠券</span>
                 <div class="yhq">
@@ -60,15 +60,14 @@
                 </div>
               </div>
             </div>
-            <orderTest v-if="orderInfo.go === 2"></orderTest>
-            <div class="time-yy" v-if="orderInfo.go === 1 || orderInfo.go === 5">
+            <div class="time-yy" v-if="orderInfo.orderFormState === 1">
               <span>预约时间</span>
               <div class="time">
                 <span>今天</span>
                 <span>15:55</span>
               </div>
             </div>
-            <div class="time-over" v-if="orderInfo.go === 1 || orderInfo.go === 5">
+            <div class="time-over" v-if="orderInfo.orderFormState === 1">
               <span>到期时间</span>
               <div class="time">
                 <span>今天</span>
@@ -76,7 +75,7 @@
               </div>
             </div>
           </div>
-          <div class="order-money" v-if="orderInfo.go === 4">
+          <div class="order-money" v-if="orderInfo.orderFormState === 4">
             <p v-if="orderInfo.state !== 3"> 配件费 <span>{{'￥' + '200.00'}}</span>  </p>
             <p v-if="orderInfo.state !== 3">总服务费 <span>{{'￥' + '20.00'}}</span>  </p>
             <p v-if="orderInfo.state === 3">总金额 <span>{{'￥' + '220.00'}}</span>  </p>
@@ -84,44 +83,44 @@
             <p>实付 <span class="red">{{'￥' + '215.00'}}</span>  </p>
           </div>
           <div class="other">
-            <p>预约单号:  <span>2055056652555555</span> </p>
-            <p>下单时间:  <span>2018年12月12日 15:30</span> </p>
-            <p v-if="orderInfo.state !== 3">预约时间:  <span>2018年12月12日 15:30</span> </p>
-            <!-- <p>到店时间:  <span>2018年12月12日 15:30</span> </p>
-            <p>服务时间:  <span>2018年12月12日 15:30</span> </p>
-            <p>取消时间:  <span>2018年12月12日 15:30</span> </p> -->
+            <p>预约单号:  <span>{{orderInfo.orderId}}</span> </p>
+            <p>下单时间:  <span>{{orderInfo.orderTime}}</span> </p>
+            <p v-if="orderInfo.orderFormState !== 1">预约时间:  <span>{{orderInfo.appointmentTime}}</span> </p>
+            <p v-if="orderInfo.orderFormState === 3 || orderInfo.orderFormState === 4">完工时间:  <span>{{orderInfo.completionTime}}</span> </p>
+            <p v-if="orderInfo.orderFormState === 4">付款时间:  <span>{{orderInfo.completionTime}}</span> </p>
+            <p v-if="orderInfo.orderFormState === 5">取消时间:  <span>{{orderInfo.cancellationTime}}</span> </p>
           </div>
         </div>
       </div>
     </Scroll>
     <div class="order-btn">
-      <div class="order-foot-1 foot" v-if="orderInfo.go === 1">
+      <div class="order-foot-1 foot" v-if="orderInfo.orderFormState === 1">
         <span class="car-state">已过期</span>
         <div class="order-set">
           <div class="del-yy">取消预约</div>
-          <div class="call-dz">联系店长</div>
+          <div class="call-dz"><a :href="'tel:' + orderInfo.store.phone">联系店长</a></div>
         </div>
       </div>
-      <div class="order-foot-2 foot" v-if="orderInfo.go === 2">
+      <!-- <div class="order-foot-2 foot" v-if="orderInfo.orderFormState === 2">
         <span class="car-state">已到店</span>
         <div class="order-set">
           <div class="call-dz">联系店长</div>
           <div class="ok-go">确认服务</div>
         </div>
-      </div>
-      <div class="order-foot-3 foot" v-if="orderInfo.go === 3">
+      </div> -->
+      <div class="order-foot-3 foot" v-if="orderInfo.orderFormState === 3">
         <span class="car-state">服务进行中</span>
         <div class="order-set">
           <div class="go-pay">付款</div>
         </div>
       </div>
-      <div class="order-foot-4 foot" v-if="orderInfo.go === 4">
+      <div class="order-foot-4 foot" v-if="orderInfo.orderFormState === 4">
         <span class="car-state">2017年05月06日 15:30</span>
         <div class="order-set">
           <div class="look-order">查看该次检测</div>
         </div>
       </div>
-      <div class="order-foot-5 foot" v-if="orderInfo.go === 5">
+      <div class="order-foot-5 foot" v-if="orderInfo.orderFormState === 5">
         <div class="order-set">
           <div class="del-order">删除订单</div>
         </div>
@@ -134,29 +133,27 @@
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
-import orderXc from '@/components/order/order-xc'
-import orderTest from '@/components/order/order-test'
+import {mapGetters} from 'vuex'
 export default {
   name: 'orderInfo',
   data () {
     return {
-      orderInfo: {},
-      orderScroll: null
     }
+  },
+  computed: {
+    ...mapGetters([
+      'orderInfo',
+      'myCar'
+    ])
   },
   methods: {
     goBack () {
-      this.$router.go(-1)
+      this.$router.back()
     }
-  },
-  mounted () {
-    this.orderInfo = JSON.parse(this.$route.query.res)
   },
   components: {
     orderBy,
     orderWx,
-    orderXc,
-    orderTest,
     Scroll
   }
 }

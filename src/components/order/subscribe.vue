@@ -8,12 +8,12 @@
           <div class="order-states" :class="{'by': item.whichService === 1, 'wx': item.whichService === 2, 'xc': item.whichService === 0}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
-          <orderWx v-if="item.whichService === 2">
+          <orderWx v-if="item.whichService === 2" :data="item.userOrderFormRepairCarBean">
           </orderWx>
-          <orderBy v-if="item.whichService === 1">
+          <orderBy v-if="item.whichService === 1" :data="item.userOrderFormKeepCarBean">
           </orderBy>
-          <orderXc v-if="item.whichService === 0">
-          </orderXc>
+          <!-- <orderXc v-if="item.whichService === 0" :data="item.userOrderFormKeepCarBean">
+          </orderXc> -->
         </div>
         <div class="order-foot">
           <div class="foot">
@@ -32,9 +32,9 @@
 <script type="text/ecmascript-6">
 import orderBy from './order-by'
 import orderWx from './order-wx'
-import orderXc from './order-xc'
+// import orderXc from './order-xc'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   computed: {
@@ -52,10 +52,19 @@ export default {
       'myCar'
     ])
   },
+  methods: {
+    goOrderInfo (res) {
+      this.setOrderInfo(res)
+      this.$router.push('/orderinfo')
+    },
+    ...mapMutations({
+      setOrderInfo: 'SET_ORDER_INFO'
+    })
+  },
   components: {
     orderBy,
     orderWx,
-    orderXc,
+    // orderXc,
     Scroll
   }
 }

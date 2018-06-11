@@ -523,21 +523,34 @@ const state = {
   ],
   orderList: [
     {
+      orderId: 201709281630246801,
+      orderTime: 1506587424,
+      appointmentTime: 1506664800,
+      expiryTime: 1506666600,
       orderFormState: 1,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
+      store: {
+        name: '奇特异维修门店-晋陵路维修中心',
+        phone: '13912345180'
+      },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
-        useProductIconUrls: [],
+        productAllPrice: 200.0,
+        useProductIconUrls: ['', '', ''],
         useProductNumber: 1,
-        useServiceNumber: 1
+        useServiceNumber: 1,
+        useServicePrice: 20.00
       },
       whichService: 1
     }, {
       orderFormState: 1,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
+      orderId: 201711221012386801,
+      orderTime: 1511316758,
+      appointmentTime: 1511339400,
+      expiryTime: 1511341200,
+      store: {
+        name: '奇特异保养门店-兰陵锦轩店',
+        phone: '15051959973'
+      },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
         productAllPrice: 1.0,
@@ -546,63 +559,131 @@ const state = {
           'http://192.168.0.110:8080/product2.jpg'
         ],
         useProductNumber: 1,
-        useServiceNumber: 1
+        useServiceNumber: 1,
+        useServicePrice: 20.00
       },
       whichService: 1
     }, {
       orderFormState: 1,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
+      orderId: 201802280936466801,
+      orderTime: 1519781806,
+      appointmentTime: 1519799400,
+      expiryTime: 1519801200,
+      store: {
+        name: '奇特异保养门店-塑化城店',
+        phone: '18118389990'
+      },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: '',
         productAllPrice: 1.0,
-        useProductIconUrls: [],
+        useProductIconUrls: [''],
         useProductNumber: 1,
-        useServiceNumber: 1
+        useServiceNumber: 1,
+        useServicePrice: 20.00
       },
       whichService: 1
     }, {
       orderFormState: 1,
-      serviceFinishTime: 1524182400000,
+      orderId: 201804121922176801,
+      orderTime: 1523532137,
+      appointmentTime: 1523980800,
+      expiryTime: 1524067200,
+      store: {
+        name: '奇特异保养门店-邹区灯城店',
+        phone: '68957257'
+      },
+      userOrderFormRepairCarBean: {
+        useProductIconUrls: ['', ''],
+        faultDetails: '啊沙发大师傅大事发生地方撒发大水发发送到发二娃千峰是阿打算发沙发沙发大撒的发生大师的发生大'
+      },
+      whichService: 2
+    }, {
+      orderFormState: 1,
+      orderId: 201806101855206801,
+      orderTime: 1528628120,
+      appointmentTime: 1528905600,
+      expiryTime: 1528992000,
+      store: {
+        name: '奇特异保养门店-邹区泰富店',
+        phone: '13506566126'
+      },
+      userOrderFormRepairCarBean: {
+        useProductIconUrls: [''],
+        faultDetails: '啊沙发大师傅大事发生地方撒发大水发发送到发二娃千峰是阿打算发沙发沙发大撒的发生大师的发生大'
+      },
+      whichService: 2
+    }, {
+      orderFormState: 3,
+      orderId: 201806091231116801,
+      orderTime: 1528518671,
+      appointmentTime: 1528597800,
+      completionTime: 1528599504,
+      serviceIsAlreadyFinish: true,
+      store: {
+        name: '奇特异保养门店-邹区灯城店',
+        phone: '68957257'
+      },
+      userOrderFormKeepCarBean: {
+        freeServiceOrProductIconUrl: '',
+        productAllPrice: 1.0,
+        useProductIconUrls: ['', '', ''],
+        useProductNumber: 1,
+        useServiceNumber: 1,
+        useServicePrice: 20.00
+      },
+      whichService: 1
+    }, {
+      orderFormState: 3,
+      orderId: 201806101130246801,
+      orderTime: 1528601424,
+      appointmentTime: 1528646400,
+      completionTime: 1528799400,
       serviceIsAlreadyFinish: false,
-      userOrderFormMaintainCarBean: {
+      store: {
+        name: '奇特异维修门店-晋陵路维修中心',
+        phone: '13912345180'
+      },
+      userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
         productAllPrice: 3.0,
-        useProductIconUrls: [],
+        useProductIconUrls: ['', ''],
         useProductNumber: 1,
-        useServiceNumber: 2
+        useServiceNumber: 2,
+        useServicePrice: 180.00
       },
       whichService: 2
     }, {
-      orderFormState: 1,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
-      userOrderFormMaintainCarBean: {
-        freeServiceOrProductIconUrl: '',
-        maintainDescribe: '',
-        productAllPrice: 6.0,
-        useProductIconUrls: [],
-        useProductNumber: 3,
-        useServiceNumber: 5
+      orderFormState: 4,
+      orderId: 201709281630246801,
+      orderTime: 1506587424,
+      appointmentTime: 1506664800,
+      completionTime: 1506666480,
+      paymentTime: 1506666720,
+      store: {
+        name: '奇特异保养门店-邹区泰富店',
+        phone: '13506566126'
       },
-      whichService: 2
-    }, {
-      orderFormState: 3,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: '',
         productAllPrice: 1.0,
-        useProductIconUrls: [],
+        useProductIconUrls: [''],
         useProductNumber: 1,
-        useServiceNumber: 1
+        useServiceNumber: 1,
+        useServicePrice: 20.00
       },
       whichService: 1
     }, {
-      orderFormState: 3,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
+      orderFormState: 4,
+      orderId: 201802280936466801,
+      orderTime: 1519781806,
+      appointmentTime: 1519799400,
+      completionTime: 1519801680,
+      paymentTime: 1519801920,
+      store: {
+        name: '奇特异保养门店-邹区灯城店',
+        phone: '68957257'
+      },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
         productAllPrice: 1.0,
@@ -611,63 +692,62 @@ const state = {
           'http://192.168.0.110:8080/product2.jpg'
         ],
         useProductNumber: 1,
-        useServiceNumber: 1
+        useServiceNumber: 1,
+        useServicePrice: 20.00
       },
       whichService: 1
-    }, {
-      orderFormState: 3,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
-      userOrderFormKeepCarBean: {
-        freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
-        useProductIconUrls: [],
-        useProductNumber: 1,
-        useServiceNumber: 1
+    },{
+      orderFormState: 4,
+      orderId: 201804121922176801,
+      orderTime: 1523532137,
+      appointmentTime: 1523980800,
+      completionTime: 1524544752,
+      paymentTime: 1524557458,
+      store: {
+        name: '奇特异维修门店-晋陵路维修中心',
+        phone: '13912345180'
       },
-      whichService: 1
-    }, {
-      orderFormState: 3,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
-      userOrderFormMaintainCarBean: {
+      userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
         productAllPrice: 3.0,
-        useProductIconUrls: [],
+        useProductIconUrls: ['', ''],
         useProductNumber: 1,
-        useServiceNumber: 2
+        useServiceNumber: 2,
+        useServicePrice: 180.00
       },
       whichService: 2
     }, {
-      orderFormState: 3,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
-      userOrderFormMaintainCarBean: {
+      orderFormState: 4,
+      orderId: 201806101855206801,
+      orderTime: 1528628120,
+      appointmentTime: 1528646400,
+      completionTime: 1528716131,
+      paymentTime: 1528718291,
+      store: {
+        name: '奇特异维修门店-晋陵路维修中心',
+        phone: '13912345180'
+      },
+      userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
         productAllPrice: 6.0,
-        useProductIconUrls: [],
+        useProductIconUrls: ['', ''],
         useProductNumber: 3,
-        useServiceNumber: 5
+        useServiceNumber: 5,
+        useServicePrice: 60.00
       },
       whichService: 2
     }, {
-      orderFormState: 4,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
-      userOrderFormKeepCarBean: {
-        freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
-        useProductIconUrls: [],
-        useProductNumber: 1,
-        useServiceNumber: 1
+      orderFormState: 5,
+      orderId: 201709281630246801,
+      orderTime: 1506587424,
+      appointmentTime: 1506664800,
+      cancellationTime: 1506598224,
+      store: {
+        name: '奇特异保养门店-兰陵锦轩店',
+        phone: '15051959973'
       },
-      whichService: 1
-    }, {
-      orderFormState: 4,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
         productAllPrice: 1.0,
@@ -676,114 +756,52 @@ const state = {
           'http://192.168.0.110:8080/product2.jpg'
         ],
         useProductNumber: 1,
-        useServiceNumber: 1
+        useServiceNumber: 1,
+        useServicePrice: 20.00
       },
       whichService: 1
     }, {
-      orderFormState: 4,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
+      orderFormState: 5,
+      orderId: 201802280936466801,
+      orderTime: 1519781806,
+      appointmentTime: 1519799400,
+      cancellationTime: 1519802416,
+      store: {
+        name: '奇特异保养门店-邹区泰富店',
+        phone: '13506566126'
+      },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: '',
         productAllPrice: 1.0,
-        useProductIconUrls: [],
+        useProductIconUrls: [''],
         useProductNumber: 1,
-        useServiceNumber: 1
+        useServiceNumber: 1,
+        useServicePrice: 20.00
       },
       whichService: 1
     }, {
-      orderFormState: 4,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
-      userOrderFormMaintainCarBean: {
+      orderFormState: 5,
+      orderId: 201806111958116801,
+      orderTime: 1528718291,
+      appointmentTime: 1528819200,
+      cancellationTime: 1528719333,
+      store: {
+        name: '奇特异维修门店-晋陵路维修中心',
+        phone: '13912345180'
+      },
+      userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
         productAllPrice: 3.0,
-        useProductIconUrls: [],
+        useProductIconUrls: ['', '', ''],
         useProductNumber: 1,
-        useServiceNumber: 2
-      },
-      whichService: 2
-    }, {
-      orderFormState: 4,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
-      userOrderFormMaintainCarBean: {
-        freeServiceOrProductIconUrl: '',
-        maintainDescribe: '',
-        productAllPrice: 6.0,
-        useProductIconUrls: [],
-        useProductNumber: 3,
-        useServiceNumber: 5
-      },
-      whichService: 2
-    }, {
-      orderFormState: 5,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
-      userOrderFormKeepCarBean: {
-        freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
-        useProductIconUrls: [],
-        useProductNumber: 1,
-        useServiceNumber: 1
-      },
-      whichService: 1
-    }, {
-      orderFormState: 5,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
-      userOrderFormKeepCarBean: {
-        freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
-        productAllPrice: 1.0,
-        useProductIconUrls: [
-          'http://192.168.0.110:8080/product1.jpg',
-          'http://192.168.0.110:8080/product2.jpg'
-        ],
-        useProductNumber: 1,
-        useServiceNumber: 1
-      },
-      whichService: 1
-    }, {
-      orderFormState: 5,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
-      userOrderFormKeepCarBean: {
-        freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
-        useProductIconUrls: [],
-        useProductNumber: 1,
-        useServiceNumber: 1
-      },
-      whichService: 1
-    }, {
-      orderFormState: 5,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: false,
-      userOrderFormMaintainCarBean: {
-        freeServiceOrProductIconUrl: '',
-        maintainDescribe: '',
-        productAllPrice: 3.0,
-        useProductIconUrls: [],
-        useProductNumber: 1,
-        useServiceNumber: 2
-      },
-      whichService: 2
-    }, {
-      orderFormState: 5,
-      serviceFinishTime: 1524182400000,
-      serviceIsAlreadyFinish: true,
-      userOrderFormMaintainCarBean: {
-        freeServiceOrProductIconUrl: '',
-        maintainDescribe: '',
-        productAllPrice: 6.0,
-        useProductIconUrls: [],
-        useProductNumber: 3,
-        useServiceNumber: 5
+        useServiceNumber: 2,
+        useServicePrice: 180.00
       },
       whichService: 2
     }
-  ]
+  ],
+  orderInfo: {}
 }
 export default state
 /* 故障单

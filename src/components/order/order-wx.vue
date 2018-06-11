@@ -1,20 +1,27 @@
 <template>
   <div class="order-wx">
-    <div class="wx-left">
-      <img src="../../common/imgs/default.png" alt="">
-      <img src="../../common/imgs/default.png" alt="">
-    </div>
-    <div class="wx-con">
+    <ul class="wx-left" >
+      <li v-for="(item, index) in data.useProductIconUrls" :key="index"><img v-lazy="item" alt=""></li>
+      <!--
+      <img src="../../common/imgs/default.png" alt=""> -->
+    </ul>
+    <div class="wx-con" v-if="data.useProductIconUrls.length > 2">
     </div>
     <div class="wx-right">
-      <p>我是苏DB5463的车主，我的车子的 前面两个大灯碰了一下墙，不亮了。 引擎盖有明显凸起发来撒斯洛伐克来看卡师傅啦事发时卡沙发上刊登</p>
+      <p>{{data.faultDetails}}</p>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'orderWx'
+  name: 'orderWx',
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  }
 }
 </script>
 
@@ -26,9 +33,9 @@ export default {
     height: 147px
     padding: 0px 30px
     .wx-left
-      width: 260px
+      display: flex
       overflow: hidden
-      & > img
+      img
         float: left
         box-sizing: border-box
         display: inline-block

@@ -154,6 +154,9 @@ const mutations = {
   },
   [type.SET_SUBSCRIBE_INFO] (state, info) {
     state.subscribeInfo = info
+  },
+  [type.SET_ORDER_INFO] (state, info) {
+    state.orderInfo = info
   }
 }
 

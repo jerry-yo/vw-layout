@@ -1,13 +1,12 @@
 <template>
   <div class="order-by">
     <div class="by-top">
-      <div class="by-left">
-        <img src="../../common/imgs/default.png" alt="">
-        <img src="../../common/imgs/default.png" alt="">
+      <ul class="by-left">
+        <li v-for="(item, index) in imgs" :key="index"><img v-lazy="item" alt=""></li>
+      </ul>
+      <div class="by-con" :class="{'ellipsis': data.useProductIconUrls.length > 2}">
       </div>
-      <div class="by-con">
-      </div>
-      <div class="by-right">
+      <div class="by-right" v-if="data.freeServiceOrProductIconUrl !== ''">
         <div class="img">
           <img src="../../common/imgs/order/wash-bg@2x.png" alt="">
           <span>赠送</span>
@@ -16,10 +15,10 @@
     </div>
     <div class="by-bottom">
       <div class="by-left">
-        <span>共2个配件，1个服务</span>
+        <span>共{{data.useProductNumber}}个配件，{{data.useServiceNumber}}个服务</span>
       </div>
       <div class="by-right">
-        配件总额：<span>{{'￥' + 200.00}}</span>
+        配件总额：<span>{{'￥' + data.productAllPrice}}</span>
       </div>
     </div>
   </div>
@@ -27,7 +26,28 @@
 
 <script type="text/ecmascript-6">
 export default {
-  name: 'orderBy'
+  name: 'orderBy',
+  props: {
+    data: {
+      type: Object,
+      required: true
+    }
+  },
+  computed: {
+    imgs () {
+      let ret = []
+      if (this.data.useProductIconUrls.length > 2) {
+        this.data.useProductIconUrls.forEach((item, index) => {
+          if (index < 2) {
+            ret.push(item)
+          }
+        })
+      } else {
+        ret = this.data.useProductIconUrls
+      }
+      return ret
+    }
+  }
 }
 </script>
 
@@ -43,9 +63,11 @@ export default {
       display: flex
       padding-top: 19px
       .by-left
-        width: 260px
+        display: flex
         overflow: hidden
-        & > img
+        li
+          margin-right: 10px
+        img
           box-sizing: border-box
           display: inline-block
           width: 120px
@@ -53,10 +75,11 @@ export default {
           border: 1px solid #d2d2d2
       .by-con
         flex: 1
-        bg-image('../../common/imgs/ellipsis')
-        background-size: 27px 6px
-        background-repeat: no-repeat
-        background-position: left center
+        &.ellipsis
+          bg-image('../../common/imgs/ellipsis')
+          background-size: 27px 6px
+          background-repeat: no-repeat
+          background-position: left center
       .by-right
         width: 154px
         bg-image('../../common/imgs/mind/leftright')
