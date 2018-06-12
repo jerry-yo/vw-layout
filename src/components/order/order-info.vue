@@ -6,12 +6,12 @@
     </div>
     <Scroll class="order-content" ref="orderWarpper">
       <div class="order-con">
-        <div class="order-img" v-if="orderInfo.orderFormState >= 4">
-          <div class="order-bg-1 order-bg" v-if="orderInfo.orderFormState === 5">
+        <div class="order-img" v-if="orderInfo.orderFormState >= 4 || orderInfo.orderFormState === 1">
+          <div class="order-bg-1 order-bg" v-if="orderInfo.orderFormState === 5 || (isExpiryTime && orderInfo.orderFormState === 1)">
             <div class="bg-1">
             </div>
             <div class="bg-font">
-              预约已取消
+              预约{{orderInfo.orderFormState === 1 ? '已过期' : '已取消'}}
             </div>
           </div>
           <div class="order-bg-2 order-bg" v-if="orderInfo.orderFormState === 4">
@@ -50,7 +50,7 @@
           <div class="other-info">
             <div class="other-fw" v-if="orderInfo.orderFormState === 3">
               <span>原项目服务费</span>
-              <span>{{'￥' + showServerPrice}}</span>
+              <span>{{'￥' + showServerPrice.server}}</span>
             </div>
             <!-- <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
               <div class="yhq-con">
@@ -75,9 +75,9 @@
               </div>
             </div>
           </div>
-          <div class="order-money" v-if="orderInfo.orderFormState === 4 || orderInfo.orderFormState === 3">
-            <p>配件费 <span>{{'￥' + orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.productAllPrice : orderInfo.userOrderFormKeepCarBean.productAllPrice}}</span>  </p>
-            <p>总服务费 <span>{{'￥' +  orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.useServicePrice : orderInfo.userOrderFormKeepCarBean.useServicePrice}}</span>  </p>
+          <div class="order-money" v-show="orderInfo.orderFormState >= 3 && orderInfo.orderFormState <= 4">
+            <p>配件费 <span>{{'￥' + showServerPrice.product}}</span>  </p>
+            <p>总服务费 <span>{{'￥' +  showServerPrice.server}}</span>  </p>
             <p>优惠 <span class="green">{{'￥' + coupon}}</span>  </p>
             <p>实付 <span class="red">{{'￥' + payPrice}}</span>  </p>
           </div>
@@ -94,7 +94,7 @@
     </Scroll>
     <div class="order-btn">
       <div class="order-foot-1 foot" v-if="orderInfo.orderFormState === 1">
-        <span class="car-state">已过期</span>
+        <span class="car-state"  v-if="isExpiryTime">已过期</span>
         <div class="order-set">
           <div class="del-yy" @click="_cancelSubscribe">取消预约</div>
           <div class="call-dz"><a :href="'tel:' + orderInfo.store.phone">联系店长</a></div>
@@ -153,12 +153,25 @@ export default {
       }
       return price - this.coupon
     },
+    isExpiryTime () {
+      let date = Math.round(new Date().getTime() / 1000)
+      if (date > this.orderInfo.expiryTime) {
+        return true
+      } else {
+        return false
+      }
+    },
     showServerPrice () {
-      let price = 0
+      let price = {
+        server: 0,
+        product: 0
+      }
       if (this.orderInfo.whichService === 2) {
-        price = this.orderInfo.userOrderFormRepairCarBean.useServicePrice
+        price.server = this.orderInfo.userOrderFormRepairCarBean.useServicePrice
+        price.product = this.orderInfo.userOrderFormRepairCarBean.productAllPrice
       } else if (this.orderInfo.whichService === 1) {
-        price = this.orderInfo.userOrderFormKeepCarBean.useServicePrice
+        price.server = this.orderInfo.userOrderFormKeepCarBean.useServicePrice
+        price.product = this.orderInfo.userOrderFormKeepCarBean.productAllPrice
       }
       return price
     },

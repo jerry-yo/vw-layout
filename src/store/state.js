@@ -709,7 +709,7 @@ const state = {
       userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
-        productAllPrice: 620.0,
+        productAllPrice: 620.00,
         useProductIconUrls: ['', ''],
         useProductNumber: 2,
         useServiceNumber: 2,
@@ -729,8 +729,7 @@ const state = {
       },
       userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
-        maintainDescribe: '',
-        productAllPrice: 965.0,
+        productAllPrice: 965.00,
         useProductIconUrls: ['', ''],
         useProductNumber: 3,
         useServiceNumber: 5,
