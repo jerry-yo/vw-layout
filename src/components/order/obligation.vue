@@ -13,10 +13,9 @@
         </div>
         <div class="order-foot">
           <div class="foot">
-            <span class="car-state">已到店</span>
+            <span class="car-state" v-if="!item.serviceIsAlreadyFinish">服务进行中</span>
             <div class="order-set">
-              <div class="call-dz">联系店长</div>
-              <div class="ok-go">确认服务</div>
+              <div :class="item.serviceIsAlreadyFinish ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
             </div>
           </div>
         </div>
@@ -51,8 +50,17 @@ export default {
       this.setOrderInfo(res)
       this.$router.push('/orderinfo')
     },
+    _goPay (item) {
+      if (item.serviceIsAlreadyFinish) {
+        this.modifyOrderList({
+          type: 'pay',
+          id: item.orderId
+        })
+      }
+    },
     ...mapMutations({
-      setOrderInfo: 'SET_ORDER_INFO'
+      setOrderInfo: 'SET_ORDER_INFO',
+      modifyOrderList: 'MODIFY_ORDER_LIST'
     })
   },
   components: {
@@ -110,7 +118,7 @@ export default {
         display: flex
         .car-state
           line-height: 78px
-          color: #acacac
+          color: #ff8040
           font-size: 20px
         .order-set
           flex: 1
@@ -127,12 +135,12 @@ export default {
             background-size: 100% 100%
             background-repeat: no-repeat
             background-position: center center
-          .ok-go
+          .go-pay
             bg-image('../../common/imgs/btn-bg')
             color: #fff
-          .call-dz
-            border: 1px solid #ff8040
-            border-radius: 5px
-            color: #ff8040
+          .ungo-pay
+            background: #cccccc
+            border-radius: 3px
+            color: #fff
 
 </style>

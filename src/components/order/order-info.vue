@@ -48,18 +48,18 @@
         </div>
         <div class="order-other">
           <div class="other-info">
-            <div class="other-fw">
+            <div class="other-fw" v-if="orderInfo.orderFormState === 3">
               <span>原项目服务费</span>
-              <span>{{'￥' + orderInfo.userOrderFormKeepCarBean.useServicePrice}}</span>
+              <span>{{'￥' + showServerPrice}}</span>
             </div>
-            <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
+            <!-- <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
               <div class="yhq-con">
                 <span>优惠券</span>
                 <div class="yhq">
                   <span>暂无优惠券</span>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="time-yy" v-if="orderInfo.orderFormState === 1">
               <span>预约时间</span>
               <div class="time">
@@ -75,20 +75,19 @@
               </div>
             </div>
           </div>
-          <div class="order-money" v-if="orderInfo.orderFormState === 4">
-            <p v-if="orderInfo.state !== 3"> 配件费 <span>{{'￥' + '200.00'}}</span>  </p>
-            <p v-if="orderInfo.state !== 3">总服务费 <span>{{'￥' + '20.00'}}</span>  </p>
-            <p v-if="orderInfo.state === 3">总金额 <span>{{'￥' + '220.00'}}</span>  </p>
-            <p>优惠 <span class="green">{{'￥' + '5.00'}}</span>  </p>
-            <p>实付 <span class="red">{{'￥' + '215.00'}}</span>  </p>
+          <div class="order-money" v-if="orderInfo.orderFormState === 4 || orderInfo.orderFormState === 3">
+            <p>配件费 <span>{{'￥' + orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.productAllPrice : orderInfo.userOrderFormKeepCarBean.productAllPrice}}</span>  </p>
+            <p>总服务费 <span>{{'￥' +  orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.useServicePrice : orderInfo.userOrderFormKeepCarBean.useServicePrice}}</span>  </p>
+            <p>优惠 <span class="green">{{'￥' + coupon}}</span>  </p>
+            <p>实付 <span class="red">{{'￥' + payPrice}}</span>  </p>
           </div>
           <div class="other">
             <p>预约单号:  <span>{{orderInfo.orderId}}</span> </p>
-            <p>下单时间:  <span>{{orderInfo.orderTime}}</span> </p>
-            <p v-if="orderInfo.orderFormState !== 1">预约时间:  <span>{{orderInfo.appointmentTime}}</span> </p>
-            <p v-if="orderInfo.orderFormState === 3 || orderInfo.orderFormState === 4">完工时间:  <span>{{orderInfo.completionTime}}</span> </p>
-            <p v-if="orderInfo.orderFormState === 4">付款时间:  <span>{{orderInfo.completionTime}}</span> </p>
-            <p v-if="orderInfo.orderFormState === 5">取消时间:  <span>{{orderInfo.cancellationTime}}</span> </p>
+            <p>下单时间:  <span>{{_getFormatDate(orderInfo.orderTime)}}</span> </p>
+            <p v-if="orderInfo.orderFormState !== 1">预约时间:  <span>{{_getFormatDate(orderInfo.appointmentTime)}}</span> </p>
+            <p v-if="orderInfo.orderFormState === 3 || orderInfo.orderFormState === 4">完工时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
+            <p v-if="orderInfo.orderFormState === 4">付款时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
+            <p v-if="orderInfo.orderFormState === 5">取消时间:  <span>{{_getFormatDate(orderInfo.cancellationTime)}}</span> </p>
           </div>
         </div>
       </div>
@@ -97,7 +96,7 @@
       <div class="order-foot-1 foot" v-if="orderInfo.orderFormState === 1">
         <span class="car-state">已过期</span>
         <div class="order-set">
-          <div class="del-yy">取消预约</div>
+          <div class="del-yy" @click="_cancelSubscribe">取消预约</div>
           <div class="call-dz"><a :href="'tel:' + orderInfo.store.phone">联系店长</a></div>
         </div>
       </div>
@@ -108,21 +107,23 @@
           <div class="ok-go">确认服务</div>
         </div>
       </div> -->
-      <div class="order-foot-3 foot" v-if="orderInfo.orderFormState === 3">
-        <span class="car-state">服务进行中</span>
-        <div class="order-set">
-          <div class="go-pay">付款</div>
+      <div class="order-foot-3" v-if="orderInfo.orderFormState === 3">
+        <div class="server"><a href="tel:0519-68191385">客服</a></div>
+        <div class="tips">
+          <span>共{{orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.useServiceNumber : orderInfo.userOrderFormKeepCarBean.useServiceNumber}}项服务</span>
+          <span>￥{{payPrice.toFixed(2)}}</span>
         </div>
+        <div class="btn" @click="_goPay">付款</div>
       </div>
       <div class="order-foot-4 foot" v-if="orderInfo.orderFormState === 4">
         <span class="car-state">2017年05月06日 15:30</span>
         <div class="order-set">
-          <div class="look-order">查看该次检测</div>
+          <div class="look-order" @click="_showDetectionRecord">查看该次检测</div>
         </div>
       </div>
       <div class="order-foot-5 foot" v-if="orderInfo.orderFormState === 5">
         <div class="order-set">
-          <div class="del-order">删除订单</div>
+          <div class="del-order"  @click="_deleteOrder">删除订单</div>
         </div>
       </div>
     </div>
@@ -133,23 +134,78 @@
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
+import {getFormatDate} from '@/common/js/date'
 export default {
   name: 'orderInfo',
   data () {
     return {
+      coupon: 4
     }
   },
   computed: {
+    payPrice () {
+      let price = 0
+      if (this.orderInfo.whichService === 2) {
+        price = this.orderInfo.userOrderFormRepairCarBean.useServicePrice + this.orderInfo.userOrderFormRepairCarBean.productAllPrice
+      } else if (this.orderInfo.whichService === 1) {
+        price = this.orderInfo.userOrderFormKeepCarBean.useServicePrice + this.orderInfo.userOrderFormKeepCarBean.productAllPrice
+      }
+      return price - this.coupon
+    },
+    showServerPrice () {
+      let price = 0
+      if (this.orderInfo.whichService === 2) {
+        price = this.orderInfo.userOrderFormRepairCarBean.useServicePrice
+      } else if (this.orderInfo.whichService === 1) {
+        price = this.orderInfo.userOrderFormKeepCarBean.useServicePrice
+      }
+      return price
+    },
     ...mapGetters([
       'orderInfo',
       'myCar'
     ])
   },
   methods: {
+    _getFormatDate (stamp) {
+      return getFormatDate(stamp)
+    },
     goBack () {
       this.$router.back()
-    }
+    },
+    _cancelSubscribe () {
+      let _self = this
+      this.modifyOrderList({
+        type: 'cancel',
+        id: _self.orderInfo.orderId
+      })
+      this.goBack()
+    },
+    _goPay (item) {
+      let _self = this
+      if (this.orderInfo.serviceIsAlreadyFinish) {
+        this.modifyOrderList({
+          type: 'pay',
+          id: _self.orderInfo.orderId
+        })
+      }
+      this.goBack()
+    },
+    _showDetectionRecord () {
+      this.$router.push('/check-list?id=0&carid=0')
+    },
+    _deleteOrder () {
+      let _self = this
+      this.deleteOrderList({
+        id: _self.orderInfo.orderId
+      })
+      this.goBack()
+    },
+    ...mapMutations({
+      modifyOrderList: 'MODIFY_ORDER_LIST',
+      deleteOrderList: 'DELETE_ORDER_LIST'
+    })
   },
   components: {
     orderBy,
@@ -398,10 +454,10 @@ export default {
               margin-left: 15px
     .order-btn
       display: flex
-      height: 78px
+      height: 98px
       background-color: #fff
-      padding: 0px 30px
       .foot
+        padding: 0px 30px
         flex: 1
         .order-set
           display: flex
@@ -423,7 +479,7 @@ export default {
         .car-state
           float: left
           line-height: 78px
-          color: #acacac
+          color: #ff8040
           font-size: 20px
         .order-set
           .del-yy
@@ -433,7 +489,8 @@ export default {
           .call-dz
             border: 1px solid #ff8040
             border-radius: 5px
-            color: #ff8040
+            a
+              color: #ff8040
       .order-foot-2
         .car-state
           float: left
@@ -449,17 +506,46 @@ export default {
             border-radius: 5px
             color: #ff8040
       .order-foot-3
-        .car-state
-          float: left
-          line-height: 78px
-          color: #ff8040
+        flex: 1
+        display: flex
+        .server
+          width: 133px
+          text-align: center
+          padding-top: 58px
           font-size: 20px
-        .order-set
-          .go-pay
-            bg-image('../../common/imgs/btn-bg')
-            color: #fff
-          .ungo-pay
-            background-image: #c5c5c5
+          color: #626262
+          border-right: 1px solid #f2f2f2
+          bg-image('../../common/imgs/repair/customer_service')
+          background-size: 24px 21px
+          background-repeat: no-repeat
+          background-position: center 25px
+        .tips
+          flex: 1
+          padding: 0 10px
+          display: flex
+          padding-top: 48px
+          line-height: 50px
+          span:nth-child(1)
+            color: #999999
+            font-size: 12px
+          span:nth-child(2)
+            flex: 1
+            display: flex
+            justify-content: flex-end
+            color: #de3e56
+            font-size: 14px
+            font-weight: bold
+        .btn
+          width: 286px
+          text-align: center
+          line-height: 98px
+          font-size: 36px
+          color: #fff
+          font-weight: bold
+          bg-image('../../common/imgs/repair/ordered_btn')
+          background-size: 286px 98px
+          background-repeat: no-repeat
+          background-position: center center
       .order-foot-4
         .car-state
           float: left

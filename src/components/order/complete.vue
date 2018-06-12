@@ -13,9 +13,9 @@
         </div>
         <div class="order-foot">
           <div class="foot">
-            <span class="car-state">2017年05月06日 15:30</span>
+            <span class="car-state">{{_getFormatDate(item.paymentTime)}}</span>
             <div class="order-set">
-              <div class="look-order">查看该次检测</div>
+              <div class="look-order" @click="showDetectionRecord(item)">查看该次检测</div>
             </div>
           </div>
         </div>
@@ -28,6 +28,7 @@
 import orderBy from './order-by'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
+import {getFormatDate} from '@/common/js/date'
 
 export default {
   computed: {
@@ -46,9 +47,15 @@ export default {
     ])
   },
   methods: {
+    _getFormatDate (time) {
+      return getFormatDate(time)
+    },
     goOrderInfo (res) {
       this.setOrderInfo(res)
       this.$router.push('/orderinfo')
+    },
+    showDetectionRecord (item) {
+      this.$router.push('/check-list?id=0&carid=0')
     },
     ...mapMutations({
       setOrderInfo: 'SET_ORDER_INFO'

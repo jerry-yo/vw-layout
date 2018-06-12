@@ -12,14 +12,12 @@
           </orderWx>
           <orderBy v-if="item.whichService === 1" :data="item.userOrderFormKeepCarBean">
           </orderBy>
-          <!-- <orderXc v-if="item.whichService === 0" :data="item.userOrderFormKeepCarBean">
-          </orderXc> -->
         </div>
         <div class="order-foot">
           <div class="foot">
-            <span class="car-state">已过期</span>
+            <span class="car-state" v-if="isExpiryTime(item)">已过期</span>
             <div class="order-set">
-              <div class="del-yy">取消预约</div>
+              <div class="del-yy" @click="cancelSubscribe(item)">取消预约</div>
               <div class="call-dz">联系店长</div>
             </div>
           </div>
@@ -32,7 +30,6 @@
 <script type="text/ecmascript-6">
 import orderBy from './order-by'
 import orderWx from './order-wx'
-// import orderXc from './order-xc'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
 
@@ -57,14 +54,28 @@ export default {
       this.setOrderInfo(res)
       this.$router.push('/orderinfo')
     },
+    isExpiryTime (item) {
+      let date = Math.round(new Date().getTime() / 1000)
+      if (date > item.expiryTime) {
+        return true
+      } else {
+        return false
+      }
+    },
+    cancelSubscribe (item) {
+      this.modifyOrderList({
+        type: 'cancel',
+        id: item.orderId
+      })
+    },
     ...mapMutations({
-      setOrderInfo: 'SET_ORDER_INFO'
+      setOrderInfo: 'SET_ORDER_INFO',
+      modifyOrderList: 'MODIFY_ORDER_LIST'
     })
   },
   components: {
     orderBy,
     orderWx,
-    // orderXc,
     Scroll
   }
 }
@@ -118,7 +129,7 @@ export default {
         display: flex
         .car-state
           line-height: 78px
-          color: #acacac
+          color: #ff8040
           font-size: 20px
         .order-set
           flex: 1

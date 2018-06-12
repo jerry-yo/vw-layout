@@ -523,7 +523,7 @@ const state = {
   ],
   orderList: [
     {
-      orderId: 201709281630246801,
+      orderId: '201709281630246801',
       orderTime: 1506587424,
       appointmentTime: 1506664800,
       expiryTime: 1506666600,
@@ -543,7 +543,7 @@ const state = {
       whichService: 1
     }, {
       orderFormState: 1,
-      orderId: 201711221012386801,
+      orderId: '201711221012386801',
       orderTime: 1511316758,
       appointmentTime: 1511339400,
       expiryTime: 1511341200,
@@ -553,19 +553,19 @@ const state = {
       },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
-        productAllPrice: 1.0,
+        productAllPrice: 460.0,
         useProductIconUrls: [
           'http://192.168.0.110:8080/product1.jpg',
           'http://192.168.0.110:8080/product2.jpg'
         ],
-        useProductNumber: 1,
+        useProductNumber: 2,
         useServiceNumber: 1,
-        useServicePrice: 20.00
+        useServicePrice: 40.00
       },
       whichService: 1
     }, {
       orderFormState: 1,
-      orderId: 201802280936466801,
+      orderId: '201802280936466801',
       orderTime: 1519781806,
       appointmentTime: 1519799400,
       expiryTime: 1519801200,
@@ -575,16 +575,16 @@ const state = {
       },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
+        productAllPrice: 390.0,
         useProductIconUrls: [''],
-        useProductNumber: 1,
+        useProductNumber: 3,
         useServiceNumber: 1,
-        useServicePrice: 20.00
+        useServicePrice: 45.00
       },
       whichService: 1
     }, {
       orderFormState: 1,
-      orderId: 201804121922176801,
+      orderId: '201804121922176801',
       orderTime: 1523532137,
       appointmentTime: 1523980800,
       expiryTime: 1524067200,
@@ -599,7 +599,7 @@ const state = {
       whichService: 2
     }, {
       orderFormState: 1,
-      orderId: 201806101855206801,
+      orderId: '201806101855206801',
       orderTime: 1528628120,
       appointmentTime: 1528905600,
       expiryTime: 1528992000,
@@ -614,7 +614,7 @@ const state = {
       whichService: 2
     }, {
       orderFormState: 3,
-      orderId: 201806091231116801,
+      orderId: '201806091231116801',
       orderTime: 1528518671,
       appointmentTime: 1528597800,
       completionTime: 1528599504,
@@ -625,19 +625,18 @@ const state = {
       },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
+        productAllPrice: 680.0,
         useProductIconUrls: ['', '', ''],
-        useProductNumber: 1,
+        useProductNumber: 4,
         useServiceNumber: 1,
-        useServicePrice: 20.00
+        useServicePrice: 70.00
       },
       whichService: 1
     }, {
       orderFormState: 3,
-      orderId: 201806101130246801,
+      orderId: '201806101130246801',
       orderTime: 1528601424,
       appointmentTime: 1528646400,
-      completionTime: 1528799400,
       serviceIsAlreadyFinish: false,
       store: {
         name: '奇特异维修门店-晋陵路维修中心',
@@ -646,16 +645,16 @@ const state = {
       userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
-        productAllPrice: 3.0,
+        productAllPrice: 880.0,
         useProductIconUrls: ['', ''],
-        useProductNumber: 1,
+        useProductNumber: 6,
         useServiceNumber: 2,
         useServicePrice: 180.00
       },
       whichService: 2
     }, {
       orderFormState: 4,
-      orderId: 201709281630246801,
+      orderId: '201709281630246802',
       orderTime: 1506587424,
       appointmentTime: 1506664800,
       completionTime: 1506666480,
@@ -666,16 +665,16 @@ const state = {
       },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: '',
-        productAllPrice: 1.0,
+        productAllPrice: 390.0,
         useProductIconUrls: [''],
-        useProductNumber: 1,
+        useProductNumber: 2,
         useServiceNumber: 1,
-        useServicePrice: 20.00
+        useServicePrice: 200.00
       },
       whichService: 1
     }, {
       orderFormState: 4,
-      orderId: 201802280936466801,
+      orderId: '201802280936466802',
       orderTime: 1519781806,
       appointmentTime: 1519799400,
       completionTime: 1519801680,
@@ -686,19 +685,19 @@ const state = {
       },
       userOrderFormKeepCarBean: {
         freeServiceOrProductIconUrl: 'http://192.168.0.110:8080/free1.jpg',
-        productAllPrice: 1.0,
+        productAllPrice: 1200.0,
         useProductIconUrls: [
           'http://192.168.0.110:8080/product1.jpg',
           'http://192.168.0.110:8080/product2.jpg'
         ],
-        useProductNumber: 1,
+        useProductNumber: 6,
         useServiceNumber: 1,
-        useServicePrice: 20.00
+        useServicePrice: 300.00
       },
       whichService: 1
-    },{
+    }, {
       orderFormState: 4,
-      orderId: 201804121922176801,
+      orderId: '201804121922176802',
       orderTime: 1523532137,
       appointmentTime: 1523980800,
       completionTime: 1524544752,
@@ -710,16 +709,16 @@ const state = {
       userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
-        productAllPrice: 3.0,
+        productAllPrice: 620.0,
         useProductIconUrls: ['', ''],
-        useProductNumber: 1,
+        useProductNumber: 2,
         useServiceNumber: 2,
         useServicePrice: 180.00
       },
       whichService: 2
     }, {
       orderFormState: 4,
-      orderId: 201806101855206801,
+      orderId: '201806101855206802',
       orderTime: 1528628120,
       appointmentTime: 1528646400,
       completionTime: 1528716131,
@@ -731,7 +730,7 @@ const state = {
       userOrderFormRepairCarBean: {
         freeServiceOrProductIconUrl: '',
         maintainDescribe: '',
-        productAllPrice: 6.0,
+        productAllPrice: 965.0,
         useProductIconUrls: ['', ''],
         useProductNumber: 3,
         useServiceNumber: 5,
@@ -740,7 +739,7 @@ const state = {
       whichService: 2
     }, {
       orderFormState: 5,
-      orderId: 201709281630246801,
+      orderId: '201709281630246803',
       orderTime: 1506587424,
       appointmentTime: 1506664800,
       cancellationTime: 1506598224,
@@ -762,7 +761,7 @@ const state = {
       whichService: 1
     }, {
       orderFormState: 5,
-      orderId: 201802280936466801,
+      orderId: '201802280936466803',
       orderTime: 1519781806,
       appointmentTime: 1519799400,
       cancellationTime: 1519802416,
@@ -781,7 +780,7 @@ const state = {
       whichService: 1
     }, {
       orderFormState: 5,
-      orderId: 201806111958116801,
+      orderId: '201806111958116801',
       orderTime: 1528718291,
       appointmentTime: 1528819200,
       cancellationTime: 1528719333,

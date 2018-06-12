@@ -14,7 +14,7 @@
         <div class="order-foot">
           <div class="foot">
             <div class="order-set">
-              <div class="del-order">删除订单</div>
+              <div class="del-order" @click="deleteOrder(item)">删除订单</div>
             </div>
           </div>
         </div>
@@ -45,12 +45,18 @@ export default {
     ])
   },
   methods: {
+    deleteOrder (item) {
+      this.deleteOrderList({
+        id: item.orderId
+      })
+    },
     goOrderInfo (res) {
       this.setOrderInfo(res)
       this.$router.push('/orderinfo')
     },
     ...mapMutations({
-      setOrderInfo: 'SET_ORDER_INFO'
+      setOrderInfo: 'SET_ORDER_INFO',
+      deleteOrderList: 'DELETE_ORDER_LIST'
     })
   },
   components: {

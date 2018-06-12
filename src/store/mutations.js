@@ -157,6 +157,30 @@ const mutations = {
   },
   [type.SET_ORDER_INFO] (state, info) {
     state.orderInfo = info
+  },
+  [type.MODIFY_ORDER_LIST] (state, info) {
+    let date = Math.round(new Date().getTime() / 1000)
+    state.orderList.forEach((item, index) => {
+      if (item.orderId === info.id) {
+        if (info.type === 'cancel') {
+          item.orderFormState = 5
+          item.cancellationTime = date
+        } else if (info.type === 'pay') {
+          item.orderFormState = 4
+          item.paymentTime = date
+        }
+      }
+    })
+  },
+  [type.DELETE_ORDER_LIST] (state, info) {
+    // let date = Math.round(new Date().getTime() / 1000)
+    let ret = []
+    state.orderList.forEach((item, index) => {
+      if (item.orderId !== info.id) {
+        ret.push(item)
+      }
+    })
+    state.orderList = ret
   }
 }
 

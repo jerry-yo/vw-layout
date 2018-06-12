@@ -36,7 +36,7 @@
       <div class="order-states">
         <div class="dfk-order">
           <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }" class="link-a">
-            <Badge count="9" :solid="false" :color="'#ff623d'">
+            <Badge count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
             <span>预约中</span>
@@ -52,7 +52,7 @@
         </div> -->
         <div class="dqr-order">
           <router-link :to="{ name: 'obligation', path: '/order/obligation'}" class="link-a">
-            <Badge  count="33" :solid="false" :color="'#ff623d'">
+            <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
             <span>待付款</span>
@@ -60,7 +60,7 @@
         </div>
         <div class="wc-order">
           <router-link :to="{ name: 'complete', path: '/order/complete' }" class="link-a">
-            <Badge  count="40" :solid="false" :color="'#ff623d'">
+            <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
             <span>已完成</span>
@@ -68,7 +68,7 @@
         </div>
         <div class="qx-order">
           <router-link :to="{ name: 'cancel', path: '/order/cancel' }" class="link-a">
-            <Badge  count="99+" :solid="false" :color="'#ff623d'">
+            <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
             <span>已取消</span>
@@ -86,7 +86,7 @@
       <div class="quan">
         <span>我的优惠券</span>
         <div class="quan-title title">
-          <span>2张优惠券</span>
+          <span>暂时没有优惠券</span>
         </div>
       </div>
       <div class="kefu">
