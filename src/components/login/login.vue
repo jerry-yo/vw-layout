@@ -2,7 +2,6 @@
   <div class="login">
     <div class="title">
       <div class="goback" @click="_goBack">
-
       </div>
       <span></span>
       <div class="register" @click="_goRegister">
@@ -34,11 +33,11 @@ export default {
       this.$router.go(-1)
     },
     _goRegister () {
-      this.$router.push('/register')
+      this.$router.replace('/register')
     },
     _getCode () {
       if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.tel)) {
-        this.$router.push('/setcode')
+        this.$router.push('/setcode?phone=' + this.tel + '&type=1')
       } else {
         this.$Toast({
           position: 'bottom',

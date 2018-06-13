@@ -9,12 +9,17 @@
         </div>
         <div class="user-info">
           <div class="user-img">
-            <img src="../../common/imgs/mind/yy@3x.png" alt="">
+            <img v-lazy="''" alt="" width="100%" height="100%">
           </div>
-          <div class="user-xm">
-            <span>{{name}}</span>
+          <div class="user-xm" v-if="userInfo.phone">
+            <span>{{userInfo.name ? userInfo.name : userInfo.phone}}</span>
             <div class="user-card">
               <span></span>
+            </div>
+          </div>
+          <div class="user-cm" v-else>
+            <div>
+              <span @click="goLogin">登录</span><span class="pad">/</span><span @click="goRegister">注册</span>
             </div>
           </div>
           <div class="user-go" @click="_goMyInfo">
@@ -27,20 +32,22 @@
     <div class="user-order" flexContainer>
       <div class="my-order">
         <div class="order-title">我的订单</div>
-        <div class="all-order">
-          <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }">
-            <span>全部订单</span>
-          </router-link>
+        <div class="all-order" @click="_goOrder(1)">
+          <!-- <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }"> -->
+          <span>全部订单</span>
+          <!-- </router-link> -->
         </div>
       </div>
       <div class="order-states">
         <div class="dfk-order">
-          <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }" class="link-a">
-            <Badge count="0" :solid="false" :color="'#ff623d'">
-              <div class="img"></div>
-            </Badge>
-            <span>预约中</span>
-          </router-link>
+          <!-- <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }" class="link-a"> -->
+            <div class="link-a" @click="_goOrder(1)">
+              <Badge count="0" :solid="false" :color="'#ff623d'">
+                <div class="img"></div>
+              </Badge>
+              <span>预约中</span>
+            </div>
+          <!-- </router-link> -->
         </div>
         <!-- <div class="yy-order">
           <router-link :to="{ name: 'confirmed', path: '/order/confirmed' }" class="link-a">
@@ -51,28 +58,34 @@
           </router-link>
         </div> -->
         <div class="dqr-order">
-          <router-link :to="{ name: 'obligation', path: '/order/obligation'}" class="link-a">
+          <!-- <router-link :to="{ name: 'obligation', path: '/order/obligation'}" class="link-a"> -->
+          <div class="link-a" @click="_goOrder(2)">
             <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
             <span>待付款</span>
-          </router-link>
+          </div>
+          <!-- </router-link> -->
         </div>
         <div class="wc-order">
-          <router-link :to="{ name: 'complete', path: '/order/complete' }" class="link-a">
+          <!-- <router-link :to="{ name: 'complete', path: '/order/complete' }" class="link-a"> -->
+          <div class="link-a" @click="_goOrder(3)">
             <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
             <span>已完成</span>
-          </router-link>
+          </div>
+          <!-- </router-link> -->
         </div>
         <div class="qx-order">
-          <router-link :to="{ name: 'cancel', path: '/order/cancel' }" class="link-a">
+          <!-- <router-link :to="{ name: 'cancel', path: '/order/cancel' }" class="link-a"> -->
+          <div class="link-a" @click="_goOrder(4)">
             <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
             <span>已取消</span>
-          </router-link>
+          </div>
+          <!-- </router-link> -->
         </div>
       </div>
     </div>
@@ -116,19 +129,93 @@ export default {
     }
   },
   methods: {
+    _goOrder (id) {
+      if (!this.userInfo.phone) {
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '此服务需登录，是否登录？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/login')
+            this.$Modal.remove()
+          }
+        })
+      } else {
+        if (id === 1) {
+          this.$router.push('/order/subscribe')
+        } else if (id === 2) {
+          this.$router.push('/order/obligation')
+        } else if (id === 3) {
+          this.$router.push('/order/complete')
+        } else if (id === 4) {
+          this.$router.push('/order/cancel')
+        }
+      }
+    },
     _goGarage () {
-      this.$router.push('/garage')
+      if (!this.userInfo.phone) {
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '此服务需登录，是否登录？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/login')
+            this.$Modal.remove()
+          }
+        })
+      } else {
+        this.$router.push('/garage')
+      }
     },
     _goSetUp () {
-      this.$router.push('/set-up')
+      if (!this.userInfo.phone) {
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '此服务需登录，是否登录？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/login')
+            this.$Modal.remove()
+          }
+        })
+      } else {
+        this.$router.push('/set-up')
+      }
     },
     _goMyInfo () {
-      this.$router.push('/my-info')
+      if (!this.userInfo.phone) {
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '此服务需登录，是否登录？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/login')
+            this.$Modal.remove()
+          }
+        })
+      } else {
+        this.$router.push('/my-info')
+      }
+    },
+    goRegister () {
+      this.$router.push('/register')
+    },
+    goLogin () {
+      this.$router.push('/login')
     }
   },
   computed: {
     ...mapGetters([
-      'myCar'
+      'myCar',
+      'userInfo'
     ])
   },
   components: {
@@ -188,6 +275,17 @@ export default {
           border: 4px solid #fff
           margin-right: 32px
           float: left
+        .user-cm
+          flex: 1
+          display: flex
+          div
+            height: 98px
+            font-size: 24px
+            color: #fff
+            line-height: 98px
+            font-weight: 600
+            .pad
+              margin: 0 10px
         .user-xm
           flex: 1
           display: flex

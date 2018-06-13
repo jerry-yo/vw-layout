@@ -17,60 +17,56 @@
       <div class="my_nickname">
         <span>昵称</span>
         <div class="nickname" @click="_modifyInfo(1)">
-          {{info.nickname}}
+          {{userInfo.name ? userInfo.name : '请输入昵称'}}
         </div>
       </div>
-      <div class="my_phone" @click="_modifyInfo(2)">
+      <div class="my_phone">
         <span>手机号</span>
         <div class="phone">
           {{hidePhone}}
         </div>
       </div>
-      <div class="my_name" @click="_modifyInfo(3)">
+      <!-- <div class="my_name" @click="_modifyInfo(3)">
         <span>真实姓名</span>
         <div class="name">
           {{info.name}}
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import myInfoMask from '@/components/mind/my-info-mask'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'myInfo',
   data () {
     return {
       modifyInfo: false,
-      info: {
-        name: '朱佩琪',
-        nickname: '朕最爱朱佩琪',
-        phone: '18772815385'
-      },
       id: 0,
       localId: ''
     }
   },
   computed: {
     hidePhone () {
-      return this.info.phone.substr(0, 3) + '****' + this.info.phone.substr(7)
+      return this.userInfo.phone.substr(0, 3) + '****' + this.userInfo.phone.substr(7)
     },
     modifyType () {
       let str = ''
       switch (this.id) {
         case 1:
-          str = this.info.nickname
+          str = this.userInfo.name
           break
         case 2:
-          str = this.info.phone
-          break
-        case 3:
-          str = this.info.name
+          str = this.userInfo.phone
           break
       }
       return str
-    }
+    },
+    ...mapGetters([
+      'userInfo'
+    ])
   },
   methods: {
     _goBack () {
@@ -87,13 +83,12 @@ export default {
       }
       switch (this.id) {
         case 1:
-          this.info.nickname = res.info
+          this.setUserInfo({
+            name: res.info
+          })
           break
         case 2:
-          this.info.phone = res.info
-          break
-        case 3:
-          this.info.name = res.info
+          this.userInfo.phone = res.info
           break
       }
     },
@@ -117,7 +112,10 @@ export default {
           }
         }
       })
-    }
+    },
+    ...mapMutations({
+      setUserInfo: 'SET_USER_INFO'
+    })
   },
   components: {
     myInfoMask

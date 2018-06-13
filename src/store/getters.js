@@ -51,6 +51,9 @@ const getters = {
   },
   orderInfo (state) {
     return state.orderInfo
+  },
+  userInfo (state) {
+    return state.userInfo
   }
 }
 

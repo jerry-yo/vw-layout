@@ -6,9 +6,9 @@
     </div>
     <Scroll class="order-content" ref="orderWarpper">
       <div class="order-con">
-        <div class="order-img" v-if="orderInfo.orderFormState >= 4 || orderInfo.orderFormState === 1">
+        <div class="order-img" v-if="orderInfo.orderFormState >= 4 || (isExpiryTime && orderInfo.orderFormState === 1)">
           <div class="order-bg-1 order-bg" v-if="orderInfo.orderFormState === 5 || (isExpiryTime && orderInfo.orderFormState === 1)">
-            <div class="bg-1">
+            <div :class="orderInfo.orderFormState === 1 ? 'bg-3' : 'bg-1'">
             </div>
             <div class="bg-font">
               预约{{orderInfo.orderFormState === 1 ? '已过期' : '已取消'}}
@@ -39,11 +39,13 @@
           </div>
         </div>
         <div class="order-con">
-          <orderBy v-if="orderInfo.orderFormState === 1 && orderInfo.whichService === 1" :data="orderInfo.userOrderFormKeepCarBean">
+          <orderBy v-if="orderInfo.whichService === 1" :data="orderInfo.userOrderFormKeepCarBean">
           </orderBy>
-          <orderBy v-if="orderInfo.orderFormState !== 1" :data="orderInfo.userOrderFormRepairCarBean || orderInfo.userOrderFormKeepCarBean">
+          <orderBy v-if="(orderInfo.orderFormState > 1 && orderInfo.orderFormState < 5) && orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean || orderInfo.userOrderFormKeepCarBean">
           </orderBy>
-          <orderWx v-if="orderInfo.orderFormState === 1 && orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean">
+          <orderXc v-if="orderInfo.whichService === 0" :data="orderInfo.userOrderFormRepairCarBean">
+          </orderXc>
+          <orderWx v-if="(orderInfo.orderFormState === 1 || orderInfo.orderFormState === 5)&& orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean">
           </orderWx>
         </div>
         <div class="order-other">
@@ -60,18 +62,16 @@
                 </div>
               </div>
             </div> -->
-            <div class="time-yy" v-if="orderInfo.orderFormState === 1">
+            <div class="time-yy" v-if="orderInfo.orderFormState === 1 || orderInfo.orderFormState === 5">
               <span>预约时间</span>
               <div class="time">
-                <span>今天</span>
-                <span>15:55</span>
+                <span>{{_getFormatDate(orderInfo.appointmentTime)}}</span>
               </div>
             </div>
             <div class="time-over" v-if="orderInfo.orderFormState === 1">
               <span>到期时间</span>
               <div class="time">
-                <span>今天</span>
-                <span>15:55</span>
+                <span>{{_getFormatDate(orderInfo.expiryTime)}}</span>
               </div>
             </div>
           </div>
@@ -286,6 +286,13 @@ export default {
             width: 184px
             height: 200px
             background-repeat: no-repeat
+          .bg-3
+            position: absolute
+            left: 132px
+            top: 30px
+            width: 205px
+            height: 139px
+            background-repeat: no-repeat
           .bg-font
             display: flex
             flex-direction: column
@@ -298,6 +305,10 @@ export default {
             bg-image('../../common/imgs/orderinfo/order-bg-1')
             background-position: center center
             background-size: 114px 120px
+          .bg-3
+            bg-image('../../common/imgs/orderinfo/order-bg-3')
+            background-position: center center
+            background-size: 205px 139px
           .bg-font
             left: 395px
             line-height: 200px

@@ -20,18 +20,18 @@
     </div>
     <div class="login-btn">
       <div class="btn" @click="setLoginState">
-        {{loginstate? '退出登录' : '登录'}}
+        退出登录
       </div>
     </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import {mapMutations} from 'vuex'
 export default {
   name: 'setUp',
   data () {
     return {
-      loginstate: true
     }
   },
   methods: {
@@ -39,11 +39,12 @@ export default {
       this.$router.go(-1)
     },
     setLoginState () {
-      if (!this.loginstate) {
-        this.$router.push('/login')
-      }
-      this.loginstate = !this.loginstate
-    }
+      this.deleteUserInfo()
+      this._goBack()
+    },
+    ...mapMutations({
+      deleteUserInfo: 'DELETE_USER_INFO'
+    })
   },
   components: {
   }

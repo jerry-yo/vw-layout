@@ -25,14 +25,15 @@
         <div class="car-info">
           <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{carInfo}}</div> </div>
           <div> <span>车牌号</span><span class="right">{{myCar[0].idCard}}</span> </div>
-          <div> <span>联系人</span><span class="right">15251916566</span> </div>
+          <div> <span>联系人</span><span class="right">{{userInfo.phone}}</span> </div>
         </div>
         <div class="server-img">
           <div class="con">
             <ul>
-              <li class="imgs"></li>
-              <li class="imgs"></li>
-              <li class="eiss"></li>
+              <li class="imgs" v-for="(item, index) in getServerSum.imgs" :key="index" v-if="index < 2">
+                <img v-lazy="" alt="">
+              </li>
+              <li class="eiss" v-if="getServerSum.num > 2"></li>
             </ul>
             <div class="goods-info">
               <span>共{{getServerSum.num}}个配件、{{getServerSum.server}}个服务</span>
@@ -90,6 +91,7 @@ export default {
       let price = 0
       let server = 0
       let num = 0
+      let imgs = []
       this.serverList.forEach((item) => {
         if (item.groupItem.isChecked) {
           server++
@@ -98,6 +100,7 @@ export default {
               if (res.isChecked) {
                 price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
                 num += res.keepServiceSecondItemBean.minCommodityNumber
+                imgs.push(res.keepServiceSecondItemBean.commodityImageUrl)
               }
             })
           } else {
@@ -105,17 +108,20 @@ export default {
           }
         }
       })
+      console.log(imgs)
       return {
         price: price,
         server: server,
-        num: num
+        num: num,
+        imgs: imgs
       }
     },
     ...mapGetters([
       'myCar',
       'serverList',
       'storeList',
-      'defaultStoreId'
+      'defaultStoreId',
+      'userInfo'
     ])
   },
   methods: {

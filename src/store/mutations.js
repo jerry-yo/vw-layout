@@ -181,6 +181,14 @@ const mutations = {
       }
     })
     state.orderList = ret
+  },
+  [type.SET_USER_INFO] (state, info) {
+    let obj = {}
+    obj = Object.assign(state.userInfo, info)
+    state.userInfo = obj
+  },
+  [type.DELETE_USER_INFO] (state) {
+    state.userInfo = {}
   }
 }
 

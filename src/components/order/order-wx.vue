@@ -5,7 +5,7 @@
       <!--
       <img src="../../common/imgs/default.png" alt=""> -->
     </ul>
-    <div class="wx-con" v-if="data.useProductIconUrls.length > 2">
+    <div class="wx-con" :class="{'img': data.useProductIconUrls.length > 2}">
     </div>
     <div class="wx-right">
       <p>{{data.faultDetails}}</p>
@@ -44,15 +44,16 @@ export default {
         border: 1px solid #d2d2d2
         margin-right: 10px
     .wx-con
-      width: 27px
+      flex: 1
       height: 120px
-      bg-image('../../common/imgs/ellipsis')
       background-size: 27px 6px
       background-repeat: no-repeat
       background-position: left center
       margin-right: 30px
+      .img
+        bg-image('../../common/imgs/ellipsis')
     .wx-right
-      flex: 1
+      width: 360px
       display: flex
       align-items: center
       height: 90px

@@ -11,7 +11,7 @@
     <div class="section">
       <h1>注册账号</h1>
       <div class="input">
-        <input type="number" name="" value="" placeholder="请输入您的手机号"  pattern="[0-9]*"  @input="_maxlength">
+        <input type="number" v-model="tel" placeholder="请输入您的手机号"  pattern="[0-9]*"  @input="_maxlength">
       </div>
       <div class="btn" @click="_getCode">
         获取验证码
@@ -33,11 +33,11 @@ export default {
       this.$router.go(-1)
     },
     _goLogin () {
-      this.$router.push('/login')
+      this.$router.replace('/login')
     },
     _getCode () {
       if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.tel)) {
-        this.$router.push('/setcode')
+        this.$router.push('/setcode?phone=' + this.tel + '&type=2')
       } else {
         this.$Toast({
           position: 'bottom',
@@ -106,6 +106,9 @@ export default {
           background-size: 24px 38px
           background-repeat: no-repeat
           background-position: 23px center
+          outline: none
+          border: none
+          -webkit-appearance: none
           &::-webkit-input-placeholder
             font-size: 28px
             color: #9e9e9e

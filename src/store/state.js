@@ -6,24 +6,7 @@ const state = {
     lat: 31.81196
   },
   addCar: {},
-  myCar: [
-    {
-      default: true,
-      exhaustVolume: '2.0T',
-      idCard: '京888888',
-      imageSrc: '/parentbrand/aodi.jpg',
-      month: '1',
-      name: '奥迪',
-      pbid: 27,
-      salesVersion: '2.0TFSI 无级 豪华型',
-      series: {
-        sbName: '一汽奥迪',
-        vehicleSystem: ['198', 'A4', '1']
-      },
-      way: 0,
-      year: '2008'
-    }
-  ],
+  myCar: [],
   cityList: [],
   storeList: [],
   serachHis: {
@@ -788,18 +771,14 @@ const state = {
         phone: '13912345180'
       },
       userOrderFormRepairCarBean: {
-        freeServiceOrProductIconUrl: '',
-        maintainDescribe: '',
-        productAllPrice: 3.0,
-        useProductIconUrls: ['', '', ''],
-        useProductNumber: 1,
-        useServiceNumber: 2,
-        useServicePrice: 180.00
+        useProductIconUrls: ['', ''],
+        faultDetails: '啊沙发大师傅大事发生地方撒发大水发发送到发二娃千峰是阿打算发沙发沙发大撒的发生大师的发生大'
       },
       whichService: 2
     }
   ],
-  orderInfo: {}
+  orderInfo: {},
+  userInfo: {}
 }
 export default state
 /* 故障单

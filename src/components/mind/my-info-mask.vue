@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     showClear () {
-      return this.modifyinfo.length === 0 ? 0 : 1
+      return this.modifyinfo === 0 ? 0 : 1
     },
     showTips () {
       let tips = ''
@@ -44,9 +44,6 @@ export default {
           break
         case 2:
           tips = '请输入手机号'
-          break
-        case 3:
-          tips = '请输入真实姓名'
           break
       }
       return tips

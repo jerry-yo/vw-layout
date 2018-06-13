@@ -26,6 +26,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import {mapMutations} from 'vuex'
 export default {
   name: 'setcode',
   data () {
@@ -34,7 +35,10 @@ export default {
       codeArr: [],
       flag: true,
       timer: null,
-      seconds: 60
+      seconds: 60,
+      code: '123456',
+      type: 0,
+      phone: '0'
     }
   },
   watch: {
@@ -68,11 +72,42 @@ export default {
       }, 1000)
     },
     _filterCode (val) {
-      if (this.number.length > 6) {
-        this.number = this.number.slice(0, 6)
-        this.$router.push('/home')
+      if (this.number.length === 6) {
+        if (this.number === this.code) {
+          if (this.type === '1') {
+            this.$router.go(-2)
+          } else if (this.type === '2') {
+            this.$router.go(-2)
+          }
+          this.setUserInfo({
+            phone: this.phone
+          })
+        } else {
+          this.$Toast({
+            message: '验证码输入错误',
+            position: 'bottom'
+          })
+        }
       }
-    }
+    },
+    postCode (phone) {
+      // this.api_post('/api/account/getMobileMsg', (res) => {
+      //   if (res.errorCode === 0) {
+      //     this.code = res.data.code
+      //   }
+      // }, {
+      //   phone: phone,
+      //   type: 1
+      // })
+    },
+    ...mapMutations({
+      setUserInfo: 'SET_USER_INFO'
+    })
+  },
+  created () {
+    this.type = this.$route.query.type
+    this.phone = this.$route.query.phone
+    this.postCode(this.phone)
   },
   mounted () {
     this._setTimeout()

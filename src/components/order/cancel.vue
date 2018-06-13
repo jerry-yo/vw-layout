@@ -8,7 +8,9 @@
           <div class="order-states" :class="{'by': item.whichService === 1, 'wx': item.whichService === 2, 'xc': item.whichService === 0}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
-          <orderBy v-if="item.whichService === 1 || item.whichService === 2" :data="item.userOrderFormRepairCarBean || item.userOrderFormKeepCarBean">
+          <orderWx v-if="item.whichService === 2" :data="item.userOrderFormRepairCarBean">
+          </orderWx>
+          <orderBy v-if="item.whichService === 1" :data="item.userOrderFormKeepCarBean">
           </orderBy>
         </div>
         <div class="order-foot">
@@ -25,6 +27,7 @@
 
 <script type="text/ecmascript-6">
 import orderBy from './order-by'
+import orderWx from './order-wx'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
 
@@ -61,6 +64,7 @@ export default {
   },
   components: {
     orderBy,
+    orderWx,
     Scroll
   }
 }

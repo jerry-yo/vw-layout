@@ -30,7 +30,7 @@
               </div>
             </div>
             <div class="car-check" @click="_goCheckList">
-              <Badge count="9">
+              <Badge count="0">
                 <img src="../../common/imgs/home/jcd@2x.png" alt="" >
               </Badge>
               <p>查看检测单</p>
@@ -152,55 +152,111 @@ export default {
     },
     // 维修
     _goRepair () {
-      if (this.myCar.length === 0) {
+      if (this.userInfo.phone) {
+        if (this.myCar.length === 0) {
+          this.$Modal.confirm({
+            title: '提示信息',
+            content: '该服务需要先添加车辆，是否立即添加车辆？',
+            onCancel: () => {
+              this.$Modal.remove()
+            },
+            onOk: () => {
+              this.$router.push('/addcar-tabbar?type=add')
+              this.$Modal.remove()
+            }
+          })
+        } else {
+          this.$router.push('/repair')
+        }
+      } else {
         this.$Modal.confirm({
           title: '提示信息',
-          content: '该服务需要先添加车辆，是否立即添加车辆？',
+          content: '此服务需登录，是否登录？',
           onCancel: () => {
             this.$Modal.remove()
           },
           onOk: () => {
-            this.$router.push('/addcar-tabbar?type=add')
+            this.$router.push('/login')
             this.$Modal.remove()
           }
         })
-      } else {
-        this.$router.push('/repair')
       }
     },
     // 保养
     _goMaintain () {
-      if (this.myCar.length === 0) {
+      if (this.userInfo.phone) {
+        if (this.myCar.length > 0) {
+          this.$router.push('/maintain')
+        } else {
+          this.$Modal.confirm({
+            title: '提示信息',
+            content: '该服务需要先添加车辆，是否立即添加车辆？',
+            onCancel: () => {
+              this.$Modal.remove()
+            },
+            onOk: () => {
+              this.$router.push('/addcar-tabbar?type=add')
+              this.$Modal.remove()
+            }
+          })
+        }
+      } else {
         this.$Modal.confirm({
           title: '提示信息',
-          content: '该服务需要先添加车辆，是否立即添加车辆？',
+          content: '此服务需登录，是否登录？',
           onCancel: () => {
             this.$Modal.remove()
           },
           onOk: () => {
-            this.$router.push('/addcar-tabbar?type=add')
+            this.$router.push('/login')
             this.$Modal.remove()
           }
         })
-      } else {
-        this.$router.push('/maintain')
       }
     },
     _goCheckList () {
-      if (this.detectionMenus.length > 0) {
-        this.$router.push('/check-list?id=0&carid=0')
+      if (this.userInfo.phone) {
+        if (this.detectionMenus.length > 0 && this.myCar.lengt > 0) {
+          this.$router.push('/check-list?id=0&carid=0')
+        } else {
+          this.$Toast({
+            message: '暂时没有车辆检测单',
+            position: 'bottom'
+          })
+        }
       } else {
-        this.$Toast({
-          message: '暂时没有车辆检测单',
-          position: 'bottom'
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '此服务需登录，是否登录？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/login')
+            this.$Modal.remove()
+          }
         })
       }
     },
     _addCar () {
-      if (this.carIndex !== -1) {
-        this.$router.push('/garage')
+      if (this.userInfo.phone) {
+        if (this.carIndex !== -1) {
+          this.$router.push('/garage')
+        } else {
+          this.$router.push('/addcar-tabbar?type=add')
+        }
       } else {
-        this.$router.push('/addcar-tabbar?type=add')
+        this.$Modal.confirm({
+          title: '提示信息',
+          content: '此服务需登录，是否登录？',
+          onCancel: () => {
+            this.$Modal.remove()
+          },
+          onOk: () => {
+            this.$router.push('/login')
+            this.$Modal.remove()
+          }
+        })
       }
     },
     _setMap () {
@@ -292,7 +348,8 @@ export default {
       'myCar',
       'cityInfo',
       'defaultStoreId',
-      'detectionMenus'
+      'detectionMenus',
+      'userInfo'
     ])
   },
   mounted () {
