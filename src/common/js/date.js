@@ -8,3 +8,44 @@ export function getFormatDate (stamp) {
   let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
   return Y + M + D + h + m + s
 }
+
+export function datePicker () {
+  let date = new Date()
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1
+  let day = date.getDate()
+  let monthArr = []
+  let yearArr = []
+  let dayArr = []
+
+  for (let i = 0; i < 50; i++) {
+    yearArr.push({
+      text: year + i,
+      value: year + i
+    })
+  }
+  for (let i = 0; i < 12; i++) {
+    monthArr.push({
+      text: i + 1,
+      value: i + 1
+    })
+  }
+  for (let i = 0; i < 31; i++) {
+    dayArr.push({
+      text: i + 1,
+      value: i + 1
+    })
+  }
+  return {
+    nowYear: year,
+    nowMonth: month,
+    nowDay: day,
+    yearArr: yearArr,
+    monthArr: monthArr,
+    dayArr: dayArr
+  }
+}
+export function getDaysInMonth (year, month) {
+  let temp = new Date(year, month, 0)
+  return temp.getDate()
+}

@@ -24,11 +24,11 @@
         <uploadPic></uploadPic>
         <div class="detection-record">
           <span>车辆检查故障</span>
-          <div class="order">
+          <div class="order" @click="_goDetectionMenu">
             <span>查看检测单</span>
           </div>
         </div>
-        <seleDetectionMenu :check="true"></seleDetectionMenu>
+        <seleDetectionMenu :check="false" :data="detectionMenus[0].faultGroupItem"></seleDetectionMenu>
       </div>
 
     </Scroll>
@@ -42,6 +42,7 @@
 import Scroll from '@/base/scroll/scroll'
 import uploadPic from '@/base/upload-pic'
 import seleDetectionMenu from '@/base/sele-detection-menu'
+import {mapGetters} from 'vuex'
 export default {
   name: 'repair',
   data () {
@@ -50,6 +51,11 @@ export default {
       clientHeight: null,
       wxInfo: null
     }
+  },
+  computed: {
+    ...mapGetters([
+      'detectionMenus'
+    ])
   },
   methods: {
     _goBack () {
@@ -65,6 +71,9 @@ export default {
     },
     goNext () {
       this.$router.push('/repair-pre-order')
+    },
+    _goDetectionMenu () {
+      this.$router.push('/check-list?id=0&carid=0')
     }
   },
   mounted: function () {

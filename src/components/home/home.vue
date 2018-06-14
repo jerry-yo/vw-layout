@@ -12,7 +12,7 @@
     <Scroll class="container_1" ref="home">
       <div class="con">
         <div class="slider">
-          <Swiper :autoplay="autoPlay" :duration="duration" :slidetype="slideType" :recommends="recommends" :color="color" :pagination="pagination">
+          <Swiper :autoplay="5000" :duration="500" :slidetype="'left'" :recommends="recommends" :color="'#fff'" :pagination="true">
           </Swiper>
         </div>
         <div class="car-info">
@@ -85,6 +85,7 @@
         </div>
       </div>
     </Scroll>
+    <datePicker v-if="isShow" @close="closePicker"></datePicker>
   </div>
 </template>
 
@@ -94,13 +95,12 @@ import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
 import {getDefaultIndex} from '@/common/js/arr'
-import Picker from 'better-picker'
+import datePicker from '@/base/date-picker'
 import AMap from 'AMap'
 export default {
   name: 'home',
   data () {
     return {
-      homeBScroll: null,
       carInfo: {},
       carIndex: -1,
       recommends: [{
@@ -124,23 +124,17 @@ export default {
         linkUrl: 'https://c.y.qq.com/node/m/client/music_headline/index.html?_hidehd=1&_button=2&zid=619582',
         picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000Wq2eW3VkzJ9.jpg'
       }],
-      autoPlay: 5000,
-      duration: 500,
-      slideType: 'left',
-      color: '#fff',
-      pagination: true,
-      storeList: []
+      storeList: [],
+      isShow: false
     }
   },
   methods: {
     // 选择日期
     _goSeleData () {
-      var picker = new Picker({
-        data: [this.data1, this.data2, this.data3],
-        selectedIndex: [0, 1, 2],
-        title: '我们都是小学生'
-      })
-      picker.show()
+      this.isShow = true
+    },
+    closePicker (res) {
+      this.isShow = false
     },
     // 选择城市
     _goSeleCity () {
@@ -216,7 +210,7 @@ export default {
     },
     _goCheckList () {
       if (this.userInfo.phone) {
-        if (this.detectionMenus.length > 0 && this.myCar.lengt > 0) {
+        if (this.detectionMenus.length > 0 && this.myCar.length > 0) {
           this.$router.push('/check-list?id=0&carid=0')
         } else {
           this.$Toast({
@@ -362,7 +356,8 @@ export default {
   components: {
     Badge,
     Swiper,
-    Scroll
+    Scroll,
+    datePicker
   }
 }
 </script>

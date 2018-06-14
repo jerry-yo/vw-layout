@@ -59,7 +59,7 @@ export default {
     top: 0
     bottom: 0
     background-color: rgba(0,0,0,.5)
-    z-index: 101
+    z-index: 1010
     transition: all .3s
     .mask-con
       padding: 45px 30px

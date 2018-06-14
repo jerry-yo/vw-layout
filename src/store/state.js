@@ -454,6 +454,36 @@ const state = {
   subscribeInfo: {},
   detectionMenus: [
     {
+      id: 2,
+      time: '2018年05月26日 19:20:42',
+      lastTime: '',
+      faultGroupItem: [
+        {
+          faultType: 1,
+          title: '左侧车漆耗损',
+          state: 1,
+          textarea: '我是真的故障了，相信我',
+          imgs: ['', '', ''],
+          carPaintPlace: 'right',
+          repairResults: 0
+        }, {
+          faultType: 1,
+          title: '车顶漆耗损',
+          state: 2,
+          textarea: '我是真的故障了，相信我',
+          imgs: ['', '', ''],
+          carPaintPlace: 'up-before',
+          repairResults: 1
+        }, {
+          faultType: 0,
+          title: '车圈松了',
+          state: 2,
+          textarea: '我是真的故障了，相信我',
+          imgs: ['', '', ''],
+          repairResults: 0
+        }
+      ]
+    }, {
       id: 1,
       time: '2018年2月28日 12:38:16',
       lastTime: '2017年12月26日 15:26:36',

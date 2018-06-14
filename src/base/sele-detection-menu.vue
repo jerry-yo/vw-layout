@@ -72,7 +72,7 @@ export default {
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../common/stylus/mixin.styl"
   .detection-menu
-    overflow: hidden
+    // overflow: hidden
     ul
       overflow: hidden
       li
