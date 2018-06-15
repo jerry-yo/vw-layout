@@ -95,6 +95,9 @@ export default {
     toggleAvatar () {
       let _self = this
       this.Wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'],
         success: function (res) {
           _self.localId = res.localIds[0]
           if (window.__wxjs_is_wkwebview) {

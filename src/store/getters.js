@@ -54,6 +54,9 @@ const getters = {
   },
   userInfo (state) {
     return state.userInfo
+  },
+  repairOrder (state) {
+    return state.repairOrder
   }
 }
 

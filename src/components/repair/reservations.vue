@@ -11,9 +11,10 @@
 
       </div>
       <div class="info">
-        <div class="store">{{subscribeInfo.store.name}}</div>
-        <div class="time">预约时间：{{getDate}}<span>{{subscribeInfo.time.time}}</span></div>
-        <div class="tips">请尽快至门店服务，奇特异祝您用车愉快</div>
+        <div class="store">{{type === 'by' ? subscribeInfo.store.name : repairOrder.store.name}}</div>
+        <div class="time" v-if="type === 'by'">预约时间：{{getDate}}<span>{{subscribeInfo.time.time}}</span></div>
+        <div class="time" v-else>预约时间：{{getDate}}</span></div>
+        <div class="tips" >请尽快至门店服务，奇特异祝您用车愉快</div>
       </div>
     </div>
     <div class="button">
@@ -42,12 +43,13 @@ export default {
       if (this.type === 'by') {
         date = this.subscribeInfo.time.today ? '今天' : '明天'
       } else if (this.type === 'wx') {
-        date = '2017'
+        date = this.repairOrder.appointmentTime
       }
       return date
     },
     ...mapGetters([
-      'subscribeInfo'
+      'subscribeInfo',
+      'repairOrder'
     ])
   },
   created () {

@@ -2,8 +2,11 @@
   <div class="upload-pic">
     <div class="con">
       <ul>
-        <li v-for="(item, index) in imgArr" :key="index" class="imgs"></li>
-        <li class="list-btn" @click="getPic" v-if="imgArr.length !== 8"></li>
+        <li v-for="(item, index) in imgArr" :key="index" class="imgs">
+          <img :src="item" alt="" >
+          <i @click="deleteImg(index)"></i>
+        </li>
+        <li class="list-btn" @click="seleRepairImgs" v-if="imgArr.length !== 8"></li>
         <li v-for="item in boxArr" :key="item.id" class="box"></li>
       </ul>
     </div>
@@ -42,14 +45,45 @@ export default {
     }
   },
   methods: {
-    getPic () {
-      this.imgArr.push(1)
+    seleRepairImgs () {
+      let _self = this
+      this.Wx.chooseImage({
+        count: 1, // 默认9
+        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
+        sourceType: ['album', 'camera'],
+        success: function (res) {
+          let img = res.localIds[0]
+          if (window.__wxjs_is_wkwebview) {
+            _self.Wx.getLocalImgData({
+              localId: img,
+              success: function (res) {
+                var localData = res.localData
+                _self.imgArr.push(localData.replace('jgp', 'jpeg'))
+              },
+              fail: function (res) {
+              }
+            })
+          } else {
+            _self.imgArr.push(img)
+          }
+        }
+      })
+    },
+    deleteImg (id) {
+      let arr = []
+      this.imgArr.forEach((item, index) => {
+        if (id !== index) {
+          arr.push(item)
+        }
+      })
+      this.imgArr = arr
     }
   }
 }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
+  @import "../common/stylus/mixin.styl"
   .upload-pic
     padding: 10px 30px
     background-color: #fff
@@ -60,12 +94,32 @@ export default {
         flex-wrap: wrap
         justify-content: space-around
         li
+          position: relative
           width: 150px
           height: 150px
           margin-bottom: 10px
-          &.imgs
-            background-color: rgba(255, 0, 255, 0.5)
+          border-radius: 4px
+          overflow: hidden
           &.list-btn
-            background-color: rgba(0, 255, 0, 0.5)
+            bg-image('../common/imgs/repair/upimg')
+            background-position: center center
+            background-repeat: no-repeat
+            background-size: 150px 150px
+          img
+            display: block
+            width: 100%
+            height: 100%
+            object-fit: cover
+          i
+            display: block
+            position: absolute
+            right: 4px
+            top: 4px
+            width: 30px
+            height: 30px
+            bg-image('../common/imgs/repair/close')
+            background-position: center center
+            background-repeat: no-repeat
+            background-size: 30px 30px
 
 </style>

@@ -189,6 +189,14 @@ const mutations = {
   },
   [type.DELETE_USER_INFO] (state) {
     state.userInfo = {}
+  },
+  [type.SET_REPAIR_ORDER] (state, info) {
+    let obj = {}
+    obj = Object.assign(state.repairOrder, info)
+    state.repairOrder = obj
+  },
+  [type.DELETE_REPAIR_ORDER] (state) {
+    state.repairOrder = {}
   }
 }
 

@@ -3,8 +3,8 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>东风本田-思域</h2>
-        <p><span>苏DB5A68</span><span>丨</span><span>2300km</span></p>
+        <h2>{{myCar[0].series.sbName + ' - ' + myCar[0].series.vehicleSystem[1]}}</h2>
+        <p><span>{{myCar[0].idCard}}</span><span>丨</span><span>{{myCar[0].way}}km</span></p>
       </div>
     </div>
     <div class="service-flow">
@@ -19,9 +19,9 @@
     <Scroll class="container" ref="repair">
       <div class="wrapper">
         <div class="textarea" flexContainer ref="chatpannel" >
-          <textarea name="name" rows="5" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
+          <textarea name="name" rows="5" v-model="faultText" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
         </div>
-        <uploadPic></uploadPic>
+        <uploadPic ref="upImage"></uploadPic>
         <div class="detection-record">
           <span>车辆检查故障</span>
           <div class="order" @click="_goDetectionMenu">
@@ -33,6 +33,7 @@
 
     </Scroll>
     <div class="go-next" @click="goNext">
+      下一步
     </div>
   </div>
 </template>
@@ -41,19 +42,21 @@
 import Scroll from '@/base/scroll/scroll'
 import uploadPic from '@/base/upload-pic'
 import seleDetectionMenu from '@/base/sele-detection-menu'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'repair',
   data () {
     return {
       repairBScroll: null,
       clientHeight: null,
-      wxInfo: null
+      wxInfo: null,
+      faultText: ''
     }
   },
   computed: {
     ...mapGetters([
-      'detectionMenus'
+      'detectionMenus',
+      'myCar'
     ])
   },
   methods: {
@@ -70,10 +73,17 @@ export default {
     },
     goNext () {
       this.$router.push('/repair-pre-order')
+      this.setRepairOrder({
+        faultText: this.faultText,
+        faultImgs: this.$refs.upImage.imgArr
+      })
     },
     _goDetectionMenu () {
       this.$router.push('/check-list?id=0&carid=0')
-    }
+    },
+    ...mapMutations({
+      setRepairOrder: 'SET_REPAIR_ORDER'
+    })
   },
   mounted: function () {
     this.$nextTick(function () {
@@ -199,5 +209,10 @@ export default {
     background-size: 750px 100px
     background-repeat: no-repeat
     background-position: center center
+    display: flex
+    align-items: center
+    justify-content: center
+    font-size: 34px
+    color: #fff
 
 </style>

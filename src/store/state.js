@@ -808,7 +808,8 @@ const state = {
     }
   ],
   orderInfo: {},
-  userInfo: {}
+  userInfo: {},
+  repairOrder: {}
 }
 export default state
 /* 故障单

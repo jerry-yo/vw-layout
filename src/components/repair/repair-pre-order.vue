@@ -20,23 +20,23 @@
         <storeInfo></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span @click="seleDate">{{date.length > 0 ? date : '选择时间'}}</span>
+          <span @click="seleDate">{{date.date.length > 0 ? date.date : '选择时间'}}</span>
         </div>
         <div class="car-info">
-          <div> <span>服务车辆</span><div class="right"><img src="../../common/imgs/default.png" alt="">东风本田思域2016款1.5T自动尊耀版</div> </div>
-          <div> <span>车牌号</span><span class="right">苏DB5A68</span> </div>
-          <div> <span>联系人</span><span class="right">15251916566</span> </div>
+          <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{carInfo}}</div> </div>
+          <div> <span>车牌号</span><span class="right">{{myCar[0].idCard}}</span> </div>
+          <div> <span>联系人</span><span class="right">{{userInfo.phone}}</span> </div>
         </div>
         <div class="fault-info">
           <div class="title">
             故障概要
           </div>
           <div class="fault-text">
-            车子每次启动都发出卡拉卡拉的声音，发动机动力也变差了车子每次启动都发出卡拉卡拉的声音，发动机动力也变差了
+            {{repairOrder.faultText}}
           </div>
           <div class="fault-img">
             <ul :class="imgs.length > 4 ? 'more': ''">
-              <li v-for="(item, index) in fillImgs" :key="index">
+              <li v-for="(item, index) in repairOrder.faultImgs" :key="index">
                 <img src="" alt="">
               </li>
             </ul>
@@ -54,7 +54,7 @@
     <div class="place-order">
       <div class="server">客服</div>
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
-      <div class="btn">确认下单</div>
+      <div class="btn" @click="goRepairOrder">确认下单</div>
     </div>
     <datePicker v-if="isShow" @close="closePicker"></datePicker>
   </div>
@@ -65,37 +65,67 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import datePicker from '@/base/date-picker'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'repairPreOrder',
   data () {
     return {
       imgs: [0, 1, 2, 3],
       isShow: false,
-      date: ''
+      date: {
+        date: '',
+        temp: 0
+      }
     }
   },
   computed: {
-    fillImgs () {
-      if (this.imgs.length > 4) {
-        let arr = this.imgs.slice(0, 4)
-        return arr
-      } else {
-        return this.imgs
-      }
-    }
+    // fillImgs () {
+    //   if (this.imgs.length > 4) {
+    //     let arr = this.imgs.slice(0, 4)
+    //     return arr
+    //   } else {
+    //     return this.imgs
+    //   }
+    // },
+    carInfo () {
+      let car = this.myCar[0].name + this.myCar[0].salesVersion
+      return car
+    },
+    ...mapGetters([
+      'myCar',
+      'userInfo',
+      'repairOrder',
+      'storeList',
+      'defaultStoreId',
+    ])
   },
   methods: {
     seleDate () {
       this.isShow = true
     },
     closePicker (res) {
-      console.log(res)
-      this.date = res.falutDate
+      this.date = {
+        date: res.falutDate,
+        temp: res.temp
+      }
       this.isShow = false
     },
     _goBack () {
       this.$router.back()
-    }
+    },
+    goRepairOrder () {
+      let _self = this
+      this.setRepairOrder({
+        appointmentTime: _self.date.temp,
+        store: _self.storeList[_self.defaultStoreId]
+      })
+      this.deleteRepairOrder()
+      this.$router.push('/reservations?type=wx')
+    },
+    ...mapMutations({
+      setRepairOrder: 'SET_REPAIR_ORDER',
+      deleteRepairOrder: 'DELETE_REPAIR_ORDER'
+    })
   },
   mounted () {
   },
@@ -273,6 +303,7 @@ export default {
   .place-order
     height: 98px
     display: flex
+    background-color: #fff
     .server
       width: 133px
       text-align: center
