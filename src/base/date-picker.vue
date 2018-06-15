@@ -5,7 +5,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {datePicker, getDaysInMonth} from '@/common/js/date'
+import {datePicker, getDaysInMonth, timeToStamp} from '@/common/js/date'
 import Picker from 'better-picker'
 export default {
   name: 'datePicker',
@@ -14,7 +14,9 @@ export default {
       date: datePicker(),
       picker: null,
       showindex: [0, 0, 0],
-      showTime: [0, 0, 0]
+      showTime: [0, 0, 0],
+      temp: 0,
+      falutDate: ''
     }
   },
   mounted () {
@@ -52,19 +54,20 @@ export default {
       })
       this.picker.show()
       this.picker.on('picker.select', function (selectedVal, selectedIndex) {
-        console.log(_self.date.yearArr[selectedIndex[0]].text + '年' + _self.date.monthArr[selectedIndex[1]].text + '月' + _self.date.dayArr[selectedIndex[2]].text + '日')
+        _self.falutDate = selectedVal[0] + '年' + selectedVal[1] + '月' + selectedVal[2] + '日'
+        _self.temp = timeToStamp(selectedVal[0], selectedVal[1], selectedVal[2])
+        _self.$emit('close', {
+          type: false,
+          falutDate: _self.falutDate,
+          temp: _self.temp
+        })
       })
 
       this.picker.on('picker.change', function (index, selectedIndex) {
         let years = _self.date.yearArr
-        let months = _self.initMonthArr
-        let days = _self.initDayArr
+        let months = _self.showindex[0] > 0 ? _self.date.monthArr : _self.initMonthArr
+        let days = _self.showindex[1] > 0 ? _self.date.dayArr : _self.initDayArr
         _self.showindex[index] = selectedIndex
-        // if (_self.showindex[0] === 0) {
-        //   // _self.showTime = [_self.date.yearArr[_self.showindex[0]].value, _self.initMonthArr[_self.showindex[1]].value, _self.initDayArr[_self.showindex[2]].value]
-        // } else {
-        //   _self.showTime = [_self.date.yearArr[_self.showindex[0]].value, _self.date.monthArr[_self.showindex[1]].value, _self.date.dayArr[_self.showindex[2]].value]
-        // }
         if (index === 0 && selectedIndex !== 0) {
           months = _self.date.monthArr
           _self.picker.refillColumn(1, months)
@@ -74,9 +77,7 @@ export default {
         if (_self.showindex[0] !== 0) {
           days = _self.date.dayArr
         }
-        _self.picker.refillColumn(2, _self.getDays(days, years[_self.showindex[0]], months[_self.showindex[1]]))
-        console.log(_self.showindex)
-
+        _self.picker.refillColumn(2, _self.getDays(days, years[_self.showindex[0]].value, months[_self.showindex[1]].value))
       })
 
       this.picker.on('picker.cancel', function () {
@@ -84,9 +85,8 @@ export default {
           type: false
         })
       })
-
       this.picker.on('picker.valuechange', function (selectedVal, selectedIndex) {
-        console.log(selectedVal)
+
       })
     },
     getDays (arr, year, month) {

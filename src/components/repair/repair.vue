@@ -33,7 +33,6 @@
 
     </Scroll>
     <div class="go-next" @click="goNext">
-
     </div>
   </div>
 </template>

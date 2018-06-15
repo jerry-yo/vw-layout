@@ -20,7 +20,7 @@
         <storeInfo></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span>2017年3月26日</span>
+          <span @click="seleDate">{{date.length > 0 ? date : '选择时间'}}</span>
         </div>
         <div class="car-info">
           <div> <span>服务车辆</span><div class="right"><img src="../../common/imgs/default.png" alt="">东风本田思域2016款1.5T自动尊耀版</div> </div>
@@ -43,12 +43,12 @@
             <div class="go-img-info"></div>
           </div>
         </div>
-        <div class="checkout-menu">
+        <!-- <div class="checkout-menu" v-if="false">
           <div class="title">
             检测单故障 <span>{{'(1' + '/' + '3)'}}</span>
           </div>
           <seleDetectionMenu :check="false"></seleDetectionMenu>
-        </div>
+        </div> -->
       </div>
     </Scroll>
     <div class="place-order">
@@ -56,6 +56,7 @@
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn">确认下单</div>
     </div>
+    <datePicker v-if="isShow" @close="closePicker"></datePicker>
   </div>
 </template>
 
@@ -63,11 +64,14 @@
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
+import datePicker from '@/base/date-picker'
 export default {
   name: 'repairPreOrder',
   data () {
     return {
-      imgs: [0, 1, 2, 3]
+      imgs: [0, 1, 2, 3],
+      isShow: false,
+      date: ''
     }
   },
   computed: {
@@ -81,6 +85,14 @@ export default {
     }
   },
   methods: {
+    seleDate () {
+      this.isShow = true
+    },
+    closePicker (res) {
+      console.log(res)
+      this.date = res.falutDate
+      this.isShow = false
+    },
     _goBack () {
       this.$router.back()
     }
@@ -90,7 +102,8 @@ export default {
   components: {
     storeInfo,
     seleDetectionMenu,
-    Scroll
+    Scroll,
+    datePicker
   }
 }
 </script>

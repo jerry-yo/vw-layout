@@ -45,7 +45,19 @@ export function datePicker () {
     dayArr: dayArr
   }
 }
+
 export function getDaysInMonth (year, month) {
   let temp = new Date(year, month, 0)
   return temp.getDate()
+}
+
+export function timeToStamp (year, month, day, hours = 0, minutes = 0, seconds = 0, ms = 0) {
+  let mth = month > 10 ? month : '0' + month
+  let d = day > 10 ? day : '0' + day
+  let h = hours > 10 ? hours : '0' + hours
+  let m = minutes > 10 ? minutes : '0' + minutes
+  let s = seconds > 10 ? seconds : '0' + seconds
+  // let mss = ms < 10 ? '00' + ms : ms < 100 ? '0' + ms : ms
+  let string = year + '-' + mth + '-' + d + ' ' + h + ':' + m + ':' + s
+  return new Date(string).getTime()
 }

@@ -50,9 +50,9 @@
         </div>
         <div class="order-other">
           <div class="other-info">
-            <div class="other-fw" v-if="orderInfo.orderFormState === 3">
-              <span>原项目服务费</span>
-              <span>{{'￥' + showServerPrice.server}}</span>
+            <div class="other-fw">
+              <span>项目服务费</span>
+              <span>{{orderInfo.orderFormState === 3 || orderInfo.orderFormState === 4 ? '￥' + showServerPrice.server : '待定'}}</span>
             </div>
             <!-- <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
               <div class="yhq-con">
@@ -77,7 +77,6 @@
           </div>
           <div class="order-money" v-show="orderInfo.orderFormState >= 3 && orderInfo.orderFormState <= 4">
             <p>配件费 <span>{{'￥' + showServerPrice.product}}</span>  </p>
-            <p>总服务费 <span>{{'￥' +  showServerPrice.server}}</span>  </p>
             <p>优惠 <span class="green">{{'￥' + coupon}}</span>  </p>
             <p>实付 <span class="red">{{'￥' + payPrice}}</span>  </p>
           </div>

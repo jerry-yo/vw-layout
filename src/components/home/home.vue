@@ -6,7 +6,7 @@
         <span></span>
       </div>
       <span>GT1养车</span>
-      <div class="message" @click="_goSeleData">
+      <div class="message">
       </div>
     </div>
     <Scroll class="container_1" ref="home">
@@ -85,7 +85,6 @@
         </div>
       </div>
     </Scroll>
-    <datePicker v-if="isShow" @close="closePicker"></datePicker>
   </div>
 </template>
 
@@ -95,7 +94,6 @@ import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
 import {getDefaultIndex} from '@/common/js/arr'
-import datePicker from '@/base/date-picker'
 import AMap from 'AMap'
 export default {
   name: 'home',
@@ -124,18 +122,10 @@ export default {
         linkUrl: 'https://c.y.qq.com/node/m/client/music_headline/index.html?_hidehd=1&_button=2&zid=619582',
         picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000Wq2eW3VkzJ9.jpg'
       }],
-      storeList: [],
-      isShow: false
+      storeList: []
     }
   },
   methods: {
-    // 选择日期
-    _goSeleData () {
-      this.isShow = true
-    },
-    closePicker (res) {
-      this.isShow = false
-    },
     // 选择城市
     _goSeleCity () {
       this.$router.push('/sele-city')
@@ -356,8 +346,7 @@ export default {
   components: {
     Badge,
     Swiper,
-    Scroll,
-    datePicker
+    Scroll
   }
 }
 </script>
