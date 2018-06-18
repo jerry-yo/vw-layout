@@ -84,7 +84,7 @@
             <p>预约单号:  <span>{{orderInfo.orderId}}</span> </p>
             <p>下单时间:  <span>{{_getFormatDate(orderInfo.orderTime)}}</span> </p>
             <p v-if="orderInfo.orderFormState !== 1">预约时间:  <span>{{_getFormatDate(orderInfo.appointmentTime)}}</span> </p>
-            <p v-if="orderInfo.orderFormState === 3 || orderInfo.orderFormState === 4">完工时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
+            <p v-if="(orderInfo.orderFormState === 3 && orderInfo.serviceIsAlreadyFinish) || orderInfo.orderFormState === 4">完工时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
             <p v-if="orderInfo.orderFormState === 4">付款时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
             <p v-if="orderInfo.orderFormState === 5">取消时间:  <span>{{_getFormatDate(orderInfo.cancellationTime)}}</span> </p>
           </div>

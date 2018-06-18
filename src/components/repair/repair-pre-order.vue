@@ -35,7 +35,7 @@
             {{repairOrder.faultText}}
           </div>
           <div class="fault-img">
-            <ul :class="imgs.length > 4 ? 'more': ''">
+            <ul :class="repairOrder.faultImgs.length > 3 ? 'more': ''">
               <li v-for="(item, index) in repairOrder.faultImgs" :key="index">
                 <img src="" alt="">
               </li>
@@ -96,7 +96,7 @@ export default {
       'userInfo',
       'repairOrder',
       'storeList',
-      'defaultStoreId',
+      'defaultStoreId'
     ])
   },
   methods: {
@@ -119,7 +119,6 @@ export default {
         appointmentTime: _self.date.temp,
         store: _self.storeList[_self.defaultStoreId]
       })
-      this.deleteRepairOrder()
       this.$router.push('/reservations?type=wx')
     },
     ...mapMutations({

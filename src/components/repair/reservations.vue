@@ -13,7 +13,7 @@
       <div class="info">
         <div class="store">{{type === 'by' ? subscribeInfo.store.name : repairOrder.store.name}}</div>
         <div class="time" v-if="type === 'by'">预约时间：{{getDate}}<span>{{subscribeInfo.time.time}}</span></div>
-        <div class="time" v-else>预约时间：{{getDate}}</span></div>
+        <div class="time" v-else>预约时间：{{tempToDate}}</div>
         <div class="tips" >请尽快至门店服务，奇特异祝您用车愉快</div>
       </div>
     </div>
@@ -29,7 +29,8 @@
 </template>
 
 <script type="text/ecmascript-6">
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
+import {getFormatDateToRepair} from '@/common/js/date'
 export default {
   name: 'reservations',
   data () {
@@ -47,6 +48,9 @@ export default {
       }
       return date
     },
+    tempToDate () {
+      return getFormatDateToRepair(this.getDate / 1000)
+    },
     ...mapGetters([
       'subscribeInfo',
       'repairOrder'
@@ -63,8 +67,14 @@ export default {
       this.$router.push('/home')
     },
     _lookOrder () {
-      this.$router.push('/order')
-    }
+      this.$router.push('/order/subscribe')
+    },
+    ...mapMutations({
+      deleteRepairOrder: 'DELETE_REPAIR_ORDER'
+    })
+  },
+  destroyed () {
+    this.deleteRepairOrder()
   }
 }
 </script>

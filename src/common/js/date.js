@@ -9,6 +9,14 @@ export function getFormatDate (stamp) {
   return Y + M + D + h + m + s
 }
 
+export function getFormatDateToRepair (stamp) {
+  let date = new Date(stamp * 1000)
+  let Y = date.getFullYear() + '年'
+  let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月'
+  let D = date.getDate() + '日 '
+  return Y + M + D
+}
+
 export function datePicker () {
   let date = new Date()
   let year = date.getFullYear()
