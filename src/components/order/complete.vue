@@ -3,13 +3,14 @@
     <ul class="container">
       <li v-for="(item, index) in subscribeOrder" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
-          <div class="img"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">  </div>
-          <span class="car-id">{{myCar[0].idCard}}</span>
+          <div class="img"><img v-lazy="item.carImageSrc" alt="">  </div>
+          <span class="car-id">{{item.idCard}}</span>
           <div class="order-states" :class="{'by': item.whichService === 1, 'wx': item.whichService === 2, 'xc': item.whichService === 0}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
           <orderBy v-if="item.whichService === 1 || item.whichService === 2" :data="item.userOrderFormRepairCarBean || item.userOrderFormKeepCarBean">
           </orderBy>
+          <orderXc v-if="item.whichService === 0" :data="item.washType"></orderXc>
         </div>
         <div class="order-foot">
           <div class="foot">
@@ -26,6 +27,7 @@
 
 <script type="text/ecmascript-6">
 import orderBy from './order-by'
+import orderXc from './order-xc'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
 import {getFormatDate} from '@/common/js/date'
@@ -35,7 +37,7 @@ export default {
     subscribeOrder () {
       let ret = []
       this.orderList.forEach((item, index) => {
-        if (item.orderFormState === 4 && item.whichService !== 0) {
+        if (item.orderFormState === 4) {
           ret.push(item)
         }
       })
@@ -63,6 +65,7 @@ export default {
   },
   components: {
     orderBy,
+    orderXc,
     Scroll
   }
 }

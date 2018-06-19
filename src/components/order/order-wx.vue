@@ -1,14 +1,20 @@
 <template>
   <div class="order-wx">
-    <ul class="wx-left" >
-      <li v-for="(item, index) in data.useProductIconUrls" :key="index"><img v-lazy="item" alt=""></li>
-      <!--
-      <img src="../../common/imgs/default.png" alt=""> -->
-    </ul>
-    <div class="wx-con" :class="{'img': data.useProductIconUrls.length > 2}">
-    </div>
-    <div class="wx-right">
-      <p>{{data.faultDetails}}</p>
+    <div class="by-top">
+      <ul class="by-left" v-if="data.faultImgs.length > 0">
+        <li v-for="(item, index) in imgs" :key="index"><img v-lazy="item" alt=""/></li>
+      </ul>
+      <div class="noimgs" v-else :class="showType.defaultImg === 1 ? 'bg-1' : 'bg-2'"></div>
+      <div class="by-con" :class="{'ellipsis': data.faultImgs.length > 2}">
+        <h2 v-if="data.faultDetails.length === 0">{{showType.title}}</h2>
+        <p>{{showType.txt}}</p>
+      </div>
+      <div class="by-right" v-if="data.freeServiceOrProductIconUrl !== ''">
+        <div class="img">
+          <img src="../../common/imgs/order/wash-bg@2x.png" alt="">
+          <span>赠送</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -21,6 +27,46 @@ export default {
       type: Object,
       required: true
     }
+  },
+  computed: {
+    showType () {
+      let title = ''
+      let txt = ''
+      let defaultImg = 1
+      if (this.data.faultImgs.length === 0) {
+        if (this.data.faultDetails.length === 0) {
+          title = '到店检查'
+          txt = '可提前联系店长简要描述需求奥， 以便店长提供更好的服务'
+          defaultImg = 1
+        } else {
+          defaultImg = 2
+          txt = this.data.faultDetails
+        }
+      } else {
+        txt = this.data.faultDetails
+      }
+      return {
+        title: title,
+        txt: txt,
+        defaultImg: defaultImg
+      }
+    },
+    imgs () {
+      let ret = []
+      if (this.data.faultImgs.length > 2) {
+        this.data.faultImgs.forEach((item, index) => {
+          if (index < 2) {
+            ret.push(item)
+          }
+        })
+      } else {
+        ret = this.data.faultImgs
+      }
+      return ret
+    }
+  },
+  mounted () {
+    console.log(this.data)
   }
 }
 </script>
@@ -32,45 +78,95 @@ export default {
     align-items: center
     height: 147px
     padding: 0px 30px
-    .wx-left
-      display: flex
-      overflow: hidden
-      img
-        float: left
-        box-sizing: border-box
-        display: inline-block
-        width: 120px
-        height: 120px
-        border: 1px solid #d2d2d2
-        margin-right: 10px
-    .wx-con
+    .by-top
       flex: 1
-      height: 120px
-      background-size: 27px 6px
-      background-repeat: no-repeat
-      background-position: left center
-      margin-right: 30px
-      .img
-        bg-image('../../common/imgs/ellipsis')
-    .wx-right
-      width: 360px
       display: flex
-      align-items: center
-      height: 90px
-      padding-right: 36px
+      padding: 20px 15px 20px 0px
       bg-image('../../common/imgs/mind/leftright')
       background-size: 15px 24px
       background-repeat: no-repeat
       background-position: right center
-      p
-        font-size: 22px
-        color: #9f9f9f
-        height: 90px
-        line-height: 30px
-        word-break: break-all
-        overflow : hidden
-        text-overflow: ellipsis
-        display: -webkit-box
-        -webkit-line-clamp: 3
-        -webkit-box-orient: vertical
+      .by-left
+        display: flex
+        overflow: hidden
+        li
+          margin-right: 10px
+        img
+          box-sizing: border-box
+          display: inline-block
+          width: 120px
+          height: 120px
+          border: 1px solid #d2d2d2
+      .noimgs
+        overflow: hidden
+        width: 120px
+        height: 120px
+        border: 1px solid #d2d2d2
+        &.bg-1
+          bg-image('../../common/imgs/order/no_by')
+          background-size: 120px 120px
+          background-repeat: no-repeat
+          background-position: center center
+        &.bg-2
+          bg-image('../../common/imgs/order/have_server')
+          background-size: 120px 120px
+          background-repeat: no-repeat
+          background-position: center center
+      .by-con
+        flex: 1
+        display: flex
+        flex-direction: column
+        justify-content: center
+        padding: 0px 20px
+        &.ellipsis
+          padding-left: 37px
+          bg-image('../../common/imgs/ellipsis')
+          background-size: 27px 6px
+          background-repeat: no-repeat
+          background-position: left center
+        h2
+          line-height: 40px
+          font-size: 24px
+          color: #444
+          font-weight: bold
+        p
+          line-height: 30px
+          font-size: 20px
+          color: #444
+          word-break: break-all
+          overflow : hidden
+          text-overflow: ellipsis
+          display: -webkit-box
+          -webkit-line-clamp: 3
+          -webkit-box-orient: vertical
+      .by-right
+        width: 134px
+        .img
+          position: relative
+          float: left
+          box-sizing: border-box
+          display: inline-block
+          width: 120px
+          height: 120px
+          border: 1px solid #d2d2d2
+          overflow: hidden
+        img
+          display: inline-block
+          position: absolute
+          right: 11px
+          top: 24px
+          height: 70px
+          width: auto
+        span
+          display: inline-block
+          position: absolute
+          bottom: 0px
+          right: 0px
+          width: 47px
+          height: 28px
+          text-align: center
+          line-height: 30px
+          font-size: 18px
+          color: #ffffff
+          background-color: #ff8040
 </style>

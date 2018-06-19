@@ -34,8 +34,8 @@
           <div class="fault-con">
             <p class="fault-text">{{repairOrder.faultText}}</p>
             <div class="fault-img" v-if="repairOrder.faultImgs.length > 0">
-              <ul :class="repairOrder.faultImgs.length > 3 ? 'more': ''">
-                <li v-for="(item, index) in repairOrder.faultImgs" :key="index">
+              <ul :class="repairOrder.faultImgs.length > 2 ? 'more': ''">
+                <li v-for="(item, index) in fillImgs" :key="index">
                   <img src="" alt="">
                 </li>
               </ul>
@@ -80,14 +80,14 @@ export default {
     }
   },
   computed: {
-    // fillImgs () {
-    //   if (this.imgs.length > 4) {
-    //     let arr = this.imgs.slice(0, 4)
-    //     return arr
-    //   } else {
-    //     return this.imgs
-    //   }
-    // },
+    fillImgs () {
+      if (this.repairOrder.faultImgs.length > 2) {
+        let arr = this.imgs.slice(0, 2)
+        return arr
+      } else {
+        return this.imgs
+      }
+    },
     carInfo () {
       let car = this.myCar[0].name + this.myCar[0].salesVersion
       return car
@@ -270,18 +270,23 @@ export default {
           background-repeat: no-repeat
           background-position: right center
           .fault-text
+            background-color: #fff
+            margin: 20px 0px
             width: 600px
             font-size: 22px
             color: #5b5b5b
-            line-height: 40px
-            // overflow: hidden
+            line-height: 1.5em
+            overflow: hidden
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-line-clamp: 2
+            -webkit-box-orient: vertical
           .fault-img
             height: 144px
             display: flex
-            padding: 0 30px
             padding-bottom: 34px
             & > ul
-              width: 510px
+              padding-right: 35px
               display: flex
               li
                 width: 110px

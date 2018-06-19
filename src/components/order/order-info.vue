@@ -26,16 +26,15 @@
         <div class="order-title">
           <div class="top">
             <div class="top-name">
-              <span>{{orderInfo.store.name.slice(8, orderInfo.store.name.length)}}</span>
+              <span>{{orderInfo.store.name}}</span>
               <div class="order-states" :class="{'by': orderInfo.whichService === 1, 'wx': orderInfo.whichService === 2}"></div>
             </div>
-            <div class="call-dz">
-              <a :href="'tel:' + orderInfo.store.phone">联系店长</a>
-            </div>
+            <router-link :to="{name: 'login', path: '/login'}" class="localtion">
+            </router-link>
           </div>
           <div class="bottom">
-            <span>倪家汇</span>
-            <span>{{myCar[0].idCard}}</span>
+            <span>{{orderInfo.userName}}</span>
+            <span>{{orderInfo.idCard}}</span>
           </div>
         </div>
         <div class="order-con">
@@ -43,7 +42,7 @@
           </orderBy>
           <orderBy v-if="(orderInfo.orderFormState > 1 && orderInfo.orderFormState < 5) && orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean || orderInfo.userOrderFormKeepCarBean">
           </orderBy>
-          <orderXc v-if="orderInfo.whichService === 0" :data="orderInfo.userOrderFormRepairCarBean">
+          <orderXc v-if="orderInfo.whichService === 0" :data="orderInfo.washType">
           </orderXc>
           <orderWx v-if="(orderInfo.orderFormState === 1 || orderInfo.orderFormState === 5)&& orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean">
           </orderWx>
@@ -109,7 +108,7 @@
       <div class="order-foot-3" v-if="orderInfo.orderFormState === 3">
         <div class="server"><a href="tel:0519-68191385">客服</a></div>
         <div class="tips">
-          <span>共{{orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.useServiceNumber : orderInfo.userOrderFormKeepCarBean.useServiceNumber}}项服务</span>
+          <span>共{{orderInfo.whichService === 0 ? orderInfo.AllPrice : orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.useServiceNumber : orderInfo.userOrderFormKeepCarBean.useServiceNumber}}项服务</span>
           <span>￥{{payPrice.toFixed(2)}}</span>
         </div>
         <div class="btn" @click="_goPay">付款</div>
@@ -133,6 +132,7 @@
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
+import orderXc from '@/components/order/order-xc'
 import {mapGetters, mapMutations} from 'vuex'
 import {getFormatDate} from '@/common/js/date'
 export default {
@@ -149,6 +149,8 @@ export default {
         price = this.orderInfo.userOrderFormRepairCarBean.useServicePrice + this.orderInfo.userOrderFormRepairCarBean.productAllPrice
       } else if (this.orderInfo.whichService === 1) {
         price = this.orderInfo.userOrderFormKeepCarBean.useServicePrice + this.orderInfo.userOrderFormKeepCarBean.productAllPrice
+      } else if (this.orderInfo.whichService === 0) {
+        price = this.orderInfo.AllPrice
       }
       return price - this.coupon
     },
@@ -222,6 +224,7 @@ export default {
   components: {
     orderBy,
     orderWx,
+    orderXc,
     Scroll
   }
 }
@@ -353,16 +356,12 @@ export default {
                 bg-image('../../common/imgs/order/repair')
               &.xc
                 bg-image('../../common/imgs/order/wash')
-          .call-dz
-            width: 143px
-            text-align: right
-            line-height: 44px
-            font-size: 24px
-            color: #ababab
-            bg-image('../../common/imgs/orderinfo/call-dz')
-            background-size: 29px 28px
+          .localtion
+            width: 60px
+            bg-image('../../common/imgs/orderinfo/localtion')
+            background-size: 43px 44px
             background-repeat: no-repeat
-            background-position: left center
+            background-position: right center
         .bottom
           height: 42px
           line-height: 42px

@@ -3,8 +3,8 @@
     <ul class="container">
       <li v-for="(item, index) in subscribeOrder" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
-          <div class="img"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">  </div>
-          <span class="car-id">{{myCar[0].idCard}}</span>
+          <div class="img"><img v-lazy="item.carImageSrc" alt="">  </div>
+          <span class="car-id">{{item.idCard}}</span>
           <div class="order-states" :class="{'by': item.whichService === 1, 'wx': item.whichService === 2, 'xc': item.whichService === 0}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
@@ -43,8 +43,7 @@ export default {
       return ret
     },
     ...mapGetters([
-      'orderList',
-      'myCar'
+      'orderList'
     ])
   },
   methods: {
