@@ -451,7 +451,7 @@ const state = {
     }
   ],
   defaultStoreId: 0,
-  subscribeInfo: {},
+  maintainOrder: {},
   detectionMenus: [
     {
       id: 2,

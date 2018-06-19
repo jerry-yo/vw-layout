@@ -20,7 +20,7 @@
         <storeInfo></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span @click="showFitTime">{{dateTime}}</span>
+          <span @click="showFitTime">{{dateTime(maintainOrder)}}</span>
         </div>
         <div class="car-info">
           <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{carInfo}}</div> </div>
@@ -63,8 +63,7 @@ export default {
     return {
       repairPreOrderBScroll: null,
       imgs: [0, 1, 2, 3],
-      fitTime: false,
-      seleTime: {}
+      fitTime: false
     }
   },
   computed: {
@@ -79,13 +78,6 @@ export default {
     carInfo () {
       let car = this.myCar[0].name + this.myCar[0].salesVersion
       return car
-    },
-    dateTime () {
-      if (JSON.stringify(this.seleTime) === '{}') {
-        return '未选择预约时间'
-      } else {
-        return `${this.seleTime.today ? '今' : '明'}天  ${this.seleTime.time}`
-      }
     },
     getServerSum () {
       let price = 0
@@ -108,7 +100,6 @@ export default {
           }
         }
       })
-      console.log(imgs)
       return {
         price: price,
         server: server,
@@ -118,6 +109,7 @@ export default {
     },
     ...mapGetters([
       'myCar',
+      'maintainOrder',
       'serverList',
       'storeList',
       'defaultStoreId',
@@ -128,17 +120,25 @@ export default {
     _goBack () {
       this.$router.go(-1)
     },
+    dateTime (res) {
+      let str = ''
+      if (!res.time) {
+        str = '未选择预约时间'
+      } else {
+        str = `${res.today ? '今' : '明'}天  ${res.time}`
+      }
+      return str
+    },
     _goPreOrder () {
-      if (JSON.stringify(this.seleTime) === '{}') {
+      if (!this.maintainOrder.time) {
         this.$Toast({
           message: '请选择预约时间',
           position: 'bottom'
         })
       } else {
         let _self = this
-        this.setSubscribeInfo({
-          store: _self.storeList[_self.defaultStoreId],
-          time: _self.seleTime
+        this.setMaintainOrder({
+          store: _self.storeList[_self.defaultStoreId]
         })
         this.setMyServer()
         this.setAllServer()
@@ -150,13 +150,12 @@ export default {
     },
     closeMask (res) {
       if (res.time !== 0 && res.time) {
-        this.$set(this.seleTime, 'time', res.time)
-        this.$set(this.seleTime, 'today', res.today)
+        this.setMaintainOrder(res)
       }
       this.fitTime = false
     },
     ...mapMutations({
-      setSubscribeInfo: 'SET_SUBSCRIBE_INFO',
+      setMaintainOrder: 'SET_MAINTAIN_ORDER',
       setMyServer: 'SET_MY_SERVER',
       setAllServer: 'SET_ALL_SERVER'
     })

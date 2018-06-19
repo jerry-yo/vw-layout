@@ -152,8 +152,13 @@ const mutations = {
   [type.SET_DEFAULTSTORE_ID] (state, id) {
     state.defaultStoreId = id
   },
-  [type.SET_SUBSCRIBE_INFO] (state, info) {
-    state.subscribeInfo = info
+  [type.SET_MAINTAIN_ORDER] (state, info) {
+    let obj = {}
+    obj = Object.assign(state.maintainOrder, info)
+    state.maintainOrder = obj
+  },
+  [type.DELETE_MAINTAIN_ORDER] (state) {
+    state.maintainOrder = {}
   },
   [type.SET_ORDER_INFO] (state, info) {
     state.orderInfo = info

@@ -40,8 +40,8 @@ const getters = {
   defaultStoreId (state) {
     return state.defaultStoreId
   },
-  subscribeInfo (state) {
-    return state.subscribeInfo
+  maintainOrder (state) {
+    return state.maintainOrder
   },
   detectionMenus (state) {
     return state.detectionMenus

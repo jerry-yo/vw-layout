@@ -1,7 +1,7 @@
 <template>
   <div class="reservations" flexContainer>
     <div class="action-bar">
-      <!-- <div class="go-back" @click="_goBack"></div> -->
+      <div class="go-back" @click="_goBack"></div>
       <div class="font">
         预约成功
       </div>
@@ -11,12 +11,12 @@
 
       </div>
       <div class="info">
-        <div class="store">{{type === 'by' ? subscribeInfo.store.name : repairOrder.store.name}}</div>
-        <div class="time" v-if="type === 'by'">预约时间：{{getDate}}<span>{{subscribeInfo.time.time}}</span></div>
+        <div class="store">{{type === 'by' ? maintainOrder.store.name : repairOrder.store.name}}</div>
+        <div class="time" v-if="type === 'by'">预约时间：{{getDate}}<span>{{maintainOrder.time}}</span></div>
         <div class="time" v-else>预约时间：{{tempToDate}}</div>
-        <div class="tips" >请尽快至门店服务，奇特异祝您用车愉快</div>
       </div>
     </div>
+    <div class="tips"> <span>请尽快至门店服务，奇特异祝您用车愉快</span> </div>
     <div class="button">
       <div class="go-index" @click="_goHome">
         返回主页
@@ -42,7 +42,7 @@ export default {
     getDate () {
       let date = ''
       if (this.type === 'by') {
-        date = this.subscribeInfo.time.today ? '今天' : '明天'
+        date = this.maintainOrder.today ? '今天' : '明天'
       } else if (this.type === 'wx') {
         date = this.repairOrder.appointmentTime
       }
@@ -52,7 +52,7 @@ export default {
       return getFormatDateToRepair(this.getDate / 1000)
     },
     ...mapGetters([
-      'subscribeInfo',
+      'maintainOrder',
       'repairOrder'
     ])
   },
@@ -60,9 +60,9 @@ export default {
     this.type = this.$route.query.type
   },
   methods: {
-    // _goBack () {
-    //   this.$router.go(-3)
-    // },
+    _goBack () {
+      this.$router.go(-3)
+    },
     _goHome () {
       this.$router.push('/home')
     },
@@ -70,11 +70,16 @@ export default {
       this.$router.push('/order/subscribe')
     },
     ...mapMutations({
-      deleteRepairOrder: 'DELETE_REPAIR_ORDER'
+      deleteRepairOrder: 'DELETE_REPAIR_ORDER',
+      deleteMaintainOrder: 'DELETE_MAINTAIN_ORDER'
     })
   },
   destroyed () {
-    this.deleteRepairOrder()
+    if (this.type === 'wx') {
+      this.deleteRepairOrder()
+    } else if (this.type === 'by') {
+      this.deleteMaintainOrder()
+    }
   }
 }
 </script>
@@ -103,10 +108,10 @@ export default {
     .go-back
       width: 120px
       height: 88px
-      bg-image('../../common/imgs/order/back')
+      bg-image('../../common/imgs/repair/close1')
       background-repeat: no-repeat
       background-position: 30px center
-      background-size: 18px 30px
+      background-size: 26px 26px
   .container
     height: 200px
     display: flex
@@ -144,16 +149,19 @@ export default {
           margin-left: 10px
           border-radius: 3px
           color: #ff815b
-      .tips
-        height: 30px
-        line-height: 30px
-        font-size: 18px
-        color: #fff
-        padding-left: 30px
-        bg-image('../../common/imgs/mind/sj')
-        background-repeat: no-repeat
-        background-size: 15px 15px
-        background-position: left center
+  .tips
+    display: flex
+    justify-content: center
+    align-items: center
+    height: 50px
+    span
+      font-size: 18px
+      color: #ccc
+      bg-image('../../common/imgs/repair/tips')
+      background-repeat: no-repeat
+      background-size: 18px 18px
+      background-position: left center
+      padding-left: 28px
   .button
     height: 110px
     padding-top: 40px

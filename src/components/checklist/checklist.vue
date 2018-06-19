@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     _goBack () {
-      this.$router.go(-1)
+      this.$router.back()
     },
     _showInfo (val, type) {
       if (val === 'err' || val === 'warn') {

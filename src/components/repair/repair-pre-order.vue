@@ -20,28 +20,28 @@
         <storeInfo></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span @click="seleDate">{{date.date.length > 0 ? date.date : '选择时间'}}</span>
+          <span @click="seleDate">{{repairOrder.appointmentTime > 0 ? _getFormatDateToRepair(repairOrder.appointmentTime) : '选择时间'}}</span>
         </div>
         <div class="car-info">
           <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{carInfo}}</div> </div>
           <div> <span>车牌号</span><span class="right">{{myCar[0].idCard}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.phone}}</span> </div>
         </div>
-        <div class="fault-info">
+        <div class="fault-info" v-if="repairOrder.faultImgs.length > 0 || repairOrder.faultText.length > 0">
           <div class="title">
             故障概要
           </div>
-          <div class="fault-text">
-            {{repairOrder.faultText}}
+          <div class="fault-con">
+            <p class="fault-text">{{repairOrder.faultText}}</p>
+            <div class="fault-img" v-if="repairOrder.faultImgs.length > 0">
+              <ul :class="repairOrder.faultImgs.length > 3 ? 'more': ''">
+                <li v-for="(item, index) in repairOrder.faultImgs" :key="index">
+                  <img src="" alt="">
+                </li>
+              </ul>
+            </div>
           </div>
-          <div class="fault-img">
-            <ul :class="repairOrder.faultImgs.length > 3 ? 'more': ''">
-              <li v-for="(item, index) in repairOrder.faultImgs" :key="index">
-                <img src="" alt="">
-              </li>
-            </ul>
-            <div class="go-img-info"></div>
-          </div>
+          <div class="go-img-info"></div>
         </div>
         <!-- <div class="checkout-menu" v-if="false">
           <div class="title">
@@ -65,6 +65,7 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import datePicker from '@/base/date-picker'
+import {getFormatDateToRepair} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'repairPreOrder',
@@ -104,22 +105,30 @@ export default {
       this.isShow = true
     },
     closePicker (res) {
-      this.date = {
-        date: res.falutDate,
-        temp: res.temp
-      }
+      this.setRepairOrder({
+        appointmentTime: res.temp
+      })
       this.isShow = false
+    },
+    _getFormatDateToRepair (temp) {
+      return getFormatDateToRepair(temp / 1000)
     },
     _goBack () {
       this.$router.back()
     },
     goRepairOrder () {
       let _self = this
-      this.setRepairOrder({
-        appointmentTime: _self.date.temp,
-        store: _self.storeList[_self.defaultStoreId]
-      })
-      this.$router.push('/reservations?type=wx')
+      if (this.repairOrder.appointmentTime) {
+        this.setRepairOrder({
+          store: _self.storeList[_self.defaultStoreId]
+        })
+        this.$router.push('/reservations?type=wx')
+      } else {
+        this.$Toast({
+          message: '请选择预约时间',
+          position: 'bottom'
+        })
+      }
     },
     ...mapMutations({
       setRepairOrder: 'SET_REPAIR_ORDER',
@@ -243,6 +252,7 @@ export default {
               margin-right: 15px
       .fault-info
         overflow: hidden
+        background-color: #fff
         .title
           height: 78px
           background-color: #f2f2f2
@@ -252,41 +262,40 @@ export default {
           font-size: 24px
           color: #ababab
           font-weight: bold
-        .fault-text
-          background-color: #fff
-          padding: 20px 30px
-          min-height: 76px
-          font-size: 22px
-          color: #5b5b5b
-          line-height: 36px
-        .fault-img
-          height: 144px
-          display: flex
-          padding: 0 30px
-          padding-bottom: 34px
-          background-color: #fff
-          & > ul
-            width: 510px
+        .fault-con
+          overflow: hidden
+          margin: 0 30px 0px 30px
+          bg-image('../../common/imgs/mind/leftright')
+          background-size: 15px 24px
+          background-repeat: no-repeat
+          background-position: right center
+          .fault-text
+            width: 600px
+            font-size: 22px
+            color: #5b5b5b
+            line-height: 40px
+            // overflow: hidden
+          .fault-img
+            height: 144px
             display: flex
-            li
-              width: 110px
-              margin-right: 10px
-              img
-                display: block
+            padding: 0 30px
+            padding-bottom: 34px
+            & > ul
+              width: 510px
+              display: flex
+              li
                 width: 110px
-                height: 110px
-                background-color: rgba(0, 255, 0, 0.5)
-            &.more
-              bg-image('../../common/imgs/ellipsis')
-              background-size: 27px 6px
-              background-repeat: no-repeat
-              background-position: right center
-          .go-img-info
-            flex: 1
-            bg-image('../../common/imgs/mind/leftright')
-            background-size: 15px 24px
-            background-repeat: no-repeat
-            background-position: right center
+                margin-right: 10px
+                img
+                  display: block
+                  width: 110px
+                  height: 110px
+                  background-color: rgba(0, 255, 0, 0.5)
+              &.more
+                bg-image('../../common/imgs/ellipsis')
+                background-size: 27px 6px
+                background-repeat: no-repeat
+                background-position: right center
       .checkout-menu
         overflow: hidden
         .title
