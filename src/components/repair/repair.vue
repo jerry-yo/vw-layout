@@ -1,5 +1,5 @@
 <template>
-  <div class="repair" flexContainer :style="{height: clientHeight + 'px'}">
+  <div class="repair" flexContainer :style="{height: clientHeight + 'px'}" @touch.prevent>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
@@ -16,10 +16,10 @@
       <span>-</span>
       <span class="bg bg4">到店服务</span>
     </div>
-    <Scroll class="container" ref="repair">
+    <Scroll class="container" ref="repair" :preventDefault="false">
       <div class="wrapper">
-        <div class="textarea" flexContainer ref="chatpannel" >
-          <textarea name="name" rows="5" v-model="faultText" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
+        <div class="textarea" flexContainer ref="chatpannel" @touch.stop>
+          <textarea class="text" name="name" rows="5" v-model="faultText" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
         </div>
         <uploadPic ref="upImage"></uploadPic>
         <div class="detection-record">
@@ -47,7 +47,6 @@ export default {
   name: 'repair',
   data () {
     return {
-      repairBScroll: null,
       clientHeight: null,
       wxInfo: null,
       faultText: ''
@@ -105,6 +104,11 @@ export default {
   position: relative
   background-color: #f4f4f4
   flex-direction: column
+  .text
+    width: 200px
+    height: 200px
+    overflow: hidden
+    overflow-y: scroll
   .action-bar
     display: flex
     height: 88px

@@ -1,5 +1,5 @@
 <template>
-  <transition name="slide" >
+  <transition name="slide">
     <div class="check-info-mask">
       <div class="mask-con">
         <h2 class="title">

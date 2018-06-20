@@ -35,6 +35,10 @@ export default {
     refreshDelay: {
       type: Number,
       default: 20
+    },
+    preventDefault: {
+      type: Boolean,
+      default: true
     }
   },
   mounted () {
@@ -44,12 +48,14 @@ export default {
   },
   methods: {
     _initScroll () {
+      let _self = this
       if (!this.$refs.wrapper) {
         return
       }
       this.scroll = new BScroll(this.$refs.wrapper, {
         probeType: this.probeType,
-        click: this.click
+        click: this.click,
+        preventDefault: _self.preventDefault
       })
       if (this.listenScroll) {
         let _self = this

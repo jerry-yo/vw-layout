@@ -1,5 +1,5 @@
 <template>
-  <div id="app" flexContainer @touchmove.prevent>
+  <div id="app" flexContainer @touch.prevent>
     <transition :name="'screen-' + routerAnimate">
       <router-view/>
     </transition>
