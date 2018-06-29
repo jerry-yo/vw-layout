@@ -54,7 +54,7 @@
         </div>
         <div class="check-detection" v-if="detectionMenu.faultGroupItem.length > 0">
           <h2>车辆异常</h2>
-          <SeleDetection :check="false" :data="detectionMenu.faultGroupItem"></SeleDetection>
+          <SeleDetection :check="false" :data="detectionMenu.faultGroupItem" @showinfo="checkDetectionInfo"></SeleDetection>
         </div>
       </div>
     </Scroll>
@@ -141,6 +141,11 @@ export default {
     },
     _closeMask () {
       this.showInfo = false
+    },
+    checkDetectionInfo (res) {
+      console.log(res)
+      this.showInfo = true
+      this.faultInfo = res
     }
   },
   components: {

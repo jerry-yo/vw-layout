@@ -14,6 +14,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Wx from 'Wx'
 export default {
   name: 'uploadPic',
   data () {
@@ -47,14 +48,14 @@ export default {
   methods: {
     seleRepairImgs () {
       let _self = this
-      this.Wx.chooseImage({
+      Wx.chooseImage({
         count: 1, // 默认9
         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'],
         success: function (res) {
           let img = res.localIds[0]
           if (window.__wxjs_is_wkwebview) {
-            _self.Wx.getLocalImgData({
+            Wx.getLocalImgData({
               localId: img,
               success: function (res) {
                 var localData = res.localData

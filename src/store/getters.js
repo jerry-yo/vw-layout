@@ -57,6 +57,9 @@ const getters = {
   },
   repairOrder (state) {
     return state.repairOrder
+  },
+  loadingState (state) {
+    return state.loadingState
   }
 }
 

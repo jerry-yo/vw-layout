@@ -1109,7 +1109,8 @@ const state = {
   ],
   orderInfo: {},
   userInfo: {},
-  repairOrder: {}
+  repairOrder: {},
+  loadingState: false
 }
 export default state
 /* 故障单

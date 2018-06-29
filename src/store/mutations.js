@@ -202,6 +202,9 @@ const mutations = {
   },
   [type.DELETE_REPAIR_ORDER] (state) {
     state.repairOrder = {}
+  },
+  [type.SET_LOADING_STATE] (state, flag) {
+    state.loadingState = flag
   }
 }
 

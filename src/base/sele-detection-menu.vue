@@ -20,12 +20,10 @@
         </li>
       </ul>
     </div>
-    <CheckMask v-if="showInfo" @closemask="_closeMask" :data="faultInfo"></CheckMask>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-import CheckMask from './check-info'
 export default {
   name: 'detectionMenu',
   props: {
@@ -39,8 +37,7 @@ export default {
   },
   data () {
     return {
-      faultInfo: {},
-      showInfo: false
+      faultInfo: {}
     }
   },
   methods: {
@@ -56,15 +53,8 @@ export default {
     },
     _showInfoId (id, item) {
       this.faultInfo = item
-      this.showInfo = true
-      this.$emit('showinfo', id)
-    },
-    _closeMask () {
-      this.showInfo = false
+      this.$emit('showinfo', item)
     }
-  },
-  components: {
-    CheckMask
   }
 }
 </script>

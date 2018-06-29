@@ -78,7 +78,7 @@ module.exports = {
   },
   externals: {
     'AMap': 'AMap',
-    'AMapUI': 'AMapUI'
+    'Wx': 'wx'
   },
   node: {
     // prevent webpack from injecting useless setImmediate polyfill because Vue

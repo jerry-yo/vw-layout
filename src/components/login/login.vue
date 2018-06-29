@@ -21,8 +21,10 @@
 </template>
 
 <script type="text/ecmascript-6">
+import {wxMixin} from '@/common/js/mixin'
 export default {
   name: 'login',
+  mixins: [wxMixin],
   data () {
     return {
       tel: ''

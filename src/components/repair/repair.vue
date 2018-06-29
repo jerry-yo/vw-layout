@@ -1,5 +1,6 @@
 <template>
   <div class="repair" flexContainer :style="{height: clientHeight + 'px'}" @touch.prevent>
+    <CheckMask v-if="showInfo" @closemask="_closeMask" :data="faultInfo"></CheckMask>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
@@ -28,7 +29,7 @@
             <span>查看检测单</span>
           </div>
         </div>
-        <seleDetectionMenu :check="false" :data="detectionMenus[0].faultGroupItem"></seleDetectionMenu>
+        <seleDetectionMenu :check="false" :data="detectionMenus[0].faultGroupItem" @showinfo="checkDetectionInfo"></seleDetectionMenu>
       </div>
 
     </Scroll>
@@ -42,6 +43,7 @@
 import Scroll from '@/base/scroll/scroll'
 import uploadPic from '@/base/upload-pic'
 import seleDetectionMenu from '@/base/sele-detection-menu'
+import CheckMask from '@/base/check-info'
 import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'repair',
@@ -49,7 +51,9 @@ export default {
     return {
       clientHeight: null,
       wxInfo: null,
-      faultText: ''
+      faultText: '',
+      faultInfo: {},
+      showInfo: false
     }
   },
   computed: {
@@ -80,6 +84,13 @@ export default {
     _goDetectionMenu () {
       this.$router.push('/check-list?id=0&carid=0')
     },
+    _closeMask () {
+      this.showInfo = false
+    },
+    checkDetectionInfo (res) {
+      this.showInfo = true
+      this.faultInfo = res
+    },
     ...mapMutations({
       setRepairOrder: 'SET_REPAIR_ORDER'
     })
@@ -92,7 +103,8 @@ export default {
   components: {
     uploadPic,
     seleDetectionMenu,
-    Scroll
+    Scroll,
+    CheckMask
   }
 }
 </script>

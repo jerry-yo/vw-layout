@@ -184,6 +184,7 @@ export default {
           width: 1px
           height: 1px
           opacity: 1
+          caret-color: #fff
       & > h2
         margin-top: 46px
         font-size: 26px

@@ -4,7 +4,7 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="serach-input">
-        <input type="text" v-model="serachVal" placeholder="搜索门店" @input="searchList" maxlength="12">
+        <input type="text" v-model="serachVal" :placeholder="selePlaceHolder" @input="searchList" maxlength="12">
         <div class="close-btn" v-show="serachVal.length > 0" @click="clearSearchVal"></div>
       </div>
       <div class="search" @click="searchBtn">搜索</div>
@@ -73,6 +73,17 @@ export default {
       } else if (this.format === 'brand') {
         return this.serachHis.brand
       }
+    },
+    selePlaceHolder () {
+      let text = ''
+      if (this.format === 'store') {
+        text = '搜索门店'
+      } else if (this.format === 'city') {
+        text = '搜索城市'
+      } else if (this.format === 'brand') {
+        text = '搜索品牌'
+      }
+      return text
     },
     ...mapGetters([
       'cityList',

@@ -101,7 +101,7 @@ export default {
       AMap.event.addListener(_self.map, 'click', (e) => {
         _self._closeAll()
       })
-      _self._onComplete(this.cityInfo)
+      this._onComplete(this.cityInfo)
     },
     _onComplete (data) {
       let _self = this
@@ -120,6 +120,7 @@ export default {
         })
       }
     },
+    // 地图Marker点击响应事件
     _onClick (e) {
       this.washinfoShow = true
       this._reductionMarker()
@@ -127,7 +128,7 @@ export default {
       let id = e.target.getExtData()
       this.markerActive(id)
     },
-    // 响应点击
+    // 地图Marker点击后样式设置
     markerActive (id) {
       let _self = this
       this.markerDom[id].setMap(null)
@@ -146,14 +147,15 @@ export default {
       // 显示信息窗体
       this._setInfoWindow(this.markers[id])
     },
+    // 还原上一个地图被点击Marker点样式
     _reductionMarker () {
-      // 还原上一个
       let preId = this.preMarkerId
       if (preId !== -1) {
         this.markerDom[preId].setMap(null)
         this._setMarker(this.markers[preId], preId)
       }
     },
+    // 获取当前定位
     _getLocation () {
       let _self = this
       this.map.plugin('AMap.Geolocation', function () {
@@ -207,6 +209,7 @@ export default {
         return arr
       }
     },
+    // 在地图上设置Marker点样式
     _setMarker (item, index, flag) {
       let _self = this
       _self.markerDom[index] = new AMap.Marker({
@@ -223,8 +226,10 @@ export default {
         extData: index,
         clickable: true
       })
+      // 监听地图Marker点被点击事件
       _self.markerDom[index].on('click', this._onClick)
     },
+    // 地图Marker被点击后显示的相应详细信息（信息窗体）
     _setInfoWindow (item) {
       let km = this.formatKm(item.way)
       this.infoWindow = new AMap.InfoWindow({
@@ -240,17 +245,22 @@ export default {
                   </div>`
       })
       this.infoWindow.open(this.map, [item.lng, item.lat])
+      // 地图中心点平移至指定点位置
       this.map.panTo([item.lng, item.lat])
+      // 以像素为单位，沿x方向和y方向移动地图，x向右为正，y向下为正
       this.map.panBy(0, -80)
     },
     _closeInfoWindow () {
+      // 关闭信息窗体
       this.infoWindow.close()
     },
     _closeAll () {
+      // 关闭所有显示状态
       this.washinfoShow = false
       this.infoWindow.close()
       this._reductionMarker()
     },
+    // 获取所有门店信息
     getStoreList (lng, lat) {
       this.api_post('api/store/storeList', (res) => {
         if (res.errorCode === 0) {
@@ -269,6 +279,7 @@ export default {
     formatKm (way) {
       return (parseInt(way) / 1000).toFixed(2)
     },
+    // 搜索完成后设置激活相应Marker 点状态
     serachActive () {
       let id = 0
       this.storeList.forEach((item, index) => {

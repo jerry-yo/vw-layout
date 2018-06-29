@@ -244,6 +244,7 @@ export default {
       }
     },
     _setMap () {
+      this.setLoadingState(true)
       let geolocation = new AMap.Geolocation({
         enableHighAccuracy: true,
         timeout: 1000,
@@ -270,6 +271,7 @@ export default {
               lat: result.position.lat
             }
             this.setCityInfo(city)
+            this.setLoadingState(false)
           }
         } else {
           this.$Toast({
@@ -307,7 +309,8 @@ export default {
     },
     ...mapMutations({
       setCityInfo: 'SET_CITYINFO',
-      setStoreList: 'SET_STORELIST'
+      setStoreList: 'SET_STORELIST',
+      setLoadingState: 'SET_LOADING_STATE'
     })
   },
   created () {
@@ -333,7 +336,8 @@ export default {
       'cityInfo',
       'defaultStoreId',
       'detectionMenus',
-      'userInfo'
+      'userInfo',
+      'loadingState'
     ])
   },
   mounted () {
