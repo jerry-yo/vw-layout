@@ -14,9 +14,12 @@
         <span>{{cityInfo.city}}</span>
       </div>
       <div class="container">
-        <div class="retrieval" @touchmove.prevent.stop>
-          <ul>
-            <li v-for="(item, index) in getFirstLetter" :key="item.type" @click="selectMenu(index, $event)">{{item}}</li>
+        <div class="letterbox">
+
+        </div>
+        <div class="retrieval">
+          <ul @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
+            <li ref="letter" class="letter" v-for="(item, index) in getFirstLetter" :key="item.type" @click="selectMenu(index, $event)">{{item}}</li>
           </ul>
         </div>
         <Scroll class="wrapper" ref="cityDom">
@@ -40,7 +43,8 @@ export default {
   name: 'seleCity',
   data () {
     return {
-      cityList: []
+      cityList: [],
+      letterHeight: 0
     }
   },
   computed: {
@@ -73,6 +77,16 @@ export default {
     ])
   },
   methods: {
+    touchStart (e) {
+      this.letterHeight = parseFloat(window.getComputedStyle(this.$refs.letter[0]).height)
+      console.log(e)
+    },
+    touchMove (e) {
+      console.log(e)
+    },
+    touchEnd (e) {
+      console.log(e)
+    },
     _goBack () {
       this.$router.back()
     },
@@ -199,15 +213,15 @@ export default {
         top: 0px
         height: 100%
         width: 40px
-        display: flex
         z-index: 99
+        display: flex
+        flex-direction: column
+        justify-content: center
         & > ul
-          flex: 1
-          display: flex
-          flex-direction: column
-          padding: 60px 0px
+          overflow: hidden
           & > li
-            flex: 1
+            width: 100%
+            height: 36px
             display: flex
             justify-content: center
             align-items: center

@@ -4,7 +4,7 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="serach-input">
-        <input type="text" v-model="serachVal" :placeholder="selePlaceHolder" @input="searchList" maxlength="12">
+        <input type="text" v-model="serachVal" :placeholder="selePlaceHolder">
         <div class="close-btn" v-show="serachVal.length > 0" @click="clearSearchVal"></div>
       </div>
       <div class="search" @click="searchBtn">搜索</div>
@@ -50,6 +50,7 @@
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
+import {debounce} from '@/common/js/arr'
 export default {
   name: 'searchCity',
   data () {
@@ -92,11 +93,12 @@ export default {
       'serachHis'
     ])
   },
+  watch: {
+    serachVal: debounce(function (newVal) {
+      this.serachModel(newVal)
+    }, 200)
+  },
   methods: {
-    searchList (e, his) {
-      let str = `${e.data ? e.data : this.serachVal}`
-      this.serachModel(str)
-    },
     serachModel (str) {
       let reg = RegExp(str)
       if (!this.serachVal) {
