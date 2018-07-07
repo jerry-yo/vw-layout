@@ -14,12 +14,10 @@
         <span>{{cityInfo.city}}</span>
       </div>
       <div class="container">
-        <div class="letterbox">
-
-        </div>
+        <div class="letterbox"></div>
         <div class="retrieval">
-          <ul @touchstart="touchStart" @touchmove="touchMove" @touchend="touchEnd">
-            <li ref="letter" class="letter" v-for="(item, index) in getFirstLetter" :key="item.type" @click="selectMenu(index, $event)">{{item}}</li>
+          <ul @touchstart="touchStart" @touchmove="touchMove" ref="letterList">
+            <li ref="letter" class="letter" v-for="(item, index) in getFirstLetter" :key="item.type" :data-index="index" @click="selectMenu(index, $event)">{{item}}</li>
           </ul>
         </div>
         <Scroll class="wrapper" ref="cityDom">
@@ -39,12 +37,14 @@
 <script type="text/ecmascript-6">
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
+import {getData} from '@/common/js/arr'
 export default {
   name: 'seleCity',
   data () {
     return {
       cityList: [],
-      letterHeight: 0
+      letterHeight: 0,
+      touch: {}
     }
   },
   computed: {
@@ -79,13 +79,27 @@ export default {
   methods: {
     touchStart (e) {
       this.letterHeight = parseFloat(window.getComputedStyle(this.$refs.letter[0]).height)
-      console.log(e)
+      let anchorIndex = getData(e.target, 'index')
+      let firstTouch = e.touches[0]
+      this.touch.y1 = firstTouch.pageY
+      this.touch.anchorIndex = anchorIndex
+      this._scrollTo(anchorIndex)
     },
     touchMove (e) {
+      this.touch.pageY = e.changedTouches[0].pageY
+      console.log(this.touch.pageY)
       console.log(e)
     },
-    touchEnd (e) {
-      console.log(e)
+    _scrollTo (index) {
+      // if (!index && index !== 0) {
+      //   return
+      // }
+      // if (index < 0) {
+      //   index = 0
+      // } else if (index > this.listHeight.length - 2) {
+      //   index = this.listHeight.length - 2
+      // }
+      this.$refs.cityDom.scrollToElement(this.$refs.city[index - 1], 0)
     },
     _goBack () {
       this.$router.back()
@@ -119,6 +133,7 @@ export default {
   },
   created () {
     this.getCityList()
+    this.touch = {}
   },
   components: {
     Scroll

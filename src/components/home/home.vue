@@ -271,7 +271,6 @@ export default {
               lat: result.position.lat
             }
             this.setCityInfo(city)
-            this.setLoadingState(false)
           }
         } else {
           this.$Toast({
@@ -282,10 +281,12 @@ export default {
       })
     },
     getStoreList (lng, lat) {
+      this.setLoadingState(true)
       this.api_post('api/store/storeList', (res) => {
         if (res.errorCode === 0) {
           this.storeList = this._setStoreList(res.data)
           this.setStoreList(this.storeList)
+          this.setLoadingState(false)
         }
       }, {
         page: 1,
