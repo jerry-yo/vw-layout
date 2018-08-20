@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'vehicleCertification',

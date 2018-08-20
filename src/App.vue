@@ -7,7 +7,7 @@
   </div>
 </template>
 
-<script  type="text/ecmascript-6">
+<script>
 import {wxMixin} from '@/common/js/mixin'
 import Loading from '@/base/loading/loading'
 import {mapGetters} from 'vuex'
@@ -28,7 +28,7 @@ export default {
     ])
   },
   mounted () {
-    this.api_post('/api/wxPubilc/getJSSDK', (response) => {
+    this.$post('/api/wxPubilc/getJSSDK', 1, (response) => {
       if (response.errorCode === 0) {
         Wx.config({
           debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。

@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import {wxMixin} from '@/common/js/mixin'
 export default {
   name: 'login',

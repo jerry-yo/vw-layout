@@ -38,7 +38,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Scroll from '@/base/scroll/scroll'
 import {mapMutations, mapGetters} from 'vuex'
 export default {

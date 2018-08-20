@@ -128,7 +128,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'

@@ -61,7 +61,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Scroll from '@/base/scroll/scroll'
 import SeleDetection from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'

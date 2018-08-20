@@ -39,7 +39,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Scroll from '@/base/scroll/scroll'
 import uploadPic from '@/base/upload-pic'
 import seleDetectionMenu from '@/base/sele-detection-menu'

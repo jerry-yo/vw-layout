@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'addcarModels',

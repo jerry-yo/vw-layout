@@ -13,7 +13,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Wx from 'Wx'
 export default {
   name: 'uploadPic',

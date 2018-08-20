@@ -36,7 +36,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import myInfoMask from '@/components/mind/my-info-mask'
 import {mapGetters, mapMutations} from 'vuex'
 export default {

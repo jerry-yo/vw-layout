@@ -30,7 +30,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'

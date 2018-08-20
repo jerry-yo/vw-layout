@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import {mapGetters, mapMutations} from 'vuex'
 import {getFormatDateToRepair} from '@/common/js/date'
 export default {

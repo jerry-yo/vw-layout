@@ -27,7 +27,7 @@
   </Scroll>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import orderBy from './order-by'
 import orderWx from './order-wx'
 import Scroll from '@/base/scroll/scroll'

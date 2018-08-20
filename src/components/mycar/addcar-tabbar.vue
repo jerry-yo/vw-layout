@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import addCarBrand from './addcar-brand'
 import vehicleCertification from './vehicle-certification'
 export default {

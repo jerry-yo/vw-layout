@@ -25,7 +25,7 @@
   </Scroll>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import orderBy from './order-by'
 import orderXc from './order-xc'
 import Scroll from '@/base/scroll/scroll'

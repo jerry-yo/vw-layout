@@ -29,7 +29,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Scroll from '@/base/scroll/scroll'
 import brandMask from './addcar-brand-mask'
 import {mapGetters, mapMutations} from 'vuex'

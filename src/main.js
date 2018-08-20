@@ -5,7 +5,6 @@ import App from './App'
 import {router} from './router'
 import store from './store'
 import axios from 'axios'
-import Vueaxios from 'vue-axios'
 import FastClick from 'fastclick'
 import VueLazyLoad from 'vue-lazyload'
 
@@ -13,11 +12,9 @@ import Toast from '@/base/toast'
 import Modal from '@/base/modal'
 
 import '@/common/stylus/reast.css'
-import api from '@/common/js/api'
+import '@/common/js/api'
 
 FastClick.attach(document.body)
-Vue.use(Vueaxios, axios)
-Vue.use(api)
 
 Vue.use(VueLazyLoad, {
   error: require('@/common/imgs/default.png'),

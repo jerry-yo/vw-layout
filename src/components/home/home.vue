@@ -88,7 +88,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
@@ -244,7 +244,6 @@ export default {
       }
     },
     _setMap () {
-      this.setLoadingState(true)
       let geolocation = new AMap.Geolocation({
         enableHighAccuracy: true,
         timeout: 1000,
@@ -282,7 +281,7 @@ export default {
     },
     getStoreList (lng, lat) {
       this.setLoadingState(true)
-      this.api_post('api/store/storeList', (res) => {
+      this.$post('api/store/storeList', 1, (res) => {
         if (res.errorCode === 0) {
           this.storeList = this._setStoreList(res.data)
           this.setStoreList(this.storeList)

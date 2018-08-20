@@ -60,7 +60,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'

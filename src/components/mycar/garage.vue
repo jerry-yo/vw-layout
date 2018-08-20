@@ -64,7 +64,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import seleArea from '@/base/sele-area'
 import Slider from '@/base/slider/slider-view'
 import {mapMutations, mapGetters} from 'vuex'

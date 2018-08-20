@@ -12,7 +12,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import vehicleCertification from './vehicle-certification'
 export default {
   name: 'carOwner',

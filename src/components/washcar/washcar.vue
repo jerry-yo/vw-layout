@@ -40,7 +40,7 @@
   </div>
 </template>
 
-<script type="text/ecmascript-6">
+<script>
 import AMap from 'AMap'
 import washInfo from './washinfo'
 import {mapMutations, mapGetters} from 'vuex'
@@ -262,7 +262,7 @@ export default {
     },
     // 获取所有门店信息
     getStoreList (lng, lat) {
-      this.api_post('api/store/storeList', (res) => {
+      this.$post('api/store/storeList', 1, (res) => {
         if (res.errorCode === 0) {
           this.storeList = res.data
           this._setMap()

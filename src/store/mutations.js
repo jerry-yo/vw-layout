@@ -205,6 +205,9 @@ const mutations = {
   },
   [type.SET_LOADING_STATE] (state, flag) {
     state.loadingState = flag
+  },
+  [type.UPLOAD_TOKEN] (state, token) {
+    state.token = token
   }
 }
 
