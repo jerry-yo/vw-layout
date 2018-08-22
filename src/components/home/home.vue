@@ -95,8 +95,15 @@ import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
 import {getDefaultIndex} from '@/common/js/arr'
 import AMap from 'AMap'
+import {expireToken} from '@/common/js/mixin'
 export default {
+  mixins: [expireToken],
   name: 'home',
+  components: {
+    Badge,
+    Swiper,
+    Scroll
+  },
   data () {
     return {
       carInfo: {},
@@ -125,7 +132,45 @@ export default {
       storeList: []
     }
   },
+  created () {
+    this.init()
+  },
+  mounted () {
+    if (!this.cityInfo.selecity) {
+      this._setMap()
+      this.carIndex = getDefaultIndex(this.myCar)
+      this.carInfo = this.myCar[this.carIndex]
+    }
+  },
+  computed: {
+    cityShow () {
+      let city = ''
+      if (this.cityInfo.selecity || this.cityInfo.city) {
+        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
+      } else {
+        return '定位中···'
+      }
+      return city.length >= 4 ? city.slice(0, 3) + '···' : city
+    },
+    getPhone () {
+      if (this.storeList.length > 1) {
+        return this.storeList[this.defaultStoreId].phone
+      }
+    },
+    ...mapGetters([
+      'myCar',
+      'cityInfo',
+      'defaultStoreId',
+      'detectionMenus',
+      'userInfo',
+      'loadingState'
+    ])
+  },
   methods: {
+    // 初始化页面
+    init () {
+      this.getStoreList()
+    },
     // 选择城市
     _goSeleCity () {
       this.$router.push('/sele-city')
@@ -136,112 +181,17 @@ export default {
     },
     // 维修
     _goRepair () {
-      if (this.userInfo.phone) {
-        if (this.myCar.length === 0) {
-          this.$Modal.confirm({
-            title: '提示信息',
-            content: '该服务需要先添加车辆，是否立即添加车辆？',
-            onCancel: () => {
-              this.$Modal.remove()
-            },
-            onOk: () => {
-              this.$router.push('/addcar-tabbar?type=add')
-              this.$Modal.remove()
-            }
-          })
-        } else {
-          this.$router.push('/repair')
-        }
-      } else {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      }
+      this.$router.push('/repair')
     },
     // 保养
     _goMaintain () {
-      if (this.userInfo.phone) {
-        if (this.myCar.length > 0) {
-          this.$router.push('/maintain')
-        } else {
-          this.$Modal.confirm({
-            title: '提示信息',
-            content: '该服务需要先添加车辆，是否立即添加车辆？',
-            onCancel: () => {
-              this.$Modal.remove()
-            },
-            onOk: () => {
-              this.$router.push('/addcar-tabbar?type=add')
-              this.$Modal.remove()
-            }
-          })
-        }
-      } else {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      }
+      this.$router.push('/maintain')
     },
     _goCheckList () {
-      if (this.userInfo.phone) {
-        if (this.detectionMenus.length > 0 && this.myCar.length > 0) {
-          this.$router.push('/check-list?id=0&carid=0')
-        } else {
-          this.$Toast({
-            message: '暂时没有车辆检测单',
-            position: 'bottom'
-          })
-        }
-      } else {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      }
+      this.$router.push('/check-list?id=0&carid=0')
     },
     _addCar () {
-      if (this.userInfo.phone) {
-        if (this.carIndex !== -1) {
-          this.$router.push('/garage')
-        } else {
-          this.$router.push('/addcar-tabbar?type=add')
-        }
-      } else {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      }
+      this.$router.push('/addcar-tabbar?type=add')
     },
     _setMap () {
       let geolocation = new AMap.Geolocation({
@@ -312,45 +262,6 @@ export default {
       setStoreList: 'SET_STORELIST',
       setLoadingState: 'SET_LOADING_STATE'
     })
-  },
-  created () {
-    this.getStoreList()
-  },
-  computed: {
-    cityShow () {
-      let city = ''
-      if (this.cityInfo.selecity || this.cityInfo.city) {
-        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
-      } else {
-        return '定位中···'
-      }
-      return city.length >= 4 ? city.slice(0, 3) + '···' : city
-    },
-    getPhone () {
-      if (this.storeList.length > 1) {
-        return this.storeList[this.defaultStoreId].phone
-      }
-    },
-    ...mapGetters([
-      'myCar',
-      'cityInfo',
-      'defaultStoreId',
-      'detectionMenus',
-      'userInfo',
-      'loadingState'
-    ])
-  },
-  mounted () {
-    if (!this.cityInfo.selecity) {
-      this._setMap()
-      this.carIndex = getDefaultIndex(this.myCar)
-      this.carInfo = this.myCar[this.carIndex]
-    }
-  },
-  components: {
-    Badge,
-    Swiper,
-    Scroll
   }
 }
 </script>

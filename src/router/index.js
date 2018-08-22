@@ -47,6 +47,22 @@ router.beforeEach((to, from, next) => {
       store.commit('SET_ANIMATETYPE', {direction: 'in'})
     }
   }
-  // console.log(window.history)
-  next()
+  if (to.meta.requireAuth) {
+    if (store.state.userInfo.token) {
+      if (to.meta.hasCar) {
+        if (store.state.myCar.length > 0) {
+          next()
+        } else {
+          next({path: '/addcar-tabbar?type=add'})
+        }
+      } else {
+        next()
+      }
+    } else {
+      next({path: '/login'})
+    }
+  } else {
+    next()
+  }
+  // next()
 })

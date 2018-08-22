@@ -35,6 +35,9 @@ const otherRouter = {
 const orderRouter = {
   path: '/order',
   name: 'order',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/order/all-order'], resolve) },
   children: [
     { path: '/order/subscribe', name: 'subscribe', component: resolve => { require(['@/components/order/subscribe'], resolve) } },
@@ -47,71 +50,114 @@ const orderRouter = {
 const orderInfoRouter = {
   path: '/orderinfo',
   name: 'orderInfo',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/order/order-info'], resolve) }
 }
 const addcarAge = {
   path: '/addcar-age',
   name: 'addcarAge',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/addcar-age'], resolve) }
 }
 const addcarTabbar = {
   path: '/addcar-tabbar',
   name: 'addcarTabbar',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/addcar-tabbar'], resolve) }
 }
 const addcarDisplacement = {
   path: '/addcar-displacement',
   name: 'addcarDisplacement',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/addcar-displacement'], resolve) }
 }
 const addcarModels = {
   path: '/addcar-models',
   name: 'addcarModels',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/addcar-models'], resolve) }
 }
 const carOwner = {
   path: '/car-owner',
   name: 'carOwner',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/car-owner'], resolve) }
 }
 const carSharing = {
   path: '/car-sharing',
   name: 'carSharing',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/car-sharing'], resolve) }
 }
 const detectionRecord = {
   path: '/detection-record',
   name: 'detectionRecord',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/detection-record'], resolve) }
 }
 const Garage = {
   path: '/garage',
   name: 'Garage',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/garage'], resolve) }
 }
 const vehicleManagement = {
   path: '/vehicle-management',
   name: 'vehicleManagement',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/vehicle-management'], resolve) }
 }
 const addCarSharing = {
   path: '/add-car-sharing',
   name: 'addCarSharing',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/add-car-sharing'], resolve) }
 }
 const addCarIdcard = {
   path: '/addcar-idcard',
   name: 'addCarIdcard',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mycar/addcar-idcard'], resolve) }
 }
 const storeList = {
   path: '/store-list',
   name: 'storeList',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/store/store-list'], resolve) }
 }
 const repairRouter = {
   path: '/repair',
   name: 'repair',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
   component: resolve => { require(['@/components/repair/repair'], resolve) }
 }
 const repairPreOrder = {
@@ -132,6 +178,10 @@ const maintainPreOrder = {
 const maintain = {
   path: '/maintain',
   name: 'maintain',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
   component: resolve => { require(['@/components/maintain/maintain'], resolve) }
 }
 const addNewServer = {
@@ -179,6 +229,10 @@ const searchList = {
   name: 'searchList',
   component: resolve => { require(['@/components/search/search-list'], resolve) }
 }
+const errorRouter = {
+  path: '*',
+  redirect: '/home'
+}
 export const routers = [
   loginRouter,
   registerRouter,
@@ -211,5 +265,6 @@ export const routers = [
   setUp,
   myInfo,
   checkList,
-  searchList
+  searchList,
+  errorRouter
 ]
