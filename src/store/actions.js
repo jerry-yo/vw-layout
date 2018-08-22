@@ -1,5 +1,5 @@
 import * as types from './mutation-types'
-import {saveUserInfo} from '@/common/js/cache'
+import {saveUserInfo} from '@/common/js/cache.js'
 
 // 用户信息更新
 export const updateUserInfo = function ({commit, state}, info) {

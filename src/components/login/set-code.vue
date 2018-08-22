@@ -104,8 +104,9 @@ export default {
       this.$post(`${this.gt1Url}/api/f6-app/login`, 1, (res) => {
         if (res.errorCode === 0) {
           if (res.data.code === 0) {
-            this.updateUserInfo(res.data.data)
             this.$router.replace('/home')
+            console.log(res.data.data)
+            this.updateUserInfo(res.data.data)
           } else {
             this.$Toast({
               position: 'bottom',
