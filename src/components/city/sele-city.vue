@@ -117,7 +117,7 @@ export default {
       this._goBack()
     },
     getCityList () {
-      this.api_post('/api/carzone/getCity', (res) => {
+      this.$post(`${this.gt1Url}/api/carzone/getCity`, 1, (res) => {
         if (res.errorCode === 0) {
           let list = res.data.data.replace(new RegExp(/'/g), '"')
           list = JSON.parse(list).data

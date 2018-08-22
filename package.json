@@ -19,6 +19,7 @@
     "cssnano": "^3.10.0",
     "fastclick": "^1.0.6",
     "good-storage": "^1.0.1",
+    "md5": "^2.2.1",
     "postcss-aspect-ratio-mini": "^0.0.2",
     "postcss-cssnext": "^3.1.0",
     "postcss-px-to-viewport": "^0.0.3",

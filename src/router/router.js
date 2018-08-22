@@ -10,10 +10,10 @@ const registerRouter = {
   name: 'register',
   component: resolve => { require(['@/components/login/register'], resolve) }
 }
-const setpwdRouter = {
-  path: '/setpwd',
-  name: 'setpwd',
-  component: resolve => { require(['@/components/login/set-pwd'], resolve) }
+const bindingtpwdRouter = {
+  path: '/binding',
+  name: 'bingding',
+  component: resolve => { require(['@/components/login/binding'], resolve) }
 }
 const setcodeRouter = {
   path: '/setcode',
@@ -183,7 +183,7 @@ export const routers = [
   loginRouter,
   registerRouter,
   setcodeRouter,
-  setpwdRouter,
+  bindingtpwdRouter,
   otherRouter,
   orderRouter,
   orderInfoRouter,

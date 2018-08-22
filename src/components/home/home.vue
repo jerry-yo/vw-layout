@@ -281,7 +281,7 @@ export default {
     },
     getStoreList (lng, lat) {
       this.setLoadingState(true)
-      this.$post('api/store/storeList', 1, (res) => {
+      this.$post(`${this.gt1Url}/api/store/storeList`, 1, (res) => {
         if (res.errorCode === 0) {
           this.storeList = this._setStoreList(res.data)
           this.setStoreList(this.storeList)

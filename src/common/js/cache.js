@@ -1,32 +1,13 @@
 import storage from 'good-storage'
+// 用户信息操作
+const USER_INFO = '__gt1_userinfo__'
 
-const TOKEN_INFO = '__gt1_token__'
-// const NOW_CLASSIFY = '__gt1_now_classify__'
-// const BRAND_LIST = '__brand_list__'
-
-export function loadToken () {
-  return storage.session.get(TOKEN_INFO, [])
+// 用户信息操作
+export function loadUserInfo () {
+  return storage.session.get(USER_INFO, {})
 }
 
-export function saveToken (token) {
-  storage.session.set(TOKEN_INFO, token)
-  return token
+export function saveUserInfo (info) {
+  storage.session.set(USER_INFO, info)
+  return info
 }
-
-// export function loadNowClassify () {
-//   return storage.session.get(NOW_CLASSIFY, {})
-// }
-//
-// export function saveNowClassify (classify) {
-//   storage.session.set(NOW_CLASSIFY, classify)
-//   return classify
-// }
-//
-// export function loadBrandList () {
-//   return storage.session.get(BRAND_LIST, [])
-// }
-//
-// export function saveBrandList (list) {
-//   storage.session.set(BRAND_LIST, list)
-//   return list
-// }

@@ -12,6 +12,8 @@ const headersOther = {
 const headersCommon = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8;'
 }
+Vue.prototype.gt1Url = 'https://www.gt1.shop'
+Vue.prototype.f6Url = 'http://openapi-trial.f6car.com/open-api'
 Vue.prototype.handleRrror = function (error) {
   if (error.response) {
     switch (error.response.code) {

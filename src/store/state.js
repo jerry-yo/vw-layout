@@ -1,3 +1,5 @@
+import {loadUserInfo} from '../common/js/cache'
+
 const state = {
   carBrand: [],
   routerAnimate: 'none',
@@ -1108,10 +1110,9 @@ const state = {
     }
   ],
   orderInfo: {},
-  userInfo: {},
+  userInfo: loadUserInfo(),
   repairOrder: {},
-  loadingState: false,
-  token: ''
+  loadingState: false
 }
 export default state
 /* 故障单

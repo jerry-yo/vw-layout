@@ -17,6 +17,9 @@
         获取验证码
       </div>
     </div>
+    <div class="wxlogin">
+      <div class="wx-btn" @click="_wxLogin"></div>
+    </div>
   </div>
 </template>
 
@@ -39,7 +42,24 @@ export default {
     },
     _getCode () {
       if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.tel)) {
-        this.$router.push('/setcode?phone=' + this.tel + '&type=1')
+        this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, 1, (res) => {
+          if (res.errorCode === 0) {
+            this.$router.push('/setcode?phone=' + this.tel + '&type=3')
+          } else if (res.errorCode) {
+            this.$Toast({
+              message: res.errorMsg,
+              position: 'bottom'
+            })
+          } else {
+            this.$Toast({
+              message: '验证码获取失败',
+              position: 'bottom'
+            })
+          }
+        }, {
+          phone: this.tel,
+          type: 3
+        })
       } else {
         this.$Toast({
           position: 'bottom',
@@ -51,6 +71,26 @@ export default {
       if (this.tel.length > 11) {
         this.tel = this.tel.slice(0, 11)
       }
+    },
+    _wxLogin () {
+      // this.$post(`${this.gt1Url}/api/f6-app/bindingLogin`, 1, (res) => {
+      //   if (res.errorCode === 0) {
+      //     this.$router.push('/binding?wxId=' + res)
+      //   } else if (res.errorCode) {
+      //     this.$Toast({
+      //       message: res.errorMsg,
+      //       position: 'bottom'
+      //     })
+      //   } else {
+      //     this.$Toast({
+      //       message: '验证码获取失败',
+      //       position: 'bottom'
+      //     })
+      //   }
+      // }, {
+      //   phone: this.tel,
+      //   type: 3
+      // })
     }
   }
 }
@@ -59,6 +99,8 @@ export default {
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
   .login
+    display: flex
+    flex-direction: column
     width: 100%
     height: 100vh
     background-color: #fff
@@ -81,7 +123,7 @@ export default {
         font-size: 36px
         color: #ff7240
     .section
-      flex: 1
+      height: 680px
       padding: 65px 70px 0px 70px
       bg-image('../../common/imgs/login/logo')
       background-size: 103px 103px
@@ -134,4 +176,16 @@ export default {
         font-weight: 600
         line-height: 90px
         text-align: center
+    .wxlogin
+      flex: 1
+      display: flex
+      justify-content: center
+      align-items: center
+      .wx-btn
+        width: 80px
+        height: 80px
+        bg-image('../../common/imgs/wechat')
+        background-size: 80px 80px
+        background-position: center center
+        background-repeat: no-repeat
 </style>

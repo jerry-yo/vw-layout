@@ -1,17 +1,17 @@
 <template>
-  <div class="register">
+  <div class="login">
     <div class="title">
       <div class="goback" @click="_goBack">
       </div>
       <span></span>
-      <div class="login" @click="_goLogin">
-        登录
+      <div class="register" @click="_goRegister">
+        注册
       </div>
     </div>
     <div class="section">
-      <h1>注册账号</h1>
+      <h1>请输入手机号进行微信绑定</h1>
       <div class="input">
-        <input type="number" v-model="tel" placeholder="请输入您的手机号"  pattern="[0-9]*"  @input="_maxlength">
+        <input type="number" name="" v-model="tel" placeholder="请输入您的手机号"  pattern="[0-9]*" @input="_maxlength">
       </div>
       <div class="btn" @click="_getCode">
         获取验证码
@@ -21,8 +21,10 @@
 </template>
 
 <script>
+import {wxMixin} from '@/common/js/mixin'
 export default {
-  name: 'register',
+  name: 'login',
+  mixins: [wxMixin],
   data () {
     return {
       tel: ''
@@ -32,14 +34,14 @@ export default {
     _goBack () {
       this.$router.go(-1)
     },
-    _goLogin () {
-      this.$router.replace('/login')
+    _goRegister () {
+      this.$router.replace('/register')
     },
     _getCode () {
       if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.tel)) {
         this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, 1, (res) => {
           if (res.errorCode === 0) {
-            this.$router.push('/setcode?phone=' + this.tel + '&type=1')
+            this.$router.push('/setcode?phone=' + this.tel + '&type=3')
           } else if (res.errorCode) {
             this.$Toast({
               message: res.errorMsg,
@@ -53,8 +55,9 @@ export default {
           }
         }, {
           phone: this.tel,
-          type: 1
+          type: 2
         })
+        this.$router.push('/setcode?phone=' + this.tel + '&type=1')
       } else {
         this.$Toast({
           position: 'bottom',
@@ -73,9 +76,9 @@ export default {
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
-  .register
-    height: 100vh
+  .login
     width: 100%
+    height: 100vh
     background-color: #fff
     .title
       height: 88px
@@ -88,7 +91,7 @@ export default {
         background-position: 30px center
       span
         flex: 1
-      .login
+      .register
         width: 180px
         line-height: 88px
         padding-right: 30px

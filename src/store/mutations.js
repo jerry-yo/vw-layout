@@ -1,19 +1,19 @@
-import * as type from './mutation-types'
+import * as types from './mutation-types'
 
 const mutations = {
-  [type.SET_CARBRAND] (state, carbrand) {
+  [types.SET_CARBRAND] (state, carbrand) {
     sessionStorage.setItem('carBrand', JSON.stringify(carbrand))
     state.carBrand = carbrand
   },
-  [type.SET_ANIMATETYPE] (state, direction) {
+  [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
     state.routerAnimate = direction.direction
   },
-  [type.SET_ADDCAR] (state, carinfo) {
+  [types.SET_ADDCAR] (state, carinfo) {
     sessionStorage.setItem('addCar', JSON.stringify(Object.assign(state.addCar, carinfo)))
     state.addCar = Object.assign(state.addCar, carinfo)
   },
-  [type.SET_MYCAR] (state, car) {
+  [types.SET_MYCAR] (state, car) {
     if (state.myCar.length > 0) {
       state.myCar.push(Object.assign(car, {
         default: false
@@ -24,7 +24,7 @@ const mutations = {
       }))
     }
   },
-  [type.SET_DEFAULTCAR] (state, car) {
+  [types.SET_DEFAULTCAR] (state, car) {
     let arr = []
     state.myCar.forEach((item, index) => {
       if (index === car.id) {
@@ -37,7 +37,7 @@ const mutations = {
     arr.unshift(car.item)
     state.myCar = arr
   },
-  [type.DELETE_MYCAR] (state, car) {
+  [types.DELETE_MYCAR] (state, car) {
     car.forEach((item, index) => {
       if (item.check) {
         state.myCar[index] = 0
@@ -58,26 +58,26 @@ const mutations = {
     }
     state.myCar = arr
   },
-  [type.MODIFY_MYCAR] (state, car) {
+  [types.MODIFY_MYCAR] (state, car) {
     let obj = {}
     obj = Object.assign(state.myCar[car.id], car.carinfo)
     state.myCar[car.id] = obj
   },
-  [type.SET_CITYINFO] (state, city) {
+  [types.SET_CITYINFO] (state, city) {
     state.cityInfo = city
   },
-  [type.MODIFY_CITYINFO] (state, city) {
+  [types.MODIFY_CITYINFO] (state, city) {
     let obj = {}
     obj = Object.assign(state.cityInfo, city)
     state.cityInfo = obj
   },
-  [type.SET_CITYLIST] (state, list) {
+  [types.SET_CITYLIST] (state, list) {
     state.cityList = list
   },
-  [type.SET_STORELIST] (state, list) {
+  [types.SET_STORELIST] (state, list) {
     state.storeList = list
   },
-  [type.SET_SERACHHIS] (state, list) {
+  [types.SET_SERACHHIS] (state, list) {
     if (list.type === 'store') {
       state.serachHis.store.push(list.search)
     } else if (list.type === 'brand') {
@@ -86,7 +86,7 @@ const mutations = {
       state.serachHis.city.push(list.search)
     }
   },
-  [type.DELETE_SERACHHIS] (state, list) {
+  [types.DELETE_SERACHHIS] (state, list) {
     let arr = []
     if (list.type === 'store') {
       state.serachHis.store.forEach((item, index) => {
@@ -111,13 +111,13 @@ const mutations = {
       state.serachHis.city = arr
     }
   },
-  [type.SET_SERACHINFO] (state, info) {
+  [types.SET_SERACHINFO] (state, info) {
     state.serachInfo = info
   },
-  [type.MODIFY_MY_SERVER] (state, list) {
+  [types.MODIFY_MY_SERVER] (state, list) {
     state.serverList = state.serverList.concat(list)
   },
-  [type.DELETE_ALL_SERVER] (state, arr) {
+  [types.DELETE_ALL_SERVER] (state, arr) {
     let ret = []
     arr.forEach((item) => {
       if (item.subnav.length > 0) {
@@ -143,27 +143,27 @@ const mutations = {
     })
     state.allServerList = ret
   },
-  [type.SET_MY_SERVER] (state) {
+  [types.SET_MY_SERVER] (state) {
     state.serverList = state.staticServerList
   },
-  [type.SET_ALL_SERVER] (state) {
+  [types.SET_ALL_SERVER] (state) {
     state.allServerList = state.staticAllServerList
   },
-  [type.SET_DEFAULTSTORE_ID] (state, id) {
+  [types.SET_DEFAULTSTORE_ID] (state, id) {
     state.defaultStoreId = id
   },
-  [type.SET_MAINTAIN_ORDER] (state, info) {
+  [types.SET_MAINTAIN_ORDER] (state, info) {
     let obj = {}
     obj = Object.assign(state.maintainOrder, info)
     state.maintainOrder = obj
   },
-  [type.DELETE_MAINTAIN_ORDER] (state) {
+  [types.DELETE_MAINTAIN_ORDER] (state) {
     state.maintainOrder = {}
   },
-  [type.SET_ORDER_INFO] (state, info) {
+  [types.SET_ORDER_INFO] (state, info) {
     state.orderInfo = info
   },
-  [type.MODIFY_ORDER_LIST] (state, info) {
+  [types.MODIFY_ORDER_LIST] (state, info) {
     let date = Math.round(new Date().getTime() / 1000)
     state.orderList.forEach((item, index) => {
       if (item.orderId === info.id) {
@@ -177,7 +177,7 @@ const mutations = {
       }
     })
   },
-  [type.DELETE_ORDER_LIST] (state, info) {
+  [types.DELETE_ORDER_LIST] (state, info) {
     // let date = Math.round(new Date().getTime() / 1000)
     let ret = []
     state.orderList.forEach((item, index) => {
@@ -187,27 +187,23 @@ const mutations = {
     })
     state.orderList = ret
   },
-  [type.SET_USER_INFO] (state, info) {
-    let obj = {}
-    obj = Object.assign(state.userInfo, info)
-    state.userInfo = obj
-  },
-  [type.DELETE_USER_INFO] (state) {
-    state.userInfo = {}
-  },
-  [type.SET_REPAIR_ORDER] (state, info) {
+  [types.SET_REPAIR_ORDER] (state, info) {
     let obj = {}
     obj = Object.assign(state.repairOrder, info)
     state.repairOrder = obj
   },
-  [type.DELETE_REPAIR_ORDER] (state) {
+  [types.DELETE_REPAIR_ORDER] (state) {
     state.repairOrder = {}
   },
-  [type.SET_LOADING_STATE] (state, flag) {
+  [types.SET_LOADING_STATE] (state, flag) {
     state.loadingState = flag
   },
-  [type.UPLOAD_TOKEN] (state, token) {
-    state.token = token
+  // 用户信息userinfo操作
+  [types.SET_USER_INFO] (state, info) {
+    state.userInfo = info
+  },
+  [types.DELETE_USER_INFO] (state) {
+    state.userInfo = {}
   }
 }
 

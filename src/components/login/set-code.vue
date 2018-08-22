@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import {mapActions} from 'vuex'
 export default {
   name: 'setcode',
   data () {
@@ -36,7 +36,6 @@ export default {
       flag: true,
       timer: null,
       seconds: 60,
-      code: '123456',
       type: 0,
       phone: '0'
     }
@@ -55,7 +54,28 @@ export default {
         this.seconds = 60
         this.flag = true
         this._setTimeout()
+        this.getYzm()
       }
+    },
+    getYzm () {
+      this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, 1, (res) => {
+        if (res.errorCode) {
+          if (res.errorCode !== 0) {
+            this.$Toast({
+              message: res.errorMsg,
+              position: 'bottom'
+            })
+          }
+        } else {
+          this.$Toast({
+            message: '验证码获取失败',
+            position: 'bottom'
+          })
+        }
+      }, {
+        phone: this.phone,
+        type: this.type
+      })
     },
     foucsInput () {
       this.$refs.number.focus()
@@ -73,46 +93,59 @@ export default {
     },
     _filterCode (val) {
       if (this.number.length === 6) {
-        if (this.number === this.code) {
-          if (this.type === '1') {
-            this.$router.go(-2)
-          } else if (this.type === '2') {
-            this.$router.go(-2)
-          }
-          this.setUserInfo({
-            phone: this.phone
-          })
-        } else {
-          this.$Toast({
-            message: '验证码输入错误',
-            position: 'bottom'
-          })
+        if (parseInt(this.type) === 1) {
+          this.registerRequest()
+        } else if (parseInt(this.type) > 1) {
+          this.loginRequest()
         }
       }
     },
-    postCode (phone) {
-      // this.api_post('/api/account/getMobileMsg', (res) => {
-      //   if (res.errorCode === 0) {
-      //     this.code = res.data.code
-      //   }
-      // }, {
-      //   phone: phone,
-      //   type: 1
-      // })
+    loginRequest () {
+      this.$post(`${this.gt1Url}/api/f6-app/login`, 1, (res) => {
+        if (res.errorCode === 0) {
+          if (res.data.code === 0) {
+            this.updateUserInfo(res.data.data)
+            this.$router.replace('/home')
+          } else {
+            this.$Toast({
+              position: 'bottom',
+              message: res.data.msg
+            })
+          }
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: res.errorCode
+          })
+        }
+      }, {
+        userTel: this.phone,
+        code: this.number,
+        thirdId: this.type ? null : null,
+        type: this.type === 2 ? 1 : 0,
+        loginType: this.type === 2 ? 1 : 0
+      })
     },
-    ...mapMutations({
-      setUserInfo: 'SET_USER_INFO'
-    })
+    registerRequest () {
+      this.$post(`${this.gt1Url}/api/f6-app/regist`, 1, (res) => {
+        console.log(res)
+      }, {
+        userTel: this.phone,
+        code: this.number
+      })
+    },
+    ...mapActions([
+      'updateUserInfo'
+    ])
   },
   created () {
     this.type = this.$route.query.type
     this.phone = this.$route.query.phone
-    this.postCode(this.phone)
   },
   mounted () {
     this._setTimeout()
   },
-  destroy () {
+  beforeDestroy () {
     clearTimeout(this.timer)
   }
 }
