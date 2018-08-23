@@ -1,16 +1,15 @@
-import {loadUserInfo} from '../common/js/cache'
+import {loadUserInfo, loadCityList, loadCityInfo, loadStoreList, loadMyCar} from '../common/js/cache'
 
 const state = {
-  carBrand: [],
   routerAnimate: 'none',
-  cityInfo: {
-    lng: 119.9938,
-    lat: 31.81196
-  },
+  userInfo: loadUserInfo(),
+  cityList: loadCityList(),
+  cityInfo: loadCityInfo(),
+  storeList: loadStoreList(),
+  myCar: loadMyCar(),
+  loadingState: false,
+  carBrand: [],
   addCar: {},
-  myCar: [],
-  cityList: [],
-  storeList: [],
   serachHis: {
     'store': [],
     'city': [],
@@ -1110,9 +1109,7 @@ const state = {
     }
   ],
   orderInfo: {},
-  userInfo: loadUserInfo(),
-  repairOrder: {},
-  loadingState: false
+  repairOrder: {}
 }
 export default state
 /* 故障单

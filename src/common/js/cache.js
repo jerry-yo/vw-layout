@@ -1,14 +1,23 @@
-// import storage from 'good-storage'
 import CryptoJS from 'crypto-js'
 
 // 秘钥
 
+/*
+  ** localStorage **
+*/
+const USER_INFO = '__gt1_user__' // 用户信息操作
+const CITY_LIST = '__gt1_citys__' // 城市列表操作
 
-// 用户信息操作
-const USER_INFO = '__gt1_user__'
-
-// 用户信息操作
-export function loadUserInfo () {
+/*
+  ** sessionStorage **
+*/
+const CITY_INFO = '__city_info__' // 定位城市信息
+const STORE_LIST = '__store_list__' // 门店列表
+const MY_CAR = '__my_car__' // 我的车库
+/*
+  ** localStorage **
+*/
+export function loadUserInfo () { // 用户信息操作
   let local = localStorage.getItem(USER_INFO)
   if (local === null) {
     return {}
@@ -16,13 +25,67 @@ export function loadUserInfo () {
     return getDAes(local, _key)
   }
 }
-
-export function saveUserInfo (info) {
+export function saveUserInfo (info) { // 用户信息操作
   let infos = getAES(JSON.stringify(info), _key)
   localStorage.setItem(USER_INFO, infos)
   return info
 }
 
+export function loadCityList () { // 城市列表操作
+  let citys = localStorage.getItem(CITY_LIST)
+  if (citys === null) {
+    return []
+  } else {
+    return JSON.parse(citys)
+  }
+}
+export function saveCityList (list) { // 城市列表操作
+  localStorage.setItem(CITY_LIST, JSON.stringify(list))
+  return list
+}
+
+/*
+  ** sessionStorage **
+*/
+
+export function loadCityInfo () { // 定位城市信息
+  let city = sessionStorage.getItem(CITY_INFO)
+  if (city === null) {
+    return {}
+  } else {
+    return JSON.parse(city)
+  }
+}
+export function saveCityInfo (info) { // 定位城市信息
+  sessionStorage.setItem(CITY_INFO, JSON.stringify(info))
+  return info
+}
+
+export function loadStoreList () { // 门店列表
+  let list = sessionStorage.getItem(STORE_LIST)
+  if (list === null) {
+    return []
+  } else {
+    return JSON.parse(list)
+  }
+}
+export function saveStoreList (list) { // 门店列表
+  sessionStorage.setItem(STORE_LIST, JSON.stringify(list))
+  return list
+}
+
+export function loadMyCar () { // 我的车库
+  let cars = sessionStorage.getItem(MY_CAR)
+  if (cars === null) {
+    return []
+  } else {
+    return JSON.parse(cars)
+  }
+}
+export function saveMyCar (list) { // 我的车库
+  sessionStorage.setItem(MY_CAR, JSON.stringify(list))
+  return list
+}
 /*
   ---加密。解密
 */

@@ -53,16 +53,35 @@ router.beforeEach((to, from, next) => {
         if (store.state.myCar.length > 0) {
           next()
         } else {
-          next({path: '/addcar-tabbar?type=add'})
+          Vue.prototype.$Modal.confirm({
+            title: '提示信息',
+            content: '该服务需要先添加车辆，是否立即添加车辆？',
+            onCancel: () => {
+              Vue.prototype.$Modal.remove()
+            },
+            onOk: () => {
+              next({path: '/addcar-tabbar?type=add'})
+              Vue.prototype.$Modal.remove()
+            }
+          })
         }
       } else {
         next()
       }
     } else {
-      next({path: '/login'})
+      Vue.prototype.$Modal.confirm({
+        title: '提示信息',
+        content: '此服务需登录，是否登录？',
+        onCancel: () => {
+          Vue.prototype.$Modal.remove()
+        },
+        onOk: () => {
+          next({path: '/login'})
+          Vue.prototype.$Modal.remove()
+        }
+      })
     }
   } else {
     next()
   }
-  // next()
 })

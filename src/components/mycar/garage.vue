@@ -68,7 +68,9 @@
 import seleArea from '@/base/sele-area'
 import Slider from '@/base/slider/slider-view'
 import {mapMutations, mapGetters} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
 export default {
+  mixins: [expireToken],
   name: 'garage',
   data () {
     return {
@@ -77,7 +79,19 @@ export default {
       carId: 0
     }
   },
+  created () {
+    this._getMyCar()
+  },
   methods: {
+    _getMyCar () {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, 2, (res) => {
+        if (res.code === 401) {
+          this.refreshToken(this._getMyCar)
+        } else if (res.code === 200) {
+          this.setMyCar(res.data)
+        }
+      })
+    },
     goSeleArea () {
       this.showAreaBtn = true
     },
@@ -129,12 +143,14 @@ export default {
       this.$router.push('/detection-record?carid=' + this.carId)
     },
     ...mapMutations({
-      setDefaultCar: 'SET_DEFAULTCAR'
+      setDefaultCar: 'SET_DEFAULTCAR',
+      setMyCar: 'SET_MYCAR'
     })
   },
   computed: {
     ...mapGetters([
-      'myCar'
+      'myCar',
+      'userInfo'
     ])
   },
   components: {

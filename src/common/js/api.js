@@ -7,12 +7,11 @@ import store from '../../store'
 
 // F6 接口使用 headersOther , 本地接口用headersCommon
 const headersOther = {
-  'Authorization': store.getters.token
+  'Authorization': store.getters.userInfo.token
 }
 const headersCommon = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8;'
 }
-
 Vue.prototype.handleRrror = function (error) {
   if (error.response) {
     switch (error.response.code) {

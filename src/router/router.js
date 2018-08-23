@@ -207,11 +207,17 @@ const washCar = {
 const setUp = {
   path: '/set-up',
   name: 'setUp',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mind/set-up'], resolve) }
 }
 const myInfo = {
   path: '/my-info',
   name: 'myInfo',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/mind/my-info'], resolve) }
 }
 const checkList = {

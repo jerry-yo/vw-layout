@@ -9,10 +9,10 @@
         </div>
         <div class="user-info">
           <div class="user-img">
-            <img v-lazy="''" alt="" width="100%" height="100%">
+            <img v-lazy="userInfo.imgSource" alt="">
           </div>
-          <div class="user-xm" v-if="userInfo.phone">
-            <span>{{userInfo.name ? userInfo.name : userInfo.phone}}</span>
+          <div class="user-xm" v-if="userInfo.token">
+            <span>{{userInfo.name ? userInfo.name : userInfo.userTel}}</span>
             <div class="user-card">
               <span></span>
             </div>
@@ -130,7 +130,7 @@ export default {
   },
   methods: {
     _goOrder (id) {
-      if (!this.userInfo.phone) {
+      if (!this.userInfo.token) {
         this.$Modal.confirm({
           title: '提示信息',
           content: '此服务需登录，是否登录？',
@@ -155,55 +155,13 @@ export default {
       }
     },
     _goGarage () {
-      if (!this.userInfo.phone) {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      } else {
-        this.$router.push('/garage')
-      }
+      this.$router.push('/garage')
     },
     _goSetUp () {
-      if (!this.userInfo.phone) {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      } else {
-        this.$router.push('/set-up')
-      }
+      this.$router.push('/set-up')
     },
     _goMyInfo () {
-      if (!this.userInfo.phone) {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      } else {
-        this.$router.push('/my-info')
-      }
+      this.$router.push('/my-info')
     },
     goRegister () {
       this.$router.push('/register')
@@ -275,6 +233,10 @@ export default {
           border: 4px solid #fff
           margin-right: 32px
           float: left
+          img
+            display: inline-block
+            width: 100%
+            height: 100%
         .user-cm
           flex: 1
           display: flex

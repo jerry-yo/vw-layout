@@ -1,5 +1,5 @@
 import * as types from './mutation-types'
-
+import {saveCityInfo, saveStoreList, saveCityList, saveMyCar} from '@/common/js/cache'
 const mutations = {
   [types.SET_CARBRAND] (state, carbrand) {
     sessionStorage.setItem('carBrand', JSON.stringify(carbrand))
@@ -13,17 +13,6 @@ const mutations = {
     sessionStorage.setItem('addCar', JSON.stringify(Object.assign(state.addCar, carinfo)))
     state.addCar = Object.assign(state.addCar, carinfo)
   },
-  [types.SET_MYCAR] (state, car) {
-    if (state.myCar.length > 0) {
-      state.myCar.push(Object.assign(car, {
-        default: false
-      }))
-    } else {
-      state.myCar.push(Object.assign(car, {
-        default: true
-      }))
-    }
-  },
   [types.SET_DEFAULTCAR] (state, car) {
     let arr = []
     state.myCar.forEach((item, index) => {
@@ -36,46 +25,6 @@ const mutations = {
     })
     arr.unshift(car.item)
     state.myCar = arr
-  },
-  [types.DELETE_MYCAR] (state, car) {
-    car.forEach((item, index) => {
-      if (item.check) {
-        state.myCar[index] = 0
-      }
-    })
-    let arr = []
-    let flag = false
-    state.myCar.forEach(item => {
-      if (item !== 0) {
-        if (item.default) {
-          flag = true
-        }
-        arr.push(item)
-      }
-    })
-    if (arr.length > 0 && !flag) {
-      arr[0].default = true
-    }
-    state.myCar = arr
-  },
-  [types.MODIFY_MYCAR] (state, car) {
-    let obj = {}
-    obj = Object.assign(state.myCar[car.id], car.carinfo)
-    state.myCar[car.id] = obj
-  },
-  [types.SET_CITYINFO] (state, city) {
-    state.cityInfo = city
-  },
-  [types.MODIFY_CITYINFO] (state, city) {
-    let obj = {}
-    obj = Object.assign(state.cityInfo, city)
-    state.cityInfo = obj
-  },
-  [types.SET_CITYLIST] (state, list) {
-    state.cityList = list
-  },
-  [types.SET_STORELIST] (state, list) {
-    state.storeList = list
   },
   [types.SET_SERACHHIS] (state, list) {
     if (list.type === 'store') {
@@ -204,6 +153,34 @@ const mutations = {
   },
   [types.DELETE_USER_INFO] (state) {
     state.userInfo = {}
+  },
+  // 城市列表cityList 操作
+  [types.SET_CITYLIST] (state, list) {
+    saveCityList(list)
+    state.cityList = list
+  },
+  // 修改 设置 cityInfo 操作
+  [types.SET_CITYINFO] (state, info) {
+    let obj = {}
+    obj = Object.assign(state.cityInfo, info)
+    saveCityInfo(info)
+    state.cityInfo = obj
+  },
+  // 设置门店 storeList 列表
+  [types.SET_STORELIST] (state, list) {
+    saveStoreList(list)
+    state.storeList = list
+  },
+  // 设置 修改 mycar 车库
+  [types.SET_MYCAR] (state, list) {
+    saveMyCar(list)
+    state.myCar = list
+  },
+  [types.MODIFY_MYCAR] (state, car) {
+    let obj = {}
+    obj = Object.assign(state.myCar[car.id], car.carinfo)
+    state.myCar[car.id] = obj
+    saveMyCar(state.myCar)
   }
 }
 

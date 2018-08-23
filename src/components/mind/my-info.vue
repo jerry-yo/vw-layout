@@ -17,7 +17,7 @@
       <div class="my_nickname">
         <span>昵称</span>
         <div class="nickname" @click="_modifyInfo(1)">
-          {{userInfo.name ? userInfo.name : '请输入昵称'}}
+          {{userInfo.name ? userInfo.name : userInfo.userTel}}
         </div>
       </div>
       <div class="my_phone">
@@ -50,7 +50,7 @@ export default {
   },
   computed: {
     hidePhone () {
-      return this.userInfo.phone.substr(0, 3) + '****' + this.userInfo.phone.substr(7)
+      return this.userInfo.userTel.substr(0, 3) + '****' + this.userInfo.userTel.substr(7)
     },
     modifyType () {
       let str = ''
@@ -59,7 +59,7 @@ export default {
           str = this.userInfo.name
           break
         case 2:
-          str = this.userInfo.phone
+          str = this.userInfo.userTel
           break
       }
       return str

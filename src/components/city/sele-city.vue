@@ -42,7 +42,6 @@ export default {
   name: 'seleCity',
   data () {
     return {
-      cityList: [],
       letterHeight: 0,
       touch: {}
     }
@@ -73,7 +72,8 @@ export default {
       return arr
     },
     ...mapGetters([
-      'cityInfo'
+      'cityInfo',
+      'cityList'
     ])
   },
   methods: {
@@ -87,8 +87,6 @@ export default {
     },
     touchMove (e) {
       this.touch.pageY = e.changedTouches[0].pageY
-      console.log(this.touch.pageY)
-      console.log(e)
     },
     _scrollTo (index) {
       // if (!index && index !== 0) {
@@ -111,7 +109,7 @@ export default {
       this.$refs.cityDom.scrollToElement(this.$refs.city[index], 300)
     },
     showBrandMask (city) {
-      this.modifyCityInfo({
+      this.setCityInfo({
         selecity: city.cityName
       })
       this._goBack()
@@ -121,19 +119,20 @@ export default {
         if (res.errorCode === 0) {
           let list = res.data.data.replace(new RegExp(/'/g), '"')
           list = JSON.parse(list).data
-          this.cityList = list
           this.setCityList(list)
         }
       })
     },
     ...mapMutations({
-      modifyCityInfo: 'MODIFY_CITYINFO',
+      setCityInfo: 'SET_CITYINFO',
       setCityList: 'SET_CITYLIST'
     })
   },
   created () {
-    this.getCityList()
-    this.touch = {}
+    console.log(this.cityList)
+    if (this.cityList.length < 1) {
+      this.getCityList()
+    }
   },
   components: {
     Scroll

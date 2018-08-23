@@ -22,8 +22,12 @@ export const expireToken = {
   methods: {
     refreshToken (callback = () => {}) {
       this.$post(`${this.gt1Url}/api/f6-app/getToken`, 1, (res) => {
-        console.log(res)
-        callback()
+        if (res.data.code === 0) {
+          this.updateUserInfo({
+            token: res.data.data
+          })
+          callback()
+        }
       }, {
         orderToken: this.userInfo.token
       })
