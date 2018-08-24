@@ -9,7 +9,7 @@
     </div>
     <div class="container">
       <div class="swiper">
-        <Slider :recommends="myCar" @tapcard="tapCard" @carid="getCarId" @setdefault="setDefault"></Slider>
+        <Slider :recommends="update" @tapcard="tapCard" @carid="getCarId" @setdefault="setDefault"></Slider>
       </div>
       <div class="car-menu">
         <div class="car-con">
@@ -27,31 +27,31 @@
       <div class="car-idcard" v-if="myCar.length > 0">
         <span>车牌号</span>
         <div class="area" @click="goSeleArea">
-          {{myCar[carId].idCard.slice(0, 1)}}
+          {{myCar[carId].carNumber.slice(0, 1)}}
         </div>
         <div class="number">
-          <input type="text" name="" :placeholder="myCar[carId].idCard.slice(1, 7)">
+          <input type="text" name="" :placeholder="myCar[carId].carNumber.slice(1, 7)">
         </div>
       </div>
       <div class="car-info" v-if="myCar.length > 0">
         <div class="car-models">
           <span>具体车型</span>
-          <span>{{myCar[carId].salesVersion}}</span>
+          <span>{{`${nowCar.year} - ${nowCar.transmissionDesc}`}}</span>
         </div>
         <div class="car-others">
           <div class="car-displacement">
             <span>发动机排量</span>
-            <span>{{myCar[carId].exhaustVolume}}</span>
+            <span>{{nowCar.exhaustVolume}}</span>
           </div>
           <div class="car-age">
             <span>生产年份</span>
-            <span>{{myCar[carId].year}}</span>
+            <span>{{nowCar.year}}</span>
           </div>
         </div>
         <div class="car-far">
           <span>行驶里程</span>
           <div class="input">
-            <input type="number" name="" :placeholder="myCar[carId].way">
+            <input type="number" name="" :placeholder="nowCar.distance">
           </div>
           <span>km</span>
         </div>
@@ -82,9 +82,46 @@ export default {
   created () {
     this._getMyCar()
   },
+  computed: {
+    nowCar () {
+      let now = this.myCar[this.carId]
+      let infos = now.carBrandLogo.split('\uA856')
+      return Object.assign(now, {
+        exhaustVolume: infos[0],
+        manufacturerName: infos[1],
+        year: infos[2],
+        time: infos[3],
+        evehicleSystem: infos[4],
+        transmissionDesc: infos[5],
+        brandName: infos[6],
+        imageSrc: infos[7]
+      })
+    },
+    update () {
+      let arr = []
+      this.myCar.forEach(item => {
+        let infos = item.carBrandLogo.split('\uA856')
+        arr.push(Object.assign(item, {
+          exhaustVolume: infos[0],
+          manufacturerName: infos[1],
+          year: infos[2],
+          time: infos[3],
+          evehicleSystem: infos[4],
+          transmissionDesc: infos[5],
+          brandName: infos[6],
+          imageSrc: infos[7]
+        }))
+      })
+      return arr
+    },
+    ...mapGetters([
+      'myCar',
+      'userInfo'
+    ])
+  },
   methods: {
     _getMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, 2, (res) => {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._getMyCar)
         } else if (res.code === 200) {
@@ -146,12 +183,6 @@ export default {
       setDefaultCar: 'SET_DEFAULTCAR',
       setMyCar: 'SET_MYCAR'
     })
-  },
-  computed: {
-    ...mapGetters([
-      'myCar',
-      'userInfo'
-    ])
   },
   components: {
     seleArea,

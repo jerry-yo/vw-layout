@@ -10,7 +10,7 @@
     </div>
     <div class="car-name">
       <img :src="carLogoUrl + addCar.imageSrc" alt="">
-      <h2>{{addCar.series.sbName + ' - ' + addCar.series.vehicleSystem[1]}}</h2>
+      <h2>{{`${addCar.brandName} - ${addCar.evehicleSystem} - ${ addCar.exhaustVolume}`}}</h2>
     </div>
     <div class="sele-next">
       <span>{{addCar.exhaustVolume}}</span><span class="between">-</span>选择年份
@@ -18,7 +18,7 @@
     <Scroll class="age" ref="ageCar" :data="ages">
       <div class="con">
         <div class="text" v-for="(item, index) in ages" :key="index" @click="goModelsDetail(item)">
-          {{item.onMarketYear + ' - ' + item.onMarketMonth}}
+          {{item.year + ' - ' + item.transmissionDesc}}
         </div>
       </div>
     </Scroll>
@@ -28,43 +28,43 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import {mapMutations, mapGetters} from 'vuex'
+import {queryCarModal} from '@/common/js/mixin'
 export default {
   name: 'addcarAge',
+  mixins: [queryCarModal],
   data () {
     return {
-      sid: 0,
-      ev: 0,
-      ages: []
+      ages: [],
+      content: 'year%2Cvehicle_system%2Ctransmission_desc',
+      conditon: ''
     }
   },
   methods: {
     goModelsDetail (item) {
-      this.$router.push('/addcar-models?sid=' + this.sid + '&ev=' + this.ev + '&year=' + item.onMarketYear)
+      this.$router.push('/addcar-idcard')
       this.setAddCar({
-        year: item.onMarketYear,
-        month: item.onMarketMonth
+        year: item.year,
+        transmissionDesc: item.transmissionDesc,
+        pbid: item.pbid,
+        sid: item.sid,
+        sbid: item.sbid,
+        mid: item.mid
       })
     },
     _goBack () {
       this.$router.go(-1)
     },
-    getRelateYear () {
-      this.api_post('/api/carzone/getRelateYearBySid', (res) => {
-        if (res.errorCode === 0) {
-          this.ages = res.data.data.detail
-        }
-      }, {
-        sid: this.sid
-      })
+    loadCondition () {
+      let params = `{"brand_name":"${this.addCar.brandName}","manufacturer_name":"${this.addCar.manufacturerName}","e_vehicle_system":"${this.addCar.evehicleSystem}","exhaust_volume":"${this.addCar.exhaustVolume}"}`
+      return encodeURIComponent(params)
     },
     ...mapMutations({
       setAddCar: 'SET_ADDCAR'
     })
   },
-  created () {
-    this.sid = this.$route.query.sid
-    this.ev = this.$route.query.ev
-    this.getRelateYear()
+  mounted () {
+    this.conditon = this.loadCondition()
+    this.queryModal()
   },
   computed: {
     ...mapGetters([

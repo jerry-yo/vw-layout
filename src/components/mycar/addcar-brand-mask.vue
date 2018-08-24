@@ -5,12 +5,12 @@
         <div class="wrapper">
           <div class="title">
             <img :src="carLogoUrl + addCar.imageSrc" alt="">
-            <h2>{{addCar.name}}</h2>
+            <h2>{{addCar.brandName}}</h2>
           </div>
           <ul class="logo-type" v-for="(item, index) in getSeriesType" :key="index">
-            <li class="logo-title">{{item.sbName}}</li>
-            <li class="logo-text" v-for="(res, id) in item.vehicleSystems" :key="id" @click="goDisplacement(item, id)">
-              {{res[1]}}
+            <li class="logo-title">{{item.manufacturerName}}</li>
+            <li class="logo-text" v-for="(res, id) in item.evehicleSystems" :key="id" @click="goDisplacement(item, id)">
+              {{res}}
             </li>
           </ul>
         </div>
@@ -22,66 +22,47 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import {mapMutations, mapGetters} from 'vuex'
+import {queryCarModal} from '@/common/js/mixin'
 export default {
   name: 'addcarBrandMask',
-  props: {
-    pbid: {
-      type: Number,
-      required: true
-    }
-  },
+  mixins: [queryCarModal],
   data () {
     return {
-      addcarBrand_1: '',
-      carSeries: []
+      carSeries: [],
+      content: 'manufacturer_name%2Ce_vehicle_system',
+      conditon: ''
     }
   },
   methods: {
     goDisplacement (res, id) {
-      this.$router.push('/addcar-displacement?sid=' + res.vehicleSystems[id][0])
+      this.$router.push('/addcar-displacement')
       this.setAddCar({
-        series: {
-          sbName: res.sbName,
-          vehicleSystem: res.vehicleSystems[id]
-        }
-      })
-    },
-    getSeries () {
-      this.api_post('/api/carzone/findSeriesByBrandId', (res) => {
-        if (res.errorCode === 0) {
-          this.carSeries = res.data.data.detail
-        }
-      }, {
-        pbid: this.pbid
+        manufacturerName: res.manufacturerName,
+        evehicleSystem: res.evehicleSystems[id]
       })
     },
     closeMask () {
       this.$emit('closemask', false)
     },
+    loadCondition () {
+      let params = `{"brand_name":"${this.addCar.brandName}"}`
+      return encodeURIComponent(params)
+    },
     ...mapMutations({
       setAddCar: 'SET_ADDCAR'
     })
   },
-  created () {
-    this.getSeries()
+  mounted () {
+    this.conditon = this.loadCondition()
+    this.queryModal()
   },
   computed: {
     getSeriesType () {
       let arr = []
       this.carSeries.forEach((item) => {
-        let series = item.vehicleSystems
-        let seriesNum = []
-        series = series.split(',')
-        series.forEach((item) => {
-          seriesNum.push(item.split('|'))
-        })
         arr.push({
-          countryId: item.countryId,
-          sbName: item.sbName,
-          sbid: item.sbid,
-          sid: item.sid,
-          status: item.status,
-          vehicleSystems: seriesNum
+          manufacturerName: item.manufacturerName,
+          evehicleSystems: item.evehicleSystems.split(',')
         })
       })
       return arr

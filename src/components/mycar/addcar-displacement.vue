@@ -10,7 +10,7 @@
     </div>
     <div class="car-name">
       <img :src="carLogoUrl + addCar.imageSrc" alt="">
-      <h2>{{addCar.series.sbName + ' - ' + addCar.series.vehicleSystem[1]}}</h2>
+      <h2>{{`${addCar.brandName} - ${addCar.evehicleSystem}`}}</h2>
     </div>
     <div class="sele-next">
       选择发动机排量
@@ -28,17 +28,20 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
+import {queryCarModal} from '@/common/js/mixin'
 export default {
   name: 'addcarDisplacement',
+  mixins: [queryCarModal],
   data () {
     return {
-      displacementId: 0,
-      displacement: []
+      displacement: [],
+      content: 'exhaust_volume',
+      conditon: ''
     }
   },
   methods: {
     goAge (item) {
-      this.$router.push('/addcar-age?sid=' + item.sid + '&ev=' + item.exhaustVolume)
+      this.$router.push('/addcar-age')
       this.setAddCar({
         exhaustVolume: item.exhaustVolume
       })
@@ -46,22 +49,17 @@ export default {
     _goBack () {
       this.$router.go(-1)
     },
-    getExhaustVolume () {
-      this.api_post('/api/carzone/findExhaustVolume', (res) => {
-        if (res.errorCode === 0) {
-          this.displacement = res.data.data.detail
-        }
-      }, {
-        sid: this.displacementId
-      })
+    loadCondition () {
+      let params = `{"brand_name":"${this.addCar.brandName}","manufacturer_name":"${this.addCar.manufacturerName}","e_vehicle_system":"${this.addCar.evehicleSystem}"}`
+      return encodeURIComponent(params)
     },
     ...mapMutations({
       setAddCar: 'SET_ADDCAR'
     })
   },
-  created () {
-    this.displacementId = this.$route.query.sid
-    this.getExhaustVolume()
+  mounted () {
+    this.conditon = this.loadCondition()
+    this.queryModal()
   },
   computed: {
     ...mapGetters([

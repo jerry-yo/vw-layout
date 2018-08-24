@@ -7,13 +7,14 @@ import CryptoJS from 'crypto-js'
 */
 const USER_INFO = '__gt1_user__' // 用户信息操作
 const CITY_LIST = '__gt1_citys__' // 城市列表操作
-
+const CAR_BRAND = '__gt1_car_brand__'
 /*
   ** sessionStorage **
 */
 const CITY_INFO = '__city_info__' // 定位城市信息
 const STORE_LIST = '__store_list__' // 门店列表
 const MY_CAR = '__my_car__' // 我的车库
+const ADD_CAR = '__add_car__' // 添加车辆信息
 /*
   ** localStorage **
 */
@@ -44,6 +45,18 @@ export function saveCityList (list) { // 城市列表操作
   return list
 }
 
+export function loadCarBrand () { // 城市列表操作
+  let brands = localStorage.getItem(CAR_BRAND)
+  if (brands === null) {
+    return []
+  } else {
+    return JSON.parse(brands)
+  }
+}
+export function saveCarBrand (list) { // 城市列表操作
+  localStorage.setItem(CAR_BRAND, JSON.stringify(list))
+  return list
+}
 /*
   ** sessionStorage **
 */
@@ -85,6 +98,19 @@ export function loadMyCar () { // 我的车库
 export function saveMyCar (list) { // 我的车库
   sessionStorage.setItem(MY_CAR, JSON.stringify(list))
   return list
+}
+
+export function loadAddCar () { // 添加车辆缓存
+  let info = sessionStorage.getItem(ADD_CAR)
+  if (info === null) {
+    return {}
+  } else {
+    return JSON.parse(info)
+  }
+}
+export function saveAddCar (info) { // 添加车辆缓存
+  sessionStorage.setItem(ADD_CAR, JSON.stringify(info))
+  return info
 }
 /*
   ---加密。解密

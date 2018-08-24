@@ -1,17 +1,9 @@
 import * as types from './mutation-types'
-import {saveCityInfo, saveStoreList, saveCityList, saveMyCar} from '@/common/js/cache'
+import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar} from '@/common/js/cache'
 const mutations = {
-  [types.SET_CARBRAND] (state, carbrand) {
-    sessionStorage.setItem('carBrand', JSON.stringify(carbrand))
-    state.carBrand = carbrand
-  },
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
     state.routerAnimate = direction.direction
-  },
-  [types.SET_ADDCAR] (state, carinfo) {
-    sessionStorage.setItem('addCar', JSON.stringify(Object.assign(state.addCar, carinfo)))
-    state.addCar = Object.assign(state.addCar, carinfo)
   },
   [types.SET_DEFAULTCAR] (state, car) {
     let arr = []
@@ -144,6 +136,7 @@ const mutations = {
   [types.DELETE_REPAIR_ORDER] (state) {
     state.repairOrder = {}
   },
+  // loading页面操作
   [types.SET_LOADING_STATE] (state, flag) {
     state.loadingState = flag
   },
@@ -181,6 +174,20 @@ const mutations = {
     obj = Object.assign(state.myCar[car.id], car.carinfo)
     state.myCar[car.id] = obj
     saveMyCar(state.myCar)
+  },
+  // 设置，保存 汽车品牌列表 carBrand
+  [types.SET_CARBRAND] (state, list) {
+    saveCarBrand(list)
+    state.carBrand = list
+  },
+  // 设置删除 添加车辆信息
+  [types.SET_ADDCAR] (state, info) {
+    let obj = {}
+    if (JSON.stringify(info) !== '{}') {
+      obj = Object.assign(state.addCar, info)
+    }
+    state.addCar = obj
+    saveAddCar(obj)
   }
 }
 

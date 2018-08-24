@@ -1,22 +1,22 @@
 <template>
   <div class="slider" @touchmove.prevent ref="slider">
     <div class="slider-group" ref="sliderGroup" @transitionend="transitionEnd" :style="{transform: translate3d, transitionDuration: animateTime + 'ms'}"  @touchstart="touchS" @touchend="touchE" @touchmove="touchM">
-      <div class="slider-dots" v-for="(item, index) in imgs" :key="index">
+      <div class="slider-dots" v-for="(item, index) in recommends" :key="index">
         <div class="dot-con">
           <div class="left">
             <img v-lazy="carLogoUrl + item.imageSrc" alt="">
           </div>
           <div class="right">
-            <h2>{{item.series.sbName + ' - ' + item.series.vehicleSystem[1]}}</h2>
-            <p>{{item.idCard}}<span>l</span>{{item.way}}km</p>
-            <div :class="item.default ? 'default' : 'default-btn'" @click.prevent="setDefault(item, index)">
-              {{item.default ? '已设为默认车辆' : '设为默认车辆'}}
+            <h2>{{item.manufacturerName + ' - ' + item.evehicleSystem}}</h2>
+            <p>{{item.carNumber}}<span>l</span>{{item.distance}}km</p>
+            <div :class="item.defaultFlag ? 'default' : 'default-btn'" @click.prevent="setDefault(item, index)">
+              {{item.defaultFlag ? '已设为默认车辆' : '设为默认车辆'}}
             </div>
           </div>
         </div>
       </div>
-      <div class="slider-dots" v-if="imgs.length ? false: true" @click="tapDom">
-        <div class="dot-con" :class="imgs.length ? '' : 'nocar'">
+      <div class="slider-dots" v-if="recommends.length ? false: true" @click="tapDom">
+        <div class="dot-con" :class="recommends.length ? '' : 'nocar'">
         </div>
       </div>
     </div>
@@ -58,12 +58,6 @@ export default {
       animateTime: 0,
       sliderGroupDom: 0,
       screenWidth: 0
-    }
-  },
-  computed: {
-    imgs () {
-      let imgs = this.recommends
-      return imgs
     }
   },
   methods: {
@@ -135,7 +129,7 @@ export default {
     },
     /*      右向左滑动， 下一页        */
     nextImg (text) {
-      if ((this.imgIndex !== this.imgs.length - 1) && this.imgs.length) {
+      if ((this.imgIndex !== this.recommends.length - 1) && this.recommends.length) {
         this.imgIndex += 1
       }
       let time = 0

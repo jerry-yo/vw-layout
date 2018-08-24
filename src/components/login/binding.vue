@@ -39,7 +39,7 @@ export default {
     },
     _getCode () {
       if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.tel)) {
-        this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, 1, (res) => {
+        this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, this.headers_1, (res) => {
           if (res.errorCode === 0) {
             this.$router.push('/setcode?phone=' + this.tel + '&type=3')
           } else if (res.errorCode) {

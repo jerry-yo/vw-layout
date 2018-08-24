@@ -15,7 +15,7 @@ const RouterConfig = {
 export const router = new VueRouter(RouterConfig)
 
 const history = window.sessionStorage
-history.clear()
+// history.clear()
 let historyCount = history.getItem('count') * 1 || 0
 history.setItem('routers', JSON.stringify([{path: '/', index: 0}]))
 // ‘in’ 下一页   ‘out’ 返回 ’

@@ -58,7 +58,7 @@ export default {
       }
     },
     getYzm () {
-      this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, 1, (res) => {
+      this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, this.headers_1, (res) => {
         if (res.errorCode) {
           if (res.errorCode !== 0) {
             this.$Toast({
@@ -101,7 +101,7 @@ export default {
       }
     },
     loginRequest () {
-      this.$post(`${this.gt1Url}/api/f6-app/login`, 1, (res) => {
+      this.$post(`${this.gt1Url}/api/f6-app/login`, this.headers_1, (res) => {
         if (res.errorCode === 0) {
           if (res.data.code === 0) {
             this.$router.replace('/home')
@@ -128,7 +128,7 @@ export default {
       })
     },
     registerRequest () {
-      this.$post(`${this.gt1Url}/api/f6-app/regist`, 1, (res) => {
+      this.$post(`${this.gt1Url}/api/f6-app/regist`, this.headers_1, (res) => {
         console.log(res)
       }, {
         userTel: this.phone,

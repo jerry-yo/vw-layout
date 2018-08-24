@@ -6,12 +6,17 @@ import axios from 'axios'
 import store from '../../store'
 
 // F6 接口使用 headersOther , 本地接口用headersCommon
-const headersOther = {
-  'Authorization': store.getters.userInfo.token
-}
-const headersCommon = {
+Vue.prototype.headers_1 = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8;'
 }
+Vue.prototype.headers_2 = {
+  'Authorization': store.getters.userInfo.token
+}
+Vue.prototype.headers_3 = {
+  'Authorization': store.getters.userInfo.token,
+  'Content-Type': 'application/json'
+}
+
 Vue.prototype.handleRrror = function (error) {
   if (error.response) {
     switch (error.response.code) {
@@ -34,7 +39,7 @@ Vue.prototype.handleRrror = function (error) {
 Vue.prototype.$get = function (url, headersCode, callback = function () {}, params = {}) {
   var _self = this
   axios.get(url, {
-    headers: headersCode === 1 ? headersCommon : headersOther,
+    headers: headersCode,
     params: params
   }).then((response) => {
     callback(response.data)
@@ -43,13 +48,13 @@ Vue.prototype.$get = function (url, headersCode, callback = function () {}, para
   })
 }
 
-Vue.prototype.$post = function (url, headersCode, callback = function () {}, params = { }) {
+Vue.prototype.$post = function (url, headersCode, callback = function () {}, params = {}) {
   var _self = this
   axios({
     url: url,
     method: 'post',
     data: params,
-    headers: headersCode === 1 ? headersCommon : headersOther,
+    headers: headersCode,
     transformRequest: [function (data) {
       // Do whatever you want to transform the data
       let ret = ''
@@ -65,10 +70,24 @@ Vue.prototype.$post = function (url, headersCode, callback = function () {}, par
   })
 }
 
+Vue.prototype.$f6post = function (url, headersCode, callback = function () {}, params = {}) {
+  var _self = this
+  axios({
+    url: url,
+    method: 'post',
+    data: params,
+    headers: headersCode
+  }).then((response) => {
+    callback(response.data)
+  }).catch(function (error) {
+    _self.handleRrror(error)
+  })
+}
+
 Vue.prototype.$put = function (url, headersCode, callback = function () {}, params = {}) {
   var _self = this
   axios.put(url, params, {
-    headers: headersCode === 1 ? headersCommon : headersOther
+    headers: headersCode
   }).then((response) => {
     callback(response.data)
   }).catch(function (error) {
@@ -79,7 +98,7 @@ Vue.prototype.$put = function (url, headersCode, callback = function () {}, para
 Vue.prototype.$patch = function (url, headersCode, callback = function () {}, params = {}) {
   var _self = this
   axios.patch(url, params, {
-    headers: headersCode === 1 ? headersCommon : headersOther
+    headers: headersCode
   }).then((response) => {
     callback(response.data)
   }).catch(function (error) {
@@ -90,7 +109,7 @@ Vue.prototype.$patch = function (url, headersCode, callback = function () {}, pa
 Vue.prototype.$delete = function (url, headersCode, callback = function () {}, params = {}) {
   var _self = this
   axios.delete(url, {
-    headers: headersCode === 1 ? headersCommon : headersOther,
+    headers: headersCode,
     params: params
   }).then((response) => {
     callback(response.data)

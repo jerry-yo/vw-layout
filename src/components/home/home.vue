@@ -197,7 +197,7 @@ export default {
     },
     getStoreList (lng, lat) {
       this.setLoadingState(true)
-      this.$post(`${this.gt1Url}/api/store/storeList`, 1, (res) => {
+      this.$post(`${this.gt1Url}/api/store/storeList`, this.headers_1, (res) => {
         if (res.errorCode === 0) {
           this.storeList = this._setStoreList(res.data)
           this.setStoreList(this.storeList)
@@ -229,9 +229,6 @@ export default {
       setLoadingState: 'SET_LOADING_STATE'
     })
   },
-  created () {
-    // this.getStoreList()
-  },
   computed: {
     cityShow () {
       let city = ''
@@ -257,7 +254,7 @@ export default {
     ])
   },
   mounted () {
-    if (!this.cityInfo.selecity) {
+    if (!this.cityInfo.citycode) {
       this._setMap()
       this.carIndex = getDefaultIndex(this.myCar)
       this.carInfo = this.myCar[this.carIndex]

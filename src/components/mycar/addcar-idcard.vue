@@ -12,7 +12,7 @@
     <div class="container">
       <div class="car-name">
         <img :src="carLogoUrl + addCar.imageSrc" alt="">
-        <h2><span>{{addCar.series.sbName + ' - ' + addCar.series.vehicleSystem[1]}}</span><span>{{addCar.year}}</span><span>{{addCar.salesVersion}}</span> </h2>
+        <h2><span>{{`${addCar.brandName} - ${addCar.evehicleSystem} - ${ addCar.exhaustVolume} - ${addCar.year} - ${addCar.transmissionDesc}`}}</span> </h2>
       </div>
       <div class="idcard">
         <span>车牌号</span>
@@ -20,7 +20,7 @@
           {{area[areaIndex]}}
         </div>
         <div class="idcard-num">
-          <input type="text" v-model.trim="carid"  maxlength="6" @change="setUppercase">
+          <input type="text" v-model.trim="carid"  maxlength="6" :placeholder="'例：A88888'" @change="validateCarid">
         </div>
       </div>
       <p>请输入真实车牌 以便后续服务</p>
@@ -28,7 +28,7 @@
       <div class="car-way">
         <span>行驶里程</span>
         <div class="input">
-          <input type="text" v-model="way">
+          <input type="text" v-model="way" :placeholder="0" @change="validateWay">
         </div>
         <span>km</span>
       </div>
@@ -49,20 +49,41 @@
 <script>
 import seleArea from '@/base/sele-area'
 import {mapGetters, mapMutations} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
 export default {
   name: 'addcarIdcard',
+  mixins: [expireToken],
   data () {
     return {
       showAreaBtn: false,
       areaIndex: 0,
-      carid: '',
-      way: 0,
-      time: '2016-12-20'
+      carid: null,
+      way: null,
+      time: -1
     }
   },
   methods: {
-    setUppercase () {
+    validateCarid () {
       this.carid = this.carid.toUpperCase()
+      let reg = /^[A-Z]{1}[A-Z0-9]{4}[A-Z0-9挂学警港澳]{1}$/
+      if (!reg.test(this.carid)) {
+        this.$Toast({
+          position: 'bottom',
+          message: '车牌号码格式错误'
+        })
+        this.carid = ''
+      }
+    },
+    validateWay () {
+      if (!isNaN(parseFloat(this.way))) {
+        this.way = parseFloat(this.way)
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '行驶里程格式错误'
+        })
+        this.way = null
+      }
     },
     goSeleArea () {
       this.showAreaBtn = true
@@ -75,32 +96,60 @@ export default {
       this.$router.go(-1)
     },
     _addCar () {
-      if (this.carid === '') {
+      if (this.carid === null) {
         this.$Toast({
           message: '请输入车牌号码',
           position: 'bottom'
         })
       } else {
-        this.setAddCar({
-          idCard: this.area[this.areaIndex] + this.carid,
-          way: this.way,
-          time: this.year
-        })
-        let car = JSON.parse(sessionStorage.getItem('addCar'))
-        this.setMyCar(car)
-        this.$router.replace('/garage')
+        this._lookMyCar()
+        // this.setAddCar({
+        //   idCard: this.area[this.areaIndex] + this.carid,
+        //   way: this.way,
+        //   time: this.year
+        // })
+        // this.$router.replace('/garage')
       }
     },
+    _lookMyCar () {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
+        if (res.code === 401) {
+          this.refreshToken(this._getMyCar)
+        } else if (res.code === 200) {
+          this._setMyCar(res.data.length > 0 ? 0 : 1)
+        }
+      })
+    },
+    _setMyCar (hasCar) {
+      this.$f6post(`${this.f6Url}/api/clientUserCar`, this.headers_3, (res) => {
+        if (res.code === 401) {
+          this.refreshToken(this._setMyCar)
+        } else if (res.code === 200) {
+          this.$router.push('/garage')
+        }
+      }, {
+        carBrandLogo: `${this.addCar.exhaustVolume}\uA856${this.addCar.manufacturerName}\uA856${this.addCar.year}\uA856${this.time}\uA856${this.addCar.evehicleSystem}\uA856${this.addCar.transmissionDesc}\uA856${this.addCar.brandName}\uA856${this.addCar.imageSrc}`,
+        carId: this.addCar.mid,
+        carNumber: `${this.area[this.areaIndex]}${this.carid}`,
+        carVin: '',
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId,
+        defaultFlag: hasCar,
+        distance: this.way,
+        externalUserId: this.userInfo.externalUserId,
+        userId: this.userInfo.fUserId
+      })
+    },
     ...mapMutations({
-      setAddCar: 'SET_ADDCAR',
-      setMyCar: 'SET_MYCAR'
+      setAddCar: 'SET_ADDCAR'
     })
   },
   computed: {
     ...mapGetters([
       'addCar',
       'area',
-      'myCar'
+      'myCar',
+      'userInfo'
     ])
   },
   components: {
@@ -216,6 +265,7 @@ export default {
           height: 100%
           font-size: 24px
           color: #3b3b3b
+          padding-right: 3px
     .car-date
       height: 90px
       line-height: 90px

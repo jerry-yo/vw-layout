@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="logo">
-      <brandMask v-if="showMask" :pbid="brandId" @closemask="_closeMask"></brandMask>
+      <brandMask v-if="showMask" @closemask="_closeMask"></brandMask>
       <div class="retrieval" @touchmove.prevent.stop>
         <ul>
           <li v-for="(item, index) in getFirstLetter" :key="item.type" @click="selectMenu(index, $event)">{{item}}</li>
@@ -33,8 +33,14 @@
 import Scroll from '@/base/scroll/scroll'
 import brandMask from './addcar-brand-mask'
 import {mapGetters, mapMutations} from 'vuex'
+import {queryCarModal} from '@/common/js/mixin'
 export default {
   name: 'addcarBrand',
+  mixins: [queryCarModal],
+  components: {
+    brandMask,
+    Scroll
+  },
   props: {
     addType: {
       type: String,
@@ -43,9 +49,9 @@ export default {
   },
   data () {
     return {
-      brandId: 0,
       showMask: false,
-      logo: []
+      content: 'brand_name',
+      conditon: ''
     }
   },
   methods: {
@@ -57,34 +63,22 @@ export default {
     },
     showBrandMask (logo) {
       this.showMask = true
-      this.brandId = logo.pbid
       this.setAddCar({
-        name: logo.name,
-        imageSrc: logo.imageSrc,
-        pbid: logo.pbid
+        brandName: logo.brandName,
+        firstLetter: logo.firstLetter,
+        imageSrc: logo.imageSrc
       })
     },
     _closeMask () {
       this.showMask = false
-    },
-    getCarBrand () {
-      this.api_post('/api/carzone/getCarAllBrand', (res) => {
-        if (res.errorCode === 0) {
-          this.logo = res.data.data.detail
-          this.setCarBrand(this.logo)
-          if (this.addType === 'sele' && this.serachInfo.pbid) {
-            this.showBrandMask(this.serachInfo)
-          }
-        }
-      })
     },
     ...mapMutations({
       setAddCar: 'SET_ADDCAR',
       setCarBrand: 'SET_CARBRAND'
     })
   },
-  created () {
-    this.getCarBrand()
+  mounted () {
+    this.queryModal()
   },
   computed: {
     getFirstLetter () {
@@ -115,10 +109,6 @@ export default {
       'carBrand',
       'serachInfo'
     ])
-  },
-  components: {
-    brandMask,
-    Scroll
   }
 }
 </script>
