@@ -157,10 +157,7 @@ const mutations = {
     state.myCar = list
   },
   [types.MODIFY_MYCAR] (state, car) {
-    let obj = {}
-    obj = Object.assign(state.myCar[car.id], car.carinfo)
-    state.myCar[car.id] = obj
-    saveMyCar(state.myCar)
+    state.myCar[car.id] = car.info
   },
   // 设置默认车辆
   [types.SET_DEFAULTCAR] (state, car) {

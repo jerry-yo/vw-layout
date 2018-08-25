@@ -9,7 +9,7 @@ export const updateUserInfo = function ({commit, state}, info) {
   commit(types.SET_USER_INFO, infos)
 }
 
-// 我的车库信息更新
+// 我的车库信息设置
 export const updateCarList = function ({commit}, list) {
   let newList = handleMyCar(list)
   let arr = []

@@ -19,13 +19,13 @@
               <img :src="carLogoUrl + item.imageSrc" alt="">
             </div>
             <div class="con">
-              <h2>{{item.series.sbName + ' - ' + item.series.vehicleSystem[1]}}</h2>
-              <p class="p1"><span>{{item.year}}</span>&nbsp;&nbsp;<span>{{item.salesVersion}}</span></p>
-              <p class="p2"><span>{{item.idCard}}</span><span v-if="item.way !== 0">丨</span> <span v-if="item.way !== 0">{{item.way}}km</span></p>
+              <h2>{{item.manufacturerName + ' - ' + item.evehicleSystem}}</h2>
+              <p class="p1"><span>{{item.year}}</span>&nbsp;&nbsp;<span>{{item.transmissionDesc}}</span></p>
+              <p class="p2"><span>{{item.carNumber}}</span><span v-if="item.distance !== 0">丨</span> <span v-if="item.distance !== 0">{{item.distance}}km</span></p>
             </div>
             <div class="right"  v-if="!editState">
-              <div class="btn" :class="item.default ? 'active' : 'common'" @click="_setCarDefault(item, index)">
-              {{item.default ? '已设为默认' : '设为默认'}}
+              <div class="btn" :class="item.defaultFlag ? 'active' : 'common'" @click="_setCarDefault(item, index)">
+              {{item.defaultFlag ? '已设为默认' : '设为默认'}}
               </div>
             </div>
           </div>
@@ -40,23 +40,118 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
-import {mapMutations, mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
+import {expireToken, modifyCarInfo} from '@/common/js/mixin'
 export default {
   name: 'vehicleManagement',
+  components: {
+    Scroll
+  },
+  mixins: [expireToken, modifyCarInfo],
   data () {
     return {
       editState: false,
       check: []
     }
   },
+  mounted () {
+    this._getMyCar()
+  },
+  computed: {
+    checkInfos () {
+      let obj = {
+        length: 0,
+        default: false
+      }
+      this.check.forEach((item, index) => {
+        if (item.check) {
+          if (index === 0) {
+            obj.default = true
+          }
+          obj.length++
+        }
+      })
+      return obj
+    },
+    defaultCarId () {
+      let id = 0
+      this.myCar.forEach((item, index) => {
+        if (item.defaultFlag) {
+          id = index
+        }
+      })
+      return id
+    },
+    ...mapGetters([
+      'myCar',
+      'userInfo'
+    ])
+  },
   methods: {
     _goBack () {
       this.$router.go(-1)
     },
+    // 获取我的车库
+    _getMyCar () {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
+        if (res.code === 401) {
+          this.refreshToken(this._getMyCar)
+        } else if (res.code === 200) {
+          this.updateCarList(res.data)
+          this.checkArr()
+        }
+      })
+    },
+    _deleteMyCar (id) {
+      this.$delete(`${this.f6Url}/api/clientUserCar`, this.headers_2, (res) => {
+        if (res.code === 401) {
+          this.refreshToken(this._deleteMyCar)
+        } else if (res.code === 200) {
+          this.checkInfos.length--
+          if (this.checkInfos.length === 0 && this.checkInfos.default === false) {
+            this.editState = false
+            this._getMyCar()
+          }
+        }
+      }, {
+        carBrandLogo: `${this.myCar[id].exhaustVolume}\uA856${this.myCar[id].manufacturerName}\uA856${this.myCar[id].year}\uA856${this.myCar[id].time}\uA856${this.myCar[id].evehicleSystem}\uA856${this.myCar[id].transmissionDesc}\uA856${this.myCar[id].brandName}\uA856${this.myCar[id].imageSrc}`,
+        carId: this.myCar[id].carId,
+        carNumber: this.myCar[id].carNumber,
+        carVin: this.myCar[id].carVin,
+        clientAppId: this.myCar[id].clientAppId,
+        clientUserId: this.myCar[id].clientUserId,
+        defaultFlag: this.myCar[id].defaultFlag,
+        distance: this.myCar[id].distance,
+        externalUserId: this.myCar[id].externalUserId,
+        userCarId: this.myCar[id].userCarId,
+        userId: this.myCar[id].userId
+      })
+    },
     _goAddcarTabbar () {
       if (this.editState) {
-        this.editState = false
-        this.deleteMyCar(this.check)
+        this.check.forEach((item, index) => {
+          if (item.check) {
+            this._deleteMyCar(index)
+          }
+          if (this.checkInfos.length === this.check.length) {
+            this.checkInfos.default = false
+          }
+          if (!item.check && this.checkInfos.default) {
+            this.modifyCar({
+              carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${this.myCar[index].time}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
+              carId: this.myCar[index].carId,
+              carNumber: this.myCar[index].carNumber,
+              carVin: this.myCar[index].carVin,
+              clientAppId: this.myCar[index].clientAppId,
+              clientUserId: this.myCar[index].clientUserId,
+              defaultFlag: 1,
+              distance: this.myCar[index].distance,
+              externalUserId: this.myCar[index].externalUserId,
+              userCarId: this.myCar[index].userCarId,
+              userId: this.myCar[index].userId
+            }, 'delete_1')
+          }
+        })
       } else {
         this.$router.push('/addcar-tabbar?type=add')
       }
@@ -68,10 +163,36 @@ export default {
       }
     },
     _setCarDefault (item, id) {
-      this.setDefaultCar({
-        id: id,
-        item: item
-      })
+      let itemObj = {
+        carBrandLogo: `${item.exhaustVolume}\uA856${item.manufacturerName}\uA856${item.year}\uA856${item.time}\uA856${item.evehicleSystem}\uA856${item.transmissionDesc}\uA856${item.brandName}\uA856${item.imageSrc}`,
+        carId: item.carId,
+        carNumber: item.carNumber,
+        carVin: item.carVin,
+        clientAppId: item.clientAppId,
+        clientUserId: item.clientUserId,
+        defaultFlag: 1,
+        distance: item.distance,
+        externalUserId: item.externalUserId,
+        userCarId: item.userCarId,
+        userId: item.userId
+      }
+      let defaultObj = {
+        carBrandLogo: `${this.myCar[0].exhaustVolume}\uA856${this.myCar[0].manufacturerName}\uA856${this.myCar[0].year}\uA856${this.myCar[0].time}\uA856${this.myCar[0].evehicleSystem}\uA856${this.myCar[0].transmissionDesc}\uA856${this.myCar[0].brandName}\uA856${this.myCar[0].imageSrc}`,
+        carId: this.myCar[0].carId,
+        carNumber: this.myCar[0].carNumber,
+        carVin: this.myCar[0].carVin,
+        clientAppId: this.myCar[0].clientAppId,
+        clientUserId: this.myCar[0].clientUserId,
+        defaultFlag: 0,
+        distance: this.myCar[0].distance,
+        externalUserId: this.myCar[0].externalUserId,
+        userCarId: this.myCar[0].userCarId,
+        userId: this.myCar[0].userId
+      }
+      this.modifyCar(itemObj, 'delete_2', id)
+      this.modifyCar(defaultObj, 'delete_2', 0)
+      this.$set(this.myCar[id], 'defaultFlag', 1)
+      this.$set(this.myCar[this.defaultCarId], 'defaultFlag', 0)
     },
     _checkCar (id) {
       if (this.check[id].check) {
@@ -80,11 +201,6 @@ export default {
         this.$set(this.check[id], 'check', true)
       }
     },
-    ...mapMutations({
-      setMyCar: 'SET_MYCAR',
-      setDefaultCar: 'SET_DEFAULTCAR',
-      deleteMyCar: 'DELETE_MYCAR'
-    }),
     checkArr () {
       let arr = []
       for (let i = 0; i < this.myCar.length; i++) {
@@ -93,18 +209,10 @@ export default {
         }
       }
       this.check = arr
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'myCar'
+    },
+    ...mapActions([
+      'updateCarList'
     ])
-  },
-  mounted () {
-    this.checkArr()
-  },
-  components: {
-    Scroll
   }
 }
 </script>

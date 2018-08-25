@@ -27,7 +27,7 @@ export const expireToken = {
             token: res.data.data
           })
           setTimeout(() => {
-            callback()
+            callback(res.data.data)
           }, 0)
         }
       }, {
@@ -63,5 +63,41 @@ export const queryCarModal = {
     ...mapMutations({
       setCarBrand: 'SET_CARBRAND'
     })
+  }
+}
+
+// 车辆信息修改
+export const modifyCarInfo = {
+  mixins: [expireToken],
+  computed: {
+    ...mapGetters([
+      'myCar'
+    ])
+  },
+  methods: {
+    modifyCar (info, type, id) {
+      // type: 'delete_1'多选删除默认，重新设置默认'delete_2'修改默认'delete_3'普通修改
+      this.$put(`${this.f6Url}/api/clientUserCar`, this.headers_2, (res) => {
+        if (res.code === 200) {
+          if (type === 'delete_1') {
+            this.checkInfos.default = false
+          }
+        } else if (res.code === 401) {
+          this.refreshToken(this.modifyCar)
+        }
+      }, {
+        carBrandLogo: info.carBrandLogo,
+        carId: info.carId,
+        carNumber: info.carNumber,
+        carVin: info.carVin,
+        clientAppId: info.clientAppId,
+        clientUserId: info.clientUserId,
+        defaultFlag: info.defaultFlag,
+        distance: info.distance,
+        externalUserId: info.externalUserId,
+        userCarId: info.userCarId,
+        userId: info.userId
+      })
+    }
   }
 }

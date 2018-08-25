@@ -110,7 +110,7 @@ Vue.prototype.$delete = function (url, headersCode, callback = function () {}, p
   var _self = this
   axios.delete(url, {
     headers: headersCode,
-    params: params
+    data: params
   }).then((response) => {
     callback(response.data)
   }).catch(function (error) {

@@ -102,11 +102,9 @@ export default {
         this.$router.push('/addcar-tabbar?type=add')
       }
     },
+    // 设置默认车辆
     setDefault (car) {
-      this.setDefaultCar({
-        id: car.index,
-        item: car.item
-      })
+      console.log(car)
     },
     getCarId (id) {
       this.carId = id
@@ -117,7 +115,14 @@ export default {
     },
     // 车辆管理
     _goManagement () {
-      this.$router.push('/vehicle-management')
+      if (this.myCar.length < 1) {
+        this.$Toast({
+          message: '请先添加车辆！',
+          position: 'bottom'
+        })
+      } else {
+        this.$router.push('/vehicle-management')
+      }
     },
     // 车主认证
     _goCarAuth () {
