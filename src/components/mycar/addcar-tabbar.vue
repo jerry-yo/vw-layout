@@ -10,7 +10,7 @@
             自助加车
           </div>
           <div class="right" :class="{active: !tabActive}"  @click="_goTab(2)">
-            发动机号绑车
+            VIN码绑车
           </div>
         </div>
       </div>

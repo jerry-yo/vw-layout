@@ -1,22 +1,9 @@
 import * as types from './mutation-types'
-import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar} from '@/common/js/cache'
+import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
     state.routerAnimate = direction.direction
-  },
-  [types.SET_DEFAULTCAR] (state, car) {
-    let arr = []
-    state.myCar.forEach((item, index) => {
-      if (index === car.id) {
-        item.default = true
-      } else {
-        arr.push(item)
-        item.default = false
-      }
-    })
-    arr.unshift(car.item)
-    state.myCar = arr
   },
   [types.SET_SERACHHIS] (state, list) {
     if (list.type === 'store') {
@@ -174,6 +161,11 @@ const mutations = {
     obj = Object.assign(state.myCar[car.id], car.carinfo)
     state.myCar[car.id] = obj
     saveMyCar(state.myCar)
+  },
+  // 设置默认车辆
+  [types.SET_DEFAULTCAR] (state, car) {
+    saveDefaultCar(car)
+    state.defaultCar = car
   },
   // 设置，保存 汽车品牌列表 carBrand
   [types.SET_CARBRAND] (state, list) {

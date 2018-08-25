@@ -94,9 +94,16 @@ import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations} from 'vuex'
 import {getDefaultIndex} from '@/common/js/arr'
+import {expireToken} from '@/common/js/mixin'
 import AMap from 'AMap'
 export default {
   name: 'home',
+  mixins: [expireToken],
+  components: {
+    Badge,
+    Swiper,
+    Scroll
+  },
   data () {
     return {
       carInfo: {},
@@ -125,7 +132,46 @@ export default {
       storeList: []
     }
   },
+  mounted () {
+    this._getMyCar()
+    if (!this.cityInfo.citycode) {
+      this._setMap()
+      this.carIndex = getDefaultIndex(this.myCar)
+      this.carInfo = this.myCar[this.carIndex]
+    }
+  },
+  computed: {
+    cityShow () {
+      let city = ''
+      if (this.cityInfo.selecity || this.cityInfo.city) {
+        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
+      } else {
+        return '定位中···'
+      }
+      return city.length >= 4 ? city.slice(0, 3) + '···' : city
+    },
+    getPhone () {
+      if (this.storeList.length > 1) {
+        return this.storeList[this.defaultStoreId].phone
+      }
+    },
+    ...mapGetters([
+      'myCar',
+      'cityInfo',
+      'defaultStoreId',
+      'detectionMenus',
+      'userInfo',
+      'loadingState'
+    ])
+  },
   methods: {
+    _addCar () {
+      if (this.carIndex !== -1) {
+        this.$router.push('/garage')
+      } else {
+        this.$router.push('/addcar-tabbar?type=add')
+      }
+    },
     // 选择城市
     _goSeleCity () {
       this.$router.push('/sele-city')
@@ -142,8 +188,9 @@ export default {
     _goMaintain () {
       this.$router.push('/maintain')
     },
+    // 检测单
     _goCheckList () {
-      if (this.detectionMenus.length > 0 && this.myCar.length > 0) {
+      if (this.detectionMenus.length > 0) {
         this.$router.push('/check-list?id=0&carid=0')
       } else {
         this.$Toast({
@@ -152,12 +199,43 @@ export default {
         })
       }
     },
-    _addCar () {
-      if (this.carIndex !== -1) {
-        this.$router.push('/garage')
-      } else {
-        this.$router.push('/addcar-tabbar?type=add')
-      }
+    // 获取我的车库列表
+    _getMyCar () {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
+        if (res.code === 401) {
+          this.refreshToken(this._getMyCar)
+        } else if (res.code === 200) {
+          this._setMyCar(res.data)
+          this._getCheckList()
+          this._getStoreList()
+        }
+      })
+    },
+    // 处理车库列表
+    _setMyCar (data) {
+      console.log(data)
+    },
+    // 获取检测单列表
+    _getCheckList () {
+
+    },
+    _getStoreList () {
+    },
+    // 处理门店信息
+    _setStoreList (data) {
+      let reg = /维修/
+      let lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
+      data.forEach((item, index) => {
+        let flag = reg.test(item.name)
+        item = Object.assign(item, {
+          icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
+          way: lnglat1.distance([item.lng, item.lat]),
+          type: flag ? 1 : 2
+        })
+      })
+      return data.sort((a, b) => {
+        return a.way > b.way
+      })
     },
     _setMap () {
       let geolocation = new AMap.Geolocation({
@@ -195,75 +273,12 @@ export default {
         }
       })
     },
-    getStoreList (lng, lat) {
-      this.setLoadingState(true)
-      this.$post(`${this.gt1Url}/api/store/storeList`, this.headers_1, (res) => {
-        if (res.errorCode === 0) {
-          this.storeList = this._setStoreList(res.data)
-          this.setStoreList(this.storeList)
-          this.setLoadingState(false)
-        }
-      }, {
-        page: 1,
-        limit: 50
-      })
-    },
-    _setStoreList (data) {
-      let reg = /维修/
-      let lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
-      data.forEach((item, index) => {
-        let flag = reg.test(item.name)
-        item = Object.assign(item, {
-          icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
-          way: lnglat1.distance([item.lng, item.lat]),
-          type: flag ? 1 : 2
-        })
-      })
-      return data.sort((a, b) => {
-        return a.way > b.way
-      })
-    },
     ...mapMutations({
+      setMyCar: 'SET_MYCAR',
       setCityInfo: 'SET_CITYINFO',
       setStoreList: 'SET_STORELIST',
       setLoadingState: 'SET_LOADING_STATE'
     })
-  },
-  computed: {
-    cityShow () {
-      let city = ''
-      if (this.cityInfo.selecity || this.cityInfo.city) {
-        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
-      } else {
-        return '定位中···'
-      }
-      return city.length >= 4 ? city.slice(0, 3) + '···' : city
-    },
-    getPhone () {
-      if (this.storeList.length > 1) {
-        return this.storeList[this.defaultStoreId].phone
-      }
-    },
-    ...mapGetters([
-      'myCar',
-      'cityInfo',
-      'defaultStoreId',
-      'detectionMenus',
-      'userInfo',
-      'loadingState'
-    ])
-  },
-  mounted () {
-    if (!this.cityInfo.citycode) {
-      this._setMap()
-      this.carIndex = getDefaultIndex(this.myCar)
-      this.carInfo = this.myCar[this.carIndex]
-    }
-  },
-  components: {
-    Badge,
-    Swiper,
-    Scroll
   }
 }
 </script>

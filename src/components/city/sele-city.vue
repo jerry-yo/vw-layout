@@ -115,7 +115,7 @@ export default {
       this._goBack()
     },
     getCityList () {
-      this.$post(`${this.gt1Url}/api/carzone/getCity`, 1, (res) => {
+      this.$post(`${this.gt1Url}/api/carzone/getCity`, this.headers_1, (res) => {
         if (res.errorCode === 0) {
           let list = res.data.data.replace(new RegExp(/'/g), '"')
           list = JSON.parse(list).data
@@ -129,7 +129,6 @@ export default {
     })
   },
   created () {
-    console.log(this.cityList)
     if (this.cityList.length < 1) {
       this.getCityList()
     }

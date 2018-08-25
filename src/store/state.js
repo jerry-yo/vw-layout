@@ -1,4 +1,4 @@
-import {loadUserInfo, loadCityList, loadCityInfo, loadStoreList, loadMyCar, loadCarBrand, loadAddCar} from '../common/js/cache'
+import {loadUserInfo, loadCityList, loadCityInfo, loadStoreList, loadMyCar, loadDefaultCar, loadCarBrand, loadAddCar} from '../common/js/cache'
 
 const state = {
   routerAnimate: 'none',
@@ -7,6 +7,7 @@ const state = {
   cityInfo: loadCityInfo(),
   storeList: loadStoreList(),
   myCar: loadMyCar(),
+  defaultCar: loadDefaultCar(),
   carBrand: loadCarBrand(),
   addCar: loadAddCar(),
   loadingState: false,

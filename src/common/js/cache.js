@@ -2,18 +2,20 @@ import CryptoJS from 'crypto-js'
 
 // 秘钥
 
+
 /*
   ** localStorage **
 */
 const USER_INFO = '__gt1_user__' // 用户信息操作
 const CITY_LIST = '__gt1_citys__' // 城市列表操作
-const CAR_BRAND = '__gt1_car_brand__'
+const CAR_BRAND = '__gt1_car_brand__' // 汽车品牌操作
 /*
   ** sessionStorage **
 */
 const CITY_INFO = '__city_info__' // 定位城市信息
 const STORE_LIST = '__store_list__' // 门店列表
 const MY_CAR = '__my_car__' // 我的车库
+const DEFAULT_CAR = '__default_car__' // 默认车辆信息
 const ADD_CAR = '__add_car__' // 添加车辆信息
 /*
   ** localStorage **
@@ -110,6 +112,19 @@ export function loadAddCar () { // 添加车辆缓存
 }
 export function saveAddCar (info) { // 添加车辆缓存
   sessionStorage.setItem(ADD_CAR, JSON.stringify(info))
+  return info
+}
+
+export function loadDefaultCar () { // 车库默认车辆
+  let car = sessionStorage.getItem(DEFAULT_CAR)
+  if (car === null) {
+    return {}
+  } else {
+    return JSON.parse(car)
+  }
+}
+export function saveDefaultCar (info) { // 车库默认车辆
+  sessionStorage.setItem(DEFAULT_CAR, JSON.stringify(info))
   return info
 }
 /*

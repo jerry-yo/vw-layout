@@ -1,8 +1,3 @@
-
-// export const getCarLogo = state => id => {
-//   return state.carBrand.find(car => car.id === id)
-// }
-
 const getters = {
   carBrand (state) {
     return state.carBrand
@@ -15,6 +10,9 @@ const getters = {
   },
   myCar (state) {
     return state.myCar
+  },
+  defaultCar (state) {
+    return state.defaultCar
   },
   cityInfo (state) {
     return state.cityInfo

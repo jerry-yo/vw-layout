@@ -20,11 +20,9 @@
           {{area[areaIndex]}}
         </div>
         <div class="idcard-num">
-          <input type="text" v-model.trim="carid"  maxlength="6" :placeholder="'例：A88888'" @change="validateCarid">
+          <input type="text" v-model.trim="carid"  maxlength="6" :placeholder="'A88888'" @change="validateCarid">
         </div>
       </div>
-      <p>请输入真实车牌 以便后续服务</p>
-      <h2>其他信息（选填）</h2>
       <div class="car-way">
         <span>行驶里程</span>
         <div class="input">
@@ -32,6 +30,8 @@
         </div>
         <span>km</span>
       </div>
+      <p>请输入真实车牌 以便后续服务</p>
+      <h2>其他信息（选填）</h2>
       <div class="car-date">
         <span>注册日期</span>
         <div class="btn">
@@ -96,19 +96,13 @@ export default {
       this.$router.go(-1)
     },
     _addCar () {
-      if (this.carid === null) {
+      if (this.carid === null && this.way === null) {
         this.$Toast({
-          message: '请输入车牌号码',
+          message: '请补全必填信息',
           position: 'bottom'
         })
       } else {
         this._lookMyCar()
-        // this.setAddCar({
-        //   idCard: this.area[this.areaIndex] + this.carid,
-        //   way: this.way,
-        //   time: this.year
-        // })
-        // this.$router.replace('/garage')
       }
     },
     _lookMyCar () {
@@ -126,6 +120,7 @@ export default {
           this.refreshToken(this._setMyCar)
         } else if (res.code === 200) {
           this.$router.push('/garage')
+          this.setAddCar({})
         }
       }, {
         carBrandLogo: `${this.addCar.exhaustVolume}\uA856${this.addCar.manufacturerName}\uA856${this.addCar.year}\uA856${this.time}\uA856${this.addCar.evehicleSystem}\uA856${this.addCar.transmissionDesc}\uA856${this.addCar.brandName}\uA856${this.addCar.imageSrc}`,
@@ -228,6 +223,7 @@ export default {
       background-color: #fff
       font-size: 24px
       color: #3b3b3b
+      border-bottom: 1px solid #f2f2f2
       .idcard-area
         flex: 1
         padding-right: 47px

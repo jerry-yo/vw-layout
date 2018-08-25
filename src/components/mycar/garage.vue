@@ -1,7 +1,6 @@
 // 我的车库
 <template>
   <div class="garage">
-    <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex"></seleArea>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
@@ -9,16 +8,13 @@
     </div>
     <div class="container">
       <div class="swiper">
-        <Slider :recommends="update" @tapcard="tapCard" @carid="getCarId" @setdefault="setDefault"></Slider>
+        <Slider :recommends="myCar" @tapcard="tapCard" @carid="getCarId" @setdefault="setDefault"></Slider>
       </div>
       <div class="car-menu">
         <div class="car-con">
-          <div class="owner" @click="_goCarOwner">
+          <div class="owner" @click="_goCarAuth">
             <h2>车主认证</h2>
           </div>
-          <!-- <div class="sharing" @click="_goCarSharing">
-            <h2>车辆共有人</h2>
-          </div> -->
           <div class="record" @click="_goDetectionRecord">
             <h2>检测记录</h2>
           </div>
@@ -26,32 +22,32 @@
       </div>
       <div class="car-idcard" v-if="myCar.length > 0">
         <span>车牌号</span>
-        <div class="area" @click="goSeleArea">
+        <div class="area">
           {{myCar[carId].carNumber.slice(0, 1)}}
         </div>
         <div class="number">
-          <input type="text" name="" :placeholder="myCar[carId].carNumber.slice(1, 7)">
+          {{myCar[carId].carNumber.slice(1, 7)}}
         </div>
       </div>
       <div class="car-info" v-if="myCar.length > 0">
         <div class="car-models">
           <span>具体车型</span>
-          <span>{{`${nowCar.year} - ${nowCar.transmissionDesc}`}}</span>
+          <span>{{`${defaultCar.year} - ${defaultCar.transmissionDesc}`}}</span>
         </div>
         <div class="car-others">
           <div class="car-displacement">
             <span>发动机排量</span>
-            <span>{{nowCar.exhaustVolume}}</span>
+            <span>{{defaultCar.exhaustVolume}}</span>
           </div>
           <div class="car-age">
             <span>生产年份</span>
-            <span>{{nowCar.year}}</span>
+            <span>{{defaultCar.year}}</span>
           </div>
         </div>
         <div class="car-far">
           <span>行驶里程</span>
           <div class="input">
-            <input type="number" name="" :placeholder="nowCar.distance">
+            <input type="number" name="" :placeholder="defaultCar.distance">
           </div>
           <span>km</span>
         </div>
@@ -65,17 +61,17 @@
 </template>
 
 <script>
-import seleArea from '@/base/sele-area'
 import Slider from '@/base/slider/slider-view'
-import {mapMutations, mapGetters} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 import {expireToken} from '@/common/js/mixin'
 export default {
-  mixins: [expireToken],
   name: 'garage',
+  components: {
+    Slider
+  },
+  mixins: [expireToken],
   data () {
     return {
-      showAreaBtn: false,
-      areaIndex: 3,
       carId: 0
     }
   },
@@ -83,59 +79,24 @@ export default {
     this._getMyCar()
   },
   computed: {
-    nowCar () {
-      let now = this.myCar[this.carId]
-      let infos = now.carBrandLogo.split('\uA856')
-      return Object.assign(now, {
-        exhaustVolume: infos[0],
-        manufacturerName: infos[1],
-        year: infos[2],
-        time: infos[3],
-        evehicleSystem: infos[4],
-        transmissionDesc: infos[5],
-        brandName: infos[6],
-        imageSrc: infos[7]
-      })
-    },
-    update () {
-      let arr = []
-      this.myCar.forEach(item => {
-        let infos = item.carBrandLogo.split('\uA856')
-        arr.push(Object.assign(item, {
-          exhaustVolume: infos[0],
-          manufacturerName: infos[1],
-          year: infos[2],
-          time: infos[3],
-          evehicleSystem: infos[4],
-          transmissionDesc: infos[5],
-          brandName: infos[6],
-          imageSrc: infos[7]
-        }))
-      })
-      return arr
-    },
     ...mapGetters([
       'myCar',
+      'defaultCar',
       'userInfo'
     ])
   },
   methods: {
+    // 获取我的车库
     _getMyCar () {
       this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._getMyCar)
         } else if (res.code === 200) {
-          this.setMyCar(res.data)
+          this.updateCarList(res.data)
         }
       })
     },
-    goSeleArea () {
-      this.showAreaBtn = true
-    },
-    getBackInfo (res) {
-      this.areaIndex = res
-      this.showAreaBtn = false
-    },
+    // 车库没有车辆， 跳转到添加车辆
     tapCard (id) {
       if (this.myCar.length < 1) {
         this.$router.push('/addcar-tabbar?type=add')
@@ -150,13 +111,16 @@ export default {
     getCarId (id) {
       this.carId = id
     },
+    // 返回个人中心
     _goBack () {
       this.$router.push('/mind')
     },
+    // 车辆管理
     _goManagement () {
       this.$router.push('/vehicle-management')
     },
-    _goCarOwner () {
+    // 车主认证
+    _goCarAuth () {
       if (this.myCar.length < 1) {
         this.$Toast({
           message: '请先添加车辆！',
@@ -166,9 +130,7 @@ export default {
       }
       this.$router.push('/car-owner?carid=' + this.carId)
     },
-    _goCarSharing () {
-      this.$router.push('/car-sharing')
-    },
+    // 查看检测单
     _goDetectionRecord () {
       if (this.myCar.length < 1) {
         this.$Toast({
@@ -179,14 +141,9 @@ export default {
       }
       this.$router.push('/detection-record?carid=' + this.carId)
     },
-    ...mapMutations({
-      setDefaultCar: 'SET_DEFAULTCAR',
-      setMyCar: 'SET_MYCAR'
-    })
-  },
-  components: {
-    seleArea,
-    Slider
+    ...mapActions([
+      'updateCarList'
+    ])
   }
 }
 </script>
@@ -295,15 +252,9 @@ export default {
         border-right: 1px solid #f2f2f2
       .number
         width: 114px
-        input
-          width: 100%
-          height: 100%
-          background: none
-          border: none
-          outline: none
-          text-align: right
-          font-size: 24px
-          color: #5b5b5b
+        font-size: 24px
+        color: #5b5b5b
+        text-align: right
     .car-info
       height: 360px
       // display: flex

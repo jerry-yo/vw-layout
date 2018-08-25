@@ -9,7 +9,7 @@
       <div class="info-2">
         <span>VIN号</span>
         <div class="input">
-          <input type="text" v-model="vin" placeholder="用于获取车辆信息" maxlength="17">
+          <input type="text" v-model="vin" placeholder="请输入VIN码" maxlength="17">
         </div>
       </div>
     </div>
@@ -114,8 +114,7 @@ export default {
       })
     },
     ...mapMutations({
-      setAddCar: 'SET_ADDCAR',
-      modifyMyCar: 'MODIFY_MYCAR'
+      setAddCar: 'SET_ADDCAR'
     })
   },
   computed: {

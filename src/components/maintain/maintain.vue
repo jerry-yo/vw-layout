@@ -3,8 +3,8 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>{{myCar[0].series.sbName + ' - ' + myCar[0].series.vehicleSystem[1]}}</h2>
-        <p><span>{{myCar[0].idCard}}</span><span>丨</span><span>{{myCar[0].way}}km</span></p>
+        <h2>{{`${defaultCar.year} - ${defaultCar.transmissionDesc}`}}</h2>
+        <p><span>{{defaultCar.carNumber}}</span><span>丨</span><span>{{defaultCar.distance}}km</span></p>
       </div>
     </div>
     <div class="service-flow">
@@ -82,7 +82,8 @@ export default {
     },
     ...mapGetters([
       'serverList',
-      'myCar'
+      'myCar',
+      'defaultCar'
     ])
   },
   created () {

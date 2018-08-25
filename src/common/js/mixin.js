@@ -26,7 +26,9 @@ export const expireToken = {
           this.updateUserInfo({
             token: res.data.data
           })
-          callback()
+          setTimeout(() => {
+            callback()
+          }, 0)
         }
       }, {
         orderToken: this.userInfo.token
