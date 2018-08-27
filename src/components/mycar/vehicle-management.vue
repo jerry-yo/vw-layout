@@ -149,11 +149,19 @@ export default {
               externalUserId: this.myCar[index].externalUserId,
               userCarId: this.myCar[index].userCarId,
               userId: this.myCar[index].userId
-            }, 'delete_1')
+            }, this._callbackModify)
           }
         })
       } else {
         this.$router.push('/addcar-tabbar?type=add')
+      }
+    },
+    // 删除默认后，设置默认成功回调
+    _callbackModify () {
+      this.checkInfos.default = false
+      if (this.checkInfos.length === 0 && this.checkInfos.default === false) {
+        this.editState = false
+        this._getMyCar()
       }
     },
     _editCar () {
@@ -163,36 +171,41 @@ export default {
       }
     },
     _setCarDefault (item, id) {
-      let itemObj = {
-        carBrandLogo: `${item.exhaustVolume}\uA856${item.manufacturerName}\uA856${item.year}\uA856${item.time}\uA856${item.evehicleSystem}\uA856${item.transmissionDesc}\uA856${item.brandName}\uA856${item.imageSrc}`,
-        carId: item.carId,
-        carNumber: item.carNumber,
-        carVin: item.carVin,
-        clientAppId: item.clientAppId,
-        clientUserId: item.clientUserId,
-        defaultFlag: 1,
-        distance: item.distance,
-        externalUserId: item.externalUserId,
-        userCarId: item.userCarId,
-        userId: item.userId
+      if (item.defaultFlag !== 1) {
+        let index = this.defaultCarId
+        let itemObj = {
+          carBrandLogo: `${item.exhaustVolume}\uA856${item.manufacturerName}\uA856${item.year}\uA856${item.time}\uA856${item.evehicleSystem}\uA856${item.transmissionDesc}\uA856${item.brandName}\uA856${item.imageSrc}`,
+          carId: item.carId,
+          carNumber: item.carNumber,
+          carVin: item.carVin,
+          clientAppId: item.clientAppId,
+          clientUserId: item.clientUserId,
+          defaultFlag: 1,
+          distance: item.distance,
+          externalUserId: item.externalUserId,
+          userCarId: item.userCarId,
+          userId: item.userId
+        }
+        let defaultObj = {
+          carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${this.myCar[index].time}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
+          carId: this.myCar[index].carId,
+          carNumber: this.myCar[index].carNumber,
+          carVin: this.myCar[index].carVin,
+          clientAppId: this.myCar[index].clientAppId,
+          clientUserId: this.myCar[index].clientUserId,
+          defaultFlag: 0,
+          distance: this.myCar[index].distance,
+          externalUserId: this.myCar[index].externalUserId,
+          userCarId: this.myCar[index].userCarId,
+          userId: this.myCar[index].userId
+        }
+        this.modifyCar(itemObj)
+        this.modifyCar(defaultObj)
+        this.updateCarDefault({
+          defaultId: index,
+          modifyId: id
+        })
       }
-      let defaultObj = {
-        carBrandLogo: `${this.myCar[0].exhaustVolume}\uA856${this.myCar[0].manufacturerName}\uA856${this.myCar[0].year}\uA856${this.myCar[0].time}\uA856${this.myCar[0].evehicleSystem}\uA856${this.myCar[0].transmissionDesc}\uA856${this.myCar[0].brandName}\uA856${this.myCar[0].imageSrc}`,
-        carId: this.myCar[0].carId,
-        carNumber: this.myCar[0].carNumber,
-        carVin: this.myCar[0].carVin,
-        clientAppId: this.myCar[0].clientAppId,
-        clientUserId: this.myCar[0].clientUserId,
-        defaultFlag: 0,
-        distance: this.myCar[0].distance,
-        externalUserId: this.myCar[0].externalUserId,
-        userCarId: this.myCar[0].userCarId,
-        userId: this.myCar[0].userId
-      }
-      this.modifyCar(itemObj, 'delete_2', id)
-      this.modifyCar(defaultObj, 'delete_2', 0)
-      this.$set(this.myCar[id], 'defaultFlag', 1)
-      this.$set(this.myCar[this.defaultCarId], 'defaultFlag', 0)
     },
     _checkCar (id) {
       if (this.check[id].check) {
@@ -211,7 +224,8 @@ export default {
       this.check = arr
     },
     ...mapActions([
-      'updateCarList'
+      'updateCarList',
+      'updateCarDefault'
     ])
   }
 }

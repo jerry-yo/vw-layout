@@ -32,53 +32,69 @@
       <div class="car-info" v-if="myCar.length > 0">
         <div class="car-models">
           <span>具体车型</span>
-          <span>{{`${defaultCar.year} - ${defaultCar.transmissionDesc}`}}</span>
+          <span>{{`${myCar[carId].year} - ${myCar[carId].transmissionDesc}`}}</span>
         </div>
         <div class="car-others">
           <div class="car-displacement">
             <span>发动机排量</span>
-            <span>{{defaultCar.exhaustVolume}}</span>
+            <span>{{myCar[carId].exhaustVolume}}</span>
           </div>
           <div class="car-age">
             <span>生产年份</span>
-            <span>{{defaultCar.year}}</span>
+            <span>{{myCar[carId].year}}</span>
           </div>
         </div>
         <div class="car-far">
           <span>行驶里程</span>
           <div class="input">
-            <input type="number" name="" :placeholder="defaultCar.distance">
+            <input type="number" v-model="modifyWay" :placeholder="myCar[carId].distance" @change="handleModifyWay">
           </div>
           <span>km</span>
         </div>
         <div class="car-time">
           <span>注册时间</span>
-          <span>未添加信息</span>
+          <span @click="showDate">{{tempToDate(myCar[carId])}}</span>
         </div>
       </div>
     </div>
+    <datePickerMask v-if="datePickerShow" @close="closePicker"></datePickerMask>
   </div>
 </template>
 
 <script>
 import Slider from '@/base/slider/slider-view'
 import {mapActions, mapGetters} from 'vuex'
-import {expireToken} from '@/common/js/mixin'
+import {expireToken, modifyCarInfo} from '@/common/js/mixin'
+import datePickerMask from '@/base/date-picker'
+import {datePicker, timeToStamp, getFormatDateToRepair} from '@/common/js/date'
 export default {
   name: 'garage',
   components: {
-    Slider
+    Slider,
+    datePickerMask
   },
-  mixins: [expireToken],
+  mixins: [expireToken, modifyCarInfo],
   data () {
     return {
-      carId: 0
+      carId: 0,
+      datePickerShow: false,
+      dateInfo: {},
+      modifyWay: null
     }
   },
   created () {
     this._getMyCar()
   },
   computed: {
+    defaultCarId () {
+      let id = 0
+      this.myCar.forEach((item, index) => {
+        if (item.defaultFlag) {
+          id = index
+        }
+      })
+      return id
+    },
     ...mapGetters([
       'myCar',
       'defaultCar',
@@ -86,6 +102,81 @@ export default {
     ])
   },
   methods: {
+    tempToDate (info) {
+      if (info.time && info.time !== '-1') {
+        let date = getFormatDateToRepair(parseInt(info.time))
+        return date
+      } else {
+        return '未添加信息'
+      }
+    },
+    // 选择时间
+    showDate () {
+      this.datePickerShow = true
+    },
+    // 返回选择时间
+    closePicker (res) {
+      this.datePickerShow = false
+      let index = this.carId
+      let date = datePicker()
+      let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
+      if (res) {
+        if (res.temp < nowTemp && res.temp !== this.myCar[index].time) {
+          this.modifyCar({
+            carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${res.temp}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
+            carId: this.myCar[index].carId,
+            carNumber: this.myCar[index].carNumber,
+            carVin: this.myCar[index].carVin,
+            clientAppId: this.myCar[index].clientAppId,
+            clientUserId: this.myCar[index].clientUserId,
+            defaultFlag: this.myCar[index].defaultFlag,
+            distance: this.myCar[index].distance,
+            externalUserId: this.myCar[index].externalUserId,
+            userCarId: this.myCar[index].userCarId,
+            userId: this.myCar[index].userId
+          }, () => {
+            this.updateCarWay({
+              index: index,
+              obj: {
+                time: res.temp
+              }
+            })
+          })
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: '您选择的日期错误，请重新选择'
+          })
+        }
+      }
+    },
+    // 修改车辆行驶路程
+    handleModifyWay () {
+      let index = this.carId
+      if (this.modifyWay !== this.myCar[index].distance) {
+        this.modifyCar({
+          carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${this.myCar[index].time}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
+          carId: this.myCar[index].carId,
+          carNumber: this.myCar[index].carNumber,
+          carVin: this.myCar[index].carVin,
+          clientAppId: this.myCar[index].clientAppId,
+          clientUserId: this.myCar[index].clientUserId,
+          defaultFlag: this.myCar[index].defaultFlag,
+          distance: this.modifyWay,
+          externalUserId: this.myCar[index].externalUserId,
+          userCarId: this.myCar[index].userCarId,
+          userId: this.myCar[index].userId
+        }, () => {
+          this.updateCarWay({
+            index: index,
+            obj: {
+              distance: this.modifyWay
+            }
+          })
+          this.modifyWay = null
+        })
+      }
+    },
     // 获取我的车库
     _getMyCar () {
       this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
@@ -103,8 +194,42 @@ export default {
       }
     },
     // 设置默认车辆
-    setDefault (car) {
-      console.log(car)
+    setDefault (res) {
+      if (res.item.defaultFlag !== 1) {
+        let index = this.defaultCarId
+        let itemObj = {
+          carBrandLogo: `${res.item.exhaustVolume}\uA856${res.item.manufacturerName}\uA856${res.item.year}\uA856${res.item.time}\uA856${res.item.evehicleSystem}\uA856${res.item.transmissionDesc}\uA856${res.item.brandName}\uA856${res.item.imageSrc}`,
+          carId: res.item.carId,
+          carNumber: res.item.carNumber,
+          carVin: res.item.carVin,
+          clientAppId: res.item.clientAppId,
+          clientUserId: res.item.clientUserId,
+          defaultFlag: 1,
+          distance: res.item.distance,
+          externalUserId: res.item.externalUserId,
+          userCarId: res.item.userCarId,
+          userId: res.item.userId
+        }
+        let defaultObj = {
+          carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${this.myCar[index].time}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
+          carId: this.myCar[index].carId,
+          carNumber: this.myCar[index].carNumber,
+          carVin: this.myCar[index].carVin,
+          clientAppId: this.myCar[index].clientAppId,
+          clientUserId: this.myCar[index].clientUserId,
+          defaultFlag: 0,
+          distance: this.myCar[index].distance,
+          externalUserId: this.myCar[index].externalUserId,
+          userCarId: this.myCar[index].userCarId,
+          userId: this.myCar[index].userId
+        }
+        this.modifyCar(itemObj)
+        this.modifyCar(defaultObj)
+        this.updateCarDefault({
+          defaultId: index,
+          modifyId: res.index
+        })
+      }
     },
     getCarId (id) {
       this.carId = id
@@ -147,7 +272,9 @@ export default {
       this.$router.push('/detection-record?carid=' + this.carId)
     },
     ...mapActions([
-      'updateCarList'
+      'updateCarList',
+      'updateCarWay',
+      'updateCarDefault'
     ])
   }
 }

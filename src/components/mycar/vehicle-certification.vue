@@ -9,7 +9,7 @@
       <div class="info-2">
         <span>VIN号</span>
         <div class="input">
-          <input type="text" v-model="vin" placeholder="请输入VIN码" maxlength="17">
+          <input type="text" v-model="vin" placeholder="请输入VIN码" maxlength="17" @change="validateVin">
         </div>
       </div>
     </div>
@@ -23,8 +23,10 @@
 
 <script>
 import {mapMutations, mapGetters} from 'vuex'
+import {modifyCarInfo} from '@/common/js/mixin'
 export default {
   name: 'vehicleCertification',
+  mixins: [modifyCarInfo],
   props: {
     vinType: {
       type: Number
@@ -38,80 +40,63 @@ export default {
     }
   },
   methods: {
+    validateVin () {
+      this.vin = this.vin.toUpperCase()
+    },
     getCarInfoByVin () {
-      let _self = this
-      this.promise = new Promise((resolve, reject) => {
-        this.api_post('/api/carzone/vincode', (res) => {
-          if (res.errorCode === 0) {
-            if (res.data.data.result === '0000') {
-              _self.carinfo = res.data.data.detail
-              resolve()
-            } else {
-              return reject
+      if (this.vin.length === 17) {
+        this.$get(`${this.f6Url}/api/clientUserCar/getModelByVin`, this.headers_2, (res) => {
+          if (res.code === 200 && res.data.result === '0000') {
+            let info = res.data.detail
+            let id = this.vinType
+            let imgURL = this.getCarLogo(info.brandName)
+            let config = {
+              carBrandLogo: `${info.exhaustVolume}\uA856${info.manufacturerName}\uA856${info.year}\uA856${this.myCar[id].time}\uA856${info.eVehicleSystem}\uA856${info.transmissionDesc}\uA856${info.brandName}\uA856${imgURL}`,
+              carId: info.mid,
+              carNumber: this.myCar[id].carNumber,
+              carVin: this.vin,
+              clientAppId: this.myCar[id].clientAppId,
+              clientUserId: this.myCar[id].clientUserId,
+              defaultFlag: this.myCar[id].defaultFlag,
+              distance: this.myCar[id].distance,
+              externalUserId: this.myCar[id].externalUserId,
+              userCarId: this.myCar[id].userCarId,
+              userId: this.myCar[id].userId
             }
+            if (this.vinType === -1) {
+              this.addMyCar(config)
+            } else {
+              this.modifyCar(config, () => {
+                this.$router.back()
+              })
+            }
+          } else if (res.code === 200 && res.data.result === '1004') {
+            this.$Toast({
+              position: 'bottom',
+              message: res.data.note
+            })
           }
         }, {
-          vinCode: this.vin
+          vin: this.vin
         })
-      })
-      if (this.vinType === -1) {
-        this.addMyCar()
       } else {
-        this.modifyCarInfo()
+        this.$Toast({
+          position: 'bottom',
+          message: 'VIN码不是17位'
+        })
       }
     },
-    addMyCar () {
-      let _self = this
-      this.promise.then(() => {
-        let img = ''
-        _self.carBrand.forEach((item) => {
-          if (item.pbid === _self.carinfo.pbid) {
-            img = item.imageSrc
-          }
-        })
-        this.setAddCar({
-          exhaustVolume: _self.carinfo.exhaustVolume,
-          imageSrc: img,
-          month: _self.carinfo.onMarketMonth,
-          name: _self.carinfo.brandName,
-          pbid: _self.carinfo.pbid,
-          salesVersion: _self.carinfo.salesVersion,
-          series: {
-            sbName: _self.carinfo.manufacturerName,
-            vehicleSystem: [_self.carinfo.sid, _self.carinfo.vehicleSystem, _self.carinfo.status]
-          },
-          year: _self.carinfo.onMarketYear
-        })
-        this.$router.push('/addcar-idcard')
+    getCarLogo (name) {
+      let img = ''
+      this.carBrand.forEach(item => {
+        if (item.brandName === name) {
+          img = item.imageSrc
+        }
       })
+      return img
     },
-    modifyCarInfo () {
-      let _self = this
-      this.promise.then(() => {
-        let img = ''
-        _self.carBrand.forEach((item) => {
-          if (item.pbid === _self.carinfo.pbid) {
-            img = item.imageSrc
-          }
-        })
-        this.modifyMyCar({
-          id: this.vinType,
-          carinfo: {
-            exhaustVolume: _self.carinfo.exhaustVolume,
-            imageSrc: img,
-            month: _self.carinfo.onMarketMonth,
-            name: _self.carinfo.brandName,
-            pbid: _self.carinfo.pbid,
-            salesVersion: _self.carinfo.salesVersion,
-            series: {
-              sbName: _self.carinfo.manufacturerName,
-              vehicleSystem: [_self.carinfo.sid, _self.carinfo.vehicleSystem, _self.carinfo.status]
-            },
-            year: _self.carinfo.onMarketYear
-          }
-        })
-        this.$router.back()
-      })
+    addMyCar (info) {
+      this.$router.push('/addcar-idcard')
     },
     ...mapMutations({
       setAddCar: 'SET_ADDCAR'

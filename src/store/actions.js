@@ -23,3 +23,32 @@ export const updateCarList = function ({commit}, list) {
   })
   commit(types.SET_MYCAR, arr)
 }
+
+// 我的车库更新默认
+export const updateCarDefault = function ({commit, state}, info) {
+  // commit(types.SET_DEFAULTCAR, item)
+  // commit(types.SET_MYCAR, arr)
+  let arr = state.myCar.slice()
+  arr.forEach((item, index) => {
+    if (index === info.defaultId) {
+      item.defaultFlag = 0
+    } else if (index === info.modifyId) {
+      item.defaultFlag = 1
+    }
+  })
+  commit(types.SET_DEFAULTCAR, arr[info.modifyId])
+  commit(types.SET_MYCAR, arr)
+}
+
+export const updateCarWay = function ({commit, state}, info) {
+  let arr = state.myCar.slice()
+  arr.forEach((item, index) => {
+    if (index === info.index) {
+      item = Object.assign(item, info.obj)
+    }
+    if (item.defaultFlag) {
+      commit(types.SET_DEFAULTCAR, item)
+    }
+  })
+  commit(types.SET_MYCAR, arr)
+}

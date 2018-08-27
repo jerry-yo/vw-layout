@@ -75,13 +75,10 @@ export const modifyCarInfo = {
     ])
   },
   methods: {
-    modifyCar (info, type, id) {
-      // type: 'delete_1'多选删除默认，重新设置默认'delete_2'修改默认'delete_3'普通修改
+    modifyCar (info, callback = () => {}) {
       this.$put(`${this.f6Url}/api/clientUserCar`, this.headers_2, (res) => {
         if (res.code === 200) {
-          if (type === 'delete_1') {
-            this.checkInfos.default = false
-          }
+          callback()
         } else if (res.code === 401) {
           this.refreshToken(this.modifyCar)
         }

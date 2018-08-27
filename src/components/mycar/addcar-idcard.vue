@@ -23,6 +23,8 @@
           <input type="text" v-model.trim="carid"  maxlength="6" :placeholder="'A88888'" @change="validateCarid">
         </div>
       </div>
+      <p>请输入真实车牌 以便后续服务</p>
+      <h2>其他信息（选填）</h2>
       <div class="car-way">
         <span>行驶里程</span>
         <div class="input">
@@ -30,19 +32,15 @@
         </div>
         <span>km</span>
       </div>
-      <p>请输入真实车牌 以便后续服务</p>
-      <h2>其他信息（选填）</h2>
       <div class="car-date">
         <span>注册日期</span>
-        <div class="btn">
-          请填写行驶证上真实注册日期
-          <!-- {{}} -->
-        </div>
+        <div class="btn" @click="datePickerShow = true">{{tempToDate}}</div>
       </div>
     </div>
     <div class="addcar-btn" @click="_addCar">
       <span>确认添加</span>
     </div>
+    <datePickerMask v-if="datePickerShow" @close="closePicker"></datePickerMask>
   </div>
 </template>
 
@@ -50,6 +48,8 @@
 import seleArea from '@/base/sele-area'
 import {mapGetters, mapMutations} from 'vuex'
 import {expireToken} from '@/common/js/mixin'
+import datePickerMask from '@/base/date-picker'
+import {getFormatDateToRepair, datePicker, timeToStamp} from '@/common/js/date'
 export default {
   name: 'addcarIdcard',
   mixins: [expireToken],
@@ -59,8 +59,26 @@ export default {
       areaIndex: 0,
       carid: null,
       way: null,
-      time: -1
+      tempInfo: {},
+      isFinish: false,
+      datePickerShow: false
     }
+  },
+  computed: {
+    tempToDate () {
+      if (this.tempInfo.temp) {
+        let date = getFormatDateToRepair(parseInt(this.tempInfo.temp))
+        return date
+      } else {
+        return '请填写驾驶证上的真实注册日期'
+      }
+    },
+    ...mapGetters([
+      'addCar',
+      'area',
+      'myCar',
+      'userInfo'
+    ])
   },
   methods: {
     validateCarid () {
@@ -95,8 +113,16 @@ export default {
     _goBack () {
       this.$router.go(-1)
     },
+    closePicker (res) {
+      this.datePickerShow = false
+      let date = datePicker()
+      let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
+      if (res.temp < nowTemp) {
+        this.tempInfo = res
+      }
+    },
     _addCar () {
-      if (this.carid === null && this.way === null) {
+      if (this.carid === null) {
         this.$Toast({
           message: '请补全必填信息',
           position: 'bottom'
@@ -115,6 +141,7 @@ export default {
       })
     },
     _setMyCar (hasCar) {
+      let time = this.tempInfo.temp ? this.tempInfo.temp : '-1'
       this.$f6post(`${this.f6Url}/api/clientUserCar`, this.headers_3, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._setMyCar)
@@ -123,14 +150,14 @@ export default {
           this.setAddCar({})
         }
       }, {
-        carBrandLogo: `${this.addCar.exhaustVolume}\uA856${this.addCar.manufacturerName}\uA856${this.addCar.year}\uA856${this.time}\uA856${this.addCar.evehicleSystem}\uA856${this.addCar.transmissionDesc}\uA856${this.addCar.brandName}\uA856${this.addCar.imageSrc}`,
+        carBrandLogo: `${this.addCar.exhaustVolume}\uA856${this.addCar.manufacturerName}\uA856${this.addCar.year}\uA856${time}\uA856${this.addCar.evehicleSystem}\uA856${this.addCar.transmissionDesc}\uA856${this.addCar.brandName}\uA856${this.addCar.imageSrc}`,
         carId: this.addCar.mid,
         carNumber: `${this.area[this.areaIndex]}${this.carid}`,
         carVin: '',
         clientAppId: this.userInfo.appId,
         clientUserId: this.userInfo.fUserId,
         defaultFlag: hasCar,
-        distance: this.way,
+        distance: this.way ? this.way : 0,
         externalUserId: this.userInfo.externalUserId,
         userId: this.userInfo.fUserId
       })
@@ -139,16 +166,14 @@ export default {
       setAddCar: 'SET_ADDCAR'
     })
   },
-  computed: {
-    ...mapGetters([
-      'addCar',
-      'area',
-      'myCar',
-      'userInfo'
-    ])
+  beforeDestory () {
+    console.log(this.isFinish, '---over')
+    if (this.isFinish) {
+    }
   },
   components: {
-    seleArea
+    seleArea,
+    datePickerMask
   }
 }
 </script>

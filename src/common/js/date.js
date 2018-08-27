@@ -10,7 +10,7 @@ export function getFormatDate (stamp) {
 }
 
 export function getFormatDateToRepair (stamp) {
-  let date = new Date(stamp * 1000)
+  let date = new Date(stamp)
   let Y = date.getFullYear() + '年'
   let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1) + '月'
   let D = date.getDate() + '日 '
@@ -26,10 +26,10 @@ export function datePicker () {
   let yearArr = []
   let dayArr = []
 
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i <= 100; i++) {
     yearArr.push({
-      text: year + i,
-      value: year + i
+      text: 1970 + i,
+      value: 1970 + i
     })
   }
   for (let i = 0; i < 12; i++) {

@@ -1,7 +1,5 @@
 <template>
-  <div class="picker">
-
-  </div>
+  <div class="picker"></div>
 </template>
 
 <script type="text/ecmascript-6">
@@ -20,35 +18,34 @@ export default {
     }
   },
   mounted () {
-    this.showTime = [this.date.nowYear, this.date.nowMonth, this.date.nowDay]
     this.init()
   },
   computed: {
+    initYearArr () {
+      return {
+        arr: this.date.yearArr,
+        index: this.date.nowYear - 1970
+      }
+    },
     initMonthArr () {
-      let arr = []
-      this.date.monthArr.forEach((item) => {
-        if (item.value >= this.date.nowMonth) {
-          arr.push(item)
-        }
-      })
-      return arr
+      return {
+        arr: this.date.monthArr,
+        index: this.date.nowMonth - 1
+      }
     },
     initDayArr () {
-      let arr = []
-      this.date.dayArr.forEach((item) => {
-        if (item.value >= this.date.nowDay) {
-          arr.push(item)
-        }
-      })
-
-      return arr
+      return {
+        arr: this.getDays(this.date.dayArr, this.date.nowYear, this.date.nowDay),
+        index: this.date.nowDay - 1
+      }
     }
   },
   methods: {
     init () {
       let _self = this
+      this.showindex = [this.initYearArr.index, this.initMonthArr.index, this.initDayArr.index]
       this.picker = new Picker({
-        data: [this.date.yearArr, this.initMonthArr, this.initDayArr],
+        data: [this.initYearArr.arr, this.initMonthArr.arr, this.initDayArr.arr],
         selectedIndex: this.showindex,
         title: ''
       })
@@ -86,7 +83,6 @@ export default {
         })
       })
       this.picker.on('picker.valuechange', function (selectedVal, selectedIndex) {
-
       })
     },
     getDays (arr, year, month) {
