@@ -48,7 +48,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   if (to.meta.requireAuth) {
-    if (store.state.userInfo.token) {
+    if (store.state.userInfo.externalUserId) {
       if (to.meta.hasCar) {
         if (store.state.myCar.length > 0) {
           next()

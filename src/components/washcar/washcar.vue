@@ -2,10 +2,7 @@
   <div class="detection-record" flexContainer>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        <!-- <h2>{{myCar[0].series.sbName + ' - ' + myCar[0].series.vehicleSystem[1]}}</h2>
-        <p><span>{{myCar[0].idCard}}</span><span>丨</span><span>{{myCar[0].way}}km</span></p> -->
-      </div>
+      <div class="font"></div>
       <div class="search" @click="_goSearch"></div>
     </div>
     <div class="container" ref="container" :class="showMap ? 'show' : ''">
@@ -14,27 +11,6 @@
         <div class="bor"></div>
         <div class="map-kf"></div>
       </div>
-      <!-- marker 样式 -->
-      <!-- <div class="marker-com bg1">
-        <span class="marker-txt">中华恐龙园
-          <div class="state bg1"></div>
-        </span>
-        <div class="new">NEW</div>
-      </div> -->
-      <!-- 信息窗体 样式 -->
-      <!-- <div class="window-info">
-        <div class="left">
-          <h2>奇特异快速保养-丽华店addads</h2>
-          <p>常州市丽华南村XX街XX路X号奇特异快速保养-丽华店</p>
-        </div>
-        <div class="right">
-          <h2>4.2km</h2>
-          <span>距您最近</span>
-        </div>
-        <div class="state bg1">
-          空闲
-        </div>
-      </div> -->
     </div>
     <washInfo v-if="washinfoShow" @closewindow="_closeAll" :washinfo="washForShow"></washInfo>
   </div>
@@ -262,7 +238,7 @@ export default {
     },
     // 获取所有门店信息
     getStoreList (lng, lat) {
-      this.$post('api/store/storeList', 1, (res) => {
+      this.$post(`${this.gt1Url}/api/store/storeList`, this.headers_1, (res) => {
         if (res.errorCode === 0) {
           this.storeList = res.data
           this._setMap()

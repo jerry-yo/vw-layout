@@ -3,18 +3,21 @@
  */
 import Vue from 'vue'
 import axios from 'axios'
-import store from '../../store'
 
 // F6 接口使用 headersOther , 本地接口用headersCommon
-Vue.prototype.headers_1 = {
+Vue.prototype.gt1Header = {
   'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8;'
 }
-Vue.prototype.headers_2 = {
-  'Authorization': store.getters.userInfo.token
+Vue.prototype.f6Header = function (token) {
+  return {
+    'Authorization': token,
+    'Content-Type': 'application/json'
+  }
 }
-Vue.prototype.headers_3 = {
-  'Authorization': store.getters.userInfo.token,
-  'Content-Type': 'application/json'
+Vue.prototype.f6Header2 = function (token) {
+  return {
+    'Authorization': token
+  }
 }
 
 Vue.prototype.handleRrror = function (error) {

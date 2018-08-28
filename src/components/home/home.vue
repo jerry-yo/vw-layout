@@ -17,15 +17,15 @@
         </div>
         <div class="car-info">
           <div class="car-con">
-            <div class="info-tab" :class="carIndex !== -1 ? '' : 'nocar'" @click="_addCar">
-              <div class="car-img" v-if="carIndex !== -1 ? true : false">
-                <img v-lazy="carLogoUrl + carInfo.imageSrc" alt="">
+            <div class="info-tab" :class="defaultCar.carId ? '' : 'nocar'" @click="_addCar">
+              <div class="car-img" v-if="defaultCar.carId ? true : false">
+                <img v-lazy="carLogoUrl + defaultCar.imageSrc" alt="">
               </div>
-              <div class="car-name"  v-if="carIndex !== -1 ? true : false">
-                <div class="name">{{carInfo.series.sbName + ' - ' + carInfo.series.vehicleSystem[1]}}</div>
+              <div class="car-name"  v-if="defaultCar.carId ? true : false">
+                <div class="name">{{`${defaultCar.manufacturerName} - ${defaultCar.evehicleSystem}`}}</div>
                 <div class="card-info">
-                  <div class="card">{{carInfo.idCard}}</div>
-                  <div class="way">{{carInfo.way}}km</div>
+                  <div class="card">{{defaultCar.carNumber}}</div>
+                  <div class="way">{{defaultCar.distance}}km</div>
                 </div>
               </div>
             </div>
@@ -92,9 +92,9 @@
 import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
-import {mapGetters, mapMutations} from 'vuex'
-import {getDefaultIndex} from '@/common/js/arr'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken} from '@/common/js/mixin'
+import {handleMyCar} from '@/common/js/config'
 import AMap from 'AMap'
 export default {
   name: 'home',
@@ -106,8 +106,6 @@ export default {
   },
   data () {
     return {
-      carInfo: {},
-      carIndex: -1,
       recommends: [{
         id: 1,
         linkUrl: 'https://y.qq.com/m/act/chunwan2018/v3/index.html?ADTAG=jiaodiantu',
@@ -133,11 +131,11 @@ export default {
     }
   },
   mounted () {
-    this._getMyCar()
+    if (this.userInfo.externalUserId) {
+      this._getMyCar()
+    }
     if (!this.cityInfo.citycode) {
       this._setMap()
-      this.carIndex = getDefaultIndex(this.myCar)
-      this.carInfo = this.myCar[this.carIndex]
     }
   },
   computed: {
@@ -161,6 +159,7 @@ export default {
       'defaultStoreId',
       'detectionMenus',
       'userInfo',
+      'defaultCar',
       'loadingState'
     ])
   },
@@ -201,19 +200,22 @@ export default {
     },
     // 获取我的车库列表
     _getMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._getMyCar)
         } else if (res.code === 200) {
           this._setMyCar(res.data)
           this._getCheckList()
-          this._getStoreList()
         }
       })
     },
     // 处理车库列表
     _setMyCar (data) {
-      console.log(data)
+      let list = handleMyCar(data)
+      this.updateCarList(list)
     },
     // 获取检测单列表
     _getCheckList () {
@@ -274,11 +276,13 @@ export default {
       })
     },
     ...mapMutations({
-      setMyCar: 'SET_MYCAR',
       setCityInfo: 'SET_CITYINFO',
       setStoreList: 'SET_STORELIST',
       setLoadingState: 'SET_LOADING_STATE'
-    })
+    }),
+    ...mapActions([
+      'updateCarList'
+    ])
   }
 }
 </script>

@@ -8,6 +8,12 @@ export const updateUserInfo = function ({commit, state}, info) {
   saveUserInfo(infos)
   commit(types.SET_USER_INFO, infos)
 }
+// 删除用户信息
+
+export const deleteUserInfo = function ({commit}) {
+  saveUserInfo({})
+  commit(types.SET_USER_INFO, {})
+}
 
 // 我的车库信息设置
 export const updateCarList = function ({commit}, list) {

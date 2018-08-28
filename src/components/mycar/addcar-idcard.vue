@@ -12,7 +12,7 @@
     <div class="container">
       <div class="car-name">
         <img :src="carLogoUrl + addCar.imageSrc" alt="">
-        <h2><span>{{`${addCar.brandName} - ${addCar.evehicleSystem} - ${ addCar.exhaustVolume} - ${addCar.year} - ${addCar.transmissionDesc}`}}</span> </h2>
+        <h2><span>{{`${addCar.manufacturerName} - ${addCar.evehicleSystem} - ${addCar.exhaustVolume} - ${addCar.year} - ${addCar.transmissionDesc}`}}</span> </h2>
       </div>
       <div class="idcard">
         <span>车牌号</span>
@@ -132,7 +132,10 @@ export default {
       }
     },
     _lookMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._getMyCar)
         } else if (res.code === 200) {
@@ -142,7 +145,10 @@ export default {
     },
     _setMyCar (hasCar) {
       let time = this.tempInfo.temp ? this.tempInfo.temp : '-1'
-      this.$f6post(`${this.f6Url}/api/clientUserCar`, this.headers_3, (res) => {
+      this.$f6post(`${this.f6Url}/api/clientUserCar`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._setMyCar)
         } else if (res.code === 200) {
@@ -165,11 +171,6 @@ export default {
     ...mapMutations({
       setAddCar: 'SET_ADDCAR'
     })
-  },
-  beforeDestory () {
-    console.log(this.isFinish, '---over')
-    if (this.isFinish) {
-    }
   },
   components: {
     seleArea,

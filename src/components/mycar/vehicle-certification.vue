@@ -45,27 +45,30 @@ export default {
     },
     getCarInfoByVin () {
       if (this.vin.length === 17) {
-        this.$get(`${this.f6Url}/api/clientUserCar/getModelByVin`, this.headers_2, (res) => {
+        this.$get(`${this.f6Url}/api/clientUserCar/getModelByVin`, {
+          'Authorization': this.userInfo.token,
+          'Content-Type': 'application/json'
+        }, (res) => {
           if (res.code === 200 && res.data.result === '0000') {
             let info = res.data.detail
-            let id = this.vinType
             let imgURL = this.getCarLogo(info.brandName)
-            let config = {
-              carBrandLogo: `${info.exhaustVolume}\uA856${info.manufacturerName}\uA856${info.year}\uA856${this.myCar[id].time}\uA856${info.eVehicleSystem}\uA856${info.transmissionDesc}\uA856${info.brandName}\uA856${imgURL}`,
-              carId: info.mid,
-              carNumber: this.myCar[id].carNumber,
-              carVin: this.vin,
-              clientAppId: this.myCar[id].clientAppId,
-              clientUserId: this.myCar[id].clientUserId,
-              defaultFlag: this.myCar[id].defaultFlag,
-              distance: this.myCar[id].distance,
-              externalUserId: this.myCar[id].externalUserId,
-              userCarId: this.myCar[id].userCarId,
-              userId: this.myCar[id].userId
-            }
             if (this.vinType === -1) {
-              this.addMyCar(config)
+              this.addMyCar(info, imgURL)
             } else {
+              let id = this.vinType
+              let config = {
+                carBrandLogo: `${info.exhaustVolume}\uA856${info.manufacturerName}\uA856${info.year}\uA856${this.myCar[id].time}\uA856${info.eVehicleSystem}\uA856${info.transmissionDesc}\uA856${info.brandName}\uA856${imgURL}`,
+                carId: info.mid,
+                carNumber: this.myCar[id].carNumber,
+                carVin: this.vin,
+                clientAppId: this.myCar[id].clientAppId,
+                clientUserId: this.myCar[id].clientUserId,
+                defaultFlag: this.myCar[id].defaultFlag,
+                distance: this.myCar[id].distance,
+                externalUserId: this.myCar[id].externalUserId,
+                userCarId: this.myCar[id].userCarId,
+                userId: this.myCar[id].userId
+              }
               this.modifyCar(config, () => {
                 this.$router.back()
               })
@@ -95,7 +98,20 @@ export default {
       })
       return img
     },
-    addMyCar (info) {
+    addMyCar (info, url) {
+      this.setAddCar({
+        brandName: info.brandName,
+        eVehicleSystem: info.eVehicleSystem,
+        exhaustVolume: info.exhaustVolume,
+        imageSrc: url,
+        manufacturerName: info.manufacturerName,
+        mid: info.mid,
+        pbid: info.pbid,
+        sbid: info.sbid,
+        sid: info.sid,
+        transmissionDesc: info.transmissionDesc,
+        year: info.year
+      })
       this.$router.push('/addcar-idcard')
     },
     ...mapMutations({
@@ -104,7 +120,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'carBrand'
+      'carBrand',
+      'userInfo'
     ])
   }
 }

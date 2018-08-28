@@ -83,7 +83,7 @@ export default {
     }
   },
   created () {
-    this._getMyCar()
+    this._getMyCar(this.userInfo.token)
   },
   computed: {
     defaultCarId () {
@@ -120,7 +120,7 @@ export default {
       let index = this.carId
       let date = datePicker()
       let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
-      if (res) {
+      if (res.temp) {
         if (res.temp < nowTemp && res.temp !== this.myCar[index].time) {
           this.modifyCar({
             carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${res.temp}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
@@ -141,7 +141,7 @@ export default {
                 time: res.temp
               }
             })
-          })
+          }, this.userInfo.token)
         } else {
           this.$Toast({
             position: 'bottom',
@@ -174,12 +174,15 @@ export default {
             }
           })
           this.modifyWay = null
-        })
+        }, this.userInfo.token)
       }
     },
     // 获取我的车库
     _getMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._getMyCar)
         } else if (res.code === 200) {
@@ -223,8 +226,8 @@ export default {
           userCarId: this.myCar[index].userCarId,
           userId: this.myCar[index].userId
         }
-        this.modifyCar(itemObj)
-        this.modifyCar(defaultObj)
+        this.modifyCar(itemObj, () => {}, this.userInfo.token)
+        this.modifyCar(defaultObj, () => {}, this.userInfo.token)
         this.updateCarDefault({
           defaultId: index,
           modifyId: res.index

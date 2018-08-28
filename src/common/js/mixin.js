@@ -21,13 +21,13 @@ export const expireToken = {
   },
   methods: {
     refreshToken (callback = () => {}) {
-      this.$post(`${this.gt1Url}/api/f6-app/getToken`, this.headers_1, (res) => {
+      this.$post(`${this.gt1Url}/api/f6-app/getToken`, this.gt1Header, (res) => {
         if (res.data.code === 0) {
           this.updateUserInfo({
             token: res.data.data
           })
           setTimeout(() => {
-            callback(res.data.data)
+            callback()
           }, 0)
         }
       }, {
@@ -42,9 +42,17 @@ export const expireToken = {
 // 车型， 车系， 排量， 年份， 品牌查询接口
 export const queryCarModal = {
   mixins: [expireToken],
+  computed: {
+    ...mapGetters([
+      'userInfo'
+    ])
+  },
   methods: {
     queryModal () {
-      this.$get(`${this.f6Url}/api/clientUserCar/model?searchContent=${this.content}&searchConditon=${this.conditon}`, this.headers_2, (res) => {
+      this.$get(`${this.f6Url}/api/clientUserCar/model?searchContent=${this.content}&searchConditon=${this.conditon}`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
         if (res.code === 200) {
           if (this.content === 'brand_name') {
             this.setCarBrand(res.data)
@@ -71,12 +79,15 @@ export const modifyCarInfo = {
   mixins: [expireToken],
   computed: {
     ...mapGetters([
-      'myCar'
+      'myCar',
+      'userInfo'
     ])
   },
   methods: {
     modifyCar (info, callback = () => {}) {
-      this.$put(`${this.f6Url}/api/clientUserCar`, this.headers_2, (res) => {
+      this.$put(`${this.f6Url}/api/clientUserCar`, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
         if (res.code === 200) {
           callback()
         } else if (res.code === 401) {

@@ -17,7 +17,7 @@
       <div class="my_nickname">
         <span>昵称</span>
         <div class="nickname" @click="_modifyInfo(1)">
-          {{userInfo.name ? userInfo.name : userInfo.userTel}}
+          {{userInfo.nickName}}
         </div>
       </div>
       <div class="my_phone">
@@ -26,21 +26,17 @@
           {{hidePhone}}
         </div>
       </div>
-      <!-- <div class="my_name" @click="_modifyInfo(3)">
-        <span>真实姓名</span>
-        <div class="name">
-          {{info.name}}
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import myInfoMask from '@/components/mind/my-info-mask'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
 export default {
   name: 'myInfo',
+  mixins: [expireToken],
   data () {
     return {
       modifyInfo: false,
@@ -56,10 +52,7 @@ export default {
       let str = ''
       switch (this.id) {
         case 1:
-          str = this.userInfo.name
-          break
-        case 2:
-          str = this.userInfo.userTel
+          str = this.userInfo.nickName
           break
       }
       return str
@@ -78,47 +71,77 @@ export default {
     },
     _closeMask (res) {
       this.modifyInfo = false
-      if (!res.modify) {
-        return
-      }
-      switch (this.id) {
-        case 1:
-          this.setUserInfo({
-            name: res.info
+      if (res.modify) {
+        this.modifyUserInfo(res.info, () => {
+          this.updateUserInfo({
+            nickName: res.info
           })
-          break
-        case 2:
-          this.userInfo.phone = res.info
-          break
+        })
       }
     },
-    toggleAvatar () {
-      let _self = this
-      this.Wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'],
-        success: function (res) {
-          _self.localId = res.localIds[0]
-          if (window.__wxjs_is_wkwebview) {
-            _self.Wx.getLocalImgData({
-              localId: _self.localId,
-              success: function (res) {
-                var localData = res.localData
-                _self.localId = localData.replace('jgp', 'jpeg')
-              },
-              fail: function (res) {
-              }
-            })
-          } else {
-            _self.localId = res.localIds[0]
-          }
+    modifyUserInfo (res, callback = () => {}) {
+      this.$put(`${this.f6Url}/api/clientUser`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
+        if (res.code === 200) {
+          callback()
+        } else if (res.code === 401) {
+          this.refreshToken(this.modifyUserInfo)
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: '网络错误'
+          })
         }
+      }, {
+        appId: this.userInfo.appId,
+        deleteFlag: this.userInfo.deleteFlag,
+        externalUserId: this.userInfo.externalUserId,
+        gender: this.userInfo.gender,
+        id: this.userInfo.id,
+        imgSource: this.userInfo.imgSource,
+        nickName: res,
+        stationId: this.userInfo.stationId,
+        userAddressCity: this.userInfo.userAddressCity,
+        userAddressProvince: this.userInfo.userAddressProvince,
+        userId: this.userInfo.userId,
+        userName: this.userInfo.userName,
+        userTel: this.userInfo.userTel,
+        userType: this.userInfo.userType
       })
     },
-    ...mapMutations({
-      setUserInfo: 'SET_USER_INFO'
-    })
+    toggleAvatar () {
+      // let _self = this
+      // this.Wx.chooseImage({
+      //   count: 1, // 默认9
+      //   sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      //   sourceType: ['album', 'camera'],
+      //   success: function (res) {
+      //     _self.localId = res.localIds[0]
+      //     if (window.__wxjs_is_wkwebview) {
+      //       _self.Wx.getLocalImgData({
+      //         localId: _self.localId,
+      //         success: function (res) {
+      //           var localData = res.localData
+      //           _self.localId = localData.replace('jgp', 'jpeg')
+      //         },
+      //         fail: function (res) {
+      //         }
+      //       })
+      //     } else {
+      //       _self.localId = res.localIds[0]
+      //     }
+      //   }
+      // })
+      this.$Toast({
+        position: 'bottom',
+        message: '请到GT1 APP修改头像'
+      })
+    },
+    ...mapActions([
+      'updateUserInfo'
+    ])
   },
   components: {
     myInfoMask

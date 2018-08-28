@@ -93,7 +93,10 @@ export default {
     },
     // 获取我的车库
     _getMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, this.headers_2, (res) => {
+      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._getMyCar)
         } else if (res.code === 200) {
@@ -103,7 +106,10 @@ export default {
       })
     },
     _deleteMyCar (id) {
-      this.$delete(`${this.f6Url}/api/clientUserCar`, this.headers_2, (res) => {
+      this.$delete(`${this.f6Url}/api/clientUserCar`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
         if (res.code === 401) {
           this.refreshToken(this._deleteMyCar)
         } else if (res.code === 200) {

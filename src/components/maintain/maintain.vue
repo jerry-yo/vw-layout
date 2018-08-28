@@ -3,7 +3,7 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>{{`${defaultCar.year} - ${defaultCar.transmissionDesc}`}}</h2>
+        <h2>{{`${defaultCar.manufacturerName} - ${defaultCar.evehicleSystem}`}}</h2>
         <p><span>{{defaultCar.carNumber}}</span><span>丨</span><span>{{defaultCar.distance}}km</span></p>
       </div>
     </div>

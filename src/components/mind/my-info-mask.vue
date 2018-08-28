@@ -3,7 +3,7 @@
     <div class="my-info-mask" @click="_goBack">
       <div class="mask-con" @click.prevent.stop>
         <div class="text">
-          <input type="text" name="" v-model="modifyinfo" placeholder="请输入信息" @input="_inputValue">
+          <input type="text" name="" v-model="modifyinfo" :placeholder="info" @input="_inputValue">
           <div class="clear" v-show="showClear" @click="_clearInput"></div>
         </div>
         <p class="tips">
@@ -34,7 +34,7 @@ export default {
   },
   computed: {
     showClear () {
-      return this.modifyinfo === 0 ? 0 : 1
+      return this.modifyinfo === '' ? 0 : 1
     },
     showTips () {
       let tips = ''
@@ -48,9 +48,6 @@ export default {
       }
       return tips
     }
-  },
-  mounted () {
-    this.modifyinfo = this.info
   },
   methods: {
     _goBack () {
@@ -68,14 +65,14 @@ export default {
       if (this.modifyinfo === '' && (this.id === 1 || this.id === 3)) {
         this.$Toast({
           message: '信息不能为空！',
-          position: 'top'
+          position: 'bottom'
         })
         return
       }
       if (this.id === 2 && (!/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.modifyinfo))) {
         this.$Toast({
           message: '手机号码格式错误！',
-          position: 'top'
+          position: 'bottom'
         })
         return
       }

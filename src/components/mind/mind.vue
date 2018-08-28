@@ -11,8 +11,8 @@
           <div class="user-img">
             <img v-lazy="userInfo.imgSource" alt="">
           </div>
-          <div class="user-xm" v-if="userInfo.token">
-            <span>{{userInfo.name ? userInfo.name : userInfo.userTel}}</span>
+          <div class="user-xm" v-if="userInfo.externalUserId">
+            <span>{{userInfo.nickName}}</span>
             <div class="user-card">
               <span></span>
             </div>
@@ -120,38 +120,35 @@
 
 <script>
 import Badge from '@/base/badge'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
 export default {
   name: 'mind',
+  mixins: [expireToken],
   data () {
-    return {
-      name: '绿鲤鱼红鲤鱼与驴'
+    return {}
+  },
+  mounted () {
+    if (this.userInfo.userTel) {
+      this.getUserInfo()
     }
+  },
+  computed: {
+    ...mapGetters([
+      'myCar',
+      'userInfo'
+    ])
   },
   methods: {
     _goOrder (id) {
-      if (!this.userInfo.token) {
-        this.$Modal.confirm({
-          title: '提示信息',
-          content: '此服务需登录，是否登录？',
-          onCancel: () => {
-            this.$Modal.remove()
-          },
-          onOk: () => {
-            this.$router.push('/login')
-            this.$Modal.remove()
-          }
-        })
-      } else {
-        if (id === 1) {
-          this.$router.push('/order/subscribe')
-        } else if (id === 2) {
-          this.$router.push('/order/obligation')
-        } else if (id === 3) {
-          this.$router.push('/order/complete')
-        } else if (id === 4) {
-          this.$router.push('/order/cancel')
-        }
+      if (id === 1) {
+        this.$router.push('/order/subscribe')
+      } else if (id === 2) {
+        this.$router.push('/order/obligation')
+      } else if (id === 3) {
+        this.$router.push('/order/complete')
+      } else if (id === 4) {
+        this.$router.push('/order/cancel')
       }
     },
     _goGarage () {
@@ -161,19 +158,39 @@ export default {
       this.$router.push('/set-up')
     },
     _goMyInfo () {
-      this.$router.push('/my-info')
+      if (this.userInfo.nickName) {
+        this.$router.push('/my-info')
+      } else {
+        this.getUserInfo(() => {
+          this.$router.push('/my-info')
+        })
+      }
     },
     goRegister () {
       this.$router.push('/register')
     },
     goLogin () {
       this.$router.push('/login')
-    }
-  },
-  computed: {
-    ...mapGetters([
-      'myCar',
-      'userInfo'
+    },
+    getUserInfo (callback = () => {}) {
+      this.$get(`${this.f6Url}/api/clientUser?appId=gt1&externalUserId=${this.userInfo.externalUserId}`, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        if (res.code === 200) {
+          this.updateUserInfo(res.data)
+          callback()
+        } else if (res.code === 401) {
+          this.refreshToken(this.getUserInfo)
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: '网络错误'
+          })
+        }
+      })
+    },
+    ...mapActions([
+      'updateUserInfo'
     ])
   },
   components: {

@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {mapMutations} from 'vuex'
+import {mapActions} from 'vuex'
 export default {
   name: 'setUp',
   data () {
@@ -36,15 +36,16 @@ export default {
   },
   methods: {
     _goBack () {
-      this.$router.go(-1)
+      this.$router.back()
     },
     setLoginState () {
-      this.deleteUserInfo()
+      this.deleteUserInfo({})
+      sessionStorage.clear()
       this._goBack()
     },
-    ...mapMutations({
-      deleteUserInfo: 'DELETE_USER_INFO'
-    })
+    ...mapActions([
+      'deleteUserInfo'
+    ])
   },
   components: {
   }

@@ -18,6 +18,9 @@ const bindingtpwdRouter = {
 const setcodeRouter = {
   path: '/setcode',
   name: 'setcode',
+  meta: {
+    requireAuth: true
+  },
   component: resolve => { require(['@/components/login/set-code'], resolve) }
 }
 
@@ -79,14 +82,6 @@ const addcarDisplacement = {
   },
   component: resolve => { require(['@/components/mycar/addcar-displacement'], resolve) }
 }
-const addcarModels = {
-  path: '/addcar-models',
-  name: 'addcarModels',
-  meta: {
-    requireAuth: true
-  },
-  component: resolve => { require(['@/components/mycar/addcar-models'], resolve) }
-}
 const carOwner = {
   path: '/car-owner',
   name: 'carOwner',
@@ -94,14 +89,6 @@ const carOwner = {
     requireAuth: true
   },
   component: resolve => { require(['@/components/mycar/car-owner'], resolve) }
-}
-const carSharing = {
-  path: '/car-sharing',
-  name: 'carSharing',
-  meta: {
-    requireAuth: true
-  },
-  component: resolve => { require(['@/components/mycar/car-sharing'], resolve) }
 }
 const detectionRecord = {
   path: '/detection-record',
@@ -126,14 +113,6 @@ const vehicleManagement = {
     requireAuth: true
   },
   component: resolve => { require(['@/components/mycar/vehicle-management'], resolve) }
-}
-const addCarSharing = {
-  path: '/add-car-sharing',
-  name: 'addCarSharing',
-  meta: {
-    requireAuth: true
-  },
-  component: resolve => { require(['@/components/mycar/add-car-sharing'], resolve) }
 }
 const addCarIdcard = {
   path: '/addcar-idcard',
@@ -248,15 +227,12 @@ export const routers = [
   orderRouter,
   orderInfoRouter,
   addcarAge,
-  addcarModels,
   addcarTabbar,
   addcarDisplacement,
   carOwner,
-  carSharing,
   detectionRecord,
   Garage,
   vehicleManagement,
-  addCarSharing,
   addCarIdcard,
   storeList,
   repairRouter,
