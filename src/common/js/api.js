@@ -35,6 +35,8 @@ Vue.prototype.handleRrror = function (error) {
       case 500:
         console.log('接口异常')
         break
+      case 503:
+        console.log('服务器异常')
     }
   }
 }
@@ -69,7 +71,14 @@ Vue.prototype.$post = function (url, headersCode, callback = function () {}, par
   }).then((response) => {
     callback(response.data)
   }).catch(function (error) {
-    _self.handleRrror(error)
+    if (!error.response) {
+      Vue.prototype.$Toast({
+        position: 'bottom',
+        message: '服务器错误'
+      })
+    } else {
+      _self.handleRrror(error)
+    }
   })
 }
 
@@ -94,6 +103,7 @@ Vue.prototype.$put = function (url, headersCode, callback = function () {}, para
   }).then((response) => {
     callback(response.data)
   }).catch(function (error) {
+    console.log(error)
     _self.handleRrror(error)
   })
 }

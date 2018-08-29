@@ -2,9 +2,9 @@
   <div class="maintain" flexContainer>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        <h2>{{`${defaultCar.manufacturerName} - ${defaultCar.evehicleSystem}`}}</h2>
-        <p><span>{{defaultCar.carNumber}}</span><span>丨</span><span>{{defaultCar.distance}}km</span></p>
+      <div class="font" @click="_goSelectCar">
+        <h2>{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</h2>
+        <p><span>{{nowCar.carNumber}}</span><span>丨</span><span>{{nowCar.distance}}km</span></p>
       </div>
     </div>
     <div class="service-flow">
@@ -18,7 +18,7 @@
     </div>
     <Scroll class="container" ref="maintain">
       <div class="wrapper">
-        <serverModel v-for="(item, index) in serverList" :key="index" :server="item" :serverid="index"></serverModel>
+        <serverModel v-for="(item, index) in []" :key="index" :server="item" :serverid="index"></serverModel>
         <div class="add-server" @click="_goAddServer">
           添加新服务
         </div>
@@ -34,8 +34,8 @@
           不包含服务费
         </div>
         <div class="money">
-          <span>共{{allServerNum}}项服务</span>
-          <span>{{'￥' + allPrice}}</span>
+          <span>共{{''}}项服务</span>
+          <span>{{'￥' + ''}}</span>
         </div>
       </div>
       <div class="btn" @click="_goMaintainPreOrder">去预约</div>
@@ -47,47 +47,32 @@
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
 export default {
   name: 'maintain',
+  mixins: [expireToken],
   data () {
-    return {
-    }
-  },
-  computed: {
-    allPrice () {
-      let price = 0
-      this.serverList.forEach((item, index) => {
-        if (item.groupItem.isChecked) {
-          if (item.subItems.length > 0) {
-            item.subItems.forEach((res, id) => {
-              if (res.isChecked) {
-                price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
-              }
-            })
-          } else {
-            price += item.groupItem.keepServiceFirstItemBean.serverPrice
-          }
-        }
-      })
-      return price
-    },
-    allServerNum () {
-      let nums = 0
-      this.serverList.forEach((item, index) => {
-        if (item.groupItem.isChecked) {
-          nums++
-        }
-      })
-      return nums
-    },
-    ...mapGetters([
-      'serverList',
-      'myCar',
-      'defaultCar'
-    ])
+    return {}
   },
   created () {
-    sessionStorage.setItem('serverList', JSON.stringify(this.serverList))
+    this._getAllServie()
+  },
+  computed: {
+    nowCar () {
+      let car = {}
+      if (this.selectCar.carId) {
+        car = this.selectCar
+      } else {
+        car = this.defaultCar
+      }
+      return car
+    },
+    ...mapGetters([
+      'defaultCar',
+      'selectCar',
+      'storeList',
+      'userInfo'
+    ])
   },
   methods: {
     _goBack () {
@@ -97,17 +82,57 @@ export default {
       this.$router.push('/add-new-server')
     },
     _goMaintainPreOrder () {
-      if (this.allServerNum > 0) {
-        this.$router.push('/maintain-pre-order')
+      this.$router.push('/maintain-pre-order')
+    },
+    _goSelectCar () {
+      this.$router.push('/garage?type=select')
+    },
+    _getAllServie () {
+      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}
+      &stationId=${this.storeList[0].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      this.$get(url, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        if (res.code === 200) {
+          this.handleServieList(res.data)
+        } else if (res.code === 401) {
+          this.refreshToken(this._getAllServie)
+        }
+      })
+    },
+    // 更换机油滤清器
+    // 更换空调滤清器
+    // 更换空气滤清器
+    handleServieList (data) {
+      console.log(data)
+      let len = data.length
+      let defaultServer = []
+      let addNewServer = []
+      if (len <= 2) {
+        defaultServer = data
       } else {
-        this.$Toast({
-          message: '请选择保养服务',
-          position: 'bottom'
+        let reg = /更换机油滤清器|更换空调滤清器|更换空气滤清器/
+        let defaultLen = 0
+        data.forEach((item, index) => {
+          if (reg.test(item.name)) {
+            defaultLen++
+            defaultServer.push(item)
+          } else {
+            addNewServer.push(item)
+          }
         })
+        if (defaultLen === 0) {
+          data.forEach((item, index) => {
+            if (index < 2) {
+              defaultServer.push(item)
+            } else {
+              addNewServer.push(item)
+            }
+          })
+        }
       }
+      console.log(defaultServer, addNewServer)
     }
-  },
-  mounted () {
   },
   components: {
     serverModel,

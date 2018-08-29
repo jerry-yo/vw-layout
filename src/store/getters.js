@@ -59,8 +59,8 @@ const getters = {
   loadingState (state) {
     return state.loadingState
   },
-  token (state) {
-    return state.token
+  selectCar (state) {
+    return state.selectCar
   }
 }
 

@@ -61,7 +61,7 @@
               <h3>一线专业技工</h3>
             </li>
             <li>
-              <a :href="'tel:' + getPhone">
+              <a :href="`tel:${storeList[0] ? storeList[0].responserTel : ''}`">
                 <div class="img">
                   <div class="action"></div>
                 </div>
@@ -126,8 +126,7 @@ export default {
         id: 5,
         linkUrl: 'https://c.y.qq.com/node/m/client/music_headline/index.html?_hidehd=1&_button=2&zid=619582',
         picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000Wq2eW3VkzJ9.jpg'
-      }],
-      storeList: []
+      }]
     }
   },
   mounted () {
@@ -137,6 +136,7 @@ export default {
     if (!this.cityInfo.citycode) {
       this._setMap()
     }
+    this._getStoreList()
   },
   computed: {
     cityShow () {
@@ -154,10 +154,9 @@ export default {
       }
     },
     ...mapGetters([
-      'myCar',
       'cityInfo',
       'defaultStoreId',
-      'detectionMenus',
+      'storeList',
       'userInfo',
       'defaultCar',
       'loadingState'
@@ -166,7 +165,7 @@ export default {
   methods: {
     _addCar () {
       if (this.carIndex !== -1) {
-        this.$router.push('/garage')
+        this.$router.push('/garage?type=add')
       } else {
         this.$router.push('/addcar-tabbar?type=add')
       }
@@ -222,20 +221,30 @@ export default {
 
     },
     _getStoreList () {
+      this.$post(`${this.gt1Url}/api/f6-app/getStoreList`, this.gt1Header, (res) => {
+        if (res.errorCode === 0 && res.data.code === 0) {
+          this.setStoreList(this._setStoreList(res.data.data))
+        }
+      })
     },
     // 处理门店信息
     _setStoreList (data) {
+      let arr = []
       let reg = /维修/
       let lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
       data.forEach((item, index) => {
-        let flag = reg.test(item.name)
-        item = Object.assign(item, {
-          icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
-          way: lnglat1.distance([item.lng, item.lat]),
-          type: flag ? 1 : 2
-        })
+        if (item.stationId !== 2569) {
+          let flag = reg.test(item.stationName)
+          item = Object.assign(item, {
+            icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
+            way: lnglat1.distance([item.stationPositionX, item.stationPositionY]),
+            type: flag ? 1 : 2,
+            name: item.stationName.split('奇特异车业科技（江苏）股份有限公司')[1]
+          })
+          arr.push(item)
+        }
       })
-      return data.sort((a, b) => {
+      return arr.sort((a, b) => {
         return a.way > b.way
       })
     },

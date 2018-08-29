@@ -152,7 +152,7 @@ export default {
       }
     },
     _goGarage () {
-      this.$router.push('/garage')
+      this.$router.push('/garage?type=add')
     },
     _goSetUp () {
       this.$router.push('/set-up')

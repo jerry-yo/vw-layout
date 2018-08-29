@@ -9,8 +9,11 @@
           <div class="right">
             <h2>{{item.manufacturerName + ' - ' + item.evehicleSystem}}</h2>
             <p>{{item.carNumber}}<span>l</span>{{item.distance}}km</p>
-            <div :class="item.defaultFlag ? 'default' : 'default-btn'" @click.prevent="setDefault(item, index)">
+            <div v-if="type==='add'" :class="item.defaultFlag ? 'default' : 'default-btn'" @click.prevent="setDefault(item, index)">
               {{item.defaultFlag ? '已设为默认车辆' : '设为默认车辆'}}
+            </div>
+            <div v-if="type==='select'" :class="item.select ? 'default' : 'default-btn'" @click.prevent="setDefault(item, index)">
+              {{item.select ? '当前车辆' : '选择该车辆'}}
             </div>
           </div>
         </div>
@@ -36,6 +39,9 @@ export default {
     },
     recommends: {
       required: true
+    },
+    type: {
+      default: 'add'
     }
   },
   data () {
@@ -117,10 +123,17 @@ export default {
       this.$emit('tapcard', true)
     },
     setDefault (item, index) {
-      this.$emit('setdefault', {
-        index: index,
-        item: item
-      })
+      if (this.type === 'add' && item.defaultFlag !== 1) {
+        this.$emit('setdefault', {
+          index: index,
+          item: item
+        })
+      } else if (this.type === 'select' && !item.select) {
+        this.$emit('setdefault', {
+          index: index,
+          item: item
+        })
+      }
     },
     /*  动画结束监听   */
     transitionEnd () {

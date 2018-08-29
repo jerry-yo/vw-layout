@@ -33,3 +33,5 @@ export const DELETE_MAINTAIN_ORDER = 'DELETE_MAINTAIN_ORDER'
 // 用户信息
 export const SET_USER_INFO = 'SET_USER_INFO'
 export const DELETE_USER_INFO = 'DELETE_USER_INFO'
+// 服务选择车辆信息
+export const SET_SELECTCAR = 'SET_SELECTCAR'

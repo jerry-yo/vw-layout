@@ -8,7 +8,7 @@
     </div>
     <div class="container">
       <div class="swiper">
-        <Slider :recommends="myCar" @tapcard="tapCard" @carid="getCarId" @setdefault="setDefault"></Slider>
+        <Slider :recommends="carList" @tapcard="tapCard" @carid="getCarId" :type="garageType" @setdefault="setDefault"></Slider>
       </div>
       <div class="car-menu">
         <div class="car-con">
@@ -20,40 +20,40 @@
           </div>
         </div>
       </div>
-      <div class="car-idcard" v-if="myCar.length > 0">
+      <div class="car-idcard" v-if="carList.length > 0">
         <span>车牌号</span>
         <div class="area">
-          {{myCar[carId].carNumber.slice(0, 1)}}
+          {{carList[carId].carNumber.slice(0, 1)}}
         </div>
         <div class="number">
-          {{myCar[carId].carNumber.slice(1, 7)}}
+          {{carList[carId].carNumber.slice(1, 7)}}
         </div>
       </div>
-      <div class="car-info" v-if="myCar.length > 0">
+      <div class="car-info" v-if="carList.length > 0">
         <div class="car-models">
           <span>具体车型</span>
-          <span>{{`${myCar[carId].year} - ${myCar[carId].transmissionDesc}`}}</span>
+          <span>{{`${carList[carId].year} - ${carList[carId].transmissionDesc}`}}</span>
         </div>
         <div class="car-others">
           <div class="car-displacement">
             <span>发动机排量</span>
-            <span>{{myCar[carId].exhaustVolume}}</span>
+            <span>{{carList[carId].exhaustVolume}}</span>
           </div>
           <div class="car-age">
             <span>生产年份</span>
-            <span>{{myCar[carId].year}}</span>
+            <span>{{carList[carId].year}}</span>
           </div>
         </div>
         <div class="car-far">
           <span>行驶里程</span>
           <div class="input">
-            <input type="number" v-model="modifyWay" :placeholder="myCar[carId].distance" @change="handleModifyWay">
+            <input type="number" v-model="modifyWay" :placeholder="carList[carId].distance" @change="handleModifyWay">
           </div>
           <span>km</span>
         </div>
         <div class="car-time">
           <span>注册时间</span>
-          <span @click="showDate">{{tempToDate(myCar[carId])}}</span>
+          <span @click="showDate">{{tempToDate(carList[carId])}}</span>
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@
 
 <script>
 import Slider from '@/base/slider/slider-view'
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 import {expireToken, modifyCarInfo} from '@/common/js/mixin'
 import datePickerMask from '@/base/date-picker'
 import {datePicker, timeToStamp, getFormatDateToRepair} from '@/common/js/date'
@@ -79,10 +79,13 @@ export default {
       carId: 0,
       datePickerShow: false,
       dateInfo: {},
-      modifyWay: null
+      modifyWay: null,
+      wayLoseBlur: true,
+      garageType: 'add'
     }
   },
   created () {
+    this.garageType = this.$route.query.type
     this._getMyCar(this.userInfo.token)
   },
   computed: {
@@ -95,10 +98,31 @@ export default {
       })
       return id
     },
+    carList () {
+      let arr = []
+      if (this.garageType === 'add') {
+        arr = this.myCar
+      } else if (this.garageType === 'select') {
+        let info = this.selectCar.userCarId ? this.selectCar : this.defaultCar
+        this.myCar.forEach(item => {
+          if (item.userCarId === info.userCarId) {
+            arr.unshift(Object.assign(item, {
+              select: true
+            }))
+          } else {
+            arr.push(Object.assign(item, {
+              select: false
+            }))
+          }
+        })
+      }
+      return arr
+    },
     ...mapGetters([
       'myCar',
       'defaultCar',
-      'userInfo'
+      'userInfo',
+      'selectCar'
     ])
   },
   methods: {
@@ -121,19 +145,19 @@ export default {
       let date = datePicker()
       let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
       if (res.temp) {
-        if (res.temp < nowTemp && res.temp !== this.myCar[index].time) {
+        if (res.temp < nowTemp && res.temp !== this.carList[index].time) {
           this.modifyCar({
-            carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${res.temp}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
-            carId: this.myCar[index].carId,
-            carNumber: this.myCar[index].carNumber,
-            carVin: this.myCar[index].carVin,
-            clientAppId: this.myCar[index].clientAppId,
-            clientUserId: this.myCar[index].clientUserId,
-            defaultFlag: this.myCar[index].defaultFlag,
-            distance: this.myCar[index].distance,
-            externalUserId: this.myCar[index].externalUserId,
-            userCarId: this.myCar[index].userCarId,
-            userId: this.myCar[index].userId
+            carBrandLogo: `${this.carList[index].exhaustVolume}\uA856${this.carList[index].manufacturerName}\uA856${this.carList[index].year}\uA856${res.temp}\uA856${this.carList[index].evehicleSystem}\uA856${this.carList[index].transmissionDesc}\uA856${this.carList[index].brandName}\uA856${this.carList[index].imageSrc}`,
+            carId: this.carList[index].carId,
+            carNumber: this.carList[index].carNumber,
+            carVin: this.carList[index].carVin,
+            clientAppId: this.carList[index].clientAppId,
+            clientUserId: this.carList[index].clientUserId,
+            defaultFlag: this.carList[index].defaultFlag,
+            distance: this.carList[index].distance,
+            externalUserId: this.carList[index].externalUserId,
+            userCarId: this.carList[index].userCarId,
+            userId: this.carList[index].userId
           }, () => {
             this.updateCarWay({
               index: index,
@@ -152,20 +176,21 @@ export default {
     },
     // 修改车辆行驶路程
     handleModifyWay () {
+      this.wayLoseBlur = false
       let index = this.carId
-      if (this.modifyWay !== this.myCar[index].distance) {
+      if (this.modifyWay !== this.carList[index].distance) {
         this.modifyCar({
-          carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${this.myCar[index].time}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
-          carId: this.myCar[index].carId,
-          carNumber: this.myCar[index].carNumber,
-          carVin: this.myCar[index].carVin,
-          clientAppId: this.myCar[index].clientAppId,
-          clientUserId: this.myCar[index].clientUserId,
-          defaultFlag: this.myCar[index].defaultFlag,
+          carBrandLogo: `${this.carList[index].exhaustVolume}\uA856${this.carList[index].manufacturerName}\uA856${this.carList[index].year}\uA856${this.carList[index].time}\uA856${this.carList[index].evehicleSystem}\uA856${this.carList[index].transmissionDesc}\uA856${this.carList[index].brandName}\uA856${this.carList[index].imageSrc}`,
+          carId: this.carList[index].carId,
+          carNumber: this.carList[index].carNumber,
+          carVin: this.carList[index].carVin,
+          clientAppId: this.carList[index].clientAppId,
+          clientUserId: this.carList[index].clientUserId,
+          defaultFlag: this.carList[index].defaultFlag,
           distance: this.modifyWay,
-          externalUserId: this.myCar[index].externalUserId,
-          userCarId: this.myCar[index].userCarId,
-          userId: this.myCar[index].userId
+          externalUserId: this.carList[index].externalUserId,
+          userCarId: this.carList[index].userCarId,
+          userId: this.carList[index].userId
         }, () => {
           this.updateCarWay({
             index: index,
@@ -173,6 +198,7 @@ export default {
               distance: this.modifyWay
             }
           })
+          this.wayLoseBlur = true
           this.modifyWay = null
         }, this.userInfo.token)
       }
@@ -192,46 +218,66 @@ export default {
     },
     // 车库没有车辆， 跳转到添加车辆
     tapCard (id) {
-      if (this.myCar.length < 1) {
+      if (this.carList.length < 1) {
         this.$router.push('/addcar-tabbar?type=add')
       }
     },
     // 设置默认车辆
-    setDefault (res) {
-      if (res.item.defaultFlag !== 1) {
-        let index = this.defaultCarId
-        let itemObj = {
-          carBrandLogo: `${res.item.exhaustVolume}\uA856${res.item.manufacturerName}\uA856${res.item.year}\uA856${res.item.time}\uA856${res.item.evehicleSystem}\uA856${res.item.transmissionDesc}\uA856${res.item.brandName}\uA856${res.item.imageSrc}`,
-          carId: res.item.carId,
-          carNumber: res.item.carNumber,
-          carVin: res.item.carVin,
-          clientAppId: res.item.clientAppId,
-          clientUserId: res.item.clientUserId,
-          defaultFlag: 1,
-          distance: res.item.distance,
-          externalUserId: res.item.externalUserId,
-          userCarId: res.item.userCarId,
-          userId: res.item.userId
-        }
-        let defaultObj = {
-          carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${this.myCar[index].time}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
-          carId: this.myCar[index].carId,
-          carNumber: this.myCar[index].carNumber,
-          carVin: this.myCar[index].carVin,
-          clientAppId: this.myCar[index].clientAppId,
-          clientUserId: this.myCar[index].clientUserId,
-          defaultFlag: 0,
-          distance: this.myCar[index].distance,
-          externalUserId: this.myCar[index].externalUserId,
-          userCarId: this.myCar[index].userCarId,
-          userId: this.myCar[index].userId
-        }
-        this.modifyCar(itemObj, () => {}, this.userInfo.token)
-        this.modifyCar(defaultObj, () => {}, this.userInfo.token)
-        this.updateCarDefault({
-          defaultId: index,
-          modifyId: res.index
+    setDefaultCar (res) {
+      if (!this.wayLoseBlur) {
+        this.$Toast({
+          position: 'bottom',
+          message: '接口请求中'
         })
+        return
+      }
+      let index = this.defaultCarId
+      let itemObj = {
+        carBrandLogo: `${res.item.exhaustVolume}\uA856${res.item.manufacturerName}\uA856${res.item.year}\uA856${res.item.time}\uA856${res.item.evehicleSystem}\uA856${res.item.transmissionDesc}\uA856${res.item.brandName}\uA856${res.item.imageSrc}`,
+        carId: res.item.carId,
+        carNumber: res.item.carNumber,
+        carVin: res.item.carVin,
+        clientAppId: res.item.clientAppId,
+        clientUserId: res.item.clientUserId,
+        defaultFlag: 1,
+        distance: res.item.distance,
+        externalUserId: res.item.externalUserId,
+        userCarId: res.item.userCarId,
+        userId: res.item.userId
+      }
+      let defaultObj = {
+        carBrandLogo: `${this.carList[index].exhaustVolume}\uA856${this.carList[index].manufacturerName}\uA856${this.carList[index].year}\uA856${this.carList[index].time}\uA856${this.carList[index].evehicleSystem}\uA856${this.carList[index].transmissionDesc}\uA856${this.carList[index].brandName}\uA856${this.carList[index].imageSrc}`,
+        carId: this.carList[index].carId,
+        carNumber: this.carList[index].carNumber,
+        carVin: this.carList[index].carVin,
+        clientAppId: this.carList[index].clientAppId,
+        clientUserId: this.carList[index].clientUserId,
+        defaultFlag: 0,
+        distance: this.carList[index].distance,
+        externalUserId: this.carList[index].externalUserId,
+        userCarId: this.carList[index].userCarId,
+        userId: this.carList[index].userId
+      }
+      this.modifyCar(itemObj, () => {}, this.userInfo.token)
+      this.modifyCar(defaultObj, () => {}, this.userInfo.token)
+      this.updateCarDefault({
+        defaultId: index,
+        modifyId: res.index
+      })
+    },
+    // 设置默认
+    setDefault (res) {
+      if (this.garageType === 'add') {
+        this.setDefaultCar(res)
+      } else if (this.garageType === 'select') {
+        if (!this.wayLoseBlur) {
+          this.$Toast({
+            position: 'bottom',
+            message: '接口请求中'
+          })
+        }
+        this.setSelectCar(res.item)
+        this._goBack()
       }
     },
     getCarId (id) {
@@ -239,11 +285,11 @@ export default {
     },
     // 返回个人中心
     _goBack () {
-      this.$router.push('/mind')
+      this.$router.back()
     },
     // 车辆管理
     _goManagement () {
-      if (this.myCar.length < 1) {
+      if (this.carList.length < 1) {
         this.$Toast({
           message: '请先添加车辆！',
           position: 'bottom'
@@ -254,7 +300,7 @@ export default {
     },
     // 车主认证
     _goCarAuth () {
-      if (this.myCar.length < 1) {
+      if (this.carList.length < 1) {
         this.$Toast({
           message: '请先添加车辆！',
           position: 'bottom'
@@ -265,7 +311,7 @@ export default {
     },
     // 查看检测单
     _goDetectionRecord () {
-      if (this.myCar.length < 1) {
+      if (this.carList.length < 1) {
         this.$Toast({
           message: '请先添加车辆！',
           position: 'bottom'
@@ -278,7 +324,11 @@ export default {
       'updateCarList',
       'updateCarWay',
       'updateCarDefault'
-    ])
+    ]),
+    ...mapMutations({
+      setLoadingState: 'SET_LOADING_STATE',
+      setSelectCar: 'SET_SELECTCAR'
+    })
   }
 }
 </script>

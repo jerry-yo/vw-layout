@@ -1,5 +1,5 @@
 import * as types from './mutation-types'
-import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar} from '@/common/js/cache'
+import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
@@ -163,6 +163,11 @@ const mutations = {
   [types.SET_DEFAULTCAR] (state, car) {
     saveDefaultCar(car)
     state.defaultCar = car
+  },
+  // 服务选择车辆
+  [types.SET_SELECTCAR] (state, info) {
+    saveSelectCar(info)
+    state.selectCar = info
   },
   // 设置，保存 汽车品牌列表 carBrand
   [types.SET_CARBRAND] (state, list) {

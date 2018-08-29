@@ -60,7 +60,8 @@ export default {
     ...mapGetters([
       'detectionMenus',
       'myCar',
-      'defaultCar'
+      'defaultCar',
+      'selectCar'
     ])
   },
   methods: {
