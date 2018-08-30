@@ -160,14 +160,14 @@ const mutations = {
     state.myCar[car.id] = car.info
   },
   // 设置默认车辆
-  [types.SET_DEFAULTCAR] (state, car) {
-    saveDefaultCar(car)
-    state.defaultCar = car
+  [types.SET_DEFAULTCAR] (state, id) {
+    saveDefaultCar(id)
+    state.defaultCar = id
   },
   // 服务选择车辆
-  [types.SET_SELECTCAR] (state, info) {
-    saveSelectCar(info)
-    state.selectCar = info
+  [types.SET_SELECTCAR] (state, id) {
+    saveSelectCar(id)
+    state.selectCar = id
   },
   // 设置，保存 汽车品牌列表 carBrand
   [types.SET_CARBRAND] (state, list) {

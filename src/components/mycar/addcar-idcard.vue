@@ -46,7 +46,7 @@
 
 <script>
 import seleArea from '@/base/sele-area'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters} from 'vuex'
 import {expireToken} from '@/common/js/mixin'
 import datePickerMask from '@/base/date-picker'
 import {getFormatDateToRepair, datePicker, timeToStamp} from '@/common/js/date'
@@ -61,8 +61,12 @@ export default {
       way: null,
       tempInfo: {},
       isFinish: false,
-      datePickerShow: false
+      datePickerShow: false,
+      type: null
     }
+  },
+  created () {
+    this.type = this.$route.query.type
   },
   computed: {
     tempToDate () {
@@ -152,8 +156,11 @@ export default {
         if (res.code === 401) {
           this.refreshToken(this._setMyCar)
         } else if (res.code === 200) {
-          this.$router.push('/garage')
-          this.setAddCar({})
+          if (this.type === 'vin') {
+            this.$router.go(-2)
+          } else {
+            this.$router.go(-4)
+          }
         }
       }, {
         carBrandLogo: `${this.addCar.exhaustVolume}\uA856${this.addCar.manufacturerName}\uA856${this.addCar.year}\uA856${time}\uA856${this.addCar.evehicleSystem}\uA856${this.addCar.transmissionDesc}\uA856${this.addCar.brandName}\uA856${this.addCar.imageSrc}`,
@@ -167,10 +174,7 @@ export default {
         externalUserId: this.userInfo.externalUserId,
         userId: this.userInfo.fUserId
       })
-    },
-    ...mapMutations({
-      setAddCar: 'SET_ADDCAR'
-    })
+    }
   },
   components: {
     seleArea,

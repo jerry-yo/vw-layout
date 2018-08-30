@@ -17,15 +17,15 @@
         </div>
         <div class="car-info">
           <div class="car-con">
-            <div class="info-tab" :class="defaultCar.carId ? '' : 'nocar'" @click="_addCar">
-              <div class="car-img" v-if="defaultCar.carId ? true : false">
-                <img v-lazy="carLogoUrl + defaultCar.imageSrc" alt="">
+            <div class="info-tab" :class="getDefaultCarInfo.carId ? '' : 'nocar'" @click="_addCar">
+              <div class="car-img" v-if="getDefaultCarInfo.carId ? true : false">
+                <img v-lazy="carLogoUrl + getDefaultCarInfo.imageSrc" alt="">
               </div>
-              <div class="car-name"  v-if="defaultCar.carId ? true : false">
-                <div class="name">{{`${defaultCar.manufacturerName} - ${defaultCar.evehicleSystem}`}}</div>
+              <div class="car-name"  v-if="getDefaultCarInfo.carId ? true : false">
+                <div class="name">{{`${getDefaultCarInfo.manufacturerName} - ${getDefaultCarInfo.evehicleSystem}`}}</div>
                 <div class="card-info">
-                  <div class="card">{{defaultCar.carNumber}}</div>
-                  <div class="way">{{defaultCar.distance}}km</div>
+                  <div class="card">{{getDefaultCarInfo.carNumber}}</div>
+                  <div class="way">{{getDefaultCarInfo.distance}}km</div>
                 </div>
               </div>
             </div>
@@ -93,12 +93,12 @@ import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import {expireToken} from '@/common/js/mixin'
+import {expireToken, defaultCarInfo} from '@/common/js/mixin'
 import {handleMyCar} from '@/common/js/config'
 import AMap from 'AMap'
 export default {
   name: 'home',
-  mixins: [expireToken],
+  mixins: [expireToken, defaultCarInfo],
   components: {
     Badge,
     Swiper,
@@ -158,7 +158,6 @@ export default {
       'defaultStoreId',
       'storeList',
       'userInfo',
-      'defaultCar',
       'loadingState'
     ])
   },

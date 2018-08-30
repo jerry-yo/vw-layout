@@ -115,29 +115,29 @@ export function saveAddCar (info) { // 添加车辆缓存
 }
 
 export function loadDefaultCar () { // 车库默认车辆
-  let car = sessionStorage.getItem(DEFAULT_CAR)
-  if (car === null) {
-    return {}
+  let id = sessionStorage.getItem(DEFAULT_CAR)
+  if (id === null) {
+    return 0
   } else {
-    return JSON.parse(car)
+    return parseInt(id)
   }
 }
-export function saveDefaultCar (info) { // 车库默认车辆
-  sessionStorage.setItem(DEFAULT_CAR, JSON.stringify(info))
-  return info
+export function saveDefaultCar (id) { // 车库默认车辆
+  sessionStorage.setItem(DEFAULT_CAR, id)
+  return id
 }
 
 export function loadSelectCar () { // 服务选择车辆
-  let car = sessionStorage.getItem(SELECT_CAR)
-  if (car === null) {
-    return {}
+  let id = sessionStorage.getItem(SELECT_CAR)
+  if (id === null) {
+    return 0
   } else {
-    return JSON.parse(car)
+    return parseInt(id)
   }
 }
-export function saveSelectCar (info) { // 服务选择车辆
-  sessionStorage.setItem(SELECT_CAR, JSON.stringify(info))
-  return info
+export function saveSelectCar (id) { // 服务选择车辆
+  sessionStorage.setItem(SELECT_CAR, id)
+  return id
 }
 /*
   ---加密。解密

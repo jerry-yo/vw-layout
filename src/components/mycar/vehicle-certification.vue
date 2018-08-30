@@ -101,7 +101,7 @@ export default {
     addMyCar (info, url) {
       this.setAddCar({
         brandName: info.brandName,
-        eVehicleSystem: info.eVehicleSystem,
+        evehicleSystem: info.eVehicleSystem,
         exhaustVolume: info.exhaustVolume,
         imageSrc: url,
         manufacturerName: info.manufacturerName,
@@ -112,7 +112,7 @@ export default {
         transmissionDesc: info.transmissionDesc,
         year: info.year
       })
-      this.$router.push('/addcar-idcard')
+      this.$router.push('/addcar-idcard?type=vin')
     },
     ...mapMutations({
       setAddCar: 'SET_ADDCAR'

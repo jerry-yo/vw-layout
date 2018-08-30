@@ -4,7 +4,7 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">我的车库</div>
-      <div class="vehicle-management" @click="_goManagement">管理</div>
+      <div class="vehicle-management" v-if="garageType === 'add'" @click="_goManagement">管理</div>
     </div>
     <div class="container">
       <div class="swiper">
@@ -103,9 +103,9 @@ export default {
       if (this.garageType === 'add') {
         arr = this.myCar
       } else if (this.garageType === 'select') {
-        let info = this.selectCar.userCarId ? this.selectCar : this.defaultCar
+        let id = this.selectCar ? this.selectCar : this.defaultCar
         this.myCar.forEach(item => {
-          if (item.userCarId === info.userCarId) {
+          if (item.userCarId === id) {
             arr.unshift(Object.assign(item, {
               select: true
             }))
@@ -160,7 +160,7 @@ export default {
             userId: this.carList[index].userId
           }, () => {
             this.updateCarWay({
-              index: index,
+              index: this.carList[index].userCarId,
               obj: {
                 time: res.temp
               }
@@ -193,7 +193,7 @@ export default {
           userId: this.carList[index].userId
         }, () => {
           this.updateCarWay({
-            index: index,
+            index: this.carList[index].userCarId,
             obj: {
               distance: this.modifyWay
             }
@@ -224,13 +224,6 @@ export default {
     },
     // 设置默认车辆
     setDefaultCar (res) {
-      if (!this.wayLoseBlur) {
-        this.$Toast({
-          position: 'bottom',
-          message: '接口请求中'
-        })
-        return
-      }
       let index = this.defaultCarId
       let itemObj = {
         carBrandLogo: `${res.item.exhaustVolume}\uA856${res.item.manufacturerName}\uA856${res.item.year}\uA856${res.item.time}\uA856${res.item.evehicleSystem}\uA856${res.item.transmissionDesc}\uA856${res.item.brandName}\uA856${res.item.imageSrc}`,
@@ -261,22 +254,23 @@ export default {
       this.modifyCar(itemObj, () => {}, this.userInfo.token)
       this.modifyCar(defaultObj, () => {}, this.userInfo.token)
       this.updateCarDefault({
-        defaultId: index,
-        modifyId: res.index
+        defaultId: this.carList[index].userCarId,
+        modifyId: res.item.userCarId
       })
     },
     // 设置默认
     setDefault (res) {
+      if (!this.wayLoseBlur) {
+        this.$Toast({
+          position: 'bottom',
+          message: '接口请求中'
+        })
+        return
+      }
       if (this.garageType === 'add') {
         this.setDefaultCar(res)
       } else if (this.garageType === 'select') {
-        if (!this.wayLoseBlur) {
-          this.$Toast({
-            position: 'bottom',
-            message: '接口请求中'
-          })
-        }
-        this.setSelectCar(res.item)
+        this.setSelectCar(res.item.userCarId)
         this._goBack()
       }
     },

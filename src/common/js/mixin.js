@@ -109,3 +109,21 @@ export const modifyCarInfo = {
     }
   }
 }
+
+export const defaultCarInfo = {
+  computed: {
+    getDefaultCarInfo () {
+      let info = {}
+      this.myCar.forEach(item => {
+        if (item.userCarId === this.defaultCar) {
+          info = item
+        }
+      })
+      return info
+    },
+    ...mapGetters([
+      'defaultCar',
+      'myCar'
+    ])
+  }
+}

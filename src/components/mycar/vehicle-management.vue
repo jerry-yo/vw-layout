@@ -143,6 +143,7 @@ export default {
             this.checkInfos.default = false
           }
           if (!item.check && this.checkInfos.default) {
+            this.checkInfos.default = false
             this.modifyCar({
               carBrandLogo: `${this.myCar[index].exhaustVolume}\uA856${this.myCar[index].manufacturerName}\uA856${this.myCar[index].year}\uA856${this.myCar[index].time}\uA856${this.myCar[index].evehicleSystem}\uA856${this.myCar[index].transmissionDesc}\uA856${this.myCar[index].brandName}\uA856${this.myCar[index].imageSrc}`,
               carId: this.myCar[index].carId,
@@ -164,7 +165,6 @@ export default {
     },
     // 删除默认后，设置默认成功回调
     _callbackModify () {
-      this.checkInfos.default = false
       if (this.checkInfos.length === 0 && this.checkInfos.default === false) {
         this.editState = false
         this._getMyCar()
@@ -208,8 +208,8 @@ export default {
         this.modifyCar(itemObj)
         this.modifyCar(defaultObj)
         this.updateCarDefault({
-          defaultId: index,
-          modifyId: id
+          defaultId: this.myCar[index].userCarId,
+          modifyId: item.userCarId
         })
       }
     },

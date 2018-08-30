@@ -46,11 +46,11 @@
 <script>
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters} from 'vuex'
-import {expireToken} from '@/common/js/mixin'
+import {mapGetters, mapMutations} from 'vuex'
+import {expireToken, defaultCarInfo} from '@/common/js/mixin'
 export default {
   name: 'maintain',
-  mixins: [expireToken],
+  mixins: [expireToken, defaultCarInfo],
   data () {
     return {}
   },
@@ -59,16 +59,19 @@ export default {
   },
   computed: {
     nowCar () {
-      let car = {}
-      if (this.selectCar.carId) {
-        car = this.selectCar
-      } else {
-        car = this.defaultCar
+      let id = this.defaultCar
+      let info = {}
+      if (this.selectCar) {
+        id = this.selectCar
       }
-      return car
+      this.myCar.forEach(item => {
+        if (id === item.userCarId) {
+          info = item
+        }
+      })
+      return info
     },
     ...mapGetters([
-      'defaultCar',
       'selectCar',
       'storeList',
       'userInfo'
@@ -105,34 +108,13 @@ export default {
     // 更换空气滤清器
     handleServieList (data) {
       console.log(data)
-      let len = data.length
-      let defaultServer = []
-      let addNewServer = []
-      if (len <= 2) {
-        defaultServer = data
-      } else {
-        let reg = /更换机油滤清器|更换空调滤清器|更换空气滤清器/
-        let defaultLen = 0
-        data.forEach((item, index) => {
-          if (reg.test(item.name)) {
-            defaultLen++
-            defaultServer.push(item)
-          } else {
-            addNewServer.push(item)
-          }
-        })
-        if (defaultLen === 0) {
-          data.forEach((item, index) => {
-            if (index < 2) {
-              defaultServer.push(item)
-            } else {
-              addNewServer.push(item)
-            }
-          })
-        }
-      }
-      console.log(defaultServer, addNewServer)
-    }
+    },
+    ...mapMutations({
+      setSelectCar: 'SET_SELECTCAR'
+    })
+  },
+  beforeDestroy () {
+    this.setSelectCar(0)
   },
   components: {
     serverModel,
