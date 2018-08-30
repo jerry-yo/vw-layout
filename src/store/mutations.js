@@ -1,5 +1,6 @@
 import * as types from './mutation-types'
-import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar} from '@/common/js/cache'
+import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar, saveDefaultStoreId,
+  saveAllServerList} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
@@ -41,52 +42,6 @@ const mutations = {
   },
   [types.SET_SERACHINFO] (state, info) {
     state.serachInfo = info
-  },
-  [types.MODIFY_MY_SERVER] (state, list) {
-    state.serverList = state.serverList.concat(list)
-  },
-  [types.DELETE_ALL_SERVER] (state, arr) {
-    let ret = []
-    arr.forEach((item) => {
-      if (item.subnav.length > 0) {
-        item.subnav.forEach((res) => {
-          delete state.allServerList[item.nav].serviceCon[res]
-        })
-      }
-    })
-    state.allServerList.forEach((item) => {
-      let server = []
-      item.serviceCon.forEach((res) => {
-        if (typeof res !== 'undefined') {
-          server.push(res)
-        }
-      })
-      if (server.length > 0) {
-        ret.push({
-          serviceCatalog: item.serviceCatalog,
-          serviceId: item.serviceId,
-          serviceCon: server
-        })
-      }
-    })
-    state.allServerList = ret
-  },
-  [types.SET_MY_SERVER] (state) {
-    state.serverList = state.staticServerList
-  },
-  [types.SET_ALL_SERVER] (state) {
-    state.allServerList = state.staticAllServerList
-  },
-  [types.SET_DEFAULTSTORE_ID] (state, id) {
-    state.defaultStoreId = id
-  },
-  [types.SET_MAINTAIN_ORDER] (state, info) {
-    let obj = {}
-    obj = Object.assign(state.maintainOrder, info)
-    state.maintainOrder = obj
-  },
-  [types.DELETE_MAINTAIN_ORDER] (state) {
-    state.maintainOrder = {}
   },
   [types.SET_ORDER_INFO] (state, info) {
     state.orderInfo = info
@@ -182,6 +137,37 @@ const mutations = {
     }
     state.addCar = obj
     saveAddCar(obj)
+  },
+  // 设置默认门店
+  [types.SET_DEFAULTSTORE_ID] (state, id) {
+    saveDefaultStoreId(id)
+    state.defaultStoreId = id
+  },
+  // 设置保养服务列表
+  [types.SET_ALL_SERVER_LIST] (state, list) {
+    saveAllServerList(list)
+    state.allServerList = list
+  },
+  // 修改保养服务列表信息
+  [types.MODIFY_ALL_SERVER_LIST] (state, info) {
+    let list = state.allServerList.slice()
+    list.forEach(item => {
+      if (item.pkId === info.pkId) {
+        item = Object.assign(item, info)
+      }
+    })
+    saveAllServerList(list)
+    state.allServerList = list
+  },
+  // 设置保养服务订单信息
+  [types.SET_MAINTAIN_ORDER] (state, info) {
+    let obj = {}
+    obj = Object.assign(state.maintainOrder, info)
+    state.maintainOrder = obj
+  },
+  // 删除保养服务订单信息
+  [types.DELETE_MAINTAIN_ORDER] (state) {
+    state.maintainOrder = {}
   }
 }
 

@@ -18,7 +18,8 @@
     </div>
     <Scroll class="container" ref="maintain">
       <div class="wrapper">
-        <serverModel v-for="(item, index) in []" :key="index" :server="item" :serverid="index"></serverModel>
+        <storeInfo></storeInfo>
+        <serverModel v-for="(item, index) in defaultServer" :key="index" :server="item" :serverid="index"></serverModel>
         <div class="add-server" @click="_goAddServer">
           添加新服务
         </div>
@@ -46,6 +47,7 @@
 <script>
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
+import storeInfo from '@/base/store-info'
 import {mapGetters, mapMutations} from 'vuex'
 import {expireToken, defaultCarInfo} from '@/common/js/mixin'
 export default {
@@ -55,7 +57,9 @@ export default {
     return {}
   },
   created () {
-    this._getAllServie()
+    if (this.allServerList.length !== 30) {
+      this._getAllServie()
+    }
   },
   computed: {
     nowCar () {
@@ -71,15 +75,28 @@ export default {
       })
       return info
     },
+    defaultServer () {
+      let defaultList = []
+      this.allServerList.forEach(item => {
+        if (item.customerServer === 'mr') {
+          defaultList.push(item)
+        }
+      })
+      console.log(defaultList)
+      return defaultList
+    },
     ...mapGetters([
       'selectCar',
       'storeList',
-      'userInfo'
+      'userInfo',
+      'allServerList'
     ])
   },
   methods: {
     _goBack () {
-      this.$router.go(-1)
+      this.setDefaultStoreId(0)
+      this.setSelectCar(0)
+      this.$router.back()
     },
     _goAddServer () {
       this.$router.push('/add-new-server')
@@ -91,34 +108,49 @@ export default {
       this.$router.push('/garage?type=select')
     },
     _getAllServie () {
-      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}
+      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=80000
       &stationId=${this.storeList[0].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {
         if (res.code === 200) {
-          this.handleServieList(res.data)
+          this.handleServerList(res.data)
         } else if (res.code === 401) {
           this.refreshToken(this._getAllServie)
         }
       })
     },
-    // 更换机油滤清器
-    // 更换空调滤清器
-    // 更换空气滤清器
-    handleServieList (data) {
-      console.log(data)
+    handleServerList (data) {
+      let reg = /TJ/
+      let arr = []
+      data.forEach(item => {
+        if (reg.test(item.customCode)) {
+          arr.push(Object.assign(item, {
+            customerType: 'mr',
+            customerServer: 'mr',
+            isChecked: false
+          }))
+        } else {
+          arr.push(Object.assign(item, {
+            customerType: 'qt',
+            customerServer: 'qt',
+            isChecked: false
+          }))
+        }
+      })
+      this.setAllServerList(arr)
     },
     ...mapMutations({
-      setSelectCar: 'SET_SELECTCAR'
+      setSelectCar: 'SET_SELECTCAR',
+      setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
+      setMaintainOrder: 'SET_MAINTAIN_ORDER',
+      setAllServerList: 'SET_ALL_SERVER_LIST'
     })
-  },
-  beforeDestroy () {
-    this.setSelectCar(0)
   },
   components: {
     serverModel,
-    Scroll
+    Scroll,
+    storeInfo
   }
 }
 </script>
@@ -188,7 +220,6 @@ export default {
     overflow: hidden
     .wrapper
       position: relative
-      padding-top: 20px
       .add-server
         margin-top: 30px
         height: 80px

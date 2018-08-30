@@ -17,7 +17,7 @@
     </div>
     <Scroll class="container" ref="repairPre">
       <div class="wrapper">
-        <storeInfo></storeInfo>
+        <storeInfo :type="'noclick'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
           <span @click="showFitTime">{{dateTime(maintainOrder)}}</span>
@@ -29,16 +29,16 @@
         </div>
         <div class="server-img">
           <div class="con">
-            <ul>
+            <!-- <ul>
               <li class="imgs" v-for="(item, index) in getServerSum.imgs" :key="index" v-if="index < 2">
                 <img v-lazy="" alt="">
               </li>
               <li class="eiss" v-if="getServerSum.num > 2"></li>
-            </ul>
-            <div class="goods-info">
+            </ul> -->
+            <!-- <div class="goods-info">
               <span>共{{getServerSum.num}}个配件、{{getServerSum.server}}个服务</span>
               <div >配件总额：<span>{{'￥' + getServerSum.price}}</span></div >
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -54,8 +54,8 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
-import storeInfo from '@/base/store-info'
 import {mapGetters, mapMutations} from 'vuex'
+import storeInfo from '@/base/store-info'
 import keepFitTime from '@/base/keep-fit-time'
 export default {
   name: 'maintain-pre',
@@ -157,13 +157,15 @@ export default {
     ...mapMutations({
       setMaintainOrder: 'SET_MAINTAIN_ORDER',
       setMyServer: 'SET_MY_SERVER',
-      setAllServer: 'SET_ALL_SERVER'
+      setAllServer: 'SET_ALL_SERVER',
+      setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
+      setSelectCar: 'SET_SELECTCAR'
     })
   },
   components: {
-    storeInfo,
     Scroll,
-    keepFitTime
+    keepFitTime,
+    storeInfo
   }
 }
 </script>

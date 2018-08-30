@@ -16,6 +16,9 @@ const MY_CAR = '__my_car__' // 我的车库
 const DEFAULT_CAR = '__default_car__' // 默认车辆信息
 const SELECT_CAR = '__select_car__' // 服务选择车辆信息
 const ADD_CAR = '__add_car__' // 添加车辆信息
+const DEFAULT_STORE_ID = '__default_store_id__' // 默认服务门店ID
+const MAINTAIN_ORDER = '__maintain_order__' // 保养订单详情
+const ALL_SERVER_LIST = '__all_server_list__' // 保养服务列表
 /*
   ** localStorage **
 */
@@ -138,6 +141,45 @@ export function loadSelectCar () { // 服务选择车辆
 export function saveSelectCar (id) { // 服务选择车辆
   sessionStorage.setItem(SELECT_CAR, id)
   return id
+}
+
+export function loadDefaultStoreId () { // 默认门店ID
+  let id = sessionStorage.getItem(DEFAULT_STORE_ID)
+  if (id === null) {
+    return 0
+  } else {
+    return parseInt(id)
+  }
+}
+export function saveDefaultStoreId (id) { // 默认门店ID
+  sessionStorage.setItem(DEFAULT_STORE_ID, id)
+  return id
+}
+
+export function loadMaintainOrder () { // 保养订单
+  let info = sessionStorage.getItem(MAINTAIN_ORDER)
+  if (info === null) {
+    return {}
+  } else {
+    return JSON.parse(info)
+  }
+}
+export function saveMaintainOrder (info) { // 保养订单
+  sessionStorage.setItem(MAINTAIN_ORDER, JSON.stringify(info))
+  return info
+}
+
+export function loadAllServerList () { // 保养订单
+  let list = sessionStorage.getItem(ALL_SERVER_LIST)
+  if (list === null) {
+    return []
+  } else {
+    return JSON.parse(list)
+  }
+}
+export function saveAllServerList (list) { // 保养订单
+  sessionStorage.setItem(ALL_SERVER_LIST, JSON.stringify(list))
+  return list
 }
 /*
   ---加密。解密

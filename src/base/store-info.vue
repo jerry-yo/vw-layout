@@ -2,19 +2,21 @@
   <div class="store-info">
     <div class="top">
       <div class="left">
-        <img v-lazy="'https://www.gt1.shop/api/common/download?id=' + storeInfo.img" alt="">
+        <img :src="'https://www.gt1.shop/api/common/download?id=' + storeInfo.icon" alt="">
       </div>
       <div class="center">
         <h2>{{storeInfo.name}}</h2>
-        <p>{{storeInfo.address}}</p>
+        <p>{{storeInfo.stationAddress}}</p>
       </div>
-      <div class="right" @click="goStoreList">
-        <span>选择门店</span>
+      <div class="right" v-if="type === 'click'">
+        <div class="right-com" @click="goStoreList">
+          <span>选择门店</span>
+        </div>
       </div>
     </div>
     <div class="bottom">
       <span>联系店长</span>
-      <a :href="'tel:' + storeInfo.phone">{{storeInfo.phone}}</a>
+      <a :href="'tel:' + storeInfo.responserTel">{{storeInfo.responserTel}}</a>
     </div>
   </div>
 </template>
@@ -23,6 +25,11 @@
 import {mapGetters} from 'vuex'
 export default {
   name: 'store-info',
+  props: {
+    type: {
+      default: 'click'
+    }
+  },
   data () {
     return {
     }
@@ -96,15 +103,19 @@ export default {
       .right
         width: 168px
         display: flex
-        align-items: center
-        padding-right: 50px
-        font-size: 22px
-        color: #ababab
-        justify-content: flex-end
-        bg-image('../common/imgs/mind/leftright')
-        background-repeat: no-repeat
-        background-size: 15px 24px
-        background-position: right center
+        overflow: hidden
+        .right-com
+          flex: 1
+          display: flex
+          align-items: center
+          padding-right: 50px
+          font-size: 22px
+          color: #ababab
+          justify-content: flex-end
+          bg-image('../common/imgs/mind/leftright')
+          background-repeat: no-repeat
+          background-size: 15px 24px
+          background-position: right center
     .bottom
       height: 80px
       display: flex

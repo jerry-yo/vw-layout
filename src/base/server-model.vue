@@ -1,12 +1,12 @@
 <template>
   <div class="server-model" flexContainer >
     <div class="menu" @click="_showInfo">
-      <div class="check">
-        <div class="btn" :class="server.groupItem.isChecked ? 'check' : 'nocheck'" @click.stop="_checkServer"></div>
+      <div class="check-btn">
+        <div class="btn" :class="server.isChecked ? 'check' : 'nocheck'" @click.stop="_checkServer"></div>
       </div>
       <div class="server-info">
-        <div class="title">{{server.groupItem.keepServiceFirstItemBean.serviceName}}<span v-if="server.groupItem.keepServiceFirstItemBean.isRecommend">推荐</span> </div>
-        <div class="tips">{{server.groupItem.keepServiceFirstItemBean.bottomRemark}}</div>
+        <div class="title">{{server.name}}<span v-if="server.customerDefault === 'mr'">推荐</span> </div>
+        <!-- <div class="tips">{{'5000KM/H'}}</div> -->
       </div>
       <!-- <div class="operation" v-if="addServer">
         <div class="state1" v-show="server.groupItem.state === 1">
@@ -21,7 +21,7 @@
         </div>
       </div> -->
     </div>
-    <ul class="good-list" v-if="server.groupItem.action">
+    <!-- <ul class="good-list" v-if="server.groupItem.action">
       <li v-for="(item, index) in server.subItems" :key="index">
         <div class="tab-check">
           <div class="btn" :class="item.isChecked ? 'check': 'nocheck'" @click="_checkGood(index)" v-if="addServer"></div>
@@ -59,12 +59,13 @@
 
         </div>
       </li>
-    </ul>
+    </ul> -->
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import counter from '@/base/counter'
+import {mapMutations} from 'vuex'
 export default {
   name: 'serverModel',
   props: {
@@ -109,15 +110,15 @@ export default {
       }
     },
     _checkServer () {
-      if (this.server.groupItem.isChecked) {
-        this.server.groupItem.isChecked = false
-        this.server.subItems.forEach((item) => {
-          item.isChecked = false
+      if (this.server.isChecked) {
+        this.modeifyAllServerList({
+          pkId: this.server.pkId,
+          isChecked: false
         })
       } else {
-        this.server.groupItem.isChecked = true
-        this.server.subItems.forEach((item) => {
-          item.isChecked = true
+        this.modeifyAllServerList({
+          pkId: this.server.pkId,
+          isChecked: true
         })
       }
     },
@@ -136,7 +137,10 @@ export default {
       this.$set(this.server, 'subItems', this.locationServerList[this.serverid].subItems)
     },
     _changeGood () {
-    }
+    },
+    ...mapMutations({
+      modeifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
+    })
   },
   mounted () {
     this.$nextTick(function () {
@@ -161,7 +165,7 @@ export default {
     .menu
       height: 90px
       display: flex
-      .check
+      .check-btn
         width: 57px
         display: flex
         align-items: center
@@ -181,7 +185,7 @@ export default {
       .server-info
         display: flex
         flex-direction: column
-        padding-top: 18px
+        justify-content: center
         .title
           height: 34px
           line-height: 34px

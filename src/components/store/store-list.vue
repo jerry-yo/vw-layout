@@ -14,11 +14,11 @@
             <img v-lazy="'https://www.gt1.shop/api/common/download?id=' + item.img" alt="">
             <div class="top-right">
               <div class="store-name">
-                <p :class="item.type === 2 ? 'by' : 'repair'">{{item.name.slice(8, item.name.length)}}</p>
+                <p :class="item.type === 2 ? 'by' : 'repair'">{{item.name}}</p>
                 <h2>{{item.distance}}</h2>
               </div>
               <div class="store-address">
-                <p>{{item.address}}</p>
+                <p>{{item.stationAddress}}</p>
                 <div>
                   <h2 :class="{'active': defaultStoreId === index, 'nosele': defaultStoreId !== index}"  @click="seleStore(index)">{{defaultStoreId  === index ? '当前门店':'选择'}}</h2>
                 </div>
@@ -27,7 +27,7 @@
           </div>
           <div class="bottom">
             <div class="get-loc" @click="_goLocaltion(item)"><span>查看定位</span>  </div>
-            <div class="call-dz"><a :href="'tel:' + item.phone"></a>联系店长</div>
+            <div class="call-dz"><a :href="'tel:' + item.responserTel"></a>联系店长</div>
           </div>
         </li>
       </ul>
@@ -55,10 +55,10 @@ export default {
     },
     _goLocaltion (item) {
       this.Wx.openLocation({
-        latitude: parseFloat(item.lat), // 纬度，浮点数，范围为90 ~ -90
-        longitude: parseFloat(item.lng), // 经度，浮点数，范围为180 ~ -180。
+        latitude: parseFloat(item.stationPositionY), // 纬度，浮点数，范围为90 ~ -90
+        longitude: parseFloat(item.stationPositionX), // 经度，浮点数，范围为180 ~ -180。
         name: item.name, // 位置名
-        address: item.address, // 地址详情说明
+        address: item.stationAddress, // 地址详情说明
         scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大
       })
     },

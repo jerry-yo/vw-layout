@@ -179,11 +179,19 @@ export default {
     },
     // 维修
     _goRepair () {
-      this.$router.push('/repair')
+      if (this.storeList.length > 0) {
+        this.$router.push('/repair')
+      } else {
+        this._getStoreList()
+      }
     },
     // 保养
     _goMaintain () {
-      this.$router.push('/maintain')
+      if (this.storeList.length > 0) {
+        this.$router.push('/maintain')
+      } else {
+        this._getStoreList()
+      }
     },
     // 检测单
     _goCheckList () {
