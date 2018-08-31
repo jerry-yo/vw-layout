@@ -61,6 +61,9 @@ const getters = {
   },
   selectCar (state) {
     return state.selectCar
+  },
+  staticServerList (state) {
+    return state.staticServerList
   }
 }
 

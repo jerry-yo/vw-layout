@@ -12,7 +12,7 @@ ToastConstructor.prototype.close = function () {
 }
 const Toast = (options = {}) => {
   var instance = new ToastConstructor().$mount(document.createElement('div'))
-  let duration = options.duration || 2.5
+  let duration = options.duration || 1.5
   instance.message = typeof options === 'string' ? options : options.message
   instance.position = options.position || 'middle'
   let toastList = document.getElementsByClassName('toast-mask')

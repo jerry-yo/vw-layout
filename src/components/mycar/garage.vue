@@ -270,7 +270,11 @@ export default {
       if (this.garageType === 'add') {
         this.setDefaultCar(res)
       } else if (this.garageType === 'select') {
-        this.setSelectCar(res.item.userCarId)
+        if (res.item.userCarId !== this.selectCar) {
+          this.setSelectCar(res.item.userCarId)
+          this.setAllServerList([])
+          this.setStaticServerList([])
+        }
         this._goBack()
       }
     },
@@ -321,7 +325,9 @@ export default {
     ]),
     ...mapMutations({
       setLoadingState: 'SET_LOADING_STATE',
-      setSelectCar: 'SET_SELECTCAR'
+      setSelectCar: 'SET_SELECTCAR',
+      setAllServerList: 'SET_ALL_SERVER_LIST',
+      setStaticServerList: 'SET_STATIC_SERVER_LIST'
     })
   }
 }

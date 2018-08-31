@@ -6,14 +6,14 @@
         添加新服务
       </div>
     </div>
-    <Scroll class="container" ref="addservice">
+    <!-- <Scroll class="container" ref="addservice" :data="newServerlist">
       <div class="wrapper">
         <div class="service-catalog" v-for="(res, resid) in allServerList" :key="resid">
           <div class="service-title">{{res.serviceCatalog}}</div>
           <serverModel v-for="(item, index) in res.serviceCon" :key="index" :server="item" :serverid="index" :addServer="true"></serverModel>
         </div>
       </div>
-    </Scroll>
+    </Scroll>-->
     <div class="place-order">
       <div class="server">客服</div>
       <div class="tips">
@@ -21,8 +21,8 @@
           不包含服务费
         </div>
         <div class="money">
-          <span>共{{allServerNum}}项服务</span>
-          <span>{{'￥' + allPrice}}</span>
+          <span>共{{0}}项服务</span>
+          <span>{{'￥' +0}}</span>
         </div>
       </div>
       <div class="btn" @click="_addServer">添加</div>
@@ -38,63 +38,22 @@ export default {
   name: 'maintain',
   data () {
     return {
-      checkServer: []
+      carid: 0,
+      distance: 0,
+      newServerlist: []
     }
   },
+  mounted () {
+    this.carid = this.$route.query.carid
+    this.distance = this.$route.query.distance
+    this._getAllServie()
+  },
   computed: {
-    allPrice () {
-      let price = 0
-      this.allServerList.forEach((ree) => {
-        ree.serviceCon.forEach((item, index) => {
-          if (item.groupItem.isChecked) {
-            if (item.subItems.length > 0) {
-              item.subItems.forEach((res, id) => {
-                if (res.isChecked) {
-                  price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
-                }
-              })
-            } else {
-              price += item.groupItem.keepServiceFirstItemBean.serverPrice
-            }
-          }
-        })
-      })
-      return price
-    },
-    allServerNum () {
-      let nums = 0
-      this.allServerList.forEach((ree) => {
-        ree.serviceCon.forEach((item, index) => {
-          if (item.groupItem.isChecked) {
-            nums++
-          }
-        })
-      })
-      return nums
-    },
-    checkedServer () {
-      let servers = []
-      let arr = []
-      this.allServerList.forEach((ree, id) => {
-        let num = []
-        ree.serviceCon.forEach((item, index) => {
-          if (item.groupItem.isChecked) {
-            servers.push(item)
-            num.push(index)
-          }
-        })
-        arr.push({
-          nav: id,
-          subnav: num
-        })
-      })
-      return {
-        servers: servers,
-        arr: arr
-      }
-    },
     ...mapGetters([
-      'allServerList'
+      'allServerList',
+      'defaultStoreId',
+      'userInfo',
+      'storeList'
     ])
   },
   methods: {
@@ -113,12 +72,27 @@ export default {
         })
       }
     },
+    _getAllServie () {
+      this.setLoadingState(true)
+      let id = this.defaultStoreId
+      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.carid}&mileage=${this.distance}
+      &stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      this.$get(url, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        if (res.code === 200) {
+          this.setLoadingState(false)
+          this.newServerlist(res.data)
+        } else if (res.code === 401) {
+          this.refreshToken(this._getAllServie)
+        }
+      })
+    },
     ...mapMutations({
+      setLoadingState: 'SET_LOADING_STATE',
       modifyMyServer: 'MODIFY_MY_SERVER',
       deleteAllServer: 'DELETE_ALL_SERVER'
     })
-  },
-  mounted () {
   },
   components: {
     serverModel,

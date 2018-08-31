@@ -1,6 +1,6 @@
 import * as types from './mutation-types'
 import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar, saveDefaultStoreId,
-  saveAllServerList} from '@/common/js/cache'
+  saveAllServerList, saveStaticServerList} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
@@ -148,6 +148,11 @@ const mutations = {
     saveAllServerList(list)
     state.allServerList = list
   },
+  // 设置参考保养服务列表
+  [types.SET_STATIC_SERVER_LIST] (state, list) {
+    saveStaticServerList(list)
+    state.staticServerList = list
+  },
   // 修改保养服务列表信息
   [types.MODIFY_ALL_SERVER_LIST] (state, info) {
     let list = state.allServerList.slice()
@@ -158,6 +163,28 @@ const mutations = {
     })
     saveAllServerList(list)
     state.allServerList = list
+  },
+  // 修改保养服务产品信息
+  [types.MODIFY_ALL_SETVER_PARTINFO] (state, info) {
+    let list = state.allServerList.slice()
+    list.forEach(item => {
+      if (item.pkId === info.pkId) {
+        item.partInfo = Object.assign(item.partInfo, info.obj)
+      }
+    })
+    saveAllServerList(list)
+    state.allServerList = list
+  },
+  // 修改参照保养服务产品信息
+  [types.MODIFY_STATIC_SERVER_PARTINFO] (state, info) {
+    let list = state.staticServerList.slice()
+    list.forEach(item => {
+      if (item.pkId === info.pkId) {
+        item.partInfo = Object.assign(item.partInfo, info.obj)
+      }
+    })
+    saveStaticServerList(list)
+    state.staticServerList = list
   },
   // 设置保养服务订单信息
   [types.SET_MAINTAIN_ORDER] (state, info) {

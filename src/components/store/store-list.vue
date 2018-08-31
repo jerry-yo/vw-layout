@@ -42,15 +42,22 @@ export default {
   name: 'storeList',
   data () {
     return {
+      route: ''
     }
+  },
+  created () {
+    this.route = this.$route.query.route
   },
   methods: {
     _goBack () {
       this.$router.go(-1)
     },
-    seleStore (id, item) {
-      this.seleIndex = id
-      this.setDefaultStoreId(id)
+    seleStore (id) {
+      if (id !== this.defaultStoreId) {
+        this.setDefaultStoreId(id)
+        this.setAllServerList([])
+        this.setStaticServerList([])
+      }
       this.$router.back()
     },
     _goLocaltion (item) {
@@ -66,7 +73,9 @@ export default {
       this.$router.push('sele-city')
     },
     ...mapMutations({
-      setDefaultStoreId: 'SET_DEFAULTSTORE_ID'
+      setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
+      setAllServerList: 'SET_ALL_SERVER_LIST',
+      setStaticServerList: 'SET_STATIC_SERVER_LIST'
     })
   },
   computed: {

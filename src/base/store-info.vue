@@ -28,6 +28,9 @@ export default {
   props: {
     type: {
       default: 'click'
+    },
+    route: {
+      default: 'normal'
     }
   },
   data () {
@@ -52,7 +55,7 @@ export default {
   },
   methods: {
     goStoreList () {
-      this.$router.push('/store-list')
+      this.$router.push('/store-list?route=' + this.route)
     }
   },
   created () {

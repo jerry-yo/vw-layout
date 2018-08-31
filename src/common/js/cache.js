@@ -1,6 +1,7 @@
 import CryptoJS from 'crypto-js'
 
 // 秘钥
+
 /*
   ** localStorage **
 */
@@ -19,6 +20,7 @@ const ADD_CAR = '__add_car__' // 添加车辆信息
 const DEFAULT_STORE_ID = '__default_store_id__' // 默认服务门店ID
 const MAINTAIN_ORDER = '__maintain_order__' // 保养订单详情
 const ALL_SERVER_LIST = '__all_server_list__' // 保养服务列表
+const STATIC_SERVER_LIST = '__static_server_list__' // 参考保养服务列表
 /*
   ** localStorage **
 */
@@ -179,6 +181,19 @@ export function loadAllServerList () { // 保养订单
 }
 export function saveAllServerList (list) { // 保养订单
   sessionStorage.setItem(ALL_SERVER_LIST, JSON.stringify(list))
+  return list
+}
+
+export function loadStaticServerList () { // 保养订单
+  let list = sessionStorage.getItem(STATIC_SERVER_LIST)
+  if (list === null) {
+    return []
+  } else {
+    return JSON.parse(list)
+  }
+}
+export function saveStaticServerList (list) { // 保养订单
+  sessionStorage.setItem(STATIC_SERVER_LIST, JSON.stringify(list))
   return list
 }
 /*

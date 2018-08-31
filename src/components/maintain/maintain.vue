@@ -16,9 +16,9 @@
       <span>-</span>
       <span class="bg bg4">到店服务</span>
     </div>
-    <Scroll class="container" ref="maintain">
+    <Scroll class="container" ref="maintain" :data="allServerList">
       <div class="wrapper">
-        <storeInfo></storeInfo>
+        <storeInfo :route="'maintain'"></storeInfo>
         <serverModel v-for="(item, index) in defaultServer" :key="index" :server="item" :serverid="index"></serverModel>
         <div class="add-server" @click="_goAddServer">
           添加新服务
@@ -32,11 +32,12 @@
       <div class="server">客服</div>
       <div class="tips">
         <div class="nums">
-          不包含服务费
+          <span>共{{allServerMoney.partInfos}}件材料</span>
+          <span>包含服务费</span>
         </div>
         <div class="money">
-          <span>共{{''}}项服务</span>
-          <span>{{'￥' + ''}}</span>
+          <span>共{{allServerMoney.servers}}项服务</span>
+          <span>{{'￥' + allServerMoney.money}}</span>
         </div>
       </div>
       <div class="btn" @click="_goMaintainPreOrder">去预约</div>
@@ -50,6 +51,7 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import {mapGetters, mapMutations} from 'vuex'
 import {expireToken, defaultCarInfo} from '@/common/js/mixin'
+const ALLSERVERMILEAGN = 2000000
 export default {
   name: 'maintain',
   mixins: [expireToken, defaultCarInfo],
@@ -82,24 +84,46 @@ export default {
           defaultList.push(item)
         }
       })
-      console.log(defaultList)
       return defaultList
+    },
+    allServerMoney () {
+      let money = 0
+      let partInfos = 0
+      let servers = 0
+      this.allServerList.forEach(item => {
+        if (item.isChecked && item.customerServer === 'mr') {
+          money += item.amount
+          servers++
+          if (item.partInfo !== null && item.partInfo.isChecked) {
+            money += item.partInfo.sellPrice * item.partInfo.number
+            partInfos++
+          }
+        }
+      })
+      return {
+        money: money,
+        partInfos: partInfos,
+        servers: servers
+      }
     },
     ...mapGetters([
       'selectCar',
       'storeList',
       'userInfo',
-      'allServerList'
+      'allServerList',
+      'defaultStoreId'
     ])
   },
   methods: {
     _goBack () {
       this.setDefaultStoreId(0)
       this.setSelectCar(0)
+      this.setAllServerList([])
+      this.setStaticServerList([])
       this.$router.back()
     },
     _goAddServer () {
-      this.$router.push('/add-new-server')
+      this.$router.push(`/add-new-server?carid=${this.nowCar.userCarId}&distance=${this.nowCar.distance}`)
     },
     _goMaintainPreOrder () {
       this.$router.push('/maintain-pre-order')
@@ -108,12 +132,15 @@ export default {
       this.$router.push('/garage?type=select')
     },
     _getAllServie () {
-      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=80000
-      &stationId=${this.storeList[0].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      this.setLoadingState(true)
+      let id = this.defaultStoreId
+      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage${ALLSERVERMILEAGN}
+      &stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {
         if (res.code === 200) {
+          this.setLoadingState(false)
           this.handleServerList(res.data)
         } else if (res.code === 401) {
           this.refreshToken(this._getAllServie)
@@ -125,10 +152,19 @@ export default {
       let arr = []
       data.forEach(item => {
         if (reg.test(item.customCode)) {
+          let obj = null
+          if (item.partInfo !== null) {
+            obj = Object.assign(item.partInfo, {
+              isChecked: false,
+              number: 1
+            })
+          }
           arr.push(Object.assign(item, {
             customerType: 'mr',
             customerServer: 'mr',
-            isChecked: false
+            isChecked: false,
+            state: -1,
+            partInfo: obj
           }))
         } else {
           arr.push(Object.assign(item, {
@@ -139,12 +175,15 @@ export default {
         }
       })
       this.setAllServerList(arr)
+      this.setStaticServerList(arr)
     },
     ...mapMutations({
+      setLoadingState: 'SET_LOADING_STATE',
       setSelectCar: 'SET_SELECTCAR',
       setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
       setMaintainOrder: 'SET_MAINTAIN_ORDER',
-      setAllServerList: 'SET_ALL_SERVER_LIST'
+      setAllServerList: 'SET_ALL_SERVER_LIST',
+      setStaticServerList: 'SET_STATIC_SERVER_LIST'
     })
   },
   components: {
@@ -260,12 +299,21 @@ export default {
       flex-direction: column
       justify-content: center
       .nums
+        display: flex
         height: 35px
         line-height: 35px
-        padding-right: 30px
-        font-size: 22px
-        color: #afafaf
-        text-align: right
+        span
+          &:nth-child(1)
+            padding-left: 30px
+            font-size: 20px
+            color: #626262
+          &:nth-child(2)
+            flex: 1
+            font-size: 22px
+            color: #afafaf
+            font-weight: bold
+            padding-right: 30px
+            text-align: right
       .money
         height: 40px
         line-height: 40px

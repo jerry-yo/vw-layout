@@ -19,6 +19,7 @@ Vue.prototype.f6Header2 = function (token) {
     'Authorization': token
   }
 }
+
 Vue.prototype.handleRrror = function (error) {
   if (error.response) {
     switch (error.response.code) {

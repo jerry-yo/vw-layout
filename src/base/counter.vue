@@ -1,8 +1,8 @@
 <template>
   <div class="counter">
-    <div class="cut" @click="cutNum">-</div>
-    <span>{{goodsinfo.keepServiceSecondItemBean.minCommodityNumber}}</span>
-    <div class="add" @click="addNum">+</div>
+    <div class="cut" @click="cutNum"><span>－</span></div>
+    <span>{{goodsinfo.number}}</span>
+    <div class="add" @click="addNum"><span>＋</span></div>
   </div>
 </template>
 
@@ -16,23 +16,39 @@ export default {
   },
   data () {
     return {
-      sssss: null
-    }
-  },
-  methods: {
-    cutNum () {
-      if (this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber <= 1) {
-        this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber = 1
-      } else {
-        this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber--
-      }
-    },
-    addNum () {
-      this.goodsinfo.keepServiceSecondItemBean.minCommodityNumber++
+      number: 0
     }
   },
   mounted () {
-    this.sssss = JSON.parse(sessionStorage.getItem('serverList'))
+    this.number = this.goodsinfo.number
+  },
+  methods: {
+    addNum () {
+      if (this.number < 5) {
+        this.number++
+        this.$emit('change', {
+          number: this.number
+        })
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '每个服务最多选择五件材料'
+        })
+      }
+    },
+    cutNum () {
+      if (this.number > 1) {
+        this.number--
+        this.$emit('change', {
+          number: this.number
+        })
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '每个服务最少选择一件材料'
+        })
+      }
+    }
   }
 }
 </script>
@@ -43,7 +59,7 @@ export default {
     height: 52px
     display: flex
     border: 1px solid #b7b7b7
-    span
+    & > span
       flex: 1
       display: flex
       justify-content: center
@@ -58,9 +74,11 @@ export default {
       display: flex
       justify-content: center
       align-items: center
-      font-size: 30px
-      color: #a8a8a8
-      outline: none
+      & > span
+        font-size: 30px
+        color: #a8a8a8
+        outline: none
+        line-height: normal
     .cut
       border-right: 1px solid #b7b7b7
 </style>

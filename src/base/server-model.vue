@@ -6,51 +6,49 @@
       </div>
       <div class="server-info">
         <div class="title">{{server.name}}<span v-if="server.customerDefault === 'mr'">推荐</span> </div>
-        <!-- <div class="tips">{{'5000KM/H'}}</div> -->
+        <div class="tips">共{{server.partInfo !== null ? 1 : 0}}件材料</div>
       </div>
-      <!-- <div class="operation" v-if="addServer">
-        <div class="state1" v-show="server.groupItem.state === 1">
-          {{server.groupItem.keepServiceFirstItemBean.rightRemark}}
+      <div class="operation">
+        <div class="state1" v-show="server.state === -1">
+          <span>{{`服务费￥${server.amount}`}}</span>
         </div>
-        <div class="state2" v-show="server.groupItem.state === 2">
+        <div class="state2" v-show="server.state === 0">
           <div class="edit" @click.stop="_editServer">编辑</div>
         </div>
-        <div class="state3" v-show="server.groupItem.state === 3">
+        <div class="state3" v-show="server.state === 1">
           <div class="sort" @click.stop="_saveServer">保存</div>
           <div class="change" @click.stop="_cancelServer">取消</div>
         </div>
-      </div> -->
+      </div>
     </div>
-    <!-- <ul class="good-list" v-if="server.groupItem.action">
-      <li v-for="(item, index) in server.subItems" :key="index">
+    <ul class="good-list" v-if="server.partInfo !== null && server.state > -1">
+      <li>
         <div class="tab-check">
-          <div class="btn" :class="item.isChecked ? 'check': 'nocheck'" @click="_checkGood(index)" v-if="addServer"></div>
+          <div class="btn" :class="server.partInfo.isChecked ? 'check': 'nocheck'" @click="_checkGood"></div>
         </div>
         <div class="img">
           <img src="" alt="">
         </div>
         <div class="good-info">
-          <div class="change" v-if="server.groupItem.state === 2">
+          <div class="change" v-if="server.state === 0">
             <div class="parameter">
-              <div class="left">
-                <div class="name">级别： <span>{{item.keepServiceSecondItemBean.classify}}</span></div>
-                <div class="brand">品牌：<span>{{item.keepServiceSecondItemBean.trademark}}</span></div>
+              <div class="top">
+                <div class="brand">品牌：<span>{{server.partInfo.brand + ' ' + server.partInfo.supplierCode}}</span></div>
               </div>
-              <div class="right">
-                <div class="viscosity">粘度：<span>{{item.keepServiceSecondItemBean.viscosity}}</span></div>
-                <div class="spec">规格：<span>{{item.keepServiceSecondItemBean.specification}}</span></div>
+              <div class="bottom">
+                <div class="spec">规格：<span>{{server.partInfo.spec}}</span></div>
               </div>
             </div>
-            <div class="tips">{{item.keepServiceSecondItemBean.minCommodityNumber}}辆“思域”选择了此产品</div>
+            <!-- <div class="tips">{{'1'}}辆“思域”选择了此产品</div> -->
             <div class="buy-info">
-              <span>￥{{item.keepServiceSecondItemBean.commodityPrice}}</span>
-              <span>X{{item.keepServiceSecondItemBean.commodityNumber}}</span>
+              <span>￥{{server.partInfo.sellPrice}}</span>
+              <span>{{`X  ${server.partInfo.number}`}}</span>
             </div>
           </div>
-          <div class="no-change" v-if="server.groupItem.state === 3  && addServer">
-            <span>￥{{(item.keepServiceSecondItemBean.commodityPrice).toFixed(2)}}</span>
+          <div class="no-change" v-if="server.state === 1">
+            <span>￥{{server.partInfo.sellPrice}}</span>
             <div class="input-num">
-              <counter :goodsinfo="item"></counter>
+              <counter :goodsinfo="server.partInfo" @change="_changeNumber"></counter>
             </div>
             <div class="change-btn">
               <div class="btn" @click="_changeGood">更换</div>
@@ -59,13 +57,13 @@
 
         </div>
       </li>
-    </ul> -->
+    </ul>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 import counter from '@/base/counter'
-import {mapMutations} from 'vuex'
+import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'serverModel',
   props: {
@@ -83,67 +81,121 @@ export default {
   },
   data () {
     return {
-      locationServerList: null
     }
   },
+  computed: {
+    ...mapGetters([
+      'staticServerList',
+      'allServerList'
+    ])
+  },
   methods: {
-    _showInfo () {
-      this.server.groupItem.action = !this.server.groupItem.action
-      if (this.server.groupItem.action) {
-        this.server.groupItem.state = 2
-      } else {
-        this.server.groupItem.state = 1
-      }
-    },
-    _checkGood (index) {
-      let flag = false
-      this.server.subItems[index].isChecked = !this.server.subItems[index].isChecked
-      this.server.subItems.forEach((item, id) => {
-        if (item.isChecked) {
-          flag = true
+    // 修改材料数量
+    _changeNumber (res) {
+      this.modifyAllServerPartInfo({
+        pkId: this.server.pkId,
+        obj: {
+          number: res.number
         }
       })
-      if (!flag) {
-        this.server.groupItem.isChecked = false
+    },
+    // 展示服务材料
+    _showInfo () {
+      if (this.server.partInfo !== null) {
+        if (this.server.state === -1) {
+          this.modifyAllServerList({
+            pkId: this.server.pkId,
+            state: 0
+          })
+        } else if (this.server.state === 0) {
+          this.modifyAllServerList({
+            pkId: this.server.pkId,
+            state: -1
+          })
+        }
       } else {
-        this.server.groupItem.isChecked = true
+        this.$Toast({
+          position: 'bottom',
+          message: '暂无产品信息'
+        })
       }
     },
+    // 选择服务材料
+    _checkGood () {
+      this.modifyAllServerPartInfo({
+        pkId: this.server.pkId,
+        obj: {
+          isChecked: !this.server.partInfo.isChecked
+        }
+      })
+    },
+    // 选择服务
     _checkServer () {
       if (this.server.isChecked) {
-        this.modeifyAllServerList({
+        this.modifyAllServerList({
           pkId: this.server.pkId,
           isChecked: false
         })
       } else {
-        this.modeifyAllServerList({
+        this.modifyAllServerList({
           pkId: this.server.pkId,
           isChecked: true
         })
       }
     },
+    // 开始修改
     _editServer () {
-      this.server.groupItem.state = 3
+      this.modifyAllServerList({
+        pkId: this.server.pkId,
+        state: 1
+      })
     },
+    // 保存修改
     _saveServer () {
-      this.locationServerList = JSON.parse(sessionStorage.getItem('serverList'))
-      this.server.groupItem.state = 2
-      this.locationServerList[this.serverid] = this.server
-      sessionStorage.setItem('serverList', JSON.stringify(this.locationServerList))
+      this.modifyStaticServerPartInfo({
+        pkId: this.server.pkId,
+        obj: {
+          number: this.server.partInfo.number
+        }
+      })
+      this.modifyAllServerList({
+        pkId: this.server.pkId,
+        state: 0
+      })
     },
+    // 取消修改
     _cancelServer () {
-      this.locationServerList = JSON.parse(sessionStorage.getItem('serverList'))
-      this.server.groupItem.state = 2
-      this.$set(this.server, 'subItems', this.locationServerList[this.serverid].subItems)
+      let staticServerPartInfo = this.getStaticServerList(this.server.pkId)
+      // console.log(staticServerPartInfo.partInfo.number)
+      this.modifyAllServerPartInfo({
+        pkId: this.server.pkId,
+        obj: {
+          number: staticServerPartInfo.partInfo.number
+        }
+      })
+      this.modifyAllServerList({
+        pkId: this.server.pkId,
+        state: 0
+      })
     },
+    // 更换材料
     _changeGood () {
+
+    },
+    // 获取参考服务信息
+    getStaticServerList (id) {
+      let obj = {}
+      this.staticServerList.forEach(item => {
+        if (item.pkId === id) {
+          obj = item
+        }
+      })
+      return obj
     },
     ...mapMutations({
-      modeifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
-    })
-  },
-  mounted () {
-    this.$nextTick(function () {
+      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',
+      modifyAllServerPartInfo: 'MODIFY_ALL_SETVER_PARTINFO',
+      modifyStaticServerPartInfo: 'MODIFY_STATIC_SERVER_PARTINFO'
     })
   },
   components: {
@@ -270,13 +322,14 @@ export default {
             flex: 1
             display: flex
             flex-direction: column
+            justify-content: center
             .parameter
               height: 90px
               display: flex
-              .left, .right
+              flex-direction: column
+              .top, .bottom
                 flex: 1
-              .left
-                margin-right: 60px
+                margin-right: 20px
               .name, .brand, .viscosity, .spec
                 height: 50%
                 display: flex
@@ -296,19 +349,20 @@ export default {
               font-size: 20px
               color: #ffffff
             .buy-info
-              flex: 1
+              height: 40px
               display: flex
               span:nth-child(1)
                 flex:1
-                padding-top: 13px
+                line-height: 40px
                 font-size: 30px
                 color: #ff6868
               span:nth-child(2)
                 flex:1
-                padding-top: 17px
+                line-height: 40px
                 font-size: 24px
                 color: #a8a8a8
                 text-align: right
+                margin-right: 20px
           .no-change
             flex: 1
             display: flex
@@ -332,4 +386,5 @@ export default {
                 color: #ff7843
                 text-align: center
                 line-height: 38px
+                border-radius: 4px
 </style>
