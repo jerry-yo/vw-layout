@@ -5,7 +5,7 @@
         <div class="btn" :class="server.isChecked ? 'check' : 'nocheck'" @click.stop="_checkServer"></div>
       </div>
       <div class="server-info">
-        <div class="title">{{server.name}}<span v-if="server.customerDefault === 'mr'">推荐</span> </div>
+        <div class="title">{{server.name}}<span v-if="server.customerType === 'cg' || server.customerType === 'tj'">{{server.customerType === 'cg' ? '常规': server.customerType === 'tj' ? '推荐': ''}}</span> </div>
         <div class="tips">共{{server.partInfo !== null ? 1 : 0}}件材料</div>
       </div>
       <div class="operation">
@@ -152,21 +152,15 @@ export default {
     },
     // 保存修改
     _saveServer () {
-      this.modifyStaticServerPartInfo({
-        pkId: this.server.pkId,
-        obj: {
-          number: this.server.partInfo.number
-        }
-      })
       this.modifyAllServerList({
         pkId: this.server.pkId,
         state: 0
       })
+      this.setStaticServerList(this.allServerList)
     },
     // 取消修改
     _cancelServer () {
       let staticServerPartInfo = this.getStaticServerList(this.server.pkId)
-      // console.log(staticServerPartInfo.partInfo.number)
       this.modifyAllServerPartInfo({
         pkId: this.server.pkId,
         obj: {
@@ -195,7 +189,7 @@ export default {
     ...mapMutations({
       modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',
       modifyAllServerPartInfo: 'MODIFY_ALL_SETVER_PARTINFO',
-      modifyStaticServerPartInfo: 'MODIFY_STATIC_SERVER_PARTINFO'
+      setStaticServerList: 'SET_STATIC_SERVER_LIST'
     })
   },
   components: {

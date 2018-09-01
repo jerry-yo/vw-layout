@@ -19,7 +19,7 @@
     <Scroll class="container" ref="maintain" :data="allServerList">
       <div class="wrapper">
         <storeInfo :route="'maintain'"></storeInfo>
-        <serverModel v-for="(item, index) in defaultServer" :key="index" :server="item" :serverid="index"></serverModel>
+        <serverModel v-for="(item, index) in defaultServer" :key="item.pkId" :server="item" :serverid="index"></serverModel>
         <div class="add-server" @click="_goAddServer">
           添加新服务
         </div>
@@ -51,12 +51,13 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import {mapGetters, mapMutations} from 'vuex'
 import {expireToken, defaultCarInfo} from '@/common/js/mixin'
-const ALLSERVERMILEAGN = 2000000
 export default {
   name: 'maintain',
   mixins: [expireToken, defaultCarInfo],
   data () {
-    return {}
+    return {
+      allmileagn: 2000000
+    }
   },
   created () {
     if (this.allServerList.length !== 30) {
@@ -78,20 +79,28 @@ export default {
       return info
     },
     defaultServer () {
-      let defaultList = []
+      let cg = []
+      let tj = []
+      let qt = []
       this.allServerList.forEach(item => {
-        if (item.customerServer === 'mr') {
-          defaultList.push(item)
+        if (item.customerServer === 'old') {
+          if (item.customerType === 'cg') {
+            cg.push(item)
+          } else if (item.customerType === 'tj') {
+            tj.push(item)
+          } else if (item.customerType === 'qt') {
+            qt.push(item)
+          }
         }
       })
-      return defaultList
+      return cg.concat(tj).concat(qt)
     },
     allServerMoney () {
       let money = 0
       let partInfos = 0
       let servers = 0
       this.allServerList.forEach(item => {
-        if (item.isChecked && item.customerServer === 'mr') {
+        if (item.isChecked && item.customerServer === 'old') {
           money += item.amount
           servers++
           if (item.partInfo !== null && item.partInfo.isChecked) {
@@ -111,6 +120,7 @@ export default {
       'storeList',
       'userInfo',
       'allServerList',
+      'staticServerList',
       'defaultStoreId'
     ])
   },
@@ -134,10 +144,10 @@ export default {
     _getAllServie () {
       this.setLoadingState(true)
       let id = this.defaultStoreId
-      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage${ALLSERVERMILEAGN}
-      &stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.allmileagn}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
-        'Authorization': this.userInfo.token
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
       }, (res) => {
         if (res.code === 200) {
           this.setLoadingState(false)
@@ -151,31 +161,35 @@ export default {
       let reg = /TJ/
       let arr = []
       data.forEach(item => {
-        if (reg.test(item.customCode)) {
-          let obj = null
-          if (item.partInfo !== null) {
-            obj = Object.assign(item.partInfo, {
-              isChecked: false,
-              number: 1
-            })
-          }
-          arr.push(Object.assign(item, {
-            customerType: 'mr',
-            customerServer: 'mr',
+        let obj = null
+        let customerType = 'cg'
+        let customerServer = 'old'
+        if (item.partInfo !== null) {
+          obj = Object.assign(item.partInfo, {
             isChecked: false,
-            state: -1,
-            partInfo: obj
-          }))
-        } else {
-          arr.push(Object.assign(item, {
-            customerType: 'qt',
-            customerServer: 'qt',
-            isChecked: false
-          }))
+            number: 1
+          })
         }
+        if (!reg.test(item.customCode)) {
+          customerType = 'qt'
+          customerServer = 'new'
+        }
+        arr.push(Object.assign(item, {
+          customerType: customerType, // cg 常规 tj 推荐 qt 其他
+          customerServer: customerServer,
+          isChecked: false,
+          state: -1,
+          partInfo: obj
+        }))
       })
       this.setAllServerList(arr)
       this.setStaticServerList(arr)
+      this.modifyStaticServerPartInfo({
+        pkId: '841262',
+        obj: {
+          number: 10000
+        }
+      })
     },
     ...mapMutations({
       setLoadingState: 'SET_LOADING_STATE',
@@ -183,7 +197,8 @@ export default {
       setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
       setMaintainOrder: 'SET_MAINTAIN_ORDER',
       setAllServerList: 'SET_ALL_SERVER_LIST',
-      setStaticServerList: 'SET_STATIC_SERVER_LIST'
+      setStaticServerList: 'SET_STATIC_SERVER_LIST',
+      modifyStaticServerPartInfo: 'MODIFY_STATIC_SERVER_PARTINFO'
     })
   },
   components: {

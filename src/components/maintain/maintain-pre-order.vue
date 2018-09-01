@@ -23,22 +23,22 @@
           <span @click="showFitTime">{{dateTime(maintainOrder)}}</span>
         </div>
         <div class="car-info">
-          <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{carInfo}}</div> </div>
-          <div> <span>车牌号</span><span class="right">{{myCar[0].idCard}}</span> </div>
-          <div> <span>联系人</span><span class="right">{{userInfo.phone}}</span> </div>
+          <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</div> </div>
+          <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
+          <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
         <div class="server-img">
           <div class="con">
-            <!-- <ul>
-              <li class="imgs" v-for="(item, index) in getServerSum.imgs" :key="index" v-if="index < 2">
+            <ul>
+              <li class="imgs" v-for="(item, index) in []" :key="index" v-if="index < 2">
                 <img v-lazy="" alt="">
               </li>
-              <li class="eiss" v-if="getServerSum.num > 2"></li>
-            </ul> -->
-            <!-- <div class="goods-info">
-              <span>共{{getServerSum.num}}个配件、{{getServerSum.server}}个服务</span>
-              <div >配件总额：<span>{{'￥' + getServerSum.price}}</span></div >
-            </div> -->
+              <li class="eiss" v-if="0 > 2"></li>
+            </ul>
+            <div class="goods-info">
+              <span>共{{allServerMoney.partInfos}}个配件、{{allServerMoney.servers}}个服务</span>
+              <div >配件总额：<span>{{'￥' + allServerMoney.money}}</span></div >
+            </div>
           </div>
         </div>
       </div>
@@ -67,6 +67,39 @@ export default {
     }
   },
   computed: {
+    nowCar () {
+      let id = this.defaultCar
+      let info = {}
+      if (this.selectCar) {
+        id = this.selectCar
+      }
+      this.myCar.forEach(item => {
+        if (id === item.userCarId) {
+          info = item
+        }
+      })
+      return info
+    },
+    allServerMoney () {
+      let money = 0
+      let partInfos = 0
+      let servers = 0
+      this.allServerList.forEach(item => {
+        if (item.isChecked && item.customerServer === 'old') {
+          money += item.amount
+          servers++
+          if (item.partInfo !== null && item.partInfo.isChecked) {
+            money += item.partInfo.sellPrice * item.partInfo.number
+            partInfos++
+          }
+        }
+      })
+      return {
+        money: money,
+        partInfos: partInfos,
+        servers: servers
+      }
+    },
     fillImgs () {
       if (this.imgs.length > 4) {
         let arr = this.imgs.slice(0, 4)
@@ -109,9 +142,11 @@ export default {
     },
     ...mapGetters([
       'myCar',
-      'maintainOrder',
-      'serverList',
+      'defaultCar',
+      'selectCar',
+      'allServerList',
       'storeList',
+      'maintainOrder',
       'defaultStoreId',
       'userInfo'
     ])

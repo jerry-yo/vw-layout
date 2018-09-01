@@ -6,23 +6,21 @@
         添加新服务
       </div>
     </div>
-    <!-- <Scroll class="container" ref="addservice" :data="newServerlist">
+    <Scroll class="container" ref="addservice" :data="newServerlist">
       <div class="wrapper">
-        <div class="service-catalog" v-for="(res, resid) in allServerList" :key="resid">
-          <div class="service-title">{{res.serviceCatalog}}</div>
-          <serverModel v-for="(item, index) in res.serviceCon" :key="index" :server="item" :serverid="index" :addServer="true"></serverModel>
-        </div>
+        <serverModel v-for="(item, index) in newServerlist" :key="item.pkId" :server="item" :serverid="index" :addServer="true"></serverModel>
       </div>
-    </Scroll>-->
+    </Scroll>
     <div class="place-order">
       <div class="server">客服</div>
       <div class="tips">
         <div class="nums">
-          不包含服务费
+          <span>共{{allServerMoney.partInfos}}件材料</span>
+          <span>包含服务费</span>
         </div>
         <div class="money">
-          <span>共{{0}}项服务</span>
-          <span>{{'￥' +0}}</span>
+          <span>共{{allServerMoney.servers}}项服务</span>
+          <span>{{'￥' + allServerMoney.money}}</span>
         </div>
       </div>
       <div class="btn" @click="_addServer">添加</div>
@@ -34,13 +32,14 @@
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
 export default {
   name: 'maintain',
+  mixins: [expireToken],
   data () {
     return {
       carid: 0,
-      distance: 0,
-      newServerlist: []
+      distance: 0
     }
   },
   mounted () {
@@ -49,6 +48,40 @@ export default {
     this._getAllServie()
   },
   computed: {
+    newServerlist () {
+      let tjArr = []
+      let qtArr = []
+      this.allServerList.forEach(item => {
+        if (item.customerServer === 'new') {
+          if (item.customerType === 'tj') {
+            tjArr.push(item)
+          } else if (item.customerType === 'qt') {
+            qtArr.push(item)
+          }
+        }
+      })
+      return tjArr.concat(qtArr)
+    },
+    allServerMoney () {
+      let money = 0
+      let partInfos = 0
+      let servers = 0
+      this.allServerList.forEach(item => {
+        if (item.isChecked && item.customerServer === 'new') {
+          money += item.amount
+          servers++
+          if (item.partInfo !== null && item.partInfo.isChecked) {
+            money += item.partInfo.sellPrice * item.partInfo.number
+            partInfos++
+          }
+        }
+      })
+      return {
+        money: money,
+        partInfos: partInfos,
+        servers: servers
+      }
+    },
     ...mapGetters([
       'allServerList',
       'defaultStoreId',
@@ -58,40 +91,78 @@ export default {
   },
   methods: {
     _goBack () {
-      this.$router.go(-1)
+      this.$router.back()
     },
     _addServer () {
-      if (this.allServerNum > 0) {
-        this.modifyMyServer(this.checkedServer.servers)
-        this.deleteAllServer(this.checkedServer.arr)
-        this.$router.back()
+      if (this.allServerMoney.servers > 0) {
+        this.newServerlist.forEach(item => {
+          if (item.customerServer === 'new' && item.isChecked) {
+            this.modifyAllServerList({
+              pkId: item.pkId,
+              customerServer: 'old'
+            })
+          }
+        })
+        this._goBack()
       } else {
         this.$Toast({
-          message: '请选择新增服务',
-          position: 'bottom'
+          position: 'bottom',
+          message: '请选择至少一种服务'
         })
       }
     },
     _getAllServie () {
       this.setLoadingState(true)
       let id = this.defaultStoreId
-      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.carid}&mileage=${this.distance}
-      &stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.carid}&mileage=${this.distance}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {
         if (res.code === 200) {
           this.setLoadingState(false)
-          this.newServerlist(res.data)
+          this.handleServerlist(res.data)
         } else if (res.code === 401) {
           this.refreshToken(this._getAllServie)
         }
       })
     },
+    handleServerlist (data) {
+      let reg = /TJ/
+      let map = new Map()
+      let list = []
+      this.allServerList.forEach(item => {
+        map.set(item.pkId, item)
+      })
+      data.forEach(item => {
+        let obj = null
+        if (item.partInfo !== null) {
+          obj = Object.assign(item.partInfo, {
+            isChecked: false,
+            number: 1
+          })
+        }
+        if (!reg.test(item.customCode)) {
+          map.set(item.pkId, Object.assign(item, {
+            customerType: 'tj', // cg 常规 tj 推荐 qt 其他
+            customerServer: 'new',
+            isChecked: false,
+            state: -1,
+            partInfo: obj
+          }))
+        }
+      })
+      for (let value of map.values()) {
+        list.push(value)
+      }
+      this.setAllServerList(list)
+      this.setStaticServerList(list)
+    },
     ...mapMutations({
+      setAllServerList: 'SET_ALL_SERVER_LIST',
+      setStaticServerList: 'SET_STATIC_SERVER_LIST',
       setLoadingState: 'SET_LOADING_STATE',
-      modifyMyServer: 'MODIFY_MY_SERVER',
-      deleteAllServer: 'DELETE_ALL_SERVER'
+      deleteAllServer: 'DELETE_ALL_SERVER',
+      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
     })
   },
   components: {
@@ -135,7 +206,7 @@ export default {
       overflow: hidden
       .wrapper
         position: relative
-        padding-top: 20px
+        padding: 20px 0px
         .service-catalog
           overflow: hidden
           .service-title
@@ -184,12 +255,21 @@ export default {
         flex-direction: column
         justify-content: center
         .nums
+          display: flex
           height: 35px
           line-height: 35px
-          padding-right: 30px
-          font-size: 22px
-          color: #afafaf
-          text-align: right
+          span
+            &:nth-child(1)
+              padding-left: 30px
+              font-size: 20px
+              color: #626262
+            &:nth-child(2)
+              flex: 1
+              font-size: 22px
+              color: #afafaf
+              font-weight: bold
+              padding-right: 30px
+              text-align: right
         .money
           height: 40px
           line-height: 40px
