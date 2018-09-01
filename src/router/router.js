@@ -168,11 +168,11 @@ const addNewServer = {
   name: 'addNewServer',
   component: resolve => { require(['@/components/maintain/add-new-server'], resolve) }
 }
-// const searchCar = {
-//   path: '/search-car',
-//   name: 'searchCar',
-//   component: resolve => { require(['@/components/mycar/search-car'], resolve) }
-// }
+const changePre = {
+  path: '/change-pre',
+  name: 'changePre',
+  component: resolve => { require(['@/components/maintain/change-pre'], resolve) }
+}
 const payOver = {
   path: '/pay-over',
   name: 'payOver',
@@ -240,6 +240,7 @@ export const routers = [
   Reservations,
   maintainPreOrder,
   maintain,
+  changePre,
   addNewServer,
   seleCity,
   payOver,

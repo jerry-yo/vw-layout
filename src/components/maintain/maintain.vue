@@ -183,13 +183,7 @@ export default {
         }))
       })
       this.setAllServerList(arr)
-      this.setStaticServerList(arr)
-      this.modifyStaticServerPartInfo({
-        pkId: '841262',
-        obj: {
-          number: 10000
-        }
-      })
+      this.setStaticServerList(JSON.parse(JSON.stringify(arr)))
     },
     ...mapMutations({
       setLoadingState: 'SET_LOADING_STATE',
