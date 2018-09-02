@@ -32,19 +32,14 @@
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
-import {expireToken} from '@/common/js/mixin'
+import {expireToken, getServerCar} from '@/common/js/mixin'
 export default {
   name: 'maintain',
-  mixins: [expireToken],
+  mixins: [expireToken, getServerCar],
   data () {
-    return {
-      carid: 0,
-      distance: 0
-    }
+    return {}
   },
   mounted () {
-    this.carid = this.$route.query.carid
-    this.distance = this.$route.query.distance
     this._getAllServie()
   },
   computed: {
@@ -83,10 +78,7 @@ export default {
       }
     },
     ...mapGetters([
-      'allServerList',
-      'defaultStoreId',
-      'userInfo',
-      'storeList'
+      'allServerList'
     ])
   },
   methods: {
@@ -114,7 +106,7 @@ export default {
     _getAllServie () {
       this.setLoadingState(true)
       let id = this.defaultStoreId
-      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.carid}&mileage=${this.distance}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {

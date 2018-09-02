@@ -50,10 +50,10 @@ import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import {mapGetters, mapMutations} from 'vuex'
-import {expireToken, defaultCarInfo} from '@/common/js/mixin'
+import {expireToken, getServerCar} from '@/common/js/mixin'
 export default {
   name: 'maintain',
-  mixins: [expireToken, defaultCarInfo],
+  mixins: [expireToken, getServerCar],
   data () {
     return {
       allmileagn: 2000000
@@ -65,19 +65,6 @@ export default {
     }
   },
   computed: {
-    nowCar () {
-      let id = this.defaultCar
-      let info = {}
-      if (this.selectCar) {
-        id = this.selectCar
-      }
-      this.myCar.forEach(item => {
-        if (id === item.userCarId) {
-          info = item
-        }
-      })
-      return info
-    },
     defaultServer () {
       let cg = []
       let tj = []
@@ -116,9 +103,6 @@ export default {
       }
     },
     ...mapGetters([
-      'selectCar',
-      'storeList',
-      'userInfo',
       'allServerList',
       'staticServerList',
       'defaultStoreId'
@@ -133,7 +117,7 @@ export default {
       this.$router.back()
     },
     _goAddServer () {
-      this.$router.push(`/add-new-server?carid=${this.nowCar.userCarId}&distance=${this.nowCar.distance}`)
+      this.$router.push(`/add-new-server`)
     },
     _goMaintainPreOrder () {
       this.$router.push('/maintain-pre-order')
@@ -182,7 +166,7 @@ export default {
           partInfo: obj
         }))
       })
-      this.setAllServerList(arr)
+      this.setAllServerList(JSON.parse(JSON.stringify(arr)))
       this.setStaticServerList(JSON.parse(JSON.stringify(arr)))
     },
     ...mapMutations({

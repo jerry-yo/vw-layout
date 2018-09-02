@@ -92,12 +92,13 @@ export default {
   methods: {
     // 修改材料数量
     _changeNumber (res) {
-      this.modifyAllServerPartInfo({
+      let obj = {
         pkId: this.server.pkId,
-        obj: {
+        partInfo: Object.assign(this.server.partInfo, {
           number: res.number
-        }
-      })
+        })
+      }
+      this.modifyAllServerList(JSON.parse(JSON.stringify(obj)))
     },
     // 展示服务材料
     _showInfo () {
@@ -122,12 +123,13 @@ export default {
     },
     // 选择服务材料
     _checkGood () {
-      this.modifyAllServerPartInfo({
+      let obj = {
         pkId: this.server.pkId,
         obj: {
           isChecked: !this.server.partInfo.isChecked
         }
-      })
+      }
+      this.modifyAllServerPartInfo(JSON.parse(JSON.stringify(obj)))
     },
     // 选择服务
     _checkServer () {
@@ -156,25 +158,20 @@ export default {
         pkId: this.server.pkId,
         state: 0
       })
-      this.setStaticServerList(this.allServerList)
+      this.setStaticServerList(JSON.parse(JSON.stringify(this.allServerList)))
     },
     // 取消修改
     _cancelServer () {
       let staticServerPartInfo = this.getStaticServerList(this.server.pkId)
-      this.modifyAllServerPartInfo({
-        pkId: this.server.pkId,
-        obj: {
-          number: staticServerPartInfo.partInfo.number
-        }
-      })
       this.modifyAllServerList({
         pkId: this.server.pkId,
+        partInfo: JSON.parse(JSON.stringify(staticServerPartInfo.partInfo)),
         state: 0
       })
     },
     // 更换材料
     _changeGood () {
-
+      this.$router.push(`/change-pre?pid=${this.server.code}&idMdmPart=${this.server.partInfo.idMdmPart}&pkid=${this.server.pkId}`)
     },
     // 获取参考服务信息
     getStaticServerList (id) {

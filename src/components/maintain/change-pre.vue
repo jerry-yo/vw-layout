@@ -8,7 +8,7 @@
     </div>
     <Scroll class="container" ref="addservice" :data="changeProList">
       <ul class="wrapper">
-        <li>
+        <li v-for="item in changeProList" :key="item.idMdmPart">
           <div class="img">
             <img src="" alt="">
           </div>
@@ -16,20 +16,20 @@
             <div class="change">
               <div class="parameter">
                 <div class="top">
-                  <div class="brand">品牌：<span>{{0 + ' ' + 0}}</span></div>
+                  <div class="brand">品牌：<span>{{item.brand + ' ' + item.supplierCode}}</span></div>
                 </div>
                 <div class="bottom">
-                  <div class="spec">规格：<span>{{0}}</span></div>
+                  <div class="spec">规格：<span>{{item.spec}}</span></div>
                 </div>
               </div>
               <!-- <div class="tips">{{'1'}}辆“思域”选择了此产品</div> -->
               <div class="buy-info">
-                <span>￥{{0}}</span>
-                <span>{{`X  ${0}`}}</span>
+                <span>￥{{item.sellPrice}}</span>
+                <span>{{`X  ${item.number}`}}</span>
               </div>
             </div>
             <div class="change-btn">
-              <div class="btn" @click="_changeGood">更换</div>
+              <div class="btn" @click="_changeGood(item)" v-if="item.idMdmPart !== idMdmPart">更换</div>
             </div>
           </div>
         </li>
@@ -41,30 +41,67 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import {mapMutations} from 'vuex'
-import {expireToken} from '@/common/js/mixin'
+import {expireToken, getServerCar} from '@/common/js/mixin'
 export default {
   name: 'changePre',
-  mixins: [expireToken],
+  mixins: [expireToken, getServerCar],
   components: {
     Scroll
   },
   data () {
     return {
-      changeProList: []
+      changeProList: [],
+      pid: '',
+      idMdmPart: '',
+      pkid: ''
     }
+  },
+  created () {
+    this.pid = this.$route.query.pid
+    this.idMdmPart = this.$route.query.idMdmPart
+    this.pkid = this.$route.query.pkid
+    this._getPartList()
   },
   methods: {
     _goBack () {
       this.$router.back()
     },
-    _changeGood () {
-
+    _changeGood (item) {
+      this.modifyAllServerList({
+        pkId: this.pkid,
+        partInfo: item
+      })
+      this._goBack()
     },
     _getPartList () {
-      let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.carid}&mileage=${this.distance}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
-      this.$get(`${this.f6Url}/api/clientOrder/getPartRecommendList?`)
-    }
-    ...mapMutations([])
+      this.setLoadingState(true)
+      let id = this.defaultStoreId
+      let url = `${this.f6Url}/api/clientOrder/getPartRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}&pid=${this.pid}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      this.$get(url, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        console.log(res.data)
+        if (res.code === 200) {
+          this.setLoadingState(false)
+          this.handleProList(res.data)
+        } else if (res.code === 401) {
+          this.refreshToken(this._getPartList)
+        }
+      })
+    },
+    handleProList (data) {
+      data.forEach(item => {
+        item = Object.assign(item, {
+          isChecked: false,
+          number: 1
+        })
+      })
+      this.changeProList = data
+    },
+    ...mapMutations({
+      setLoadingState: 'SET_LOADING_STATE',
+      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
+    })
   }
 }
 </script>

@@ -3,9 +3,9 @@
     <CheckMask v-if="showInfo" @closemask="_closeMask" :data="faultInfo"></CheckMask>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        <h2>{{`${defaultCar.manufacturerName} - ${defaultCar.evehicleSystem}`}}</h2>
-        <p><span>{{defaultCar.carNumber}}</span><span>丨</span><span>{{defaultCar.distance}}km</span></p>
+      <div class="font" @click="_goSelectCar">
+        <h2>{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</h2>
+        <p><span>{{nowCar.carNumber}}</span><span>丨</span><span>{{nowCar.distance}}km</span></p>
       </div>
     </div>
     <div class="service-flow">
@@ -19,6 +19,7 @@
     </div>
     <Scroll class="container" ref="repair" :preventDefault="false">
       <div class="wrapper">
+        <storeInfo :route="'repair'"></storeInfo>
         <div class="textarea" flexContainer ref="chatpannel" @touch.stop>
           <textarea class="text" name="name" rows="5" v-model="faultText" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
         </div>
@@ -29,7 +30,7 @@
             <span>查看检测单</span>
           </div>
         </div>
-        <seleDetectionMenu :check="false" :data="detectionMenus[0].faultGroupItem" @showinfo="checkDetectionInfo"></seleDetectionMenu>
+        <!-- <seleDetectionMenu :check="false" :data="detectionMenus[0].faultGroupItem" @showinfo="checkDetectionInfo"></seleDetectionMenu> -->
       </div>
 
     </Scroll>
@@ -42,11 +43,14 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import uploadPic from '@/base/upload-pic'
+import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'
 import {mapGetters, mapMutations} from 'vuex'
+import {getServerCar} from '@/common/js/mixin'
 export default {
   name: 'repair',
+  mixins: [getServerCar],
   data () {
     return {
       clientHeight: null,
@@ -67,6 +71,9 @@ export default {
   methods: {
     _goBack () {
       this.$router.go(-1)
+    },
+    _goSelectCar () {
+      this.$router.push('/garage?type=select')
     },
     focusText () {
       let _self = this
@@ -106,7 +113,8 @@ export default {
     uploadPic,
     seleDetectionMenu,
     Scroll,
-    CheckMask
+    CheckMask,
+    storeInfo
   }
 }
 </script>

@@ -123,6 +123,11 @@ export default {
       let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
       if (res.temp < nowTemp) {
         this.tempInfo = res
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '注册日期不得大于当前时间'
+        })
       }
     },
     _addCar () {

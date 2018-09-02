@@ -17,17 +17,17 @@
     </div>
     <Scroll class="container" ref="repairPre">
       <div class="wrapper">
-        <storeInfo></storeInfo>
+        <storeInfo :type="'noclick'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
           <span @click="seleDate">{{repairOrder.appointmentTime > 0 ? _getFormatDateToRepair(repairOrder.appointmentTime) : '选择时间'}}</span>
         </div>
         <div class="car-info">
-          <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{carInfo}}</div> </div>
-          <div> <span>车牌号</span><span class="right">{{myCar[0].idCard}}</span> </div>
-          <div> <span>联系人</span><span class="right">{{userInfo.phone}}</span> </div>
+          <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</div> </div>
+          <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
+          <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <div class="fault-info" v-if="repairOrder.faultImgs.length > 0 || repairOrder.faultText.length > 0">
+        <!-- <div class="fault-info" v-if="repairOrder.faultImgs.length > 0 || repairOrder.faultText.length > 0">
           <div class="title">
             故障概要
           </div>
@@ -42,7 +42,7 @@
             </div>
           </div>
           <div class="go-img-info"></div>
-        </div>
+        </div> -->
         <!-- <div class="checkout-menu" v-if="false">
           <div class="title">
             检测单故障 <span>{{'(1' + '/' + '3)'}}</span>
@@ -56,7 +56,7 @@
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn" @click="goRepairOrder">确认下单</div>
     </div>
-    <datePicker v-if="isShow" @close="closePicker"></datePicker>
+    <datePickerMask v-if="datePickerShow" @close="closePicker"></datePickerMask>
   </div>
 </template>
 
@@ -64,15 +64,17 @@
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
-import datePicker from '@/base/date-picker'
-import {getFormatDateToRepair} from '@/common/js/date'
+import datePickerMask from '@/base/date-picker'
+import {getFormatDateToRepair, datePicker, timeToStamp} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
+import {getServerCar} from '@/common/js/mixin'
 export default {
   name: 'repairPreOrder',
+  mixins: [getServerCar],
   data () {
     return {
       imgs: [0, 1, 2, 3],
-      isShow: false,
+      datePickerShow: false,
       date: {
         date: '',
         temp: 0
@@ -102,13 +104,20 @@ export default {
   },
   methods: {
     seleDate () {
-      this.isShow = true
+      this.datePickerShow = true
     },
     closePicker (res) {
-      this.setRepairOrder({
-        appointmentTime: res.temp
-      })
-      this.isShow = false
+      this.datePickerShow = false
+      let date = datePicker()
+      let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
+      if (res.temp > nowTemp) {
+        this.tempInfo = res
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '预约日期不得小于当前时间'
+        })
+      }
     },
     _getFormatDateToRepair (temp) {
       return getFormatDateToRepair(temp / 1000)
@@ -141,7 +150,7 @@ export default {
     storeInfo,
     seleDetectionMenu,
     Scroll,
-    datePicker
+    datePickerMask
   }
 }
 </script>

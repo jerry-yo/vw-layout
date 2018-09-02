@@ -1,6 +1,6 @@
 import Wx from 'Wx'
 import {mapActions, mapGetters, mapMutations} from 'vuex'
-
+// 微信权限操作
 export const wxMixin = {
   mounted () {
     this.wxReady()
@@ -13,6 +13,7 @@ export const wxMixin = {
     }
   }
 }
+// 刷新token
 export const expireToken = {
   computed: {
     ...mapGetters([
@@ -124,6 +125,32 @@ export const defaultCarInfo = {
     ...mapGetters([
       'defaultCar',
       'myCar'
+    ])
+  }
+}
+
+export const getServerCar = {
+  computed: {
+    nowCar () {
+      let id = this.defaultCar
+      let info = {}
+      if (this.selectCar) {
+        id = this.selectCar
+      }
+      this.myCar.forEach(item => {
+        if (id === item.userCarId) {
+          info = item
+        }
+      })
+      return info
+    },
+    ...mapGetters([
+      'myCar',
+      'selectCar',
+      'storeList',
+      'userInfo',
+      'defaultCar',
+      'defaultStoreId'
     ])
   }
 }

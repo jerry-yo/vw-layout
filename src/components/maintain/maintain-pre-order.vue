@@ -55,10 +55,12 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
+import {getServerCar} from '@/common/js/mixin'
 import storeInfo from '@/base/store-info'
 import keepFitTime from '@/base/keep-fit-time'
 export default {
   name: 'maintain-pre',
+  mixins: [getServerCar],
   data () {
     return {
       repairPreOrderBScroll: null,
@@ -67,19 +69,6 @@ export default {
     }
   },
   computed: {
-    nowCar () {
-      let id = this.defaultCar
-      let info = {}
-      if (this.selectCar) {
-        id = this.selectCar
-      }
-      this.myCar.forEach(item => {
-        if (id === item.userCarId) {
-          info = item
-        }
-      })
-      return info
-    },
     allServerMoney () {
       let money = 0
       let partInfos = 0
@@ -100,55 +89,9 @@ export default {
         servers: servers
       }
     },
-    fillImgs () {
-      if (this.imgs.length > 4) {
-        let arr = this.imgs.slice(0, 4)
-        return arr
-      } else {
-        return this.imgs
-      }
-    },
-    carInfo () {
-      let car = this.myCar[0].name + this.myCar[0].salesVersion
-      return car
-    },
-    getServerSum () {
-      let price = 0
-      let server = 0
-      let num = 0
-      let imgs = []
-      this.serverList.forEach((item) => {
-        if (item.groupItem.isChecked) {
-          server++
-          if (item.subItems.length > 0) {
-            item.subItems.forEach((res, id) => {
-              if (res.isChecked) {
-                price += res.keepServiceSecondItemBean.minCommodityNumber * res.keepServiceSecondItemBean.commodityPrice
-                num += res.keepServiceSecondItemBean.minCommodityNumber
-                imgs.push(res.keepServiceSecondItemBean.commodityImageUrl)
-              }
-            })
-          } else {
-            price += item.groupItem.keepServiceFirstItemBean.serverPrice
-          }
-        }
-      })
-      return {
-        price: price,
-        server: server,
-        num: num,
-        imgs: imgs
-      }
-    },
     ...mapGetters([
-      'myCar',
-      'defaultCar',
-      'selectCar',
       'allServerList',
-      'storeList',
-      'maintainOrder',
-      'defaultStoreId',
-      'userInfo'
+      'maintainOrder'
     ])
   },
   methods: {
