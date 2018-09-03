@@ -27,7 +27,7 @@
           <div class="btn" :class="server.partInfo.isChecked ? 'check': 'nocheck'" @click="_checkGood"></div>
         </div>
         <div class="img">
-          <img src="" alt="">
+          <img v-lazy="imgpartUrl + server.partInfo.customCode" alt="">
         </div>
         <div class="good-info">
           <div class="change" v-if="server.state === 0">

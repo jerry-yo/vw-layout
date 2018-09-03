@@ -35,8 +35,8 @@ const getters = {
   defaultStoreId (state) {
     return state.defaultStoreId
   },
-  maintainOrder (state) {
-    return state.maintainOrder
+  updateOrder (state) {
+    return state.updateOrder
   },
   detectionMenus (state) {
     return state.detectionMenus

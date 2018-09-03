@@ -20,7 +20,7 @@
         <storeInfo :type="'noclick'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span @click="showFitTime">{{dateTime(maintainOrder)}}</span>
+          <span @click="showFitTime">{{dateTime(orderTime)}}</span>
         </div>
         <div class="car-info">
           <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</div> </div>
@@ -30,10 +30,12 @@
         <div class="server-img">
           <div class="con">
             <ul>
-              <li class="imgs" v-for="(item, index) in []" :key="index" v-if="index < 2">
-                <img v-lazy="" alt="">
+              <li class="imgs" v-for="(item) in this.allServerMoney.partList" :key="item.customCode">
+                <img v-lazy="imgpartUrl + item.customCode">
               </li>
-              <li class="eiss" v-if="0 > 2"></li>
+              <li class="no-by" v-if="this.allServerMoney.partInfos === 0 && this.allServerMoney.servers === 0"></li>
+              <li class="no-part" v-if="this.allServerMoney.partInfos === 0 && this.allServerMoney.servers !== 0"></li>
+              <li class="eiss" v-if="this.allServerMoney.partList.length > 2"></li>
             </ul>
             <div class="goods-info">
               <span>共{{allServerMoney.partInfos}}个配件、{{allServerMoney.servers}}个服务</span>
@@ -55,17 +57,18 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
-import {getServerCar} from '@/common/js/mixin'
+import {getServerCar, expireToken} from '@/common/js/mixin'
 import storeInfo from '@/base/store-info'
 import keepFitTime from '@/base/keep-fit-time'
+import {datePicker} from '@/common/js/date'
 export default {
   name: 'maintain-pre',
-  mixins: [getServerCar],
+  mixins: [getServerCar, expireToken],
   data () {
     return {
-      repairPreOrderBScroll: null,
       imgs: [0, 1, 2, 3],
-      fitTime: false
+      fitTime: false,
+      orderTime: {}
     }
   },
   computed: {
@@ -73,6 +76,7 @@ export default {
       let money = 0
       let partInfos = 0
       let servers = 0
+      let partList = []
       this.allServerList.forEach(item => {
         if (item.isChecked && item.customerServer === 'old') {
           money += item.amount
@@ -80,18 +84,45 @@ export default {
           if (item.partInfo !== null && item.partInfo.isChecked) {
             money += item.partInfo.sellPrice * item.partInfo.number
             partInfos++
+            partList.push(item.partInfo)
           }
         }
       })
       return {
         money: money,
         partInfos: partInfos,
-        servers: servers
+        servers: servers,
+        partList: partList
       }
     },
+    serverOrder () {
+      let list = []
+      this.allServerList.forEach(item => {
+        if (item.isChecked && item.customerServer === 'old') {
+          if (item.partInfo !== null && item.partInfo.isChecked) {
+            list.push({
+              type: 2,
+              number: item.partInfo.number,
+              genaraprice: item.partInfo.sellPrice,
+              retailprice: item.partInfo.sellPrice,
+              projectid: item.partInfo.pkId,
+              projectname: item.partInfo.name
+            })
+          }
+          list.push({
+            type: 0,
+            projectname: item.name,
+            genaraprice: item.amount,
+            retailprice: item.amount,
+            number: 1,
+            projectid: item.pkId
+          })
+        }
+      })
+      return list
+    },
     ...mapGetters([
-      'allServerList',
-      'maintainOrder'
+      'allServerList'
     ])
   },
   methods: {
@@ -108,19 +139,49 @@ export default {
       return str
     },
     _goPreOrder () {
-      if (!this.maintainOrder.time) {
+      let id = this.defaultStoreId
+      if (this.orderTime.time && this.orderTime.time !== 0) {
+        this.$f6post(`${this.f6Url}/api/clientOrder`, {
+          'Authorization': this.userInfo.token,
+          'Content-Type': 'application/json'
+        }, (res) => {
+          if (res.code === 401) {
+            this.refreshToken(this._goPreOrder)
+          } else if (res.code === 200) {
+            this.setUpdateOrder(Object.assign(this.storeList[id], this.orderTime))
+            this.$router.push('/reservations?type=by')
+          }
+        }, {
+          clientAppId: this.userInfo.appId,
+          clientUserId: this.userInfo.fUserId,
+          orderStationId: this.storeList[id].stationId, // 用户车辆主键
+          stationName: this.storeList[id].stationName,
+          employeeId: '',
+          employeeName: '',
+          userContactTel: this.userInfo.userTel, // 联系电话
+          orderUserName: this.userInfo.userName, // 订单用户名
+          userCarUnmber: this.nowCar.carNumber, // 车牌号
+          userCarId: this.nowCar.userCarId,
+          userId: this.userInfo.userId,
+          OrderStatus: 4,
+          memo: '',
+          orderReserveTime: '',
+          price: this.allServerMoney.money, // 价格
+          depositAmt: 0,
+          deleteFlag: 0,
+          orderPartList: this.serverOrder,
+          carId: this.nowCar.carId, // 车辆ID
+          distance: this.nowCar.distance, // 行驶距离
+          stationCode: this.storeList[id].stationCode, // 门店编号
+          orderReserveDate: this.orderTime.dateTime, // 订单预约时间
+          orderReserveStart: this.orderTime.startTime,
+          orderReserveEnd: this.orderTime.endTime
+        })
+      } else {
         this.$Toast({
           message: '请选择预约时间',
           position: 'bottom'
         })
-      } else {
-        let _self = this
-        this.setMaintainOrder({
-          store: _self.storeList[_self.defaultStoreId]
-        })
-        this.setMyServer()
-        this.setAllServer()
-        this.$router.push('/reservations?type=by')
       }
     },
     showFitTime () {
@@ -128,16 +189,23 @@ export default {
     },
     closeMask (res) {
       if (res.time !== 0 && res.time) {
-        this.setMaintainOrder(res)
+        let now = datePicker()
+        let end = res.time.split(':')
+        let end1 = parseInt(end[0]) + 1
+        let startTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay} ${res.time}:00`
+        let dateTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay}`
+        let endTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay} ${end1 > 9 ? end1 : '0' + end1}:${end[1]}:00`
+        this.orderTime = Object.assign(res, {
+          startTime: startTime,
+          endTime: endTime,
+          dateTime: dateTime,
+          showTime: this.dateTime(res)
+        })
       }
       this.fitTime = false
     },
     ...mapMutations({
-      setMaintainOrder: 'SET_MAINTAIN_ORDER',
-      setMyServer: 'SET_MY_SERVER',
-      setAllServer: 'SET_ALL_SERVER',
-      setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
-      setSelectCar: 'SET_SELECTCAR'
+      setUpdateOrder: 'SET_UPDATE_ORDER'
     })
   },
   components: {
@@ -273,9 +341,23 @@ export default {
               box-sizing: border-box
               width: 120px
               height: 120px
-              border: 1px solid #d2d2d2
-              background-color: rgba(0,255,126,0.5)
               margin-right: 10px
+            .no-part
+              box-sizing: border-box
+              width: 120px
+              height: 120px
+              bg-image('../../common/imgs/order/have_server')
+              background-repeat: no-repeat
+              background-size: 120px 120px
+              background-position: center center
+            .no-by
+              box-sizing: border-box
+              width: 120px
+              height: 120px
+              bg-image('../../common/imgs/order/no_by')
+              background-repeat: no-repeat
+              background-size: 120px 120px
+              background-position: center center
             .eiss
               width: 27px
               bg-image('../../common/imgs/ellipsis')

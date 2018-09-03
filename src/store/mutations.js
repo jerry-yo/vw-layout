@@ -186,15 +186,15 @@ const mutations = {
     saveStaticServerList(list)
     state.staticServerList = list
   },
-  // 设置保养服务订单信息
-  [types.SET_MAINTAIN_ORDER] (state, info) {
+  // 设置服务订单信息
+  [types.SET_UPDATE_ORDER] (state, info) {
     let obj = {}
-    obj = Object.assign(state.maintainOrder, info)
-    state.maintainOrder = obj
+    obj = Object.assign(state.updateOrder, info)
+    state.updateOrder = obj
   },
-  // 删除保养服务订单信息
-  [types.DELETE_MAINTAIN_ORDER] (state) {
-    state.maintainOrder = {}
+  // 删除服务订单信息
+  [types.DELETE_UPDATE_ORDER] (state) {
+    state.updateOrder = {}
   }
 }
 

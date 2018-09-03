@@ -7,13 +7,11 @@
       </div>
     </div>
     <div class="container">
-      <div class="bg">
-
-      </div>
+      <div class="bg"></div>
       <div class="info">
-        <div class="store">{{type === 'by' ? maintainOrder.store.name : repairOrder.store.name}}</div>
-        <div class="time" v-if="type === 'by'">预约时间：{{getDate}}<span>{{maintainOrder.time}}</span></div>
-        <div class="time" v-else>预约时间：{{tempToDate}}</div>
+        <div class="store">{{updateOrder.name}}</div>
+        <div class="time" v-if="type === 'by'">预约时间：<span>{{updateOrder.showTime}}</span></div>
+        <div class="time" v-else>预约时间：{{getDate}}</div>
       </div>
     </div>
     <div class="tips"> <span>请尽快至门店服务，奇特异祝您用车愉快</span> </div>
@@ -30,7 +28,6 @@
 
 <script>
 import {mapGetters, mapMutations} from 'vuex'
-import {getFormatDateToRepair} from '@/common/js/date'
 export default {
   name: 'reservations',
   data () {
@@ -42,18 +39,14 @@ export default {
     getDate () {
       let date = ''
       if (this.type === 'by') {
-        date = this.maintainOrder.today ? '今天' : '明天'
+        date = this.updateOrder.today ? '今天' : '明天'
       } else if (this.type === 'wx') {
-        date = this.repairOrder.appointmentTime
+        date = this.updateOrder.time
       }
       return date
     },
-    tempToDate () {
-      return getFormatDateToRepair(this.getDate / 1000)
-    },
     ...mapGetters([
-      'maintainOrder',
-      'repairOrder'
+      'updateOrder'
     ])
   },
   created () {
@@ -69,16 +62,15 @@ export default {
     _lookOrder () {
       this.$router.push('/order/subscribe')
     },
-    ...mapMutations({
-      deleteRepairOrder: 'DELETE_REPAIR_ORDER',
-      deleteMaintainOrder: 'DELETE_MAINTAIN_ORDER'
-    })
+    ...mapActions([
+      
+    ])
   },
-  destroyed () {
+  beforeDestroy () {
     if (this.type === 'wx') {
-      this.deleteRepairOrder()
+      this.deleteUpdateOrder()
     } else if (this.type === 'by') {
-      this.deleteMaintainOrder()
+
     }
   }
 }

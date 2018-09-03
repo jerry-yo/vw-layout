@@ -56,3 +56,7 @@ export const updateCarWay = function ({commit, state}, info) {
   })
   commit(types.SET_MYCAR, arr)
 }
+
+export const clearOrderAllInfo = function ({commit, state}) {
+  
+}

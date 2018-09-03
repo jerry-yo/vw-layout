@@ -46,7 +46,7 @@ export default {
             state: 1,
             date: '9:00'
           }, {
-            state: 2,
+            state: 1,
             date: '9:30'
           }, {
             state: 1,
@@ -55,7 +55,7 @@ export default {
             state: 1,
             date: '10:30'
           }, {
-            state: 2,
+            state: 1,
             date: '11:00'
           }, {
             state: 1,
@@ -70,7 +70,7 @@ export default {
             state: 1,
             date: '14:30'
           }, {
-            state: 2,
+            state: 1,
             date: '15:00'
           }, {
             state: 1,
@@ -106,7 +106,7 @@ export default {
             state: 1,
             date: '11:00'
           }, {
-            state: 2,
+            state: 1,
             date: '11:30'
           }, {
             state: 1,
@@ -121,13 +121,13 @@ export default {
             state: 1,
             date: '15:00'
           }, {
-            state: 2,
+            state: 1,
             date: '15:30'
           }, {
             state: 1,
             date: '16:00'
           }, {
-            state: 2,
+            state: 1,
             date: '16:30'
           }, {
             state: 1,
