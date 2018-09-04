@@ -9,8 +9,8 @@
     <div class="container">
       <div class="bg"></div>
       <div class="info">
-        <div class="store">{{updateOrder.name}}</div>
-        <div class="time" v-if="type === 'by'">预约时间：<span>{{updateOrder.showTime}}</span></div>
+        <div class="store">{{type === 'by' ? '奇特异保养店-' : '奇特异维修店-'}}{{updateOrder.name}}</div>
+        <div class="time" v-if="type === 'by'">预约时间：{{updateOrder.showTime.split(' ')[0]}}<span>{{updateOrder.time}}</span></div>
         <div class="time" v-else>预约时间：{{getDate}}</div>
       </div>
     </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
 export default {
   name: 'reservations',
   data () {
@@ -63,14 +63,13 @@ export default {
       this.$router.push('/order/subscribe')
     },
     ...mapActions([
-      
+      'clearOrderAllInfo'
     ])
   },
   beforeDestroy () {
     if (this.type === 'wx') {
-      this.deleteUpdateOrder()
     } else if (this.type === 'by') {
-
+      this.clearOrderAllInfo('by')
     }
   }
 }
@@ -129,6 +128,7 @@ export default {
         font-size: 26px
         color: #fffefe
         font-weight: bold
+        margin-bottom: 10px
       .time
         height: 36px
         line-height: 36px

@@ -5,13 +5,13 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        <h2>{{myCar[carId].series.sbName + ' - ' + myCar[carId].series.vehicleSystem[1]}}</h2>
-        <p><span>{{myCar[carId].idCard}}</span><span>丨</span><span>{{myCar[carId].way}}km</span></p>
+        <!-- <h2>{{myCar[carId].series.sbName + ' - ' + myCar[carId].series.vehicleSystem[1]}}</h2>
+        <p><span>{{myCar[carId].idCard}}</span><span>丨</span><span>{{myCar[carId].way}}km</span></p> -->
       </div>
     </div>
     <Scroll class="list">
       <ul class="con">
-        <li  class="list-info" v-for="(item, index) in detectionMenus" :key="index" @click="_goLookInfo(item, index)" >
+        <li  class="list-info" v-for="(item, index) in []" :key="index" @click="_goLookInfo(item, index)" >
           <div class="left">
             <div class="time">
               <span>{{item.time}}</span>
@@ -44,12 +44,11 @@ export default {
     }
   },
   created () {
-    this.carId = this.$route.query.carid
+    this._getCheckList()
   },
   computed: {
     ...mapGetters([
-      'detectionMenus',
-      'myCar'
+      'userInfo'
     ])
   },
   methods: {
@@ -58,6 +57,19 @@ export default {
     },
     _goLookInfo (item, index) {
       this.$router.push('/check-list?id=' + index + '&carid=' + this.carId)
+    },
+    _getCheckList () {
+      this.$get(`${this.f6Url}/api/check/list`, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        console.log(res)
+      }, {
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId,
+        userId: this.userInfo.userId,
+        currentPage: 1,
+        pageSize: 10
+      })
     }
   },
   components: {

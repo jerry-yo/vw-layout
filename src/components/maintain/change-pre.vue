@@ -3,7 +3,7 @@
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
-        添加新服务
+        更换配件
       </div>
     </div>
     <Scroll class="container" ref="addservice" :data="changeProList">
@@ -80,7 +80,6 @@ export default {
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {
-        console.log(res.data)
         if (res.code === 200) {
           this.setLoadingState(false)
           this.handleProList(res.data)

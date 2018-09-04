@@ -1,7 +1,7 @@
 <template>
   <Scroll class="wrapper">
     <ul class="container">
-      <li v-for="(item, index) in subscribeOrder" :key="index">
+      <li v-for="(item, index) in []" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
           <div class="img"><img v-lazy="item.carImageSrc" alt="">  </div>
           <span class="car-id">{{item.idCard}}</span>
@@ -35,18 +35,12 @@ import {mapGetters, mapMutations} from 'vuex'
 
 export default {
   computed: {
-    subscribeOrder () {
-      let ret = []
-      this.orderList.forEach((item, index) => {
-        if (item.orderFormState === 1 && item.whichService !== 0) {
-          ret.push(item)
-        }
-      })
-      return ret
-    },
     ...mapGetters([
-      'orderList'
+      'userInfo'
     ])
+  },
+  mounted () {
+    this._getSubscribeOrder()
   },
   methods: {
     goOrderInfo (res) {
@@ -65,6 +59,21 @@ export default {
       this.modifyOrderList({
         type: 'cancel',
         id: item.orderId
+      })
+    },
+    _getSubscribeOrder () {
+      this.$get(`${this.f6Url}/api/clientOrder`, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        console.log(res)
+      }, {
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId,
+        userId: this.userInfo.userId,
+        orderStatus: 1,
+        deleteFlag: 0,
+        currentPage: 1,
+        pageSize: 10
       })
     },
     ...mapMutations({

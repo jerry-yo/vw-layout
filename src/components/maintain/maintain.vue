@@ -49,7 +49,7 @@
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, getServerCar} from '@/common/js/mixin'
 export default {
   name: 'maintain',
@@ -110,10 +110,7 @@ export default {
   },
   methods: {
     _goBack () {
-      this.setDefaultStoreId(0)
-      this.setSelectCar(0)
-      this.setAllServerList([])
-      this.setStaticServerList([])
+      this.clearOrderAllInfo('by')
       this.$router.back()
     },
     _goAddServer () {
@@ -144,40 +141,49 @@ export default {
     handleServerList (data) {
       let reg = /TJ/
       let arr = []
+      let i = 0
       data.forEach(item => {
         let obj = null
-        let customerType = 'cg'
-        let customerServer = 'old'
+        let haspartInfo = false
         if (item.partInfo !== null) {
           obj = Object.assign(item.partInfo, {
             isChecked: false,
             number: 1
           })
+          haspartInfo = true
         }
         if (!reg.test(item.customCode)) {
-          customerType = 'qt'
-          customerServer = 'new'
+          arr.push(Object.assign(item, {
+            customerType: 'qt', // cg 常规 tj 推荐 qt 其他
+            customerServer: 'new',
+            isChecked: false,
+            state: -1,
+            partInfo: obj
+          }))
+        } else {
+          let flag = (haspartInfo && i === 0) ? 0 : -1
+          arr.push(Object.assign(item, {
+            customerType: 'cg', // cg 常规 tj 推荐 qt 其他
+            customerServer: 'old',
+            isChecked: false,
+            state: flag,
+            partInfo: obj
+          }))
+          i++
         }
-        arr.push(Object.assign(item, {
-          customerType: customerType, // cg 常规 tj 推荐 qt 其他
-          customerServer: customerServer,
-          isChecked: false,
-          state: -1,
-          partInfo: obj
-        }))
       })
       this.setAllServerList(JSON.parse(JSON.stringify(arr)))
       this.setStaticServerList(JSON.parse(JSON.stringify(arr)))
     },
     ...mapMutations({
       setLoadingState: 'SET_LOADING_STATE',
-      setSelectCar: 'SET_SELECTCAR',
-      setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
-      setMaintainOrder: 'SET_MAINTAIN_ORDER',
       setAllServerList: 'SET_ALL_SERVER_LIST',
       setStaticServerList: 'SET_STATIC_SERVER_LIST',
-      modifyStaticServerPartInfo: 'MODIFY_STATIC_SERVER_PARTINFO'
-    })
+      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
+    }),
+    ...mapActions([
+      'clearOrderAllInfo'
+    ])
   },
   components: {
     serverModel,

@@ -57,6 +57,13 @@ export const updateCarWay = function ({commit, state}, info) {
   commit(types.SET_MYCAR, arr)
 }
 
-export const clearOrderAllInfo = function ({commit, state}) {
-  
+export const clearOrderAllInfo = function ({commit, state}, type) {
+  commit(types.DELETE_UPDATE_ORDER)
+  commit(types.SET_DEFAULTSTORE_ID, 0)
+  commit(types.SET_SELECTCAR, 0)
+  if (type === 'by') {
+    commit(types.SET_ALL_SERVER_LIST, [])
+    commit(types.SET_STATIC_SERVER_LIST, [])
+  } else if (type === 'wx') {
+  }
 }
