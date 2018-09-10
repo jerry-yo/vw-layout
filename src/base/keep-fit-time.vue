@@ -6,10 +6,10 @@
       </div>
       <div class="container">
         <div class="tabbar">
-          <div class="today" :class="today ? '' : 'active'" @click="isToday">
+          <div class="today" :class="today ? '' : 'active'" @click="goToday">
             今天
           </div>
-          <div class="tomorrow" :class="today ? 'active' : ''" @click="isToday">
+          <div class="tomorrow" :class="today ? 'active' : ''" @click="goTomorrow">
             明天
           </div>
         </div>
@@ -17,13 +17,13 @@
           <span class="bor"></span><span class="txt">上午</span><span class="bor"></span>
         </div>
         <ul class="time-list">
-          <li :class="'active-' + item.state" v-for="(item, index) in getAmList.am" :key="index" @click="seleTime(item, index, 'am')">{{item.date}}</li>
+          <li :class="{'active-1': item.state === 1, 'active-2': item.state > 1, 'active-3': item.state === 0}" v-for="(item, index) in getAmList.am" :key="index" @click="seleTime(item, index, 'am')">{{item.startPoint2}}</li>
         </ul>
         <div class="title">
           <span class="bor"></span><span class="txt">下午</span><span class="bor"></span>
         </div>
         <ul class="time-list">
-          <li :class="'active-' + item.state" v-for="(item, index) in getAmList.pm" :key="index" @click="seleTime(item, index, 'pm')">{{item.date}}</li>
+          <li :class="{'active-1': item.state === 1, 'active-2': item.state > 1, 'active-3': item.state === 0}" v-for="(item, index) in getAmList.pm" :key="index" @click="seleTime(item, index, 'pm')">{{item.startPoint2}}</li>
         </ul>
       </div>
       <div class="btn" @click="seleSuccess">确认</div>
@@ -32,253 +32,118 @@
 </template>
 
 <script type="text/ecmascript-6">
+const UNDERLINE_LONG = 18000000
+
 export default {
   name: 'keepFitTime',
+  props: {
+    store: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       today: true,
-      bespeakTime: {
-        today: [
-          {
-            state: 1,
-            date: '8:30'
-          }, {
-            state: 1,
-            date: '9:00'
-          }, {
-            state: 1,
-            date: '9:30'
-          }, {
-            state: 1,
-            date: '10:00'
-          }, {
-            state: 1,
-            date: '10:30'
-          }, {
-            state: 1,
-            date: '11:00'
-          }, {
-            state: 1,
-            date: '11:30'
-          }, {
-            state: 1,
-            date: '13:30'
-          }, {
-            state: 1,
-            date: '14:00'
-          }, {
-            state: 1,
-            date: '14:30'
-          }, {
-            state: 1,
-            date: '15:00'
-          }, {
-            state: 1,
-            date: '15:30'
-          }, {
-            state: 1,
-            date: '16:00'
-          }, {
-            state: 1,
-            date: '16:30'
-          }, {
-            state: 1,
-            date: '17:00'
-          }
-        ],
-        tomorrow: [
-          {
-            state: 1,
-            date: '8:30'
-          }, {
-            state: 1,
-            date: '9:00'
-          }, {
-            state: 1,
-            date: '9:30'
-          }, {
-            state: 1,
-            date: '10:00'
-          }, {
-            state: 1,
-            date: '10:30'
-          }, {
-            state: 1,
-            date: '11:00'
-          }, {
-            state: 1,
-            date: '11:30'
-          }, {
-            state: 1,
-            date: '13:30'
-          }, {
-            state: 1,
-            date: '14:00'
-          }, {
-            state: 1,
-            date: '14:30'
-          }, {
-            state: 1,
-            date: '15:00'
-          }, {
-            state: 1,
-            date: '15:30'
-          }, {
-            state: 1,
-            date: '16:00'
-          }, {
-            state: 1,
-            date: '16:30'
-          }, {
-            state: 1,
-            date: '17:00'
-          }
-        ]
-      },
-      nowHour: 0,
-      nowMinute: 0,
-      amIndex: 0,
-      seleIndex: {
-        today: -1,
-        tomorrow: -1
-      }
+      dateList: [],
+      seleDate: {}
     }
   },
   computed: {
     getAmList () {
-      let _self = this
-      _self.amIndex = 0
       let am = []
       let pm = []
-      if (this.today) {
-        let active = []
-        this.bespeakTime.today.forEach((item, index) => {
-          let arr = item.date.split(':')
-          let minute = parseInt(arr[1])
-          let hour = parseInt(arr[0])
-          if (this.nowHour > hour) {
-            item.state = 2
-          } else if (this.nowHour === hour) {
-            if (this.nowMinute >= minute) {
-              item.state = 2
-            } else {
-              item.state = 1
-            }
-          } else {
-            item.state = 1
-          }
-          if (item.state === 1) {
-            active.push(index)
-          }
-          if (hour < 13) {
-            _self.amIndex++
-            am.push(item)
-          } else {
-            pm.push(item)
-          }
-        })
-        this.bespeakTime.today.forEach((item, index) => {
-          if (_self.seleIndex.today < 0 && index === active[0]) {
-            item.state = 3
-          } else if (_self.seleIndex.today === index) {
-            item.state = 3
-          }
-        })
-      } else {
-        let active = []
-        this.bespeakTime.tomorrow.forEach((item, index) => {
-          let arr = item.date.split(':')
-          let hour = parseInt(arr[0])
-          if (item.state !== 2) {
-            item.state = 1
-          }
-          if (item.state === 1) {
-            active.push(index)
-          }
-          if (hour < 13) {
-            _self.amIndex++
-            am.push(item)
-          } else {
-            pm.push(item)
-          }
-        })
-        this.bespeakTime.tomorrow.forEach((item, index) => {
-          if (_self.seleIndex.tomorrow < 0 && index === active[0]) {
-            item.state = 3
-          } else if (_self.seleIndex.tomorrow === index) {
-            item.state = 3
-          }
-        })
-      }
+      let date = new Date()
+      let hours = this.today ? (date.getHours() - 8) * 60 * 60 * 1000 : -1
+
+      this.dateList.forEach(item => {
+        if (item.startPoint1 < UNDERLINE_LONG) {
+          item = Object.assign(item, {
+            state: item.startPoint1 <= hours ? 3 : item.state
+          })
+          am.push(item)
+        } else {
+          item = Object.assign(item, {
+            state: item.startPoint1 <= hours ? 3 : item.state
+          })
+          pm.push(item)
+        }
+      })
       return {
         am: am,
         pm: pm
       }
     }
   },
+  created () {
+    this.getDateList()
+  },
   methods: {
-    isToday () {
+    getDateList () {
+      let date = new Date()
+      this.$post(`${this.tonyUrl}/api/f6-app/getStoreOrderTimeList`, this.gt1Header, (res) => {
+        if (res.errorCode === 0 && res.data.code === 0) {
+          this.dateList = res.data.data
+        }
+      }, {
+        storeName: this.store.stationName,
+        orderReserveDate: `${date.getFullYear()}-${date.getMonth() + 1}-${this.today ? date.getDate() : date.getDate() + 1}`
+      })
+    },
+    goToday () {
+      if (this.today) {
+        return
+      }
       this.today = !this.today
+      this.getDateList()
+    },
+    goTomorrow () {
+      if (!this.today) {
+        return
+      }
+      this.today = !this.today
+      this.getDateList()
     },
     closeMask () {
       this.$emit('close', {
-        close: false,
-        time: 0
+        close: false
       })
     },
     seleTime (res, index, type) {
-      let _self = this
-      if (this.today) {
-        this.bespeakTime.today.forEach((item, id) => {
-          if (item.state !== 2) {
-            item.state = 1
-          }
-          if (type === 'am' && res.state !== 2) {
-            _self.seleIndex.today = index
-          } else if (type === 'pm' && res.state !== 2) {
-            _self.seleIndex.today = index + _self.amIndex
-          }
-        })
-      } else {
-        this.bespeakTime.tomorrow.forEach((item, id) => {
-          if (item.state !== 2) {
-            item.state = 1
-          }
-          if (type === 'am' && res.state !== 2) {
-            _self.seleIndex.tomorrow = index
-          } else if (type === 'pm' && res.state !== 2) {
-            _self.seleIndex.tomorrow = index + _self.amIndex
-          }
-        })
+      if (res.state !== 1) {
+        return
       }
+      let id = index
+      if (type === 'pm') {
+        id += this.getAmList.am.length
+      }
+      this.seleDate = res
+      this.dateList.forEach((item, i) => {
+        if (item.state === 0) {
+          item = Object.assign(item, {
+            state: 1
+          })
+        }
+        if (id === i) {
+          item = Object.assign(item, {
+            state: 0
+          })
+        }
+      })
     },
     seleSuccess () {
-      let ret = {}
-      let _self = this
-      if (this.today) {
-        this.bespeakTime.today.forEach((item, id) => {
-          if (item.state === 3) {
-            ret = item
-          }
-        })
+      if (this.seleDate.startPoint2) {
+        this.$emit('close', Object.assign(this.seleDate, {
+          today: this.today,
+          close: false
+        }))
       } else {
-        this.bespeakTime.tomorrow.forEach((item, id) => {
-          if (item.state === 3) {
-            ret = item
-          }
+        this.$Toast({
+          position: 'bottom',
+          message: '请选择预约时间'
         })
       }
-      this.$emit('close', {
-        close: false,
-        today: _self.today,
-        time: ret.date
-      })
     }
-  },
-  created () {
-    let date = new Date()
-    this.nowHour = date.getHours()
-    this.nowMinute = date.getMinutes()
   }
 }
 </script>

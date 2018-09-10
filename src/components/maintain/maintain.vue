@@ -19,7 +19,7 @@
     <Scroll class="container" ref="maintain" :data="allServerList">
       <div class="wrapper">
         <storeInfo :route="'maintain'"></storeInfo>
-        <serverModel v-for="(item, index) in defaultServer" :key="item.pkId" :server="item" :serverid="index"></serverModel>
+        <serverModel v-for="item in defaultServer" :key="item.pkId" :server="item"></serverModel>
         <div class="add-server" @click="_goAddServer">
           添加新服务
         </div>

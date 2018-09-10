@@ -10,7 +10,7 @@
       <ul class="wrapper">
         <li v-for="item in changeProList" :key="item.idMdmPart">
           <div class="img">
-            <img src="" alt="">
+            <img :src="imgpartUrl + item.customCode" alt="">
           </div>
           <div class="good-info">
             <div class="change">

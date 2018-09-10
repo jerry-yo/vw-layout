@@ -1,5 +1,5 @@
 import {loadUserInfo, loadCityList, loadCityInfo, loadStoreList, loadMyCar, loadDefaultCar, loadSelectCar, loadCarBrand, loadAddCar,
-  loadDefaultStoreId, loadUpdateOrder, loadAllServerList, loadStaticServerList} from '../common/js/cache'
+  loadDefaultStoreId, loadUpdateOrder, loadAllServerList, loadStaticServerList, loadAddNewServerLoadNum} from '../common/js/cache'
 
 const state = {
   routerAnimate: 'none',
@@ -16,6 +16,7 @@ const state = {
   updateOrder: loadUpdateOrder(),
   allServerList: loadAllServerList(),
   staticServerList: loadStaticServerList(),
+  addNewServerLoadNum: loadAddNewServerLoadNum(),
   loadingState: false,
   serachHis: {
     'store': [],

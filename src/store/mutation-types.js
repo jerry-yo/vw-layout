@@ -39,3 +39,6 @@ export const SET_USER_INFO = 'SET_USER_INFO'
 export const DELETE_USER_INFO = 'DELETE_USER_INFO'
 // 服务选择车辆信息
 export const SET_SELECTCAR = 'SET_SELECTCAR'
+
+// 记录新服务加载次数
+export const SET_ADD_NEW_SERVER_LOAD_NUM = 'SET_ADD_NEW_SERVER_LOAD_NUM'

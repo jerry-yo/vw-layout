@@ -27,7 +27,7 @@
           <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <div class="server-img">
+        <div class="server-img" @click="lookServerInfo">
           <div class="con">
             <ul>
               <li class="imgs" v-for="(item) in this.allServerMoney.partList" :key="item.customCode">
@@ -39,7 +39,7 @@
             </ul>
             <div class="goods-info">
               <span>共{{allServerMoney.partInfos}}个配件、{{allServerMoney.servers}}个服务</span>
-              <div >配件总额：<span>{{'￥' + allServerMoney.money}}</span></div >
+              <div >配件总额：<span>{{'￥' + (allServerMoney.partMoney + allServerMoney.serverMoney)}}</span></div >
             </div>
           </div>
         </div>
@@ -50,7 +50,7 @@
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn" @click="_goPreOrder">确认下单</div>
     </div>
-    <keepFitTime v-if="fitTime" @close="closeMask"></keepFitTime>
+    <keepFitTime v-if="fitTime" @close="closeMask" :store="storeInfo"></keepFitTime>
   </div>
 </template>
 
@@ -60,7 +60,7 @@ import {mapGetters, mapMutations} from 'vuex'
 import {getServerCar, expireToken} from '@/common/js/mixin'
 import storeInfo from '@/base/store-info'
 import keepFitTime from '@/base/keep-fit-time'
-import {datePicker} from '@/common/js/date'
+import {datePicker, getFormatDateNow, timeToStamp} from '@/common/js/date'
 export default {
   name: 'maintain-pre',
   mixins: [getServerCar, expireToken],
@@ -73,26 +73,31 @@ export default {
   },
   computed: {
     allServerMoney () {
-      let money = 0
+      let partMoney = 0
+      let serverMoney = 0
       let partInfos = 0
       let servers = 0
       let partList = []
+      let partListStr = ''
       this.allServerList.forEach(item => {
         if (item.isChecked && item.customerServer === 'old') {
-          money += item.amount
+          serverMoney += item.amount
           servers++
           if (item.partInfo !== null && item.partInfo.isChecked) {
-            money += item.partInfo.sellPrice * item.partInfo.number
+            partMoney += item.partInfo.sellPrice * item.partInfo.number
             partInfos++
             partList.push(item.partInfo)
+            partListStr += `${item.partInfo.customCode},`
           }
         }
       })
       return {
-        money: money,
+        partMoney: partMoney,
+        serverMoney: serverMoney,
         partInfos: partInfos,
         servers: servers,
-        partList: partList
+        partList: partList,
+        partListStr: partListStr
       }
     },
     serverOrder () {
@@ -100,26 +105,41 @@ export default {
       this.allServerList.forEach(item => {
         if (item.isChecked && item.customerServer === 'old') {
           if (item.partInfo !== null && item.partInfo.isChecked) {
+            let remark = `${item.pkId}\uA856${item.partInfo.customCode}\uA856${item.partInfo.brand}\uA856${item.partInfo.supplierCode}\uA856${item.partInfo.spec || ' '}`
             list.push({
               type: 2,
               number: item.partInfo.number,
               genaraprice: item.partInfo.sellPrice,
               retailprice: item.partInfo.sellPrice,
               projectid: item.partInfo.pkId,
-              projectname: item.partInfo.name
+              projectname: item.partInfo.name,
+              remark: remark
+            })
+            list.push({
+              type: 0,
+              projectname: item.name,
+              genaraprice: item.amount,
+              retailprice: item.amount,
+              number: 1,
+              projectid: item.pkId,
+              remark: item.partInfo.pkId
+            })
+          } else {
+            list.push({
+              type: 0,
+              projectname: item.name,
+              genaraprice: item.amount,
+              retailprice: item.amount,
+              number: 1,
+              projectid: item.pkId
             })
           }
-          list.push({
-            type: 0,
-            projectname: item.name,
-            genaraprice: item.amount,
-            retailprice: item.amount,
-            number: 1,
-            projectid: item.pkId
-          })
         }
       })
       return list
+    },
+    storeInfo () {
+      return this.storeList[this.defaultStoreId]
     },
     ...mapGetters([
       'allServerList'
@@ -131,16 +151,17 @@ export default {
     },
     dateTime (res) {
       let str = ''
-      if (!res.time) {
+      if (!res.startPoint2) {
         str = '未选择预约时间'
       } else {
-        str = `${res.today ? '今' : '明'}天  ${res.time}`
+        str = `${res.today ? '今' : '明'}天  ${res.startPoint2}`
       }
       return str
     },
     _goPreOrder () {
       let id = this.defaultStoreId
-      if (this.orderTime.time && this.orderTime.time !== 0) {
+      if (this.orderTime.startPoint2) {
+        let memo = `${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${this.nowCar.imageSrc}\uA856${this.allServerMoney.servers}\uA856${this.allServerMoney.serverMoney}\uA856${this.allServerMoney.partInfos}\uA856${this.allServerMoney.partMoney}\uA856${this.allServerMoney.partListStr}\uA856${this.orderTime.endTamp}\uA856${this.storeList[id].stationTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
         this.$f6post(`${this.f6Url}/api/clientOrder`, {
           'Authorization': this.userInfo.token,
           'Content-Type': 'application/json'
@@ -164,9 +185,9 @@ export default {
           userCarId: this.nowCar.userCarId,
           userId: this.userInfo.userId,
           OrderStatus: 4,
-          memo: '',
+          memo: memo,
           orderReserveTime: '',
-          price: this.allServerMoney.money, // 价格
+          price: this.allServerMoney.partMoney + this.allServerMoney.serverMoney, // 价格
           depositAmt: 0,
           deleteFlag: 0,
           orderPartList: this.serverOrder,
@@ -188,21 +209,41 @@ export default {
       this.fitTime = true
     },
     closeMask (res) {
-      if (res.time !== 0 && res.time) {
+      if (res.startPoint2) {
         let now = datePicker()
-        let end = res.time.split(':')
-        let end1 = parseInt(end[0]) + 1
-        let startTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay} ${res.time}:00`
-        let dateTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay}`
-        let endTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay} ${end1 > 9 ? end1 : '0' + end1}:${end[1]}:00`
+        let startTime = null
+        let dateTime = null
+        let endTime = null
+        let endTamp = null
+        if (res.today) {
+          startTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay} ${res.startPoint2}:00`
+          dateTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay}`
+          endTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay > 9 ? now.nowDay : '0' + now.nowDay} ${res.endPoint2}:00`
+          endTamp = timeToStamp(now.nowYear, now.nowMonth, now.nowDay, res.endPoint2.split(':')[0])
+        } else {
+          startTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay + 1 > 9 ? now.nowDay + 1 : '0' + now.nowDay} ${res.startPoint2}:00`
+          dateTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay + 1 > 9 ? now.nowDay + 1 : '0' + now.nowDay}`
+          endTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay + 1 > 9 ? now.nowDay + 1 : '0' + now.nowDay} ${res.endPoint2}:00`
+          endTamp = timeToStamp(now.nowYear, now.nowMonth, now.nowDay + 1, res.endPoint2.split(':')[0])
+        }
         this.orderTime = Object.assign(res, {
           startTime: startTime,
           endTime: endTime,
           dateTime: dateTime,
-          showTime: this.dateTime(res)
+          endTamp: endTamp
         })
       }
       this.fitTime = false
+    },
+    lookServerInfo () {
+      if (!this.allServerMoney.partInfos && !this.allServerMoney.servers) {
+        this.$Toast({
+          position: 'bottom',
+          message: '无具体服务项目和材料'
+        })
+      } else {
+        this.$router.push('/server-info')
+      }
     },
     ...mapMutations({
       setUpdateOrder: 'SET_UPDATE_ORDER'

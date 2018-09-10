@@ -1,7 +1,7 @@
 <template>
   <div class="server-model" flexContainer >
     <div class="menu" @click="_showInfo">
-      <div class="check-btn">
+      <div class="check-btn" v-if="hasCheck">
         <div class="btn" :class="server.isChecked ? 'check' : 'nocheck'" @click.stop="_checkServer"></div>
       </div>
       <div class="server-info">
@@ -9,13 +9,13 @@
         <div class="tips">共{{server.partInfo !== null ? 1 : 0}}件材料</div>
       </div>
       <div class="operation">
-        <div class="state1" v-show="server.state === -1">
+        <div class="state1" v-show="!hasCheck || server.state === -1 ">
           <span>{{`服务费￥${server.amount}`}}</span>
         </div>
-        <div class="state2" v-show="server.state === 0">
+        <div class="state2" v-show="server.state === 0 && hasCheck">
           <div class="edit" @click.stop="_editServer">编辑</div>
         </div>
-        <div class="state3" v-show="server.state === 1">
+        <div class="state3" v-show="server.state === 1 && hasCheck">
           <div class="sort" @click.stop="_saveServer">保存</div>
           <div class="change" @click.stop="_cancelServer">取消</div>
         </div>
@@ -23,7 +23,7 @@
     </div>
     <ul class="good-list" v-if="server.partInfo !== null && server.state > -1">
       <li>
-        <div class="tab-check">
+        <div class="tab-check" v-if="hasCheck">
           <div class="btn" :class="server.partInfo.isChecked ? 'check': 'nocheck'" @click="_checkGood"></div>
         </div>
         <div class="img">
@@ -70,11 +70,7 @@ export default {
     server: {
       type: Object
     },
-    serverid: {
-      type: Number,
-      required: true
-    },
-    addServer: {
+    hasCheck: {
       type: Boolean,
       default: true
     }
@@ -102,23 +98,27 @@ export default {
     },
     // 展示服务材料
     _showInfo () {
-      if (this.server.partInfo !== null) {
-        if (this.server.state === -1) {
-          this.modifyAllServerList({
-            pkId: this.server.pkId,
-            state: 0
-          })
-        } else if (this.server.state === 0) {
-          this.modifyAllServerList({
-            pkId: this.server.pkId,
-            state: -1
+      if (this.hasCheck) {
+        if (this.server.partInfo !== null) {
+          if (this.server.state === -1) {
+            this.modifyAllServerList({
+              pkId: this.server.pkId,
+              state: 0
+            })
+          } else if (this.server.state === 0) {
+            this.modifyAllServerList({
+              pkId: this.server.pkId,
+              state: -1
+            })
+          }
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: '暂无产品信息'
           })
         }
       } else {
-        this.$Toast({
-          position: 'bottom',
-          message: '暂无产品信息'
-        })
+        console.log('其他')
       }
     },
     // 选择服务材料

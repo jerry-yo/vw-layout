@@ -229,6 +229,7 @@ export default {
     },
     _getStoreList () {
       this.$post(`${this.gt1Url}/api/f6-app/getStoreList`, this.gt1Header, (res) => {
+        // console.log(res)
         if (res.errorCode === 0 && res.data.code === 0) {
           this.setStoreList(this._setStoreList(res.data.data))
         }
@@ -238,13 +239,22 @@ export default {
     _setStoreList (data) {
       let arr = []
       let reg = /维修/
-      let lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
+      let lnglat1 = null
+      if (this.cityInfo.lng) {
+        lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
+      }
       data.forEach((item, index) => {
+        let way = null
+        if (this.cityInfo.lng) {
+          way = lnglat1.distance([item.stationPositionX, item.stationPositionY])
+        } else {
+          way = '- -'
+        }
         if (item.stationId !== 2569) {
           let flag = reg.test(item.stationName)
           item = Object.assign(item, {
             icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
-            way: lnglat1.distance([item.stationPositionX, item.stationPositionY]),
+            way: way,
             type: flag ? 1 : 2,
             name: item.stationName.split('奇特异车业科技（江苏）股份有限公司')[1]
           })
@@ -284,6 +294,7 @@ export default {
             this.setCityInfo(city)
           }
         } else {
+          // this._setMap()
           this.$Toast({
             message: '定位失败，请手动选择城市',
             position: 'bottom'

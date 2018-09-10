@@ -64,6 +64,7 @@ export const clearOrderAllInfo = function ({commit, state}, type) {
   if (type === 'by') {
     commit(types.SET_ALL_SERVER_LIST, [])
     commit(types.SET_STATIC_SERVER_LIST, [])
+    commit(types.SET_ADD_NEW_SERVER_LOAD_NUM, 0)
   } else if (type === 'wx') {
   }
 }

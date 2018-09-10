@@ -10,8 +10,8 @@
       <div class="bg"></div>
       <div class="info">
         <div class="store">{{type === 'by' ? '奇特异保养店-' : '奇特异维修店-'}}{{updateOrder.name}}</div>
-        <div class="time" v-if="type === 'by'">预约时间：{{updateOrder.showTime.split(' ')[0]}}<span>{{updateOrder.time}}</span></div>
-        <div class="time" v-else>预约时间：{{getDate}}</div>
+        <div class="time" v-if="type === 'by'">预约时间：{{updateOrder.today ? '今天' : '明天'}}<span>{{updateOrder.startPoint2}}</span></div>
+        <div class="time" v-else>预约时间：{{updateOrder.time}}</div>
       </div>
     </div>
     <div class="tips"> <span>请尽快至门店服务，奇特异祝您用车愉快</span> </div>
@@ -36,15 +36,6 @@ export default {
     }
   },
   computed: {
-    getDate () {
-      let date = ''
-      if (this.type === 'by') {
-        date = this.updateOrder.today ? '今天' : '明天'
-      } else if (this.type === 'wx') {
-        date = this.updateOrder.time
-      }
-      return date
-    },
     ...mapGetters([
       'updateOrder'
     ])

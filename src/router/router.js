@@ -18,9 +18,6 @@ const bindingtpwdRouter = {
 const setcodeRouter = {
   path: '/setcode',
   name: 'setcode',
-  meta: {
-    requireAuth: true
-  },
   component: resolve => { require(['@/components/login/set-code'], resolve) }
 }
 
@@ -168,6 +165,12 @@ const addNewServer = {
   name: 'addNewServer',
   component: resolve => { require(['@/components/maintain/add-new-server'], resolve) }
 }
+const serverInfo = {
+  path: '/server-info',
+  name: 'serverInfo',
+  component: resolve => { require(['@/components/maintain/server-info'], resolve) }
+}
+
 const changePre = {
   path: '/change-pre',
   name: 'changePre',
@@ -240,6 +243,7 @@ export const routers = [
   Reservations,
   maintainPreOrder,
   maintain,
+  serverInfo,
   changePre,
   addNewServer,
   seleCity,

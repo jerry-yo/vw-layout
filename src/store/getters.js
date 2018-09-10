@@ -61,6 +61,9 @@ const getters = {
   },
   staticServerList (state) {
     return state.staticServerList
+  },
+  addNewServerLoadNum (state) {
+    return state.addNewServerLoadNum
   }
 }
 

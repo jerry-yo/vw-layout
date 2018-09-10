@@ -25,7 +25,7 @@ Vue.config.productionTip = false
 // 全局 控件
 Vue.prototype.$Toast = Toast
 Vue.prototype.$Modal = Modal
-Vue.prototype.carLogoUrl = 'http://image.carzone.cn'
+
 Vue.config.productionTip = false
 /* eslint-disable no-new */
 

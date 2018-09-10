@@ -8,7 +8,7 @@
     </div>
     <Scroll class="container" ref="addservice" :data="newServerlist">
       <div class="wrapper">
-        <serverModel v-for="(item, index) in newServerlist" :key="item.pkId" :server="item" :serverid="index" :addServer="true"></serverModel>
+        <serverModel v-for="item in newServerlist" :key="item.pkId" :server="item"></serverModel>
       </div>
     </Scroll>
     <div class="place-order">
@@ -78,7 +78,8 @@ export default {
       }
     },
     ...mapGetters([
-      'allServerList'
+      'allServerList',
+      'addNewServerLoadNum'
     ])
   },
   methods: {
@@ -104,6 +105,9 @@ export default {
       }
     },
     _getAllServie () {
+      if (this.addNewServerLoadNum > 0) {
+        return
+      }
       this.setLoadingState(true)
       let id = this.defaultStoreId
       let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
@@ -113,6 +117,7 @@ export default {
         if (res.code === 200) {
           this.setLoadingState(false)
           this.handleServerlist(res.data)
+          this.setAddNewServerLoadNum(this.addNewServerLoadNum + 1)
         } else if (res.code === 401) {
           this.refreshToken(this._getAllServie)
         }
@@ -147,14 +152,15 @@ export default {
         list.push(value)
       }
       this.setAllServerList(list)
-      this.setStaticServerList(list)
+      this.setStaticServerList(JSON.parse(JSON.stringify(list)))
     },
     ...mapMutations({
       setAllServerList: 'SET_ALL_SERVER_LIST',
       setStaticServerList: 'SET_STATIC_SERVER_LIST',
       setLoadingState: 'SET_LOADING_STATE',
       deleteAllServer: 'DELETE_ALL_SERVER',
-      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
+      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',
+      setAddNewServerLoadNum: 'SET_ADD_NEW_SERVER_LOAD_NUM'
     })
   },
   components: {
