@@ -19,8 +19,12 @@ export default {
   name: 'uploadPic',
   data () {
     return {
-      imgArr: []
+      imgArr: [],
+      formData: ''
     }
+  },
+  created () {
+    this.formData = new FormData()
   },
   computed: {
     boxArr () {
@@ -58,8 +62,13 @@ export default {
             Wx.getLocalImgData({
               localId: img,
               success: function (res) {
-                var localData = res.localData
-                _self.imgArr.push(localData.replace('jgp', 'jpeg'))
+                _self.imgArr.push(res.localData.replace('jgp', 'jpeg'))
+                alert('localData---' + JSON.stringify(res))
+                _self.formData.append('img1', _self.base64ToBlob(res.localData))
+                alert('---formData' + JSON.stringify(_self.base64ToBlob(res.localData)))
+                _self.api_file('api/common/upload', _self.formData, (response) => {
+                  alert(JSON.stringify(response))
+                })
               },
               fail: function (res) {
               }
@@ -78,6 +87,24 @@ export default {
         }
       })
       this.imgArr = arr
+    },
+    // base64 转  图片
+    base64ToBlob (urlData) {
+      var arr = urlData.split(',')
+      var mime = arr[0].match(/:(.*?);/)[1] || 'image/png'
+      // 去掉url的头，并转化为byte
+      var bytes = window.atob(arr[1])
+      // 处理异常,将ascii码小于0的转换为大于0
+      var ab = new ArrayBuffer(bytes.length)
+      // 生成视图（直接针对内存）：8位无符号整数，长度1个字节
+      var ia = new Uint8Array(ab)
+
+      for (var i = 0; i < bytes.length; i++) {
+        ia[i] = bytes.charCodeAt(i)
+      }
+      return new Blob([ab], {
+        type: mime
+      })
     }
   }
 }
