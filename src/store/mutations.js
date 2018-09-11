@@ -1,6 +1,6 @@
 import * as types from './mutation-types'
 import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar, saveDefaultStoreId,
-  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum} from '@/common/js/cache'
+  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum, saveSeleServersInfo} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
@@ -200,6 +200,20 @@ const mutations = {
   [types.SET_ADD_NEW_SERVER_LOAD_NUM] (state, num) {
     saveAddNewServerLoadNum(num)
     state.addNewServerLoadNum = num
+  },
+  // 服务详情列表
+  [types.SET_SELE_SERVERS_INFO] (state, list) {
+    saveSeleServersInfo(list)
+    state.seleServersInfo = list
+  },
+  [types.MODIFY_SELE_SERVERS_INFO] (state, info) {
+    state.seleServersInfo.forEach(item => {
+      if (item.pkId === info.pkId) {
+        item = Object.assign(item, {
+          state: item.state < 0 ? 0 : -1
+        })
+      }
+    })
   }
 }
 

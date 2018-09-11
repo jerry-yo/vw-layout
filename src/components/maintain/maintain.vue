@@ -19,7 +19,18 @@
     <Scroll class="container" ref="maintain" :data="allServerList">
       <div class="wrapper">
         <storeInfo :route="'maintain'"></storeInfo>
-        <serverModel v-for="item in defaultServer" :key="item.pkId" :server="item"></serverModel>
+        <serverModel
+          v-for="item in defaultServer"
+          :key="item.pkId"
+          :server="item"
+          @changeNumber="_changeNumberParent"
+          @clickServer="_clickServerParent"
+          @checkGood="_checkGoodParent"
+          @checkServer="_checkServerParent"
+          @editServer="_editServerParent"
+          @saveServer="_saveServerParent"
+          @cancelServer="_cancelServerParent"
+        ></serverModel>
         <div class="add-server" @click="_goAddServer">
           添加新服务
         </div>
@@ -51,9 +62,10 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, getServerCar} from '@/common/js/mixin'
+import {handleServerModel} from '@/common/js/servermixin'
 export default {
   name: 'maintain',
-  mixins: [expireToken, getServerCar],
+  mixins: [expireToken, getServerCar, handleServerModel],
   data () {
     return {
       allmileagn: 2000000
@@ -103,8 +115,6 @@ export default {
       }
     },
     ...mapGetters([
-      'allServerList',
-      'staticServerList',
       'defaultStoreId'
     ])
   },
@@ -117,7 +127,43 @@ export default {
       this.$router.push(`/add-new-server`)
     },
     _goMaintainPreOrder () {
+      this.checkSeleServers()
       this.$router.push('/maintain-pre-order')
+    },
+    checkSeleServers () {
+      let cg = []
+      let tj = []
+      let qt = []
+      this.allServerList.forEach(item => {
+        if (item.customerServer === 'old' && item.isChecked) {
+          if (item.customerType === 'cg') {
+            if (item.partInfo && item.partInfo.isChecked) {
+              cg.push(item)
+            } else {
+              cg.push(Object.assign(item, {
+                partInfo: null
+              }))
+            }
+          } else if (item.customerType === 'tj') {
+            if (item.partInfo && item.partInfo.isChecked) {
+              tj.push(item)
+            } else {
+              tj.push(Object.assign(item, {
+                partInfo: null
+              }))
+            }
+          } else if (item.customerType === 'qt') {
+            if (item.partInfo && item.partInfo.isChecked) {
+              qt.push(item)
+            } else {
+              qt.push(Object.assign(item, {
+                partInfo: null
+              }))
+            }
+          }
+        }
+      })
+      this.setSeleServersInfo(cg.concat(tj).concat(qt))
     },
     _goSelectCar () {
       this.$router.push('/garage?type=select')
@@ -179,7 +225,8 @@ export default {
       setLoadingState: 'SET_LOADING_STATE',
       setAllServerList: 'SET_ALL_SERVER_LIST',
       setStaticServerList: 'SET_STATIC_SERVER_LIST',
-      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
+      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',
+      setSeleServersInfo: 'SET_SELE_SERVERS_INFO'
     }),
     ...mapActions([
       'clearOrderAllInfo'

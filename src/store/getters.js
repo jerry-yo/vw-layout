@@ -64,6 +64,9 @@ const getters = {
   },
   addNewServerLoadNum (state) {
     return state.addNewServerLoadNum
+  },
+  seleServersInfo (state) {
+    return state.seleServersInfo
   }
 }
 

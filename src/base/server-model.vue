@@ -27,7 +27,7 @@
           <div class="btn" :class="server.partInfo.isChecked ? 'check': 'nocheck'" @click="_checkGood"></div>
         </div>
         <div class="img">
-          <img v-lazy="imgpartUrl + server.partInfo.customCode" alt="">
+          <img :src="imgpartUrl + server.partInfo.customCode" alt="">
         </div>
         <div class="good-info">
           <div class="change" v-if="server.state === 0">
@@ -63,7 +63,6 @@
 
 <script type="text/ecmascript-6">
 import counter from '@/base/counter'
-import {mapMutations, mapGetters} from 'vuex'
 export default {
   name: 'serverModel',
   props: {
@@ -79,115 +78,39 @@ export default {
     return {
     }
   },
-  computed: {
-    ...mapGetters([
-      'staticServerList',
-      'allServerList'
-    ])
-  },
   methods: {
     // 修改材料数量
     _changeNumber (res) {
-      let obj = {
-        pkId: this.server.pkId,
-        partInfo: Object.assign(this.server.partInfo, {
-          number: res.number
-        })
-      }
-      this.modifyAllServerList(JSON.parse(JSON.stringify(obj)))
+      this.$emit('changeNumber', [res, this.server])
     },
     // 展示服务材料
     _showInfo () {
-      if (this.hasCheck) {
-        if (this.server.partInfo !== null) {
-          if (this.server.state === -1) {
-            this.modifyAllServerList({
-              pkId: this.server.pkId,
-              state: 0
-            })
-          } else if (this.server.state === 0) {
-            this.modifyAllServerList({
-              pkId: this.server.pkId,
-              state: -1
-            })
-          }
-        } else {
-          this.$Toast({
-            position: 'bottom',
-            message: '暂无产品信息'
-          })
-        }
-      } else {
-        console.log('其他')
-      }
+      this.$emit('clickServer', this.server)
     },
     // 选择服务材料
     _checkGood () {
-      let obj = {
-        pkId: this.server.pkId,
-        obj: {
-          isChecked: !this.server.partInfo.isChecked
-        }
-      }
-      this.modifyAllServerPartInfo(JSON.parse(JSON.stringify(obj)))
+      this.$emit('checkGood', this.server)
     },
     // 选择服务
     _checkServer () {
-      if (this.server.isChecked) {
-        this.modifyAllServerList({
-          pkId: this.server.pkId,
-          isChecked: false
-        })
-      } else {
-        this.modifyAllServerList({
-          pkId: this.server.pkId,
-          isChecked: true
-        })
-      }
+      this.$emit('checkServer', this.server)
     },
     // 开始修改
     _editServer () {
-      this.modifyAllServerList({
-        pkId: this.server.pkId,
-        state: 1
-      })
+      this.$emit('editServer', this.server)
     },
     // 保存修改
     _saveServer () {
-      this.modifyAllServerList({
-        pkId: this.server.pkId,
-        state: 0
-      })
-      this.setStaticServerList(JSON.parse(JSON.stringify(this.allServerList)))
+      this.$emit('saveServer', this.server)
     },
     // 取消修改
     _cancelServer () {
-      let staticServerPartInfo = this.getStaticServerList(this.server.pkId)
-      this.modifyAllServerList({
-        pkId: this.server.pkId,
-        partInfo: JSON.parse(JSON.stringify(staticServerPartInfo.partInfo)),
-        state: 0
-      })
+      this.$emit('cancelServer', this.server)
     },
     // 更换材料
     _changeGood () {
       this.$router.push(`/change-pre?pid=${this.server.code}&idMdmPart=${this.server.partInfo.idMdmPart}&pkid=${this.server.pkId}`)
-    },
-    // 获取参考服务信息
-    getStaticServerList (id) {
-      let obj = {}
-      this.staticServerList.forEach(item => {
-        if (item.pkId === id) {
-          obj = item
-        }
-      })
-      return obj
-    },
-    ...mapMutations({
-      modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',
-      modifyAllServerPartInfo: 'MODIFY_ALL_SETVER_PARTINFO',
-      setStaticServerList: 'SET_STATIC_SERVER_LIST'
-    })
+    }
   },
   components: {
     counter

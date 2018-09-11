@@ -6,9 +6,15 @@
         服务详情
       </div>
     </div>
-    <Scroll class="container" ref="addservice" :data="defaultServer">
+    <Scroll class="container" ref="addservice" :data="seleServersInfo">
       <div class="wrapper">
-        <serverModel v-for="item in defaultServer" :key="item.pkId" :server="item" :has-check="false"></serverModel>
+        <serverModel
+          v-for="item in seleServersInfo"
+          :key="item.pkId"
+          :server="item"
+          :has-check="false"
+          @clickServer="_clickServerParent"
+        ></serverModel>
       </div>
     </Scroll>
   </div>
@@ -17,45 +23,34 @@
 <script>
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'maintain',
   data () {
     return {}
   },
   computed: {
-    defaultServer () {
-      let cg = []
-      let tj = []
-      let qt = []
-      this.allServerList.forEach(item => {
-        if (item.customerServer === 'old') {
-          if (item.customerType === 'cg') {
-            cg.push(Object.assign(item, {
-              state: 0
-            }))
-          } else if (item.customerType === 'tj') {
-            tj.push(Object.assign(item, {
-              state: 0
-            }))
-          } else if (item.customerType === 'qt') {
-            qt.push(Object.assign(item, {
-              state: 0
-            }))
-          }
-        }
-      })
-      return cg.concat(tj).concat(qt)
-    },
     ...mapGetters([
-      'allServerList',
-      'addNewServerLoadNum'
+      'seleServersInfo'
     ])
   },
   methods: {
     _goBack () {
       this.$router.back()
-    }
+    },
+    _clickServerParent (server) {
+      if (server.partInfo !== null) {
+        this.modifySeleServersInfo(server)
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '暂无产品信息'
+        })
+      }
+    },
+    ...mapMutations({
+      modifySeleServersInfo: 'MODIFY_SELE_SERVERS_INFO'
+    })
   },
   components: {
     serverModel,

@@ -8,7 +8,18 @@
     </div>
     <Scroll class="container" ref="addservice" :data="newServerlist">
       <div class="wrapper">
-        <serverModel v-for="item in newServerlist" :key="item.pkId" :server="item"></serverModel>
+        <serverModel
+          v-for="item in newServerlist"
+          :key="item.pkId"
+          :server="item"
+          @changeNumber="_changeNumberParent"
+          @clickServer="_clickServerParent"
+          @checkGood="_checkGoodParent"
+          @checkServer="_checkServerParent"
+          @editServer="_editServerParent"
+          @saveServer="_saveServerParent"
+          @cancelServer="_cancelServerParent"
+        ></serverModel>
       </div>
     </Scroll>
     <div class="place-order">
@@ -33,9 +44,10 @@ import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters, mapMutations} from 'vuex'
 import {expireToken, getServerCar} from '@/common/js/mixin'
+import {handleServerModel} from '@/common/js/servermixin'
 export default {
   name: 'maintain',
-  mixins: [expireToken, getServerCar],
+  mixins: [expireToken, getServerCar, handleServerModel],
   data () {
     return {}
   },
@@ -78,7 +90,6 @@ export default {
       }
     },
     ...mapGetters([
-      'allServerList',
       'addNewServerLoadNum'
     ])
   },
