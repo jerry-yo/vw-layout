@@ -20,7 +20,8 @@ export default {
   data () {
     return {
       imgArr: [],
-      formData: ''
+      formData: '',
+      imgList: []
     }
   },
   created () {
@@ -59,23 +60,23 @@ export default {
         success: function (res) {
           let img = res.localIds[0]
           if (window.__wxjs_is_wkwebview) {
-            Wx.getLocalImgData({
-              localId: img,
-              success: function (res) {
-                _self.imgArr.push(res.localData.replace('jgp', 'jpeg'))
-                alert('localData---' + JSON.stringify(res))
-                _self.formData.append('img1', _self.base64ToBlob(res.localData))
-                alert('---formData' + JSON.stringify(_self.base64ToBlob(res.localData)))
-                _self.api_file('api/common/upload', _self.formData, (response) => {
-                  alert(JSON.stringify(response))
-                })
-              },
-              fail: function (res) {
-              }
-            })
+            _self.imgArr.push(res.localData.replace('jgp', 'jpeg'))
           } else {
             _self.imgArr.push(img)
           }
+          Wx.getLocalImgData({
+            localId: img,
+            success: function (res) {
+              if (window.__wxjs_is_wkwebview) {
+                _self.formData.append('img1', _self.base64ToBlob(res.localData))
+              } else {
+                _self.formData.append('img1', _self.base64ToBlob('data:image/jpg;base64,' + res.localData))
+              }
+              _self.uploadFile()
+            },
+            fail: function (res) {
+            }
+          })
         }
       })
     },
@@ -87,6 +88,13 @@ export default {
         }
       })
       this.imgArr = arr
+    },
+    uploadFile () {
+      this.api_file('api/common/upload', this.formData, (res) => {
+        if (res.errorCode === 0) {
+          this.imgList.push(res.data.id)
+        }
+      })
     },
     // base64 转  图片
     base64ToBlob (urlData) {
