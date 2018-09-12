@@ -20,7 +20,7 @@
         <storeInfo :type="'noclick'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span @click="seleDate">{{repairOrder.appointmentTime > 0 ? _getFormatDateToRepair(repairOrder.appointmentTime) : '选择时间'}}</span>
+          <span @click="seleDate">{{updateOrder.falutDate ? updateOrder.falutDate : '选择时间'}}</span>
         </div>
         <div class="car-info">
           <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</div> </div>
@@ -65,7 +65,7 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import datePickerMask from '@/base/date-picker'
-import {getFormatDateToRepair, datePicker, timeToStamp} from '@/common/js/date'
+import {datePicker, timeToStamp, getFormatDateNow} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
 import {getServerCar} from '@/common/js/mixin'
 export default {
@@ -82,24 +82,8 @@ export default {
     }
   },
   computed: {
-    fillImgs () {
-      if (this.repairOrder.faultImgs.length > 2) {
-        let arr = this.imgs.slice(0, 2)
-        return arr
-      } else {
-        return this.imgs
-      }
-    },
-    carInfo () {
-      let car = this.myCar[0].name + this.myCar[0].salesVersion
-      return car
-    },
     ...mapGetters([
-      'myCar',
-      'userInfo',
-      'repairOrder',
-      'storeList',
-      'defaultStoreId'
+      'updateOrder'
     ])
   },
   methods: {
@@ -110,8 +94,16 @@ export default {
       this.datePickerShow = false
       let date = datePicker()
       let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
-      if (res.temp > nowTemp) {
-        this.tempInfo = res
+      let expireTemp = timeToStamp(date.nowYear + 1, date.nowMonth, date.nowDay)
+      if (res.temp >= nowTemp && res.temp < expireTemp) {
+        this.setUpdateOrder(Object.assign(res, {
+          expireTemp: expireTemp
+        }))
+      } else if (res.temp >= expireTemp) {
+        this.$Toast({
+          position: 'bottom',
+          message: '预约日期不得超过一年'
+        })
       } else {
         this.$Toast({
           position: 'bottom',
@@ -119,17 +111,58 @@ export default {
         })
       }
     },
-    _getFormatDateToRepair (temp) {
-      return getFormatDateToRepair(temp / 1000)
-    },
     _goBack () {
       this.$router.back()
     },
     goRepairOrder () {
-      let _self = this
-      if (this.repairOrder.appointmentTime) {
-        this.setRepairOrder({
-          store: _self.storeList[_self.defaultStoreId]
+      if (this.updateOrder.falutDate) {
+        let id = this.defaultStoreId
+        let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.faultText}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.faultImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
+        this.$post(`${this.tonyUrl}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
+          if (res.errorCode === 0 && res.data.code === 0) {
+            this.setUpdateOrder(Object.assign(this.storeList[id], this.orderTime))
+            this.$router.push('/reservations?type=by')
+          } else if (res.errorCode === 0 && res.data.code !== 0) {
+            this.$Toast({
+              position: 'bottom',
+              message: res.data.msg
+            })
+          } else {
+            this.$Toast({
+              position: 'bottom',
+              message: '服务器错误'
+            })
+          }
+        }, {
+          json: JSON.stringify({
+            clientAppId: this.userInfo.appId,
+            clientUserId: this.userInfo.fUserId,
+            orderStationId: this.storeList[id].stationId, // 用户车辆主键
+            stationName: this.storeList[id].stationName,
+            employeeId: '',
+            employeeName: '',
+            userContactTel: this.userInfo.userTel, // 联系电话
+            orderUserName: this.userInfo.userName, // 订单用户名
+            userCarUnmber: this.nowCar.carNumber, // 车牌号
+            userCarId: this.nowCar.userCarId,
+            userId: this.userInfo.userId,
+            OrderStatus: 4,
+            memo: memo,
+            orderReserveTime: '',
+            price: 0, // 价格
+            depositAmt: 0,
+            deleteFlag: 0,
+            orderPartList: [],
+            carId: this.nowCar.carId, // 车辆ID
+            distance: this.nowCar.distance, // 行驶距离
+            stationCode: this.storeList[id].stationCode, // 门店编号
+            orderReserveDate: this.orderTime.dateTime, // 订单预约时间
+            orderReserveStart: this.orderTime.startTime,
+            orderReserveEnd: this.orderTime.endTime,
+            employeeMemo: '员工备注',
+            finishmemo: '完成备注',
+            receivememo: '接受备注'
+          })
         })
         this.$router.push('/reservations?type=wx')
       } else {
@@ -140,8 +173,7 @@ export default {
       }
     },
     ...mapMutations({
-      setRepairOrder: 'SET_REPAIR_ORDER',
-      deleteRepairOrder: 'DELETE_REPAIR_ORDER'
+      setUpdateOrder: 'SET_UPDATE_ORDER'
     })
   },
   mounted () {

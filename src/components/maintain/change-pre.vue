@@ -76,7 +76,7 @@ export default {
     _getPartList () {
       this.setLoadingState(true)
       let id = this.defaultStoreId
-      let url = `${this.f6Url}/api/clientOrder/getPartRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}&pid=${this.pid}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
+      let url = `${this.f6Url}/api/clientOrder/getPartRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${2000000}&pid=${this.pid}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {
@@ -153,7 +153,6 @@ export default {
             width: 160px
             height: 160px
             border: 1px solid #d2d2d2
-            background-color: rgba(255, 0, 0, 0.5)
         .good-info
           flex: 1
           display: flex

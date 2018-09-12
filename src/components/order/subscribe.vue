@@ -70,7 +70,7 @@ export default {
         clientAppId: this.userInfo.appId,
         clientUserId: this.userInfo.fUserId,
         userId: this.userInfo.userId,
-        orderStatus: 4,
+        orderStatus: 5,
         deleteFlag: 0,
         currentPage: 1,
         pageSize: 10

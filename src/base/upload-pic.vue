@@ -15,12 +15,19 @@
 
 <script>
 import Wx from 'Wx'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'uploadPic',
   data () {
     return {
-      imgArr: []
+      imgArr: [],
+      formData: '',
+      imgList: '8888888888888888888888888,'
     }
+  },
+  created () {
+    this.formData = new FormData()
+    this.imgArr = this.updateOrder.imgArr || []
   },
   computed: {
     boxArr () {
@@ -43,7 +50,10 @@ export default {
         }
         return arr
       }
-    }
+    },
+    ...mapGetters([
+      'updateOrder'
+    ])
   },
   methods: {
     seleRepairImgs () {
@@ -55,18 +65,27 @@ export default {
         success: function (res) {
           let img = res.localIds[0]
           if (window.__wxjs_is_wkwebview) {
-            Wx.getLocalImgData({
-              localId: img,
-              success: function (res) {
-                var localData = res.localData
-                _self.imgArr.push(localData.replace('jgp', 'jpeg'))
-              },
-              fail: function (res) {
-              }
-            })
+            _self.imgArr.push(res.localData.replace('jgp', 'jpeg'))
           } else {
             _self.imgArr.push(img)
           }
+          Wx.getLocalImgData({
+            localId: img,
+            success: function (res) {
+              if (window.__wxjs_is_wkwebview) {
+                _self.formData.append('img1', _self.base64ToBlob(res.localData))
+              } else {
+                _self.formData.append('img1', _self.base64ToBlob('data:image/jpg;base64,' + res.localData))
+              }
+              _self.uploadFile()
+            },
+            fail: function (res) {
+              _self.$Toast({
+                position: 'bottom',
+                message: '图片读取失败'
+              })
+            }
+          })
         }
       })
     },
@@ -78,7 +97,47 @@ export default {
         }
       })
       this.imgArr = arr
-    }
+    },
+    // 上传图片到本地服务器
+    uploadFile () {
+      this.$file('api/common/upload', this.formData, (res) => {
+        if (res.errorCode === 0) {
+          this.imgList += `${res.data.id},`
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: '图片读取失败'
+          })
+        }
+      })
+    },
+    // base64 转  图片
+    base64ToBlob (urlData) {
+      var arr = urlData.split(',')
+      var mime = arr[0].match(/:(.*?);/)[1] || 'image/png'
+      // 去掉url的头，并转化为byte
+      var bytes = window.atob(arr[1])
+      // 处理异常,将ascii码小于0的转换为大于0
+      var ab = new ArrayBuffer(bytes.length)
+      // 生成视图（直接针对内存）：8位无符号整数，长度1个字节
+      var ia = new Uint8Array(ab)
+
+      for (var i = 0; i < bytes.length; i++) {
+        ia[i] = bytes.charCodeAt(i)
+      }
+      return new Blob([ab], {
+        type: mime
+      })
+    },
+    ...mapMutations({
+      setUpdateOrder: 'SET_UPDATE_ORDER'
+    })
+  },
+  beforeDestroy () {
+    this.setUpdateOrder({
+      faultImgs: this.imgList,
+      imgArr: this.imgArr
+    })
   }
 }
 </script>

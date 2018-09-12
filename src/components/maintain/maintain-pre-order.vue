@@ -50,7 +50,7 @@
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn" @click="_goPreOrder">确认下单</div>
     </div>
-    <keepFitTime v-if="fitTime" @close="closeMask" :store="storeInfo"></keepFitTime>
+    <keepFitTime v-if="fitTime" @close="closeMask" :store="storeInfos"></keepFitTime>
   </div>
 </template>
 
@@ -138,7 +138,7 @@ export default {
       })
       return list
     },
-    storeInfo () {
+    storeInfos () {
       return this.storeList[this.defaultStoreId]
     },
     ...mapGetters([
@@ -161,42 +161,52 @@ export default {
     _goPreOrder () {
       let id = this.defaultStoreId
       if (this.orderTime.startPoint2) {
-        let memo = `${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${this.nowCar.imageSrc}\uA856${this.allServerMoney.servers}\uA856${this.allServerMoney.serverMoney}\uA856${this.allServerMoney.partInfos}\uA856${this.allServerMoney.partMoney}\uA856${this.allServerMoney.partListStr}\uA856${this.orderTime.endTamp}\uA856${this.storeList[id].stationTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
-        this.$f6post(`${this.f6Url}/api/clientOrder`, {
-          'Authorization': this.userInfo.token,
-          'Content-Type': 'application/json'
-        }, (res) => {
-          if (res.code === 401) {
-            this.refreshToken(this._goPreOrder)
-          } else if (res.code === 200) {
+        let memo = `${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${this.nowCar.imageSrc}\uA856${this.allServerMoney.servers}\uA856${this.allServerMoney.serverMoney}\uA856${this.allServerMoney.partInfos}\uA856${this.allServerMoney.partMoney}\uA856${this.allServerMoney.partListStr}\uA856${this.orderTime.endTamp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
+        this.$post(`${this.tonyUrl}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
+          if (res.errorCode === 0 && res.data.code === 0) {
             this.setUpdateOrder(Object.assign(this.storeList[id], this.orderTime))
             this.$router.push('/reservations?type=by')
+          } else if (res.errorCode === 0 && res.data.code !== 0) {
+            this.$Toast({
+              position: 'bottom',
+              message: res.data.msg
+            })
+          } else {
+            this.$Toast({
+              position: 'bottom',
+              message: '服务器错误'
+            })
           }
         }, {
-          clientAppId: this.userInfo.appId,
-          clientUserId: this.userInfo.fUserId,
-          orderStationId: this.storeList[id].stationId, // 用户车辆主键
-          stationName: this.storeList[id].stationName,
-          employeeId: '',
-          employeeName: '',
-          userContactTel: this.userInfo.userTel, // 联系电话
-          orderUserName: this.userInfo.userName, // 订单用户名
-          userCarUnmber: this.nowCar.carNumber, // 车牌号
-          userCarId: this.nowCar.userCarId,
-          userId: this.userInfo.userId,
-          OrderStatus: 4,
-          memo: memo,
-          orderReserveTime: '',
-          price: this.allServerMoney.partMoney + this.allServerMoney.serverMoney, // 价格
-          depositAmt: 0,
-          deleteFlag: 0,
-          orderPartList: this.serverOrder,
-          carId: this.nowCar.carId, // 车辆ID
-          distance: this.nowCar.distance, // 行驶距离
-          stationCode: this.storeList[id].stationCode, // 门店编号
-          orderReserveDate: this.orderTime.dateTime, // 订单预约时间
-          orderReserveStart: this.orderTime.startTime,
-          orderReserveEnd: this.orderTime.endTime
+          json: JSON.stringify({
+            clientAppId: this.userInfo.appId,
+            clientUserId: this.userInfo.fUserId,
+            orderStationId: this.storeList[id].stationId, // 用户车辆主键
+            stationName: this.storeList[id].stationName,
+            employeeId: '',
+            employeeName: '',
+            userContactTel: this.userInfo.userTel, // 联系电话
+            orderUserName: this.userInfo.userName, // 订单用户名
+            userCarUnmber: this.nowCar.carNumber, // 车牌号
+            userCarId: this.nowCar.userCarId,
+            userId: this.userInfo.userId,
+            OrderStatus: 4,
+            memo: memo,
+            orderReserveTime: '',
+            price: this.allServerMoney.partMoney + this.allServerMoney.serverMoney, // 价格
+            depositAmt: 0,
+            deleteFlag: 0,
+            orderPartList: this.serverOrder,
+            carId: this.nowCar.carId, // 车辆ID
+            distance: this.nowCar.distance, // 行驶距离
+            stationCode: this.storeList[id].stationCode, // 门店编号
+            orderReserveDate: this.orderTime.dateTime, // 订单预约时间
+            orderReserveStart: this.orderTime.startTime,
+            orderReserveEnd: this.orderTime.endTime,
+            employeeMemo: '员工备注',
+            finishmemo: '完成备注',
+            receivememo: '接受备注'
+          })
         })
       } else {
         this.$Toast({

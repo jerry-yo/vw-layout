@@ -228,7 +228,6 @@ export default {
             width: 160px
             height: 160px
             border: 1px solid #d2d2d2
-            background-color: rgba(255, 0, 0, 0.5)
         .good-info
           flex: 1
           display: flex

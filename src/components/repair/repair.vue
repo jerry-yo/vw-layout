@@ -21,7 +21,7 @@
       <div class="wrapper">
         <storeInfo :route="'repair'"></storeInfo>
         <div class="textarea" flexContainer ref="chatpannel" @touch.stop>
-          <textarea class="text" name="name" rows="5" v-model="faultText" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
+          <textarea class="text" name="name" rows="5" v-model="faultText" maxlength="500" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText" @change="inputOver"></textarea>
         </div>
         <uploadPic ref="upImage"></uploadPic>
         <div class="detection-record">
@@ -60,17 +60,22 @@ export default {
       showInfo: false
     }
   },
+  created () {
+    this.faultText = this.updateOrder.faultText
+  },
   computed: {
     ...mapGetters([
-      'detectionMenus',
-      'myCar',
-      'defaultCar',
-      'selectCar'
+      'updateOrder'
     ])
   },
   methods: {
     _goBack () {
       this.$router.go(-1)
+    },
+    inputOver (e) {
+      this.setUpdateOrder({
+        faultText: this.faultText
+      })
     },
     _goSelectCar () {
       this.$router.push('/garage?type=select')
@@ -85,10 +90,6 @@ export default {
     },
     goNext () {
       this.$router.push('/repair-pre-order')
-      this.setRepairOrder({
-        faultText: this.faultText,
-        faultImgs: this.$refs.upImage.imgArr
-      })
     },
     _goDetectionMenu () {
       this.$router.push('/check-list?id=0&carid=0')
@@ -101,7 +102,7 @@ export default {
       this.faultInfo = res
     },
     ...mapMutations({
-      setRepairOrder: 'SET_REPAIR_ORDER'
+      setUpdateOrder: 'SET_UPDATE_ORDER'
     })
   },
   mounted: function () {

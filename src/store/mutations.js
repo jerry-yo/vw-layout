@@ -1,6 +1,6 @@
 import * as types from './mutation-types'
 import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar, saveDefaultStoreId,
-  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum, saveSeleServersInfo} from '@/common/js/cache'
+  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum, saveSeleServersInfo, saveUpdateOrder} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
@@ -191,10 +191,12 @@ const mutations = {
     let obj = {}
     obj = Object.assign(state.updateOrder, info)
     state.updateOrder = obj
+    saveUpdateOrder(obj)
   },
   // 删除服务订单信息
   [types.DELETE_UPDATE_ORDER] (state) {
     state.updateOrder = {}
+    saveUpdateOrder({})
   },
   // 记录新服务加载次数
   [types.SET_ADD_NEW_SERVER_LOAD_NUM] (state, num) {
