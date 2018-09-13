@@ -17,3 +17,85 @@ export function handleMyCar (data) {
   })
   return arr
 }
+
+// `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${faultText}\uA856${imageSrc}\uA856${faultImgs}\uA856${expireTemp}\uA856${responserTel}\uA856${stationPositionX}\uA856${stationPositionY}`
+export function handleWxOrder (data) {
+  let arr = []
+  if (/,/.test(data[4])) {
+    arr = data[4].split(',')
+    arr.pop()
+  }
+  let obj = {
+    orderTime: data[0],
+    serverType: data[1],
+    serverState: 2,
+    faultText: data[2],
+    imageSrc: data[3],
+    faultImgs: arr,
+    expireTemp: data[5],
+    responserTel: data[6],
+    stationPositionX: parseFloat(data[7]),
+    stationPositionY: parseFloat(data[8])
+  }
+  return obj
+}
+// ${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${imageSrc}\uA856${servers}\uA856${serverMoney}\uA856${partInfos}\uA856${partMoney}\uA856${partListStr}\uA856${endTamp}\uA856${responserTel}\uA856${stationPositionX}\uA856${stationPositionY}
+
+export function handleByOrder (data) {
+  let arr = []
+  if (/,/.test(data[7])) {
+    arr = data[7].split(',')
+    arr.pop()
+  }
+  let obj = {
+    orderTime: data[0],
+    serverType: data[1],
+    serverState: 1,
+    imageSrc: data[2],
+    serversNum: parseInt(data[3]),
+    serverMoney: parseFloat(data[4]),
+    partInfos: parseInt(data[5]),
+    partMoney: parseFloat(data[6]),
+    partListStr: arr,
+    expireTemp: data[8],
+    responserTel: data[9],
+    stationPositionX: parseFloat(data[10]),
+    stationPositionY: parseFloat(data[11])
+  }
+  return obj
+}
+export function handleOrderRemark (remark) {
+  let arr = remark.split('\uA856')
+  return {
+    pkId: arr[0],
+    customCode: arr[1],
+    brand: arr[2],
+    supplierCode: arr[3],
+    spec: arr[4]
+  }
+}
+// `${item.pkId}\uA856${item.partInfo.customCode}\uA856${item.partInfo.brand}\uA856${item.partInfo.supplierCode}\uA856${item.partInfo.spec || ' '}`
+export function handleOrderPartList (arr) {
+  let serverArr = []
+  let partArr = []
+  arr.forEach(item => {
+    if (item.type === 0) {
+      serverArr.push(item)
+    } else if (item.type === 2) {
+      partArr.push(Object.assign(item, {
+        handleRemark: handleOrderRemark(item.remark)
+      }))
+    }
+  })
+  for (let i = 0; i < serverArr.length; i++) {
+    for (let j = 0; j < partArr.length; j++) {
+      if (serverArr[i].projectid === partArr[j].handleRemark.pkId) {
+        Object.assign(serverArr[i], {
+          partInfo: partArr[j]
+        })
+      }
+    }
+  }
+  console.log(serverArr)
+  return serverArr
+}

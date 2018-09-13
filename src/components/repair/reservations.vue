@@ -9,9 +9,9 @@
     <div class="container">
       <div class="bg"></div>
       <div class="info">
-        <div class="store">{{type === 'by' ? '奇特异保养店-' : '奇特异维修店-'}}{{updateOrder.name}}</div>
+        <div class="store">{{type === 'by' ? '奇特异保养店-' : '奇特异维修店-'}}{{storeList[defaultStoreId].name}}</div>
         <div class="time" v-if="type === 'by'">预约时间：{{updateOrder.today ? '今天' : '明天'}}<span>{{updateOrder.startPoint2}}</span></div>
-        <div class="time" v-else>预约时间：{{updateOrder.time}}</div>
+        <div class="time" v-else>预约时间：{{updateOrder.falutDate}}</div>
       </div>
     </div>
     <div class="tips"> <span>请尽快至门店服务，奇特异祝您用车愉快</span> </div>
@@ -37,7 +37,9 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'updateOrder'
+      'updateOrder',
+      'defaultStoreId',
+      'storeList'
     ])
   },
   created () {
@@ -59,6 +61,7 @@ export default {
   },
   beforeDestroy () {
     if (this.type === 'wx') {
+      this.clearOrderAllInfo('wx')
     } else if (this.type === 'by') {
       this.clearOrderAllInfo('by')
     }

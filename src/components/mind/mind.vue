@@ -39,7 +39,7 @@
         </div>
       </div>
       <div class="order-states">
-        <div class="dfk-order">
+        <div class="yy-order">
           <!-- <router-link :to="{ name: 'subscribe', path: '/order/subscribe' }" class="link-a"> -->
             <div class="link-a" @click="_goOrder(1)">
               <Badge count="0" :solid="false" :color="'#ff623d'">
@@ -57,7 +57,7 @@
             <span>待确认</span>
           </router-link>
         </div> -->
-        <div class="dqr-order">
+        <div class="dfk-order">
           <!-- <router-link :to="{ name: 'obligation', path: '/order/obligation'}" class="link-a"> -->
           <div class="link-a" @click="_goOrder(2)">
             <Badge  count="0" :solid="false" :color="'#ff623d'">

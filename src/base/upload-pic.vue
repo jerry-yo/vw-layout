@@ -103,6 +103,10 @@ export default {
       this.$file('api/common/upload', this.formData, (res) => {
         if (res.errorCode === 0) {
           this.imgList += `${res.data.id},`
+          this.setUpdateOrder({
+            faultImgs: this.imgList,
+            imgArr: this.imgArr
+          })
         } else {
           this.$Toast({
             position: 'bottom',
@@ -131,12 +135,6 @@ export default {
     },
     ...mapMutations({
       setUpdateOrder: 'SET_UPDATE_ORDER'
-    })
-  },
-  beforeDestroy () {
-    this.setUpdateOrder({
-      faultImgs: this.imgList,
-      imgArr: this.imgArr
     })
   }
 }

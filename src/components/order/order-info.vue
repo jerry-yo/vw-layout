@@ -4,41 +4,40 @@
       <div class="back" @click="goBack" ></div>
       <span>订单详情</span>
     </div>
-    <Scroll class="order-content" ref="orderWarpper">
+    <Scroll class="order-content" ref="orderWarpper" :data="orderInfoShow">
       <div class="order-con">
-        <div class="order-img" v-if="orderInfo.orderFormState >= 4 || (isExpiryTime && orderInfo.orderFormState === 1)">
-          <div class="order-bg-1 order-bg" v-if="orderInfo.orderFormState === 5 || (isExpiryTime && orderInfo.orderFormState === 1)">
-            <div :class="orderInfo.orderFormState === 1 ? 'bg-3' : 'bg-1'">
+        <div class="order-img">
+          <div class="order-bg-1 order-bg" v-if="true">
+            <div :class="true ? 'bg-3' : 'bg-1'">
             </div>
             <div class="bg-font">
-              预约{{orderInfo.orderFormState === 1 ? '已过期' : '已取消'}}
+              预约{{true ? '已过期' : '已取消'}}
             </div>
           </div>
-          <div class="order-bg-2 order-bg" v-if="orderInfo.orderFormState === 4">
+          <div class="order-bg-2 order-bg" v-if="false">
             <div class="bg-1">
             </div>
             <div class="bg-font">
               <span>服务完成</span>
-              <h2>{{orderInfo.store.name}}</h2>
+              <h2>奇特异维修门店{{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, ' - ')}}</h2>
             </div>
           </div>
         </div>
-        <div class="order-title">
+        <div class="order-title" v-if="orderInfoShow.stationName">
           <div class="top">
             <div class="top-name">
-              <span>{{orderInfo.store.name}}</span>
-              <div class="order-states" :class="{'by': orderInfo.whichService === 1, 'wx': orderInfo.whichService === 2}"></div>
+              <span>奇特异维修门店{{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, ' - ')}}</span>
+              <div class="order-states" :class="{'by': orderInfoShow.memoInfos.serverState === 1, 'wx': orderInfoShow.memoInfos.serverState === 2}"></div>
             </div>
-            <router-link :to="{name: 'login', path: '/login'}" class="localtion">
-            </router-link>
+            <div class="localtion" @click="_openLocation"></div>
           </div>
           <div class="bottom">
-            <span>{{orderInfo.userName}}</span>
-            <span>{{orderInfo.idCard}}</span>
+            <span>{{orderInfoShow.orderUserName}}</span>
+            <span>{{orderInfoShow.userCarUnmber}}</span>
           </div>
         </div>
-        <div class="order-con">
-          <orderBy v-if="orderInfo.whichService === 1" :data="orderInfo.userOrderFormKeepCarBean">
+        <!-- <div class="order-con">
+          <orderBy v-if="orderInfo.whichService === 1" :data="orderInfo.userOrderFormKeepCarBean" :money="'other'">
           </orderBy>
           <orderBy v-if="(orderInfo.orderFormState > 1 && orderInfo.orderFormState < 5) && orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean || orderInfo.userOrderFormKeepCarBean">
           </orderBy>
@@ -46,21 +45,21 @@
           </orderXc>
           <orderWx v-if="(orderInfo.orderFormState === 1 || orderInfo.orderFormState === 5)&& orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean">
           </orderWx>
-        </div>
-        <div class="order-other">
+        </div> -->
+        <!-- <div class="order-other">
           <div class="other-info">
             <div class="other-fw">
               <span>项目服务费</span>
               <span>{{orderInfo.orderFormState === 3 || orderInfo.orderFormState === 4 ? '￥' + showServerPrice.server : '待定'}}</span>
             </div>
-            <!-- <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
+            <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
               <div class="yhq-con">
                 <span>优惠券</span>
                 <div class="yhq">
                   <span>暂无优惠券</span>
                 </div>
               </div>
-            </div> -->
+            </div>
             <div class="time-yy" v-if="orderInfo.orderFormState === 1 || orderInfo.orderFormState === 5">
               <span>预约时间</span>
               <div class="time">
@@ -87,15 +86,15 @@
             <p v-if="orderInfo.orderFormState === 4">付款时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
             <p v-if="orderInfo.orderFormState === 5">取消时间:  <span>{{_getFormatDate(orderInfo.cancellationTime)}}</span> </p>
           </div>
-        </div>
+        </div> -->
       </div>
     </Scroll>
     <div class="order-btn">
-      <div class="order-foot-1 foot" v-if="orderInfo.orderFormState === 1">
-        <span class="car-state"  v-if="isExpiryTime">已过期</span>
+      <div class="order-foot-1 foot" v-show="orderType === 'yyz'">
+        <span class="car-state">{{isExpiryTime()}}</span>
         <div class="order-set">
           <div class="del-yy" @click="_cancelSubscribe">取消预约</div>
-          <div class="call-dz"><a :href="'tel:' + orderInfo.store.phone">联系店长</a></div>
+          <div class="call-dz"><a :href="'tel:' + 122">联系店长</a></div>
         </div>
       </div>
       <!-- <div class="order-foot-2 foot" v-if="orderInfo.orderFormState === 2">
@@ -105,23 +104,18 @@
           <div class="ok-go">确认服务</div>
         </div>
       </div> -->
-      <div class="order-foot-3" v-if="orderInfo.orderFormState === 3">
+      <div class="order-foot-3" v-if="orderType === 'dfk'">
         <div class="server"><a href="tel:0519-68191385">客服</a></div>
         <div class="tips">
-          <span>共{{orderInfo.whichService === 0 ? orderInfo.AllPrice : orderInfo.whichService > 1 ? orderInfo.userOrderFormRepairCarBean.useServiceNumber : orderInfo.userOrderFormKeepCarBean.useServiceNumber}}项服务</span>
-          <span>￥{{payPrice.toFixed(2)}}</span>
+          <span>共{{2}}项服务</span>
+          <span>￥{{100}}</span>
         </div>
         <div class="btn" @click="_goPay">付款</div>
       </div>
-      <div class="order-foot-4 foot" v-if="orderInfo.orderFormState === 4">
+      <div class="order-foot-4 foot" v-if="orderType === 'ywc'">
         <span class="car-state">2017年05月06日 15:30</span>
         <div class="order-set">
           <div class="look-order" @click="_showDetectionRecord">查看该次检测</div>
-        </div>
-      </div>
-      <div class="order-foot-5 foot" v-if="orderInfo.orderFormState === 5">
-        <div class="order-set">
-          <div class="del-order"  @click="_deleteOrder">删除订单</div>
         </div>
       </div>
     </div>
@@ -133,93 +127,95 @@ import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
 import orderXc from '@/components/order/order-xc'
-import {mapGetters, mapMutations} from 'vuex'
-import {getFormatDate} from '@/common/js/date'
+import {expireToken} from '@/common/js/mixin'
+import {handleWxOrder, handleByOrder, handleOrderPartList} from '@/common/js/config'
+import {mapGetters} from 'vuex'
 export default {
-  name: 'orderInfo',
+  name: 'order-info',
+  mixins: [expireToken],
   data () {
     return {
-      coupon: 4
+      orderId: null,
+      orderType: null,
+      orderInfoShow: {}
     }
   },
   computed: {
-    payPrice () {
-      let price = 0
-      if (this.orderInfo.whichService === 2) {
-        price = this.orderInfo.userOrderFormRepairCarBean.useServicePrice + this.orderInfo.userOrderFormRepairCarBean.productAllPrice
-      } else if (this.orderInfo.whichService === 1) {
-        price = this.orderInfo.userOrderFormKeepCarBean.useServicePrice + this.orderInfo.userOrderFormKeepCarBean.productAllPrice
-      } else if (this.orderInfo.whichService === 0) {
-        price = this.orderInfo.AllPrice
-      }
-      return price - this.coupon
-    },
-    isExpiryTime () {
-      let date = Math.round(new Date().getTime() / 1000)
-      if (date > this.orderInfo.expiryTime) {
-        return true
-      } else {
-        return false
-      }
-    },
-    showServerPrice () {
-      let price = {
-        server: 0,
-        product: 0
-      }
-      if (this.orderInfo.whichService === 2) {
-        price.server = this.orderInfo.userOrderFormRepairCarBean.useServicePrice
-        price.product = this.orderInfo.userOrderFormRepairCarBean.productAllPrice
-      } else if (this.orderInfo.whichService === 1) {
-        price.server = this.orderInfo.userOrderFormKeepCarBean.useServicePrice
-        price.product = this.orderInfo.userOrderFormKeepCarBean.productAllPrice
-      }
-      return price
-    },
     ...mapGetters([
-      'orderInfo',
-      'myCar'
+      'userInfo'
     ])
   },
+  mounted () {
+    this.orderId = this.$route.query.id
+    this.orderType = this.$route.query.type
+    if (!this.orderId) {
+      this.$router.back()
+    } else {
+      this._getOrderInfo()
+    }
+  },
   methods: {
-    _getFormatDate (stamp) {
-      return getFormatDate(stamp)
-    },
     goBack () {
       this.$router.back()
     },
-    _cancelSubscribe () {
-      let _self = this
-      this.modifyOrderList({
-        type: 'cancel',
-        id: _self.orderInfo.orderId
+    _getOrderInfo () {
+      this.$get(`${this.f6Url}/api/clientOrder/info`, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        if (res.code === 401) {
+          this.refreshToken(this._getOrderInfo)
+        } else if (res.code === 200) {
+          console.log(this.handleOrderInfo(res.data))
+          this.orderInfoShow = this.handleOrderInfo(res.data)
+        }
+      }, {
+        orderId: this.orderId,
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId
       })
-      this.goBack()
+    },
+    handleOrderInfo (data) {
+      let arr = data.memo.split('\uA856')
+      let memoInfos = null
+      if (/维修/.test(arr[1])) {
+        memoInfos = handleWxOrder(arr)
+      }
+      if (/保养/.test(arr[1])) {
+        memoInfos = handleByOrder(arr)
+      }
+      return Object.assign(data, {
+        memoInfos: memoInfos,
+        handleOrderPartList: handleOrderPartList(data.orderPartList)
+      })
+    },
+    isExpiryTime () {
+      let now = new Date().getTime()
+      let str = ''
+      if (this.orderInfoShow.memoInfos) {
+        if (this.orderInfoShow.memoInfos.expireTemp < now) {
+          str = '已过期'
+        } else if (this.orderInfoShow.orderStatus === 5) {
+          str = '已接收'
+        }
+      }
+      return str
+    },
+    _openLocation () {
+      this.Wx.openLocation({
+        latitude: parseFloat(this.orderInfoShow.memoInfos.stationPositionY), // 纬度，浮点数，范围为90 ~ -90
+        longitude: parseFloat(this.orderInfoShow.memoInfos.stationPositionX), // 经度，浮点数，范围为180 ~ -180。
+        scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大
+      })
+    },
+    _cancelSubscribe () {
     },
     _goPay (item) {
-      let _self = this
-      if (this.orderInfo.serviceIsAlreadyFinish) {
-        this.modifyOrderList({
-          type: 'pay',
-          id: _self.orderInfo.orderId
-        })
-      }
-      this.goBack()
     },
     _showDetectionRecord () {
       this.$router.push('/check-list?id=0&carid=0')
     },
     _deleteOrder () {
-      let _self = this
-      this.deleteOrderList({
-        id: _self.orderInfo.orderId
-      })
-      this.goBack()
-    },
-    ...mapMutations({
-      modifyOrderList: 'MODIFY_ORDER_LIST',
-      deleteOrderList: 'DELETE_ORDER_LIST'
-    })
+    }
   },
   components: {
     orderBy,
@@ -476,6 +472,8 @@ export default {
               margin-left: 15px
     .order-btn
       display: flex
+      justify-content: center
+      align-items: center
       height: 98px
       background-color: #fff
       .foot

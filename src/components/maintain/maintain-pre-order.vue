@@ -20,7 +20,7 @@
         <storeInfo :type="'noclick'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
-          <span @click="showFitTime">{{dateTime(orderTime)}}</span>
+          <span @click="showFitTime">{{dateTime(updateOrder)}}</span>
         </div>
         <div class="car-info">
           <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + myCar[0].imageSrc" alt="">{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</div> </div>
@@ -39,7 +39,7 @@
             </ul>
             <div class="goods-info">
               <span>共{{allServerMoney.partInfos}}个配件、{{allServerMoney.servers}}个服务</span>
-              <div >配件总额：<span>{{'￥' + (allServerMoney.partMoney + allServerMoney.serverMoney)}}</span></div >
+              <div >总额：<span>{{'￥' + (allServerMoney.partMoney + allServerMoney.serverMoney)}}</span></div >
             </div>
           </div>
         </div>
@@ -67,8 +67,7 @@ export default {
   data () {
     return {
       imgs: [0, 1, 2, 3],
-      fitTime: false,
-      orderTime: {}
+      fitTime: false
     }
   },
   computed: {
@@ -142,7 +141,8 @@ export default {
       return this.storeList[this.defaultStoreId]
     },
     ...mapGetters([
-      'allServerList'
+      'allServerList',
+      'updateOrder'
     ])
   },
   methods: {
@@ -160,11 +160,10 @@ export default {
     },
     _goPreOrder () {
       let id = this.defaultStoreId
-      if (this.orderTime.startPoint2) {
-        let memo = `${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${this.nowCar.imageSrc}\uA856${this.allServerMoney.servers}\uA856${this.allServerMoney.serverMoney}\uA856${this.allServerMoney.partInfos}\uA856${this.allServerMoney.partMoney}\uA856${this.allServerMoney.partListStr}\uA856${this.orderTime.endTamp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
+      if (this.updateOrder.startPoint2) {
+        let memo = `${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${this.nowCar.imageSrc}\uA856${this.allServerMoney.servers}\uA856${this.allServerMoney.serverMoney}\uA856${this.allServerMoney.partInfos}\uA856${this.allServerMoney.partMoney}\uA856${this.allServerMoney.partListStr}\uA856${this.updateOrder.endTamp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
         this.$post(`${this.tonyUrl}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
           if (res.errorCode === 0 && res.data.code === 0) {
-            this.setUpdateOrder(Object.assign(this.storeList[id], this.orderTime))
             this.$router.push('/reservations?type=by')
           } else if (res.errorCode === 0 && res.data.code !== 0) {
             this.$Toast({
@@ -200,9 +199,9 @@ export default {
             carId: this.nowCar.carId, // 车辆ID
             distance: this.nowCar.distance, // 行驶距离
             stationCode: this.storeList[id].stationCode, // 门店编号
-            orderReserveDate: this.orderTime.dateTime, // 订单预约时间
-            orderReserveStart: this.orderTime.startTime,
-            orderReserveEnd: this.orderTime.endTime,
+            orderReserveDate: this.updateOrder.dateTime, // 订单预约时间
+            orderReserveStart: this.updateOrder.startTime,
+            orderReserveEnd: this.updateOrder.endTime,
             employeeMemo: '员工备注',
             finishmemo: '完成备注',
             receivememo: '接受备注'
@@ -236,12 +235,12 @@ export default {
           endTime = `${now.nowYear}-${now.nowMonth > 9 ? now.nowMonth : '0' + now.nowMonth}-${now.nowDay + 1 > 9 ? now.nowDay + 1 : '0' + now.nowDay} ${res.endPoint2}:00`
           endTamp = timeToStamp(now.nowYear, now.nowMonth, now.nowDay + 1, res.endPoint2.split(':')[0])
         }
-        this.orderTime = Object.assign(res, {
+        this.setUpdateOrder(Object.assign(res, {
           startTime: startTime,
           endTime: endTime,
           dateTime: dateTime,
           endTamp: endTamp
-        })
+        }))
       }
       this.fitTime = false
     },

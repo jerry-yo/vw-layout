@@ -65,9 +65,11 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import datePickerMask from '@/base/date-picker'
-import {datePicker, timeToStamp, getFormatDateNow} from '@/common/js/date'
+import {datePicker, timeToStamp, getFormatDateNow, formatDate} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
 import {getServerCar} from '@/common/js/mixin'
+const EXPIRE_DATE = 7 * 24 * 60 * 60 * 1000
+const DEFAULT_HOUR = 13 * 60 * 60 * 1000
 export default {
   name: 'repairPreOrder',
   mixins: [getServerCar],
@@ -97,7 +99,8 @@ export default {
       let expireTemp = timeToStamp(date.nowYear + 1, date.nowMonth, date.nowDay)
       if (res.temp >= nowTemp && res.temp < expireTemp) {
         this.setUpdateOrder(Object.assign(res, {
-          expireTemp: expireTemp
+          expireTemp: res.temp + EXPIRE_DATE + DEFAULT_HOUR,
+          temp: res.temp + DEFAULT_HOUR
         }))
       } else if (res.temp >= expireTemp) {
         this.$Toast({
@@ -117,11 +120,10 @@ export default {
     goRepairOrder () {
       if (this.updateOrder.falutDate) {
         let id = this.defaultStoreId
-        let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.faultText}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.faultImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
+        let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.faultText ? this.updateOrder.faultText : ''}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.faultImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
         this.$post(`${this.tonyUrl}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
           if (res.errorCode === 0 && res.data.code === 0) {
-            this.setUpdateOrder(Object.assign(this.storeList[id], this.orderTime))
-            this.$router.push('/reservations?type=by')
+            this.$router.push('/reservations?type=wx')
           } else if (res.errorCode === 0 && res.data.code !== 0) {
             this.$Toast({
               position: 'bottom',
@@ -156,9 +158,9 @@ export default {
             carId: this.nowCar.carId, // 车辆ID
             distance: this.nowCar.distance, // 行驶距离
             stationCode: this.storeList[id].stationCode, // 门店编号
-            orderReserveDate: this.orderTime.dateTime, // 订单预约时间
-            orderReserveStart: this.orderTime.startTime,
-            orderReserveEnd: this.orderTime.endTime,
+            orderReserveDate: formatDate('YYYY-MM-DD', this.updateOrder.temp), // 订单预约时间
+            orderReserveStart: formatDate('YYYY-MM-DD hh:mm:ss', this.updateOrder.temp),
+            orderReserveEnd: formatDate('YYYY-MM-DD hh:mm:ss', this.updateOrder.expireTemp),
             employeeMemo: '员工备注',
             finishmemo: '完成备注',
             receivememo: '接受备注'

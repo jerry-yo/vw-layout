@@ -46,7 +46,7 @@ import uploadPic from '@/base/upload-pic'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {getServerCar} from '@/common/js/mixin'
 export default {
   name: 'repair',
@@ -70,7 +70,8 @@ export default {
   },
   methods: {
     _goBack () {
-      this.$router.go(-1)
+      this.$router.back()
+      this.clearOrderAllInfo('wx')
     },
     inputOver (e) {
       this.setUpdateOrder({
@@ -103,7 +104,10 @@ export default {
     },
     ...mapMutations({
       setUpdateOrder: 'SET_UPDATE_ORDER'
-    })
+    }),
+    ...mapActions([
+      'clearOrderAllInfo'
+    ])
   },
   mounted: function () {
     this.$nextTick(function () {

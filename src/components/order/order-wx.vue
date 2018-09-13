@@ -2,14 +2,14 @@
   <div class="order-wx">
     <div class="by-top">
       <ul class="by-left" v-if="data.faultImgs.length > 0">
-        <li v-for="(item, index) in imgs" :key="index"><img v-lazy="item" alt=""/></li>
+        <li v-for="(item, index) in data.faultImgs" :key="index"><img v-lazy="item" alt=""/></li>
       </ul>
       <div class="noimgs" v-else :class="showType.defaultImg === 1 ? 'bg-1' : 'bg-2'"></div>
       <div class="by-con" :class="{'ellipsis': data.faultImgs.length > 2}">
-        <h2 v-if="data.faultDetails.length === 0">{{showType.title}}</h2>
+        <h2 v-if="data.faultText.length === 0">{{showType.title}}</h2>
         <p>{{showType.txt}}</p>
       </div>
-      <div class="by-right" v-if="data.freeServiceOrProductIconUrl !== ''">
+      <div class="by-right" v-if="false">
         <div class="img">
           <img src="../../common/imgs/order/wash-bg@2x.png" alt="">
           <span>赠送</span>
@@ -33,40 +33,20 @@ export default {
       let title = ''
       let txt = ''
       let defaultImg = 1
-      if (this.data.faultImgs.length === 0) {
-        if (this.data.faultDetails.length === 0) {
-          title = '到店检查'
-          txt = '可提前联系店长简要描述需求奥， 以便店长提供更好的服务'
-          defaultImg = 1
-        } else {
-          defaultImg = 2
-          txt = this.data.faultDetails
-        }
+      if (this.data.faultText.length === 0) {
+        defaultImg = 1
+        title = '到店检查'
+        txt = '可提前联系店长简要描述需求奥， 以便店长提供更好的服务'
       } else {
-        txt = this.data.faultDetails
+        txt = this.data.faultText
+        defaultImg = 2
       }
       return {
         title: title,
         txt: txt,
         defaultImg: defaultImg
       }
-    },
-    imgs () {
-      let ret = []
-      if (this.data.faultImgs.length > 2) {
-        this.data.faultImgs.forEach((item, index) => {
-          if (index < 2) {
-            ret.push(item)
-          }
-        })
-      } else {
-        ret = this.data.faultImgs
-      }
-      return ret
     }
-  },
-  mounted () {
-    console.log(this.data)
   }
 }
 </script>

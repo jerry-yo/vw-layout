@@ -9,6 +9,23 @@ export function getFormatDate (stamp) {
   return Y + M + D + h + m + s
 }
 
+// YYYY-MM-DD hh:mm:ss
+export function formatDate (format = 'YYYY-MM-DD hh:mm:ss', timeStamp = null) {
+  let date = null
+  if (timeStamp === null) {
+    date = new Date()
+  } else {
+    date = new Date(timeStamp)
+  }
+  let year = date.getFullYear()
+  let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
+  let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+  let hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+  let minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  let second = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  return format.replace(/YYYY/, year).replace(/MM/, month).replace(/DD/, day).replace(/hh/, hour).replace(/mm/, minute).replace(/ss/, second)
+}
+
 export function getFormatDateToRepair (stamp) {
   let date = new Date(stamp)
   let Y = date.getFullYear() + '年'

@@ -1,24 +1,24 @@
 <template>
   <Scroll class="wrapper">
     <ul class="container">
-      <li v-for="(item, index) in []" :key="index">
+      <li v-for="(item, index) in handleOrderList" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
-          <div class="img"><img v-lazy="item.carImageSrc" alt="">  </div>
-          <span class="car-id">{{item.idCard}}</span>
-          <div class="order-states" :class="{'by': item.whichService === 1, 'wx': item.whichService === 2, 'xc': item.whichService === 0}"></div>
+          <div class="img"><img :src="carLogoUrl + item.memoInfos.imageSrc" alt="">  </div>
+          <span class="car-id">{{item.carNumber}}</span>
+          <div class="order-states" :class="{'by': item.memoInfos.serverState === 1, 'wx': item.memoInfos.serverState === 2}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
-          <orderWx v-if="item.whichService === 2" :data="item.userOrderFormRepairCarBean">
+          <orderWx v-if="item.memoInfos.serverState === 2" :data="item.memoInfos">
           </orderWx>
-          <orderBy v-if="item.whichService === 1" :data="item.userOrderFormKeepCarBean">
+          <orderBy v-if="item.memoInfos.serverState === 1" :data="item.memoInfos">
           </orderBy>
         </div>
         <div class="order-foot">
           <div class="foot">
-            <span class="car-state" v-if="isExpiryTime(item)">已过期</span>
+            <span class="car-state">{{isExpiryTime(item)}}</span>
             <div class="order-set">
               <div class="del-yy" @click="cancelSubscribe(item)">取消预约</div>
-              <div class="call-dz">联系店长</div>
+              <div class="call-dz"><a :href="'tel:' + item.memoInfos.responserTel">联系店长</a></div>
             </div>
           </div>
         </div>
@@ -31,10 +31,40 @@
 import orderBy from './order-by'
 import orderWx from './order-wx'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
+import {handleWxOrder, handleByOrder} from '@/common/js/config'
 
 export default {
+  name: 'subscribe',
+  mixins: [expireToken],
+  data () {
+    return {
+      orderList: []
+    }
+  },
   computed: {
+    handleOrderList () {
+      let arr = []
+      this.orderList.forEach(order => {
+        if (order.orderStatus === 4 || order.orderStatus === 5) {
+          let wxReg = /维修/
+          let byReg = /保养/
+          let memo = order.memo.split('\uA856')
+          if (wxReg.test(memo[1])) {
+            arr.push(Object.assign(order, {
+              memoInfos: handleWxOrder(memo)
+            }))
+          }
+          if (byReg.test(memo[1])) {
+            arr.push(Object.assign(order, {
+              memoInfos: handleByOrder(memo)
+            }))
+          }
+        }
+      })
+      return arr
+    },
     ...mapGetters([
       'userInfo'
     ])
@@ -44,42 +74,39 @@ export default {
   },
   methods: {
     goOrderInfo (res) {
-      this.setOrderInfo(res)
-      this.$router.push('/orderinfo')
+      this.$router.push('/orderinfo?id=' + res.orderId + '&type=yyz')
     },
     isExpiryTime (item) {
-      let date = Math.round(new Date().getTime() / 1000)
-      if (date > item.expiryTime) {
-        return true
-      } else {
-        return false
+      let now = new Date().getTime()
+      let str = ''
+      if (item.memoInfos.expireTemp < now) {
+        str = '已过期'
+      } else if (item.orderStatus === 5) {
+        str = '已接收'
       }
+      return str
     },
     cancelSubscribe (item) {
-      this.modifyOrderList({
-        type: 'cancel',
-        id: item.orderId
-      })
+      // 取消订单
     },
     _getSubscribeOrder () {
       this.$get(`${this.f6Url}/api/clientOrder`, {
         'Authorization': this.userInfo.token
       }, (res) => {
-        console.log(res)
+        if (res.code === 200) {
+          this.orderList = res.data.list
+        } else if (res.code === 401) {
+          this.refreshToken(this._getSubscribeOrder)
+        }
       }, {
         clientAppId: this.userInfo.appId,
         clientUserId: this.userInfo.fUserId,
         userId: this.userInfo.userId,
-        orderStatus: 5,
         deleteFlag: 0,
         currentPage: 1,
-        pageSize: 10
+        pageSize: 200
       })
-    },
-    ...mapMutations({
-      setOrderInfo: 'SET_ORDER_INFO',
-      modifyOrderList: 'MODIFY_ORDER_LIST'
-    })
+    }
   },
   components: {
     orderBy,
@@ -161,6 +188,7 @@ export default {
           .call-dz
             border: 1px solid #ff8040
             border-radius: 5px
-            color: #ff8040
-
+            a
+              color: #ff8040
+              font-size: 20px
 </style>
