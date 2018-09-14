@@ -1,5 +1,5 @@
 <template>
-  <div class="order-by">
+  <div class="order-by" v-if="data">
     <div class="by-top">
       <ul class="by-left" v-if="data.partListStr.length > 0">
         <li v-for="(item, index) in data.partListStr" :key="index"><img :src="imgpartUrl + item" alt=""/></li>

@@ -1,22 +1,22 @@
 <template>
-  <Scroll class="wrapper">
+  <Scroll class="wrapper" :data="handleOrderList">
     <ul class="container">
-      <li v-for="(item, index) in subscribeOrder" :key="index">
+      <li v-for="(item, index) in handleOrderList" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
-          <div class="img"><img v-lazy="item.carImageSrc" alt="">  </div>
-          <span class="car-id">{{item.idCard}}</span>
-          <div class="order-states" :class="{'by': item.whichService === 1, 'wx': item.whichService === 2, 'xc': item.whichService === 0}"></div>
+          <div class="img"><img :src="carLogoUrl + item.memoInfos.imageSrc" alt="">  </div>
+          <span class="car-id">{{item.carNumber}}</span>
+          <div class="order-states" :class="{'by': item.memoInfos.serverState === 1, 'wx': item.memoInfos.serverState === 2}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
-          <orderWx v-if="item.whichService === 2" :data="item.userOrderFormRepairCarBean">
+          <orderWx v-if="item.memoInfos.serverState === 2" :data="item.memoInfos">
           </orderWx>
-          <orderBy v-if="item.whichService === 1" :data="item.userOrderFormKeepCarBean">
+          <orderBy v-if="item.memoInfos.serverState === 1" :data="item.memoInfos">
           </orderBy>
         </div>
         <div class="order-foot">
           <div class="foot">
             <div class="order-set">
-              <div class="del-order" @click="deleteOrder(item)">删除订单</div>
+              <div class="del-order" @click="goOrderInfo(item)">查看订单详情</div>
             </div>
           </div>
         </div>
@@ -29,37 +29,21 @@
 import orderBy from './order-by'
 import orderWx from './order-wx'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters, mapMutations} from 'vuex'
+import {expireToken, getOrderListForYy} from '@/common/js/mixin'
 
 export default {
-  computed: {
-    subscribeOrder () {
-      let ret = []
-      this.orderList.forEach((item, index) => {
-        if (item.orderFormState === 5 && item.whichService !== 0) {
-          ret.push(item)
-        }
-      })
-      return ret
-    },
-    ...mapGetters([
-      'orderList'
-    ])
+  name: 'cancel',
+  mixins: [expireToken, getOrderListForYy],
+  data () {
+    return {
+      orderList: [],
+      ordetType: 'yqx'
+    }
   },
   methods: {
-    deleteOrder (item) {
-      this.deleteOrderList({
-        id: item.orderId
-      })
-    },
     goOrderInfo (res) {
-      this.setOrderInfo(res)
-      this.$router.push('/orderinfo')
-    },
-    ...mapMutations({
-      setOrderInfo: 'SET_ORDER_INFO',
-      deleteOrderList: 'DELETE_ORDER_LIST'
-    })
+      this.$router.push('/orderinfo?id=' + res.orderId + '&type=yqx')
+    }
   },
   components: {
     orderBy,
@@ -125,7 +109,7 @@ export default {
           justify-content: flex-end
           align-items: center
           & > div
-            width: 120px
+            width: 180px
             height: 48px
             margin-left: 18px
             font-size: 20px

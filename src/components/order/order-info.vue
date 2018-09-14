@@ -6,15 +6,17 @@
     </div>
     <Scroll class="order-content" ref="orderWarpper" :data="orderInfoShow">
       <div class="order-con">
-        <div class="order-img">
-          <div class="order-bg-1 order-bg" v-if="true">
-            <div :class="true ? 'bg-3' : 'bg-1'">
+        <div class="order-img" v-if="(orderType === 'yyz' && isExpiryTime.flag) || orderType === 'yqx'">
+          <div class="order-bg-1 order-bg">
+            <div :class="{'bg-3': isExpiryTime.flag, 'bg-1': orderType === 'yqx'}">
             </div>
             <div class="bg-font">
               预约{{true ? '已过期' : '已取消'}}
             </div>
           </div>
-          <div class="order-bg-2 order-bg" v-if="false">
+        </div>
+        <div class="order-img" v-if="orderType === 'ywc'">
+          <div class="order-bg-2 order-bg">
             <div class="bg-1">
             </div>
             <div class="bg-font">
@@ -36,23 +38,18 @@
             <span>{{orderInfoShow.userCarUnmber}}</span>
           </div>
         </div>
-        <!-- <div class="order-con">
-          <orderBy v-if="orderInfo.whichService === 1" :data="orderInfo.userOrderFormKeepCarBean" :money="'other'">
-          </orderBy>
-          <orderBy v-if="(orderInfo.orderFormState > 1 && orderInfo.orderFormState < 5) && orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean || orderInfo.userOrderFormKeepCarBean">
-          </orderBy>
-          <orderXc v-if="orderInfo.whichService === 0" :data="orderInfo.washType">
-          </orderXc>
-          <orderWx v-if="(orderInfo.orderFormState === 1 || orderInfo.orderFormState === 5)&& orderInfo.whichService === 2" :data="orderInfo.userOrderFormRepairCarBean">
+        <div class="order-con" v-if="orderInfoShow.memoInfos">
+          <orderBy v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 1" :data="orderInfoShow.memoInfos" :money="'other'"></orderBy>
+          <orderWx v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 2" :data="orderInfoShow.memoInfos">
           </orderWx>
-        </div> -->
-        <!-- <div class="order-other">
+        </div>
+        <div class="order-other" v-if="orderInfoShow.memoInfos">
           <div class="other-info">
-            <div class="other-fw">
+            <div class="other-fw" v-if="orderType === 'yyz' || orderType === 'yqx'">
               <span>项目服务费</span>
-              <span>{{orderInfo.orderFormState === 3 || orderInfo.orderFormState === 4 ? '￥' + showServerPrice.server : '待定'}}</span>
+              <span>{{orderInfoShow.memoInfos.serverState === 1 ? '￥' + orderInfoShow.memoInfos.serverMoney : '待定'}}</span>
             </div>
-            <div class="other-yhq" v-if="orderInfo.orderFormState === 3">
+            <div class="other-yhq" v-if="false">
               <div class="yhq-con">
                 <span>优惠券</span>
                 <div class="yhq">
@@ -60,50 +57,42 @@
                 </div>
               </div>
             </div>
-            <div class="time-yy" v-if="orderInfo.orderFormState === 1 || orderInfo.orderFormState === 5">
+            <div class="time-yy">
               <span>预约时间</span>
               <div class="time">
-                <span>{{_getFormatDate(orderInfo.appointmentTime)}}</span>
+                <span>{{getFormatDate(orderInfoShow.orderReserveDate + orderInfoShow.orderReserveStart + 8 * 60 * 60 * 1000)}}</span>
               </div>
             </div>
-            <div class="time-over" v-if="orderInfo.orderFormState === 1">
+            <div class="time-over">
               <span>到期时间</span>
               <div class="time">
-                <span>{{_getFormatDate(orderInfo.expiryTime)}}</span>
+                <span>{{getFormatDate(orderInfoShow.memoInfos.expireTemp)}}</span>
               </div>
             </div>
           </div>
-          <div class="order-money" v-show="orderInfo.orderFormState >= 3 && orderInfo.orderFormState <= 4">
-            <p>配件费 <span>{{'￥' + showServerPrice.product}}</span>  </p>
-            <p>优惠 <span class="green">{{'￥' + coupon}}</span>  </p>
-            <p>实付 <span class="red">{{'￥' + payPrice}}</span>  </p>
+          <div class="order-money" v-if="orderType === 'ywc'">
+            <p>配件费 <span>{{'￥' + 100}}</span>  </p>
+            <p>优惠 <span class="green">{{'￥' + 200}}</span>  </p>
+            <p>实付 <span class="red">{{'￥' + 300}}</span>  </p>
           </div>
           <div class="other">
-            <p>预约单号:  <span>{{orderInfo.orderId}}</span> </p>
-            <p>下单时间:  <span>{{_getFormatDate(orderInfo.orderTime)}}</span> </p>
-            <p v-if="orderInfo.orderFormState !== 1">预约时间:  <span>{{_getFormatDate(orderInfo.appointmentTime)}}</span> </p>
-            <p v-if="(orderInfo.orderFormState === 3 && orderInfo.serviceIsAlreadyFinish) || orderInfo.orderFormState === 4">完工时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
-            <p v-if="orderInfo.orderFormState === 4">付款时间:  <span>{{_getFormatDate(orderInfo.completionTime)}}</span> </p>
-            <p v-if="orderInfo.orderFormState === 5">取消时间:  <span>{{_getFormatDate(orderInfo.cancellationTime)}}</span> </p>
+            <p>预约单号:  <span>{{orderInfoShow.reservationNumber}}</span> </p>
+            <p>下单时间:  <span>{{orderInfoShow.memoInfos.orderTime}}</span> </p>
+            <p v-if="true">预约时间:  <span>{{getFormatDate(orderInfoShow.orderReserveDate + orderInfoShow.orderReserveStart + 8 * 60 * 60 * 1000)}}</span> </p>
+            <p v-if="orderType === 'dfk'">到店时间:  <span>{{4}}</span> </p>
+            <p v-if="orderType === 'ywc'">完工时间:  <span>{{5}}</span> </p>
           </div>
-        </div> -->
+        </div>
       </div>
     </Scroll>
-    <div class="order-btn">
+    <div class="order-btn" v-if="orderType !== 'yqx'">
       <div class="order-foot-1 foot" v-show="orderType === 'yyz'">
-        <span class="car-state">{{isExpiryTime()}}</span>
+        <span class="car-state">{{isExpiryTime.str}}</span>
         <div class="order-set">
           <div class="del-yy" @click="_cancelSubscribe">取消预约</div>
           <div class="call-dz"><a :href="'tel:' + 122">联系店长</a></div>
         </div>
       </div>
-      <!-- <div class="order-foot-2 foot" v-if="orderInfo.orderFormState === 2">
-        <span class="car-state">已到店</span>
-        <div class="order-set">
-          <div class="call-dz">联系店长</div>
-          <div class="ok-go">确认服务</div>
-        </div>
-      </div> -->
       <div class="order-foot-3" v-if="orderType === 'dfk'">
         <div class="server"><a href="tel:0519-68191385">客服</a></div>
         <div class="tips">
@@ -126,21 +115,40 @@
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
-import orderXc from '@/components/order/order-xc'
-import {expireToken} from '@/common/js/mixin'
+import {expireToken, cancelOrderYy} from '@/common/js/mixin'
 import {handleWxOrder, handleByOrder, handleOrderPartList} from '@/common/js/config'
+import {formatDate} from '@/common/js/date'
 import {mapGetters} from 'vuex'
 export default {
   name: 'order-info',
-  mixins: [expireToken],
+  mixins: [expireToken, cancelOrderYy],
   data () {
     return {
       orderId: null,
       orderType: null,
-      orderInfoShow: {}
+      orderInfoShow: {},
+      cancelOrderInfo: {},
+      stationCode: ''
     }
   },
   computed: {
+    isExpiryTime () {
+      let now = new Date().getTime()
+      let str = ''
+      let flag = false
+      if (this.orderInfoShow.memoInfos) {
+        if (this.orderInfoShow.memoInfos.expireTemp < now) {
+          str = '已过期'
+          flag = true
+        } else if (this.orderInfoShow.orderStatus === 5) {
+          str = '已接收'
+        }
+      }
+      return {
+        str: str,
+        flag: flag
+      }
+    },
     ...mapGetters([
       'userInfo'
     ])
@@ -148,6 +156,7 @@ export default {
   mounted () {
     this.orderId = this.$route.query.id
     this.orderType = this.$route.query.type
+    this.stationCode = this.$route.query.code ? this.$route.query.code : ''
     if (!this.orderId) {
       this.$router.back()
     } else {
@@ -165,7 +174,6 @@ export default {
         if (res.code === 401) {
           this.refreshToken(this._getOrderInfo)
         } else if (res.code === 200) {
-          console.log(this.handleOrderInfo(res.data))
           this.orderInfoShow = this.handleOrderInfo(res.data)
         }
       }, {
@@ -183,22 +191,17 @@ export default {
       if (/保养/.test(arr[1])) {
         memoInfos = handleByOrder(arr)
       }
+      console.log(Object.assign(data, {
+        memoInfos: memoInfos,
+        handleOrderPartList: handleOrderPartList(data.orderPartList),
+        stationCode: this.stationCode
+      }))
       return Object.assign(data, {
         memoInfos: memoInfos,
+        stationCode: this.stationCode,
+        carNumber: data.userCarUnmber,
         handleOrderPartList: handleOrderPartList(data.orderPartList)
       })
-    },
-    isExpiryTime () {
-      let now = new Date().getTime()
-      let str = ''
-      if (this.orderInfoShow.memoInfos) {
-        if (this.orderInfoShow.memoInfos.expireTemp < now) {
-          str = '已过期'
-        } else if (this.orderInfoShow.orderStatus === 5) {
-          str = '已接收'
-        }
-      }
-      return str
     },
     _openLocation () {
       this.Wx.openLocation({
@@ -207,20 +210,33 @@ export default {
         scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大
       })
     },
+    getFormatDate (temp) {
+      return formatDate('YYYY年MM月DD日 hh:mm:ss', parseFloat(temp))
+    },
     _cancelSubscribe () {
+      let _self = this
+      this.$Modal.confirm({
+        title: '提示信息',
+        content: '该服务需要先添加车辆，是否立即添加车辆？',
+        onCancel: () => {
+          _self.$Modal.remove()
+        },
+        onOk: () => {
+          _self.cancelOrderInfo = _self.orderInfoShow
+          _self.cancelOrderState()
+          _self.$Modal.remove()
+        }
+      })
     },
     _goPay (item) {
     },
     _showDetectionRecord () {
       this.$router.push('/check-list?id=0&carid=0')
-    },
-    _deleteOrder () {
     }
   },
   components: {
     orderBy,
     orderWx,
-    orderXc,
     Scroll
   }
 }

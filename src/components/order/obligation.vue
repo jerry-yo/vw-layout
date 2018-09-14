@@ -1,7 +1,7 @@
 <template>
   <Scroll class="wrapper">
     <ul class="container">
-      <li v-for="(item, index) in subscribeOrder" :key="index">
+      <li v-for="(item, index) in []" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
           <div class="img"><img v-lazy="item.carImageSrc" alt="">  </div>
           <span class="car-id">{{item.idCard}}</span>
@@ -15,7 +15,7 @@
         <div class="order-foot">
           <div class="foot">
             <span class="car-state" v-if="!item.serviceIsAlreadyFinish">服务进行中</span>
-            <div class="order-set">
+            <div class="order-set" v-if="false">
               <div :class="item.serviceIsAlreadyFinish ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
             </div>
           </div>
@@ -29,9 +29,15 @@
 import orderBy from './order-by'
 import orderXc from './order-xc'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters} from 'vuex'
+import {clientMaintain} from '@/common/js/mixin'
 
 export default {
+  name: 'obligation',
+  mixins: [clientMaintain],
+  created () {
+    this.getMaintainOrder()
+  },
   computed: {
     subscribeOrder () {
       let ret = []
@@ -43,26 +49,17 @@ export default {
       return ret
     },
     ...mapGetters([
-      'orderList'
+      'userInfo'
     ])
   },
   methods: {
     goOrderInfo (res) {
-      this.setOrderInfo(res)
+      console.log(res)
       this.$router.push('/orderinfo')
     },
     _goPay (item) {
-      if (item.serviceIsAlreadyFinish) {
-        this.modifyOrderList({
-          type: 'pay',
-          id: item.orderId
-        })
-      }
-    },
-    ...mapMutations({
-      setOrderInfo: 'SET_ORDER_INFO',
-      modifyOrderList: 'MODIFY_ORDER_LIST'
-    })
+      console.log(item)
+    }
   },
   components: {
     orderBy,

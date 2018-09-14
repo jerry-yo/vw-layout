@@ -96,6 +96,5 @@ export function handleOrderPartList (arr) {
       }
     }
   }
-  console.log(serverArr)
   return serverArr
 }

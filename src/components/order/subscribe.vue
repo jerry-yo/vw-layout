@@ -31,80 +31,35 @@
 import orderBy from './order-by'
 import orderWx from './order-wx'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters} from 'vuex'
-import {expireToken} from '@/common/js/mixin'
-import {handleWxOrder, handleByOrder} from '@/common/js/config'
+import {expireToken, getOrderListForYy, cancelOrderYy} from '@/common/js/mixin'
 
 export default {
   name: 'subscribe',
-  mixins: [expireToken],
+  mixins: [expireToken, getOrderListForYy, cancelOrderYy],
   data () {
     return {
-      orderList: []
+      orderList: [],
+      orderType: 'yyz',
+      cancelOrderInfo: {}
     }
-  },
-  computed: {
-    handleOrderList () {
-      let arr = []
-      this.orderList.forEach(order => {
-        if (order.orderStatus === 4 || order.orderStatus === 5) {
-          let wxReg = /维修/
-          let byReg = /保养/
-          let memo = order.memo.split('\uA856')
-          if (wxReg.test(memo[1])) {
-            arr.push(Object.assign(order, {
-              memoInfos: handleWxOrder(memo)
-            }))
-          }
-          if (byReg.test(memo[1])) {
-            arr.push(Object.assign(order, {
-              memoInfos: handleByOrder(memo)
-            }))
-          }
-        }
-      })
-      return arr
-    },
-    ...mapGetters([
-      'userInfo'
-    ])
-  },
-  mounted () {
-    this._getSubscribeOrder()
   },
   methods: {
     goOrderInfo (res) {
-      this.$router.push('/orderinfo?id=' + res.orderId + '&type=yyz')
-    },
-    isExpiryTime (item) {
-      let now = new Date().getTime()
-      let str = ''
-      if (item.memoInfos.expireTemp < now) {
-        str = '已过期'
-      } else if (item.orderStatus === 5) {
-        str = '已接收'
-      }
-      return str
+      this.$router.push('/orderinfo?id=' + res.orderId + '&type=yyz&code=' + res.stationCode)
     },
     cancelSubscribe (item) {
-      // 取消订单
-    },
-    _getSubscribeOrder () {
-      this.$get(`${this.f6Url}/api/clientOrder`, {
-        'Authorization': this.userInfo.token
-      }, (res) => {
-        if (res.code === 200) {
-          this.orderList = res.data.list
-        } else if (res.code === 401) {
-          this.refreshToken(this._getSubscribeOrder)
+      let _self = this
+      this.$Modal.confirm({
+        title: '提示信息',
+        content: '该服务需要先添加车辆，是否立即添加车辆？',
+        onCancel: () => {
+          _self.$Modal.remove()
+        },
+        onOk: () => {
+          _self.cancelOrderInfo = item
+          _self.cancelOrderState()
+          _self.$Modal.remove()
         }
-      }, {
-        clientAppId: this.userInfo.appId,
-        clientUserId: this.userInfo.fUserId,
-        userId: this.userInfo.userId,
-        deleteFlag: 0,
-        currentPage: 1,
-        pageSize: 200
       })
     }
   },

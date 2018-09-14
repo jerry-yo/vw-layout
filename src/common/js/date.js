@@ -37,11 +37,12 @@ export function getFormatDateToRepair (stamp) {
 export function getFormatDateNow () {
   let date = new Date()
   let Y = date.getFullYear()
-  let M = (date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1)
+  let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
   let D = date.getDate()
-  let h = (date.getHours() < 10 ? '0' + date.getHours() : date.getHours())
-  let m = (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
-  return `${Y}年${M}月${D}日 ${h}:${m}`
+  let h = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
+  let m = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
+  let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+  return `${Y}年${M}月${D}日 ${h}:${m}:${s}`
 }
 
 export function datePicker () {

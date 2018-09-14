@@ -1,5 +1,7 @@
 import Wx from 'Wx'
+import {formatDate} from '@/common/js/date'
 import {mapActions, mapGetters, mapMutations} from 'vuex'
+import {handleWxOrder, handleByOrder} from '@/common/js/config'
 // 微信权限操作
 export const wxMixin = {
   mounted () {
@@ -152,5 +154,129 @@ export const getServerCar = {
       'defaultCar',
       'defaultStoreId'
     ])
+  }
+}
+
+// 获取预约中 已取消订单列表
+export const getOrderListForYy = {
+  created () {
+    this._getSubscribeOrder()
+  },
+  computed: {
+    handleOrderList () {
+      let arr = []
+      this.orderList.forEach(order => {
+        if ((order.orderStatus === 4 || order.orderStatus === 5) && order.carNumber !== '京A88888') {
+          let wxReg = /维修/
+          let byReg = /保养/
+          let memo = order.memo.split('\uA856')
+          if (wxReg.test(memo[1])) {
+            arr.push(Object.assign(order, {
+              memoInfos: handleWxOrder(memo)
+            }))
+          }
+          if (byReg.test(memo[1])) {
+            arr.push(Object.assign(order, {
+              memoInfos: handleByOrder(memo)
+            }))
+          }
+        }
+      })
+      return arr
+    }
+  },
+  methods: {
+    isExpiryTime (item) {
+      let now = new Date().getTime()
+      let str = ''
+      if (item.memoInfos.expireTemp < now) {
+        str = '已过期'
+      } else if (item.orderStatus === 5) {
+        str = '已接收'
+      }
+      return str
+    },
+    _getSubscribeOrder () {
+      this.$get(`${this.f6Url}/api/clientOrder`, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        if (res.code === 200) {
+          this.orderList = res.data.list
+        } else if (res.code === 401) {
+          this.refreshToken(this._getSubscribeOrder)
+        }
+      }, {
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId,
+        userId: this.userInfo.userId,
+        deleteFlag: this.ordetType === 'yqx' ? 1 : 0,
+        currentPage: 1,
+        pageSize: 200
+      })
+    }
+  }
+}
+
+// 取消预约单
+export const cancelOrderYy = {
+  methods: {
+    cancelOrderState () {
+      this.$post(`${this.tonyUrl}/api/f6-app/cancelclientOrder`, this.gt1Header, (res) => {
+        if (res.errorCode === 0) {
+          if (res.data.code === 0) {
+            if (this.orderType === 'yyz') {
+              this._getSubscribeOrder()
+            } else {
+              this.$router.push('/order/subscribe')
+            }
+          } else {
+            this.$Toast({
+              position: 'bottom',
+              message: res.data.msg
+            })
+          }
+        } else if (res.errorCode !== 0) {
+          this.$Toast({
+            position: 'bottom',
+            message: res.errorMsg
+          })
+        }
+      }, {
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId,
+        type: this.cancelOrderInfo.memoInfos.serverState,
+        userCarUnmber: this.cancelOrderInfo.carNumber,
+        stationCode: this.cancelOrderInfo.stationCode,
+        orderReserveDate: formatDate('YYYY-MM-DD', this.cancelOrderInfo.orderReserveDate + this.cancelOrderInfo.orderReserveStart + 8 * 60 * 60 * 1000),
+        orderTime: this.cancelOrderInfo.memoInfos.orderTime.replace(/年|月/g, '-').replace(/日/g, ''),
+        orderId: this.cancelOrderInfo.orderId
+      })
+    }
+  }
+}
+
+// 维保记录
+export const clientMaintain = {
+  mixins: [expireToken],
+  methods: {
+    getMaintainOrder () {
+      this.$get(`${this.f6Url}/api/clientMaintain/list`, {
+        'Authorization': this.userInfo.token,
+        'Content-Type': 'application/json'
+      }, (res) => {
+        if (res.code === 200) {
+
+        } else if (res.code === 401) {
+          this.refreshToken(this.getMaintainOrder)
+        }
+        console.log(res)
+      }, {
+        userId: this.userInfo.userId,
+        pageSize: 500,
+        currentPage: 1,
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId
+      })
+    }
   }
 }
