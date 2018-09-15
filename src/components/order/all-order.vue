@@ -8,7 +8,7 @@
         <ul>
           <li ><router-link :to="{ name: 'subscribe', path: '/order/subscribe' }"><span>预约中</span></router-link></li>
           <!-- <li ><router-link :to="{ name: 'confirmed', path: '/order/confirmed' }"><span>待确认</span></router-link></li> -->
-          <li ><router-link :to="{ name: 'obligation', path: '/order/obligation' }"><span>待付款</span></router-link></li>
+          <li ><router-link :to="{ name: 'obligation', path: '/order/obligation' }"><span>服务中</span></router-link></li>
           <li ><router-link :to="{ name: 'complete', path: '/order/complete' }"><span>已完成</span></router-link></li>
           <li ><router-link :to="{ name: 'cancel', path: '/order/cancel' }"><span>已取消</span></router-link></li>
         </ul>

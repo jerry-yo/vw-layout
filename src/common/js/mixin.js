@@ -258,6 +258,29 @@ export const cancelOrderYy = {
 // 维保记录
 export const clientMaintain = {
   mixins: [expireToken],
+  computed: {
+    obligationOrder () {
+      let overOrder = []
+      let unOverOrder = []
+      this.orderList.forEach((item, index) => {
+        if (item.carNoWhole !== '京A88888') {
+          item = Object.assign(item, {
+            stationType: item.businessTypeName === '保养' ? 1 : item.businessTypeName === '维修' ? 2 : 0,
+            handleComplateDate: item.complateDate.replace(/-/, '年').replace(/-/, '月').replace(/ /, '日 ').split('.')[0]
+          })
+          if (item.balanceStatus === '7000' && (item.stationType === 1 || item.stationType === 2)) {
+            unOverOrder.push(item)
+          } else if (item.balanceStatus === '7100' && (item.stationType === 1 || item.stationType === 2)) {
+            overOrder.push(item)
+          }
+        }
+      })
+      return {
+        overOrder: overOrder,
+        unOverOrder: unOverOrder
+      }
+    }
+  },
   methods: {
     getMaintainOrder () {
       this.$get(`${this.f6Url}/api/clientMaintain/list`, {
@@ -265,14 +288,13 @@ export const clientMaintain = {
         'Content-Type': 'application/json'
       }, (res) => {
         if (res.code === 200) {
-
+          this.orderList = res.data
         } else if (res.code === 401) {
           this.refreshToken(this.getMaintainOrder)
         }
-        console.log(res)
       }, {
         userId: this.userInfo.userId,
-        pageSize: 500,
+        pageSize: 100,
         currentPage: 1,
         clientAppId: this.userInfo.appId,
         clientUserId: this.userInfo.fUserId

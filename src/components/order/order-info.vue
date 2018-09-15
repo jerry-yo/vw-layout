@@ -38,7 +38,7 @@
             <span>{{orderInfoShow.userCarUnmber}}</span>
           </div>
         </div>
-        <div class="order-con" v-if="orderInfoShow.memoInfos">
+        <div class="order-con" v-if="orderInfoShow.memoInfos" @click="goPartAndServerInfo">
           <orderBy v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 1" :data="orderInfoShow.memoInfos" :money="'other'"></orderBy>
           <orderWx v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 2" :data="orderInfoShow.memoInfos">
           </orderWx>
@@ -85,7 +85,7 @@
         </div>
       </div>
     </Scroll>
-    <div class="order-btn" v-if="orderType !== 'yqx'">
+    <div class="order-btn" v-if="orderType !== 'yqx' || orderType === 'ywc'">
       <div class="order-foot-1 foot" v-show="orderType === 'yyz'">
         <span class="car-state">{{isExpiryTime.str}}</span>
         <div class="order-set">
@@ -99,13 +99,7 @@
           <span>共{{2}}项服务</span>
           <span>￥{{100}}</span>
         </div>
-        <div class="btn" @click="_goPay">付款</div>
-      </div>
-      <div class="order-foot-4 foot" v-if="orderType === 'ywc'">
-        <span class="car-state">2017年05月06日 15:30</span>
-        <div class="order-set">
-          <div class="look-order" @click="_showDetectionRecord">查看该次检测</div>
-        </div>
+        <div class="btn">付款</div>
       </div>
     </div>
   </div>
@@ -118,7 +112,7 @@ import orderWx from '@/components/order/order-wx'
 import {expireToken, cancelOrderYy} from '@/common/js/mixin'
 import {handleWxOrder, handleByOrder, handleOrderPartList} from '@/common/js/config'
 import {formatDate} from '@/common/js/date'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'order-info',
   mixins: [expireToken, cancelOrderYy],
@@ -191,11 +185,6 @@ export default {
       if (/保养/.test(arr[1])) {
         memoInfos = handleByOrder(arr)
       }
-      console.log(Object.assign(data, {
-        memoInfos: memoInfos,
-        handleOrderPartList: handleOrderPartList(data.orderPartList),
-        stationCode: this.stationCode
-      }))
       return Object.assign(data, {
         memoInfos: memoInfos,
         stationCode: this.stationCode,
@@ -228,11 +217,14 @@ export default {
         }
       })
     },
-    _goPay (item) {
+    goPartAndServerInfo () {
+      this.setSeleServerInfo(this.orderInfoShow.handleOrderPartList)
+      this.$router.push('/server-info')
+      console.log(this.orderInfoShow.handleOrderPartList)
     },
-    _showDetectionRecord () {
-      this.$router.push('/check-list?id=0&carid=0')
-    }
+    ...mapMutations({
+      setSeleServerInfo: 'SET_SELE_SERVERS_INFO'
+    })
   },
   components: {
     orderBy,

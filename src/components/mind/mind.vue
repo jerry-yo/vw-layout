@@ -63,7 +63,7 @@
             <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
-            <span>待付款</span>
+            <span>服务中</span>
           </div>
           <!-- </router-link> -->
         </div>

@@ -74,14 +74,12 @@ export default {
       this._goBack()
     },
     _getPartList () {
-      this.setLoadingState(true)
       let id = this.defaultStoreId
       let url = `${this.f6Url}/api/clientOrder/getPartRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${2000000}&pid=${this.pid}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {
         if (res.code === 200) {
-          this.setLoadingState(false)
           this.handleProList(res.data)
         } else if (res.code === 401) {
           this.refreshToken(this._getPartList)
@@ -98,7 +96,6 @@ export default {
       this.changeProList = data
     },
     ...mapMutations({
-      setLoadingState: 'SET_LOADING_STATE',
       modifyAllServerList: 'MODIFY_ALL_SERVER_LIST'
     })
   }

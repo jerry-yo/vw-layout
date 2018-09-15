@@ -91,7 +91,8 @@ export function handleOrderPartList (arr) {
     for (let j = 0; j < partArr.length; j++) {
       if (serverArr[i].projectid === partArr[j].handleRemark.pkId) {
         Object.assign(serverArr[i], {
-          partInfo: partArr[j]
+          partInfo: partArr[j],
+          state: 0
         })
       }
     }

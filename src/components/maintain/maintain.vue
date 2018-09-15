@@ -169,7 +169,6 @@ export default {
       this.$router.push('/garage?type=select')
     },
     _getAllServie () {
-      this.setLoadingState(true)
       let id = this.defaultStoreId
       let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.allmileagn}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
@@ -177,7 +176,6 @@ export default {
         'Content-Type': 'application/json'
       }, (res) => {
         if (res.code === 200) {
-          this.setLoadingState(false)
           this.handleServerList(res.data)
         } else if (res.code === 401) {
           this.refreshToken(this._getAllServie)
@@ -222,7 +220,6 @@ export default {
       this.setStaticServerList(JSON.parse(JSON.stringify(arr)))
     },
     ...mapMutations({
-      setLoadingState: 'SET_LOADING_STATE',
       setAllServerList: 'SET_ALL_SERVER_LIST',
       setStaticServerList: 'SET_STATIC_SERVER_LIST',
       modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',

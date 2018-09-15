@@ -29,6 +29,11 @@ export default {
   data () {
     return {}
   },
+  created () {
+    if (this.seleServersInfo.length === 0) {
+      this._goBack()
+    }
+  },
   computed: {
     ...mapGetters([
       'seleServersInfo'
@@ -39,6 +44,7 @@ export default {
       this.$router.back()
     },
     _clickServerParent (server) {
+      console.log(server)
       if (server.partInfo !== null) {
         this.modifySeleServersInfo(server)
       } else {

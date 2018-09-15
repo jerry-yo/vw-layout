@@ -119,14 +119,12 @@ export default {
       if (this.addNewServerLoadNum > 0) {
         return
       }
-      this.setLoadingState(true)
       let id = this.defaultStoreId
       let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
         'Authorization': this.userInfo.token
       }, (res) => {
         if (res.code === 200) {
-          this.setLoadingState(false)
           this.handleServerlist(res.data)
           this.setAddNewServerLoadNum(this.addNewServerLoadNum + 1)
         } else if (res.code === 401) {
@@ -168,7 +166,6 @@ export default {
     ...mapMutations({
       setAllServerList: 'SET_ALL_SERVER_LIST',
       setStaticServerList: 'SET_STATIC_SERVER_LIST',
-      setLoadingState: 'SET_LOADING_STATE',
       deleteAllServer: 'DELETE_ALL_SERVER',
       modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',
       setAddNewServerLoadNum: 'SET_ADD_NEW_SERVER_LOAD_NUM'

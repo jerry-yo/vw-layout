@@ -1,22 +1,19 @@
 <template>
   <Scroll class="wrapper">
     <ul class="container">
-      <li v-for="(item, index) in []" :key="index">
+      <li v-for="(item, index) in obligationOrder.unOverOrder" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
-          <div class="img"><img v-lazy="item.carImageSrc" alt="">  </div>
-          <span class="car-id">{{item.idCard}}</span>
-          <div class="order-states" :class="{'by': item.whichService === 1, 'wx': item.whichService === 2, 'xc': item.whichService === 0}"></div>
+          <span class="car-id">{{item.carNoWhole}}</span>
+          <div class="order-states" :class="{'by': item.stationType === 1, 'wx': item.stationType === 2}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
-          <orderBy v-if="item.whichService === 1 || item.whichService === 2" :data="item.userOrderFormRepairCarBean || item.userOrderFormKeepCarBean">
-          </orderBy>
-          <orderXc v-if="item.whichService === 0" :data="item.washType"></orderXc>
+          <orderOther :data="item" :index="index"></orderOther>
         </div>
         <div class="order-foot">
           <div class="foot">
-            <span class="car-state" v-if="!item.serviceIsAlreadyFinish">服务进行中</span>
+            <span class="car-state">{{item.billStatus === '0000' ? '服务进行中' : item.billStatus === '6300' ? '待付款' : ''}}</span>
             <div class="order-set" v-if="false">
-              <div :class="item.serviceIsAlreadyFinish ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
+              <div :class="false ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
             </div>
           </div>
         </div>
@@ -26,35 +23,23 @@
 </template>
 
 <script>
-import orderBy from './order-by'
-import orderXc from './order-xc'
+import orderOther from '@/components/order/order-other'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters} from 'vuex'
 import {clientMaintain} from '@/common/js/mixin'
 
 export default {
   name: 'obligation',
   mixins: [clientMaintain],
+  data () {
+    return {
+      orderList: []
+    }
+  },
   created () {
     this.getMaintainOrder()
   },
-  computed: {
-    subscribeOrder () {
-      let ret = []
-      this.orderList.forEach((item, index) => {
-        if (item.orderFormState === 3) {
-          ret.push(item)
-        }
-      })
-      return ret
-    },
-    ...mapGetters([
-      'userInfo'
-    ])
-  },
   methods: {
     goOrderInfo (res) {
-      console.log(res)
       this.$router.push('/orderinfo')
     },
     _goPay (item) {
@@ -62,9 +47,8 @@ export default {
     }
   },
   components: {
-    orderBy,
-    Scroll,
-    orderXc
+    orderOther,
+    Scroll
   }
 }
 </script>

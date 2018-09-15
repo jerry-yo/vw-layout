@@ -157,8 +157,7 @@ export default {
       'cityInfo',
       'defaultStoreId',
       'storeList',
-      'userInfo',
-      'loadingState'
+      'userInfo'
     ])
   },
   methods: {
@@ -304,8 +303,7 @@ export default {
     },
     ...mapMutations({
       setCityInfo: 'SET_CITYINFO',
-      setStoreList: 'SET_STORELIST',
-      setLoadingState: 'SET_LOADING_STATE'
+      setStoreList: 'SET_STORELIST'
     }),
     ...mapActions([
       'updateCarList'
