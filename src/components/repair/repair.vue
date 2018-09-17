@@ -74,9 +74,7 @@ export default {
       this.clearOrderAllInfo('wx')
     },
     inputOver (e) {
-      this.setUpdateOrder({
-        faultText: this.faultText
-      })
+      console.log(e)
     },
     _goSelectCar () {
       this.$router.push('/garage?type=select')
@@ -90,7 +88,19 @@ export default {
       }, 200)
     },
     goNext () {
-      this.$router.push('/repair-pre-order')
+      let arr = []
+      if (this.updateOrder.imgArr) {
+        arr = this.updateOrder.imgArr
+        console.log(this.updateOrder.imgArr, '000')
+      }
+      this.setUpdateOrder({
+        faultText: this.faultText || '',
+        imgArr: arr,
+        faultImgs: ''
+      })
+      setTimeout(() => {
+        this.$router.push('/repair-pre-order')
+      }, 0)
     },
     _goDetectionMenu () {
       this.$router.push('/check-list?id=0&carid=0')

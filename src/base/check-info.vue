@@ -3,14 +3,21 @@
     <div class="check-info-mask">
       <div class="mask-con">
         <h2 class="title">
-          <span :class="data.state === 1 ? 'wran' : 'err'">{{data.title}}</span>
+          <span>故障概要</span>
         </h2>
-        <div class="content">
-          <p>{{data.textarea}}</p>
-        </div>
-        <ul class="imgs">
-          <li v-for="(item, index) in data.imgs" :key="index"><img v-lazy="item" alt="" @click="showImgs(item)"> </li>
-        </ul>
+        <Scroll class="content" ref="faultText" :data="data" v-if="data.faultText.length > 0">
+          <div class="wrapper">
+            <p>{{data.faultText}}</p>
+          </div>
+        </Scroll>
+        <Scroll class="img-content" ref="faultImg" :data="data" :scrollX="true" :scrollY="false" v-if="showImgArr.length > 0">
+          <ul class="imgs" :style="{width: showImgArr.length * 31 + '%'}">
+            <li v-for="(item, index) in showImgArr" :key="index">
+              <img :src="gt1UpdateImgUrl + item" alt="" @click="showImgs(item)" v-if="from === 'order'">
+              <img :src="item" alt="" @click="showImgs(item)" v-else>
+            </li>
+          </ul>
+        </Scroll>
         <div class="close-btn" @click="_closeMask">
           知道了
         </div>
@@ -20,12 +27,31 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'checkInfo',
+  components: {
+    Scroll
+  },
   props: {
     data: {
       type: Object,
       required: true
+    },
+    from: {
+      type: String,
+      default: 'repair'
+    }
+  },
+  computed: {
+    showImgArr () {
+      let arr = []
+      if (this.form === 'order') {
+        arr = this.data.imgArr
+      } else {
+        arr = this.data.faultImgs
+      }
+      return arr
     }
   },
   methods: {
@@ -62,7 +88,7 @@ export default {
     z-index: 1010
     transition: all .3s
     .mask-con
-      padding: 45px 30px
+      padding: 10px 30px 10px 30px
       width: 630px
       overflow: hidden
       background-color: #fff
@@ -72,17 +98,9 @@ export default {
         align-items: center
         height: 110px
         span
-          padding-right: 112px
-          background-position: right center
-          background-repeat: no-repeat
-          background-size: 78px 56px
           font-size: 30px
           color: #585858
           font-weight: bold
-          &.err
-            bg-image('../common/imgs/orderinfo/err')
-          &.wran
-            bg-image('../common/imgs/orderinfo/warn')
       .content
         max-height: 138px
         overflow: hidden
@@ -90,27 +108,28 @@ export default {
           font-size: 26px
           color: #585858
           line-height: 46px
-      .imgs
+      .img-content
         margin-top: 30px
-        margin-bottom: 50px
+        margin-bottom: 20px
         height: 160px
         overflow: hidden
-        li
-          box-sizing: border-box
-          height: 160px
-          width: 160px
-          border: 1px solid #b6b6b6
-          margin-right: 14px
-          float: left
-          img
-            display: flex
-            width: 100%
-            height: 100%
+        .imgs
+          li
+            box-sizing: border-box
+            height: 160px
+            width: 160px
+            border: 1px solid #b6b6b6
+            margin-right: 14px
+            float: left
+            img
+              display: flex
+              width: 100%
+              height: 100%
       .close-btn
-        height: 58px
+        height: 110px
         text-align: center
         font-size: 30px
         color: #ff9239
-        line-height: 58px
+        line-height: 110px
 
 </style>

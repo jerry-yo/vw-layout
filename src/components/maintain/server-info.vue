@@ -10,7 +10,7 @@
       <div class="wrapper">
         <serverModel
           v-for="item in seleServersInfo"
-          :key="item.pkId"
+          :key="item.name"
           :server="item"
           :has-check="false"
           @clickServer="_clickServerParent"
@@ -44,7 +44,6 @@ export default {
       this.$router.back()
     },
     _clickServerParent (server) {
-      console.log(server)
       if (server.partInfo !== null) {
         this.modifySeleServersInfo(server)
       } else {

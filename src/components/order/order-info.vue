@@ -38,7 +38,7 @@
             <span>{{orderInfoShow.userCarUnmber}}</span>
           </div>
         </div>
-        <div class="order-con" v-if="orderInfoShow.memoInfos" @click="goPartAndServerInfo">
+        <div class="order-con" v-if="orderInfoShow.memoInfos"  @click="goPartAndServerInfo">
           <orderBy v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 1" :data="orderInfoShow.memoInfos" :money="'other'"></orderBy>
           <orderWx v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 2" :data="orderInfoShow.memoInfos">
           </orderWx>
@@ -102,6 +102,7 @@
         <div class="btn">付款</div>
       </div>
     </div>
+    <checkInfo v-if="faultInfoState" :data="orderInfoShow.memoInfos" :from="'order'" @closemask="closeCheckInfo"></checkInfo>
   </div>
 </template>
 
@@ -109,6 +110,7 @@
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
+import checkInfo from '@/base/check-info'
 import {expireToken, cancelOrderYy} from '@/common/js/mixin'
 import {handleWxOrder, handleByOrder, handleOrderPartList} from '@/common/js/config'
 import {formatDate} from '@/common/js/date'
@@ -122,7 +124,8 @@ export default {
       orderType: null,
       orderInfoShow: {},
       cancelOrderInfo: {},
-      stationCode: ''
+      stationCode: '',
+      faultInfoState: false
     }
   },
   computed: {
@@ -218,9 +221,16 @@ export default {
       })
     },
     goPartAndServerInfo () {
-      this.setSeleServerInfo(this.orderInfoShow.handleOrderPartList)
-      this.$router.push('/server-info')
-      console.log(this.orderInfoShow.handleOrderPartList)
+      if (this.orderInfoShow.memoInfos.serverState === 1) {
+        this.setSeleServerInfo(this.orderInfoShow.handleOrderPartList)
+        this.$router.push('/server-info')
+      } else if (this.orderInfoShow.memoInfos.serverState === 2) {
+        console.log(this.orderInfoShow.memoInfos)
+        this.faultInfoState = true
+      }
+    },
+    closeCheckInfo () {
+      this.faultInfoState = false
     },
     ...mapMutations({
       setSeleServerInfo: 'SET_SELE_SERVERS_INFO'
@@ -229,7 +239,8 @@ export default {
   components: {
     orderBy,
     orderWx,
-    Scroll
+    Scroll,
+    checkInfo
   }
 }
 </script>

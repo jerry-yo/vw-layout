@@ -78,6 +78,7 @@ export function handleOrderRemark (remark) {
 export function handleOrderPartList (arr) {
   let serverArr = []
   let partArr = []
+  let handleArr = []
   arr.forEach(item => {
     if (item.type === 0) {
       serverArr.push(item)
@@ -88,14 +89,28 @@ export function handleOrderPartList (arr) {
     }
   })
   for (let i = 0; i < serverArr.length; i++) {
+    let obj1 = null
+    let obj2 = null
     for (let j = 0; j < partArr.length; j++) {
       if (serverArr[i].projectid === partArr[j].handleRemark.pkId) {
-        Object.assign(serverArr[i], {
-          partInfo: partArr[j],
-          state: 0
-        })
+        obj2 = {
+          brand: partArr[j].handleRemark.brand,
+          customCode: partArr[j].handleRemark.customCode,
+          number: partArr[j].number,
+          sellPrice: partArr[j].genaraprice,
+          spec: partArr[j].handleRemark.spec,
+          supplierCode: partArr[j].handleRemark.supplierCode
+        }
       }
     }
+    obj1 = {
+      amount: serverArr[i].genaraprice,
+      name: serverArr[i].projectname,
+      pkId: serverArr[i].remark,
+      state: 0,
+      partInfo: obj2
+    }
+    handleArr.push(obj1)
   }
-  return serverArr
+  return handleArr
 }

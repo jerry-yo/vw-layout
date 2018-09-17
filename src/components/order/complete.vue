@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     goOrderInfo (res) {
-      this.setOrderInfo(res)
       this.$router.push('/orderinfo')
     },
     showDetectionRecord (item) {

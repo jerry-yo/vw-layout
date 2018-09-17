@@ -6,7 +6,7 @@
       </div>
       <div class="server-info">
         <div class="title">{{server.name}}<span v-if="server.customerType === 'cg' || server.customerType === 'tj'">{{server.customerType === 'cg' ? '常规': server.customerType === 'tj' ? '推荐': ''}}</span> </div>
-        <div class="tips">共{{server.partInfo !== null ? 1 : 0}}件材料</div>
+        <div class="tips">共{{server.partInfo !== null && server.partInfo ? 1 : 0}}件材料</div>
       </div>
       <div class="operation">
         <div class="state1" v-show="!hasCheck || server.state === -1 ">

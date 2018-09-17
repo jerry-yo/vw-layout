@@ -27,22 +27,22 @@
           <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <!-- <div class="fault-info" v-if="repairOrder.faultImgs.length > 0 || repairOrder.faultText.length > 0">
+        <div class="fault-info" v-if="updateOrder.faultImgs.length > 0 || updateOrder.faultText.length > 0">
           <div class="title">
             故障概要
           </div>
-          <div class="fault-con">
-            <p class="fault-text">{{repairOrder.faultText}}</p>
-            <div class="fault-img" v-if="repairOrder.faultImgs.length > 0">
-              <ul :class="repairOrder.faultImgs.length > 2 ? 'more': ''">
-                <li v-for="(item, index) in fillImgs" :key="index">
-                  <img src="" alt="">
+          <div class="fault-con" @click="showFaultInfo">
+            <p class="fault-text">{{updateOrder.faultText}}</p>
+            <div class="fault-img" v-if="updateOrder.imgArr.length > 0">
+              <ul :class="updateOrder.imgArr.length > 2 ? 'more': ''">
+                <li v-for="(item, index) in handleImgs" :key="index">
+                  <img :src="item" alt="" >
                 </li>
               </ul>
             </div>
           </div>
           <div class="go-img-info"></div>
-        </div> -->
+        </div>
         <!-- <div class="checkout-menu" v-if="false">
           <div class="title">
             检测单故障 <span>{{'(1' + '/' + '3)'}}</span>
@@ -57,6 +57,7 @@
       <div class="btn" @click="goRepairOrder">确认下单</div>
     </div>
     <datePickerMask v-if="datePickerShow" @close="closePicker"></datePickerMask>
+    <checkInfo v-if="faultInfoState" :data="updateOrder" @closemask="closeCheckInfo"></checkInfo>
   </div>
 </template>
 
@@ -65,6 +66,7 @@ import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import datePickerMask from '@/base/date-picker'
+import checkInfo from '@/base/check-info'
 import {datePicker, timeToStamp, getFormatDateNow, formatDate} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
 import {getServerCar} from '@/common/js/mixin'
@@ -75,15 +77,20 @@ export default {
   mixins: [getServerCar],
   data () {
     return {
-      imgs: [0, 1, 2, 3],
       datePickerShow: false,
-      date: {
-        date: '',
-        temp: 0
-      }
+      faultInfoState: false
     }
   },
   computed: {
+    handleImgs () {
+      let arr = []
+      this.updateOrder.imgArr.forEach(item => {
+        if (arr.length < 3) {
+          arr.push(item)
+        }
+      })
+      return arr
+    },
     ...mapGetters([
       'updateOrder'
     ])
@@ -174,6 +181,12 @@ export default {
         })
       }
     },
+    showFaultInfo () {
+      this.faultInfoState = true
+    },
+    closeCheckInfo () {
+      this.faultInfoState = false
+    },
     ...mapMutations({
       setUpdateOrder: 'SET_UPDATE_ORDER'
     })
@@ -182,6 +195,7 @@ export default {
   },
   components: {
     storeInfo,
+    checkInfo,
     seleDetectionMenu,
     Scroll,
     datePickerMask
