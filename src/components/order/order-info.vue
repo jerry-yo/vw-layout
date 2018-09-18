@@ -225,8 +225,14 @@ export default {
         this.setSeleServerInfo(this.orderInfoShow.handleOrderPartList)
         this.$router.push('/server-info')
       } else if (this.orderInfoShow.memoInfos.serverState === 2) {
-        console.log(this.orderInfoShow.memoInfos)
-        this.faultInfoState = true
+        if (this.orderInfoShow.memoInfos.faultImgs.length === 0 && this.orderInfoShow.memoInfos.faultText.length === 0) {
+          this.$Toast({
+            position: 'bottom',
+            message: '暂无故障描述'
+          })
+        } else {
+          this.faultInfoState = true
+        }
       }
     },
     closeCheckInfo () {

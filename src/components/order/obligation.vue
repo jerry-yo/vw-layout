@@ -40,7 +40,8 @@ export default {
   },
   methods: {
     goOrderInfo (res) {
-      this.$router.push('/orderinfo')
+      console.log(res)
+      this.$router.push('/pay-order-info?pkid=' + res.pkId + '&type=dfk&station=' + res.abbreviation)
     },
     _goPay (item) {
       console.log(item)

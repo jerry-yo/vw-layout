@@ -169,7 +169,16 @@ const serverInfo = {
   name: 'serverInfo',
   component: resolve => { require(['@/components/maintain/server-info'], resolve) }
 }
-
+const payOrderInfo = {
+  path: '/pay-order-info',
+  name: 'payOrderInfo',
+  component: resolve => { require(['@/components/order/pay-order-info'], resolve) }
+}
+const payServerInfo = {
+  path: '/pay-server-info',
+  name: 'payServerInfo',
+  component: resolve => { require(['@/components/order/pay-server-info'], resolve) }
+}
 const changePre = {
   path: '/change-pre',
   name: 'changePre',
@@ -243,6 +252,8 @@ export const routers = [
   maintainPreOrder,
   maintain,
   serverInfo,
+  payOrderInfo,
+  payServerInfo,
   changePre,
   addNewServer,
   seleCity,

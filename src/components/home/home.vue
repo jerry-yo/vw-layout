@@ -6,8 +6,6 @@
         <span></span>
       </div>
       <span>GT1养车</span>
-      <div class="message">
-      </div>
     </div>
     <Scroll class="container_1" ref="home">
       <div class="con">

@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     goOrderInfo (res) {
-      this.$router.push('/orderinfo')
+      this.$router.push('/pay-order-info?pkid=' + res.pkId + '&type=ywc&station=' + res.abbreviation)
     },
     showDetectionRecord (item) {
       this.$router.push('/check-list?id=0&carid=0')

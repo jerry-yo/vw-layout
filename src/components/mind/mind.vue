@@ -4,7 +4,6 @@
       <div class="user-con" aspectratio-content>
         <div class="user-head">
           <span>个人中心</span>
-          <div class="user-xx"></div>
           <div class="user-sz" @click="_goSetUp"></div>
         </div>
         <div class="user-info">
