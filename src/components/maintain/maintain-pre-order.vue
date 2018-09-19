@@ -162,7 +162,7 @@ export default {
       let id = this.defaultStoreId
       if (this.updateOrder.startPoint2) {
         let memo = `${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${this.nowCar.imageSrc}\uA856${this.allServerMoney.servers}\uA856${this.allServerMoney.serverMoney}\uA856${this.allServerMoney.partInfos}\uA856${this.allServerMoney.partMoney}\uA856${this.allServerMoney.partListStr}\uA856${this.updateOrder.endTamp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
-        this.$post(`${this.tonyUrl}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
+        this.$post(`${this.gt1Url}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
           if (res.errorCode === 0 && res.data.code === 0) {
             this.$router.push('/reservations?type=by')
           } else if (res.errorCode === 0 && res.data.code !== 0) {

@@ -114,3 +114,9 @@ export function handleOrderPartList (arr) {
   }
   return handleArr
 }
+
+// 处理检测单列表
+export function handleCheckList (arr, car) {
+  console.log(arr, car)
+  return []
+}

@@ -27,8 +27,8 @@
                 </div>
               </div>
             </div>
-            <div class="car-check" @click="_goCheckList">
-              <Badge count="0">
+            <div class="car-check" @click="_goCheckInfo">
+              <Badge count="23">
                 <img src="../../common/imgs/home/jcd@2x.png" alt="" >
               </Badge>
               <p>查看检测单</p>
@@ -92,7 +92,7 @@ import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, defaultCarInfo} from '@/common/js/mixin'
-import {handleMyCar} from '@/common/js/config'
+import {handleMyCar, handleCheckList} from '@/common/js/config'
 import AMap from 'AMap'
 export default {
   name: 'home',
@@ -124,7 +124,8 @@ export default {
         id: 5,
         linkUrl: 'https://c.y.qq.com/node/m/client/music_headline/index.html?_hidehd=1&_button=2&zid=619582',
         picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000Wq2eW3VkzJ9.jpg'
-      }]
+      }],
+      checkList: null
     }
   },
   mounted () {
@@ -135,6 +136,13 @@ export default {
       this._setMap()
     }
     this._getStoreList()
+  },
+  watch: {
+    getDefaultCarInfo: function (newVal, oldVal) {
+      if (newVal.defaultFlag === 1) {
+        this._getCheckList()
+      }
+    }
   },
   computed: {
     cityShow () {
@@ -191,7 +199,7 @@ export default {
       }
     },
     // 检测单
-    _goCheckList () {
+    _goCheckInfo () {
       if (this.detectionMenus.length > 0) {
         this.$router.push('/check-list?id=0&carid=0')
       } else {
@@ -200,6 +208,24 @@ export default {
           position: 'bottom'
         })
       }
+    },
+    // 获取检测单列表
+    _getCheckList () {
+      this.$get(`${this.f6Url}/api/check/list`, {
+        'Authorization': this.userInfo.token
+      }, (res) => {
+        if (res.code === 200) {
+          this.checkList = handleCheckList(res.data, this.getDefaultCarInfo.carNumber)
+        } else if (res.code === 401) {
+          this.refreshToken(this._getCheckList)
+        }
+      }, {
+        userId: this.userInfo.userId,
+        pageSize: 500,
+        currentPage: 1,
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId
+      })
     },
     // 获取我的车库列表
     _getMyCar () {
@@ -211,7 +237,6 @@ export default {
           this.refreshToken(this._getMyCar)
         } else if (res.code === 200) {
           this._setMyCar(res.data)
-          this._getCheckList()
         }
       })
     },
@@ -219,10 +244,6 @@ export default {
     _setMyCar (data) {
       let list = handleMyCar(data)
       this.updateCarList(list)
-    },
-    // 获取检测单列表
-    _getCheckList () {
-
     },
     _getStoreList () {
       this.$post(`${this.gt1Url}/api/f6-app/getStoreList`, this.gt1Header, (res) => {
@@ -393,6 +414,7 @@ export default {
           .info-tab
             flex: 1
             display: flex
+            align-items: center
             &.nocar
               bg-image('../../common/imgs/home/nocar')
               background-size: 374px 60px
@@ -400,6 +422,7 @@ export default {
               background-position: center center
             .car-img
               width: 127px
+              height: 140px
               display: flex
               align-items: center
               justify-content: center
@@ -408,6 +431,7 @@ export default {
                 height: 50px
             .car-name
               flex: 1
+              height: 140px
               display: flex
               flex-direction: column
               align-items: flex-start

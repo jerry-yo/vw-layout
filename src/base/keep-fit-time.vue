@@ -81,7 +81,7 @@ export default {
   methods: {
     getDateList () {
       let date = new Date()
-      this.$post(`${this.tonyUrl}/api/f6-app/getStoreOrderTimeList`, this.gt1Header, (res) => {
+      this.$post(`${this.gt1Url}/api/f6-app/getStoreOrderTimeList`, this.gt1Header, (res) => {
         if (res.errorCode === 0 && res.data.code === 0) {
           this.dateList = res.data.data
         }
