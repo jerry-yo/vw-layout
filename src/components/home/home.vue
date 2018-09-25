@@ -92,11 +92,12 @@ import Badge from '@/base/badge'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, defaultCarInfo} from '@/common/js/mixin'
-import {handleMyCar, handleCheckList} from '@/common/js/config'
+import {checksObjMixin} from '@/common/js/checkmixin'
+import {handleMyCar, handleNowCarCheckList} from '@/common/js/config'
 import AMap from 'AMap'
 export default {
   name: 'home',
-  mixins: [expireToken, defaultCarInfo],
+  mixins: [expireToken, defaultCarInfo, checksObjMixin],
   components: {
     Badge,
     Swiper,
@@ -124,8 +125,7 @@ export default {
         id: 5,
         linkUrl: 'https://c.y.qq.com/node/m/client/music_headline/index.html?_hidehd=1&_button=2&zid=619582',
         picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000Wq2eW3VkzJ9.jpg'
-      }],
-      checkList: null
+      }]
     }
   },
   mounted () {
@@ -136,13 +136,6 @@ export default {
       this._setMap()
     }
     this._getStoreList()
-  },
-  watch: {
-    getDefaultCarInfo: function (newVal, oldVal) {
-      if (newVal.defaultFlag === 1) {
-        this._getCheckList()
-      }
-    }
   },
   computed: {
     cityShow () {
@@ -163,7 +156,8 @@ export default {
       'cityInfo',
       'defaultStoreId',
       'storeList',
-      'userInfo'
+      'userInfo',
+      'checksObj'
     ])
   },
   methods: {
@@ -200,32 +194,15 @@ export default {
     },
     // 检测单
     _goCheckInfo () {
-      if (this.detectionMenus.length > 0) {
-        this.$router.push('/check-list?id=0&carid=0')
+      let obj = handleNowCarCheckList(this.nowCarCheck)
+      if (this.nowCarCheck.length > 0) {
+        this.$router.push('/check-list?idownorg=' + obj.CCD[0].idOwnOrg + '&ccd=' + obj.CCD[0].pkId + '&yjd=' + obj.YJD[0].pkId)
       } else {
         this.$Toast({
           message: '暂时没有车辆检测单',
           position: 'bottom'
         })
       }
-    },
-    // 获取检测单列表
-    _getCheckList () {
-      this.$get(`${this.f6Url}/api/check/list`, {
-        'Authorization': this.userInfo.token
-      }, (res) => {
-        if (res.code === 200) {
-          this.checkList = handleCheckList(res.data, this.getDefaultCarInfo.carNumber)
-        } else if (res.code === 401) {
-          this.refreshToken(this._getCheckList)
-        }
-      }, {
-        userId: this.userInfo.userId,
-        pageSize: 500,
-        currentPage: 1,
-        clientAppId: this.userInfo.appId,
-        clientUserId: this.userInfo.fUserId
-      })
     },
     // 获取我的车库列表
     _getMyCar () {
@@ -268,7 +245,7 @@ export default {
         } else {
           way = '- -'
         }
-        if (item.stationId !== 2569) {
+        if (item.stationId !== 2569 && item.stationId !== 6322) {
           let flag = reg.test(item.stationName)
           item = Object.assign(item, {
             icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,

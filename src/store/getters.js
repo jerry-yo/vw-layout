@@ -67,6 +67,9 @@ const getters = {
   },
   seleServersInfo (state) {
     return state.seleServersInfo
+  },
+  checksObj (state) {
+    return state.checksObj
   }
 }
 

@@ -12,14 +12,14 @@
         <div class="map-kf"></div>
       </div>
     </div>
-    <washInfo v-if="washinfoShow" @closewindow="_closeAll" :washinfo="washForShow"></washInfo>
+    <washInfo v-if="washinfoShow" @closewindow="_closeAll"></washInfo>
   </div>
 </template>
 
 <script>
 import AMap from 'AMap'
 import washInfo from './washinfo'
-import {mapMutations, mapGetters} from 'vuex'
+import {mapGetters} from 'vuex'
 export default {
   data () {
     return {
@@ -32,25 +32,8 @@ export default {
       infoWindow: null,
       washinfoShow: false,
       washForShow: null,
-      storeList: [],
       markers: [],
-      washType: '',
-      washinfo: [{
-        type: 1,
-        name: '普洗',
-        info: '整车泡沫冲洗擦干、轮胎、轮毂冲洗清洁、车内吸尘、内饰脚垫等简单除尘',
-        price: 30.00
-      }, {
-        type: 2,
-        name: '精洗',
-        info: '整车泡沫冲洗擦干、轮胎轮毂冲洗清洁、边缝清洗、发动机舱清洁、车内精致清洁',
-        price: 60.00
-      }, {
-        type: 3,
-        name: '超精洗',
-        info: '边缝清洗、发动机舱清洁、车内精致清洁，整车泡沫冲洗擦干、轮胎轮毂冲洗清洁',
-        price: 90.00
-      }]
+      washType: ''
     }
   },
   watch: {
@@ -63,7 +46,7 @@ export default {
       this.$router.push('/search-list?format=' + 'store')
     },
     _goBack () {
-      this.$router.go(-1)
+      this.$router.back()
     },
     _setMap () {
       let _self = this
@@ -111,7 +94,7 @@ export default {
       this.markerDom[id] = new AMap.Marker({
         map: _self.map,
         offset: new AMap.Pixel(-22, -22),
-        position: [_self.markers[id].lng, _self.markers[id].lat],
+        position: [_self.markers[id].stationPositionX, _self.markers[id].stationPositionY],
         icon: new AMap.Icon({
           image: _self.markers[id].icon,
           size: new AMap.Size(44, 44)
@@ -121,7 +104,7 @@ export default {
       })
       this.preMarkerId = id
       // 显示信息窗体
-      this._setInfoWindow(this.markers[id])
+      this._setInfoWindow(this.markers[id], id)
     },
     // 还原上一个地图被点击Marker点样式
     _reductionMarker () {
@@ -155,48 +138,25 @@ export default {
       })
     },
     _getMarker () {
-      let reg = /维修/
-      let lnglat1 = new AMap.LngLat(this.cityInfo.lng, this.cityInfo.lat)
       this.storeList.forEach((item, index) => {
-        let flag = reg.test(item.name)
-        item = Object.assign(item, {
-          washinfo: this.setWashinfo(flag),
-          icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,
-          way: lnglat1.distance([item.lng, item.lat]),
-          type: flag ? 1 : 2
-        })
-        this._setMarker(item, index, flag)
+        this._setMarker(item, index)
       })
       this.markers = this.storeList
-      if (this.washType === 'serach' && this.serachInfo.address) {
+      if (this.washType === 'serach' && this.serachInfo.stationId) {
         this.serachActive()
       }
     },
-    setWashinfo (flag) {
-      if (flag) {
-        return this.washinfo
-      } else {
-        let arr = []
-        this.washinfo.forEach((item, index) => {
-          if (index !== 2) {
-            arr.push(item)
-          }
-        })
-        return arr
-      }
-    },
     // 在地图上设置Marker点样式
-    _setMarker (item, index, flag) {
+    _setMarker (item, index) {
       let _self = this
       _self.markerDom[index] = new AMap.Marker({
         map: _self.map,
         offset: new AMap.Pixel(-17, -17),
-        position: [item.lng, item.lat],
-        content: `<div class="marker-com ${flag ? 'wx' : 'by'}">
-                    <div class="new ${item.new ? '' : 'show'}" ></div>
+        position: [item.stationPositionX, item.stationPositionY],
+        content: `<div class="marker-com ${item.type === 1 ? 'wx' : 'by'}">
+                    <div class="new show" ></div>
                     <div class="marker-txt">
-                      <span>${item.name.slice(8, item.length)}</span>
-                      <div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div>
+                      <span>${item.name}</span>
                     </div>
                   </div>`,
         extData: index,
@@ -206,23 +166,22 @@ export default {
       _self.markerDom[index].on('click', this._onClick)
     },
     // 地图Marker被点击后显示的相应详细信息（信息窗体）
-    _setInfoWindow (item) {
+    _setInfoWindow (item, id) {
       let km = this.formatKm(item.way)
       this.infoWindow = new AMap.InfoWindow({
         isCustom: true,
         offset: new AMap.Pixel(0, -24),
         content: `<div class="window-info">
                     <div class="left">
-                      <h2>${item.name.slice(8, item.length)}</h2>
-                      <p>${item.address}</p>
+                      <h2>${item.name}</h2>
+                      <p>${item.stationAddress}</p>
                     </div>
-                    <div class="right"><h2>${km}km</h2><span class="${item.mostfar ? 'show' : ''}">距您最近</span></div>
-                    <div class="state bg${item.state}">${item.state === 1 ? '空闲' : '繁忙'}</div>
+                    <div class="right"><h2>${km}km</h2><span class="${id === 0 ? 'show' : ''}">距您最近</span></div>
                   </div>`
       })
-      this.infoWindow.open(this.map, [item.lng, item.lat])
+      this.infoWindow.open(this.map, [item.stationPositionX, item.stationPositionY])
       // 地图中心点平移至指定点位置
-      this.map.panTo([item.lng, item.lat])
+      this.map.panTo([item.stationPositionX, item.stationPositionY])
       // 以像素为单位，沿x方向和y方向移动地图，x向右为正，y向下为正
       this.map.panBy(0, -80)
     },
@@ -232,25 +191,11 @@ export default {
     },
     _closeAll () {
       // 关闭所有显示状态
-      this.washinfoShow = false
-      this.infoWindow.close()
-      this._reductionMarker()
-    },
-    // 获取所有门店信息
-    getStoreList (lng, lat) {
-      this.$post(`${this.gt1Url}/api/store/storeList`, this.headers_1, (res) => {
-        if (res.errorCode === 0) {
-          this.storeList = res.data
-          this._setMap()
-          this._getMarker()
-          this.setStoreList(res.data)
-        }
-      }, {
-        page: 1,
-        limit: 50,
-        lng: lng || '',
-        lat: lat || ''
-      })
+      if (this.infoWindow) {
+        this.washinfoShow = false
+        this.infoWindow.close()
+        this._reductionMarker()
+      }
     },
     formatKm (way) {
       return (parseInt(way) / 1000).toFixed(2)
@@ -259,26 +204,37 @@ export default {
     serachActive () {
       let id = 0
       this.storeList.forEach((item, index) => {
-        if (item.id === this.serachInfo.id) {
+        if (item.stationId === this.serachInfo.stationId) {
           id = index
         }
       })
       this.washinfoShow = true
       this.markerActive(id)
-    },
-    ...mapMutations({
-      setStoreList: 'SET_STORELIST'
-    })
+    }
   },
   computed: {
     ...mapGetters([
       'cityInfo',
-      'serachInfo'
+      'serachInfo',
+      'storeList'
     ])
   },
+  beforeRouteEnter (to, from, next) {
+    // 在渲染该组件的对应路由被 confirm 前调用
+    // 不！能！获取组件实例 `this`
+    // 因为当守卫执行前，组件实例还没被创建
+    next(vm => {
+      if (vm.storeList.length === 0) {
+        vm._goBack()
+      }
+    })
+  },
   created () {
-    this.getStoreList()
     this.washType = this.$route.query.type
+  },
+  mounted () {
+    this._setMap()
+    this._getMarker()
   },
   components: {
     washInfo

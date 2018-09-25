@@ -2,19 +2,19 @@
   <div class="menu">
     <div class="detection-menu">
       <ul>
-        <li v-for="(item, index) in data" :key="index">
+        <li v-for="(item, index) in handleData" :key="index">
           <div class="select-btn" v-if="check">
-            <div class="sele-btn" :class="item.check ? 'check': 'nocheck'" @click="checkMenu(index)">
+            <div class="sele-btn" :class="item.check ? 'check': 'nocheck'" @click="checkMenu(id)">
             </div>
           </div>
           <div class="sele-right" @click="_showInfoId(index, item)">
-            <div class="select-info" :class="showState(item.state)">
-              {{item.title}}
+            <div class="select-info" :class="showState(item.optionValue)">
+              {{item.itemName}}
             </div>
             <div class="select-box">
             </div>
             <div class="go-info">
-              {{item.textarea}}
+              {{item.memo}}
             </div>
           </div>
         </li>
@@ -37,22 +37,39 @@ export default {
   },
   data () {
     return {
-      faultInfo: {}
+    }
+  },
+  computed: {
+    handleData () {
+      let arr = []
+      this.data.forEach(item => {
+        if (item.optionValue > 0) {
+          arr.push(item)
+        }
+      })
+      return arr
     }
   },
   methods: {
     showState (id) {
-      if (id === 0) {
-        return 'safe'
-      } else {
-        return id === 1 ? 'warn' : 'error'
+      let className = ''
+      switch (id) {
+        case 1:
+          className = 'safe'
+          break
+        case 2:
+          className = 'warn'
+          break
+        case 3:
+          className = 'error'
+          break
       }
+      return className
     },
     checkMenu (index) {
       this.menus[index].check = !this.menus[index].check
     },
     _showInfoId (id, item) {
-      this.faultInfo = item
       this.$emit('showinfo', item)
     }
   }

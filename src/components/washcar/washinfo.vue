@@ -7,16 +7,18 @@
       </div>
       <div class="content">
         <ul>
-          <li v-for="(item, index) in washinfo.washinfo" :key="index">
+          <li v-for="(item, index) in washinfo" :key="index">
             <div class="left">
-              <div class="img" :class="'bg' + item.type"></div>
+              <div class="img">
+                <img :src="gt1UpdateImgUrl + item.img" alt="">
+              </div>
               <div class="info">
-                <h2>{{item.name}}</h2>
-                <p>{{item.info}}</p>
+                <h2>{{item.title}}</h2>
+                <p>{{item.content}}</p>
               </div>
             </div>
             <div class="right">
-              ￥{{item.price.toFixed(2)}}
+              ￥{{item.price}}
             </div>
           </li>
         </ul>
@@ -32,10 +34,9 @@
 
 <script>
 export default {
-  props: {
-    washinfo: {
-      type: Object,
-      required: true
+  data () {
+    return {
+      washinfo: []
     }
   },
   methods: {
@@ -50,9 +51,17 @@ export default {
         address: this.washinfo.address, // 地址详情说明
         scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大
       })
+    },
+    getWashInfo () {
+      this.$post(`${this.gt1Url}/api/f6-app/getcarWashList`, this.gt1Header, (res) => {
+        if (res.errorCode === 0 && res.data.code === 0) {
+          this.washinfo = res.data.data
+        }
+      })
     }
   },
-  mounted () {
+  created () {
+    this.getWashInfo()
   }
 }
 </script>
@@ -99,8 +108,9 @@ export default {
         overflow: hidden
         li
           display: flex
+          align-items: center
           height: 170px
-          padding: 0 30px
+          padding: 0 30px 0px 0px
           .right
             width: 100px
             display: flex
@@ -111,17 +121,10 @@ export default {
           .left
             flex: 1
             display: flex
-            .img
+            img
               width: 154px
-              background-repeat: no-repeat
-              background-position: left center
-              background-size: 133px 90px
-              &.bg1
-                bg-image('../../common/imgs/washcar/p_wash')
-              &.bg2
-                bg-image('../../common/imgs/washcar/j_wash')
-              &.bg3
-                bg-image('../../common/imgs/washcar/super_wash')
+              height: 90px
+              margin-right: 30px
             .info
               flex: 1
               display: flex

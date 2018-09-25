@@ -111,7 +111,7 @@ export default {
           if (reg.test(store.name) || reg.test(store.address)) {
             this.showList.push(Object.assign(store, {
               spanname: store.name.replace(reg, `<span class="red">${str}</span>`),
-              spanaddress: store.address.replace(reg, `<span class="red">${str}</span>`)
+              spanaddress: store.stationAddress.replace(reg, `<span class="red">${str}</span>`)
             }))
           }
         })

@@ -1,5 +1,5 @@
 import {loadUserInfo, loadCityList, loadCityInfo, loadStoreList, loadMyCar, loadDefaultCar, loadSelectCar, loadCarBrand, loadAddCar,
-  loadDefaultStoreId, loadUpdateOrder, loadAllServerList, loadStaticServerList, loadAddNewServerLoadNum} from '../common/js/cache'
+  loadDefaultStoreId, loadUpdateOrder, loadAllServerList, loadStaticServerList, loadAddNewServerLoadNum, loadChecksObj} from '../common/js/cache'
 
 const state = {
   routerAnimate: 'none',
@@ -17,6 +17,7 @@ const state = {
   allServerList: loadAllServerList(),
   staticServerList: loadStaticServerList(),
   addNewServerLoadNum: loadAddNewServerLoadNum(),
+  checksObj: loadChecksObj(),
   seleServersInfo: [],
   loadingState: false,
   serachHis: {
@@ -25,11 +26,8 @@ const state = {
     'brand': []
   },
   serachInfo: {},
-  area: ['京', '沪', '浙', '苏', '粤', '鲁', '晋', '冀', '渝', '川', '豫', '辽', '吉', '黑', '皖', '鄂', '湘', '赣', '闽', '陕', '甘', '宁', '蒙', '津', '桂', '云', '贵', '琼', '青', '新', '藏', '港', '澳'],
-  detectionMenus: [],
-  orderList: [],
-  orderInfo: {},
-  repairOrder: {}
+  area: ['京', '沪', '浙', '苏', '粤', '鲁', '晋', '冀', '渝', '川', '豫', '辽', '吉', '黑', '皖', '鄂', '湘', '赣', '闽', '陕', '甘', '宁', '蒙', '津', '桂', '云', '贵', '琼', '青', '新', '藏', '港', '澳']
+
 }
 export default state
 /* 故障单

@@ -1,6 +1,6 @@
 import * as types from './mutation-types'
 import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar, saveDefaultStoreId,
-  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum, saveUpdateOrder} from '@/common/js/cache'
+  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum, saveUpdateOrder, saveChecksObj} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
@@ -215,6 +215,10 @@ const mutations = {
         })
       }
     })
+  },
+  [types.SET_CHECKS_OBJ] (state, obj) {
+    saveChecksObj(obj)
+    state.checksObj = obj
   }
 }
 

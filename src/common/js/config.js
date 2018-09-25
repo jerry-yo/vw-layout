@@ -116,7 +116,31 @@ export function handleOrderPartList (arr) {
 }
 
 // 处理检测单列表
-export function handleCheckList (arr, car) {
-  console.log(arr, car)
-  return []
+export function handleCheckList (arr, carlist) {
+  let obj = {}
+  carlist.forEach(item => {
+    obj[item.carNumber] = []
+    arr.forEach(check => {
+      if (check.carNoWhole === item.carNumber) {
+        obj[item.carNumber].push(check)
+      }
+    })
+  })
+  return obj
+}
+
+export function handleNowCarCheckList (arr) {
+  let CCD_ARR = []
+  let YJD_ARR = []
+  arr.forEach(item => {
+    if (item.maintainType === 'CCD') {
+      CCD_ARR.push(item)
+    } else if (item.maintainType === 'YJD') {
+      YJD_ARR.push(item)
+    }
+  })
+  return {
+    CCD: CCD_ARR,
+    YJD: YJD_ARR
+  }
 }

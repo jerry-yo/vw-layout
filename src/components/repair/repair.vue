@@ -47,10 +47,11 @@ import storeInfo from '@/base/store-info'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import {getServerCar} from '@/common/js/mixin'
+import {getServerCar, defaultCarInfo} from '@/common/js/mixin'
+import {checksObjMixin} from '@/common/js/checkmixin'
 export default {
   name: 'repair',
-  mixins: [getServerCar],
+  mixins: [defaultCarInfo, getServerCar, checksObjMixin],
   data () {
     return {
       clientHeight: null,
