@@ -11,55 +11,25 @@
     </div>
     <Scroll class="container" :data="maintainPhotoVoList" v-if="maintainPhotoVoList">
       <div  class="con">
-        <div class="prev-detection">
+        <div class="prev-detection" v-if="yjdId !== ''">
           <span>预检时间</span>
           <div class="info">
             {{maintainPhotoVoList.billDate}}
           </div>
         </div>
-        <div class="testing-img">
+        <div class="testing-img" v-if="yjdId !== ''">
           <h2>漆面耗损</h2>
           <div class="image-block" v-if="maintainPhotoVoList.photoUrl !== ''">
             <img :src="maintainPhotoVoList.photoUrl" alt="">
-            <!-- <div class="block_1">
-              <div class="left" @click="_showInfo(faultState.left, 'left')">
-                <div class="state_1" :class="faultState.left"></div>
-                左侧
-              </div>
-              <div class="right" @click="_showInfo(faultState.right, 'right')">
-                <div class="state_1" :class="faultState.right"></div>
-                右侧
-              </div>
-            </div>
-            <div class="block_2">
-              <div class="up">
-                <div class="up-1" @click="_showInfo(faultState.upBefore, 'up-before')">
-                  <div class="state_2" :class="faultState.upBefore"></div>
-                  <span>引擎盖面</span>
-                </div>
-                <div class="up-2" @click="_showInfo(faultState.upAfter, 'up-after')">
-                  <div class="state_2" :class="faultState.upAfter"></div>
-                  <span>后备箱面</span>
-                </div>
-              </div>
-              <div class="before" @click="_showInfo(faultState.before, 'before')">
-                <div class="state_2" :class="faultState.before"></div>
-                <span>车头</span>
-              </div>
-              <div class="after" @click="_showInfo(faultState.after), 'up-after'">
-                <div class="state_2" :class="faultState.after"></div>
-                <span>车尾</span>
-              </div>
-            </div> -->
           </div>
         </div>
-        <div class="prev-detection">
+        <div class="prev-detection" v-if="ccdId !== ''">
           <span>查车时间</span>
           <div class="info">
             {{carCheckDetailVoList.billDate}}
           </div>
         </div>
-        <div class="check-detection" >
+        <div class="check-detection" v-if="ccdId !== ''">
           <h2>车辆异常</h2>
           <SeleDetection v-if="carCheckDetailVoList.list" :check="false" :data="carCheckDetailVoList.list" @showinfo="checkDetectionInfo"></SeleDetection>
         </div>
@@ -72,17 +42,18 @@
 import Scroll from '@/base/scroll/scroll'
 import SeleDetection from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'
-// import {mapGetters} from 'vuex'
-import {defaultCarInfo, expireToken} from '@/common/js/mixin'
+import {mapGetters} from 'vuex'
+import {expireToken} from '@/common/js/mixin'
 export default {
   name: 'checklist',
-  mixins: [expireToken, defaultCarInfo],
+  mixins: [expireToken],
   data () {
     return {
       showInfo: false,
       ccdId: '',
       yjdId: '',
       stoteId: '',
+      carNumber: '',
       faultInfo: {
         faultText: '',
         faultImgs: []
@@ -95,16 +66,31 @@ export default {
     this.ccdId = this.$route.query.ccd || ''
     this.yjdId = this.$route.query.yjd || ''
     this.stoteId = this.$route.query.idownorg || ''
+    this.carNumber = this.$route.query.carnumber
     if (this.ccdId !== '') {
-      this.getCCDCheckInfo(this.ccdId)
+      this.getCCDCheckInfo(this.ccdId, this.stoteId)
     }
-    if (this.ccdId !== '') {
-      this.getCCDCheckInfo(this.yjdId)
+    if (this.yjdId !== '') {
+      this.getCCDCheckInfo(this.yjdId, this.stoteId)
     }
+  },
+  computed: {
+    getDefaultCarInfo () {
+      let obj = {}
+      this.myCar.forEach(item => {
+        if (item.carNumber === this.carNumber) {
+          obj = item
+        }
+      })
+      return obj
+    },
+    ...mapGetters([
+      'myCar'
+    ])
   },
   methods: {
     _goBack () {
-      this.$router.back()
+      this.$router.go(-1)
     },
     _showInfo (val, type) {
       if (val === 'err' || val === 'warn') {

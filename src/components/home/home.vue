@@ -28,7 +28,7 @@
               </div>
             </div>
             <div class="car-check" @click="_goCheckInfo">
-              <Badge count="23">
+              <Badge :count="checkCount">
                 <img src="../../common/imgs/home/jcd@2x.png" alt="" >
               </Badge>
               <p>查看检测单</p>
@@ -93,7 +93,7 @@ import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, defaultCarInfo} from '@/common/js/mixin'
 import {checksObjMixin} from '@/common/js/checkmixin'
-import {handleMyCar, handleNowCarCheckList} from '@/common/js/config'
+import {handleMyCar} from '@/common/js/config'
 import AMap from 'AMap'
 export default {
   name: 'home',
@@ -125,8 +125,12 @@ export default {
         id: 5,
         linkUrl: 'https://c.y.qq.com/node/m/client/music_headline/index.html?_hidehd=1&_button=2&zid=619582',
         picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000Wq2eW3VkzJ9.jpg'
-      }]
+      }],
+      typeName: 'home'
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    next()
   },
   mounted () {
     if (this.userInfo.externalUserId) {
@@ -138,6 +142,20 @@ export default {
     this._getStoreList()
   },
   computed: {
+    checkCount () {
+      let id = 0
+      if (this.checkDetectionInfo.carCheckDetailVoList) {
+        this.checkDetectionInfo.carCheckDetailVoList.forEach(item => {
+          if (item.optionValue === 3) {
+            id++
+          }
+        })
+      }
+      return id
+    },
+    carNumber () {
+      return this.getDefaultCarInfo.carNumber
+    },
     cityShow () {
       let city = ''
       if (this.cityInfo.selecity || this.cityInfo.city) {
@@ -194,9 +212,11 @@ export default {
     },
     // 检测单
     _goCheckInfo () {
-      let obj = handleNowCarCheckList(this.nowCarCheck)
-      if (this.nowCarCheck.length > 0) {
-        this.$router.push('/check-list?idownorg=' + obj.CCD[0].idOwnOrg + '&ccd=' + obj.CCD[0].pkId + '&yjd=' + obj.YJD[0].pkId)
+      if (!this.nowCarCheck.ccd || !this.nowCarCheck.yjd) {
+        return
+      }
+      if (this.nowCarCheck.ccd.length > 0 || this.nowCarCheck.yjd.length > 0) {
+        this.$router.push('/check-list?idownorg=' + this.nowCarCheck.ccd[0].idOwnOrg + '&ccd=' + this.nowCarCheck.ccd[0].pkId + '&yjd=' + this.nowCarCheck.yjd[0].pkId + '&carnumber=' + this.getDefaultCarInfo.carNumber)
       } else {
         this.$Toast({
           message: '暂时没有车辆检测单',

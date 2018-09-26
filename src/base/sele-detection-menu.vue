@@ -28,11 +28,16 @@ export default {
   name: 'detectionMenu',
   props: {
     check: {
-      type: Boolean
+      type: Boolean,
+      default: true
     },
     data: {
       type: Array,
       required: true
+    },
+    type: {
+      type: Number,
+      default: 1
     }
   },
   data () {
@@ -43,7 +48,7 @@ export default {
     handleData () {
       let arr = []
       this.data.forEach(item => {
-        if (item.optionValue > 0) {
+        if (item.optionValue >= this.type) {
           arr.push(item)
         }
       })

@@ -27,7 +27,7 @@
           <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <div class="fault-info" v-if="(updateOrder.faultImgs && updateOrder.faultImgs.length > 0) || (updateOrder.faultImgs && updateOrder.faultText.length > 0)">
+        <div class="fault-info" v-if="updateOrder.faultText.length > 0 || updateOrder.faultImgs.length > 0">
           <div class="title">
             故障概要
           </div>

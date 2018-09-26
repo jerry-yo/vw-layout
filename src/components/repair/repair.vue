@@ -21,16 +21,16 @@
       <div class="wrapper">
         <storeInfo :route="'repair'"></storeInfo>
         <div class="textarea" flexContainer ref="chatpannel" @touch.stop>
-          <textarea class="text" name="name" rows="5" v-model="faultText" maxlength="500" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText" @change="inputOver"></textarea>
+          <textarea class="text" name="name" rows="5" v-model="faultText" maxlength="500" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
         </div>
         <uploadPic ref="upImage"></uploadPic>
-        <div class="detection-record">
+        <div class="detection-record" v-if="checkDetectionInfo.carCheckDetailVoList">
           <span>车辆检查故障</span>
           <div class="order" @click="_goDetectionMenu">
             <span>查看检测单</span>
           </div>
         </div>
-        <!-- <seleDetectionMenu :check="false" :data="detectionMenus[0].faultGroupItem" @showinfo="checkDetectionInfo"></seleDetectionMenu> -->
+        <seleDetectionMenu v-if="checkDetectionInfo.carCheckDetailVoList" :check="false" :type="2" :data="checkDetectionInfo.carCheckDetailVoList" @showinfo="checkDetection"></seleDetectionMenu>
       </div>
 
     </Scroll>
@@ -58,13 +58,27 @@ export default {
       wxInfo: null,
       faultText: '',
       faultInfo: {},
-      showInfo: false
+      showInfo: false,
+      typeName: 'repair'
     }
   },
-  created () {
-    this.faultText = this.updateOrder.faultText
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'home') {
+      next(vm => {
+        vm.faultText = vm.updateOrder.faultText
+        vm._getCheckList()
+      })
+    } else {
+      next(vm => {
+        vm.faultText = vm.updateOrder.faultText
+        vm.handleCheckInfo(vm.checksObj)
+      })
+    }
   },
   computed: {
+    carNumber () {
+      return this.nowCar.carNumber
+    },
     ...mapGetters([
       'updateOrder'
     ])
@@ -73,9 +87,6 @@ export default {
     _goBack () {
       this.$router.back()
       this.clearOrderAllInfo('wx')
-    },
-    inputOver (e) {
-      console.log(e)
     },
     _goSelectCar () {
       this.$router.push('/garage?type=select')
@@ -92,7 +103,6 @@ export default {
       let arr = []
       if (this.updateOrder.imgArr) {
         arr = this.updateOrder.imgArr
-        console.log(this.updateOrder.imgArr, '000')
       }
       this.setUpdateOrder({
         faultText: this.faultText || '',
@@ -104,12 +114,12 @@ export default {
       }, 0)
     },
     _goDetectionMenu () {
-      this.$router.push('/check-list?id=0&carid=0')
+      // this.$router.push('/check-list?id=0&carid=0')
     },
     _closeMask () {
       this.showInfo = false
     },
-    checkDetectionInfo (res) {
+    checkDetection (res) {
       this.showInfo = true
       this.faultInfo = res
     },

@@ -283,7 +283,7 @@ export default {
     },
     // 返回个人中心
     _goBack () {
-      this.$router.back()
+      this.$router.go(-1)
     },
     // 车辆管理
     _goManagement () {
@@ -316,7 +316,7 @@ export default {
         })
         return
       }
-      this.$router.push('/detection-record?carid=' + this.carId)
+      this.$router.push('/detection-record?carid=' + this.myCar[this.carId].carNumber)
     },
     ...mapActions([
       'updateCarList',

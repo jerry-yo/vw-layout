@@ -1,11 +1,13 @@
 import {mapMutations, mapGetters} from 'vuex'
 import {handleCheckList} from '@/common/js/config'
+import {expireToken} from '@/common/js/mixin'
 
 // 检测单处理
 export const checksObjMixin = {
+  mixins: [expireToken],
   data () {
     return {
-      nowCarCheck: []
+      checkDetectionInfo: {}
     }
   },
   watch: {
@@ -13,48 +15,41 @@ export const checksObjMixin = {
       if (newVal.defaultFlag === 1) {
         this._getCheckList()
       }
-    },
-    checksObj: function (newVal, oldVal) {
-      if (newVal) {
-        this.defaultCarCheck(newVal)
-      }
     }
   },
   computed: {
+    nowCarCheck () {
+      let obj = {}
+      if (!this.checksObj) {
+        return
+      }
+      for (let key in this.checksObj) {
+        if (key === this.carNumber) {
+          obj = this.checksObj[key]
+          break
+        }
+      }
+      return obj
+    },
     ...mapGetters([
       'checksObj'
     ])
   },
   methods: {
-    defaultCarCheck (val) {
-      for (let key in val) {
-        if (key === this.getDefaultCarInfo.carNumber) {
-          this.nowCarCheck = val[key]
-        }
-      }
-    },
-    getCCDCheckInfo (id) {
+    getCCDCheckInfo (id, storeId) {
       this.$get(`${this.f6Url}/api/check/info`, {
         'Authorization': this.userInfo.token
       }, (res) => {
         if (res.code === 200) {
           if (res.data.maintainType === 'CCD') {
-            this.carCheckDetailVoList = {
-              list: res.data.carCheckDetailVoList,
-              billDate: res.data.billDate.replace(/-/, '年').replace(/-/, '月').replace(/ /, '日 ') + ':00'
-            }
-          } else if (res.data.maintainType === 'YJD') {
-            this.maintainPhotoVoList = {
-              photoUrl: res.data.maintainPhotoVoList[0].photoUrl,
-              billDate: res.data.billDate.replace(/-/, '年').replace(/-/, '月').replace(/ /, '日 ') + ':00'
-            }
+            this.checkDetectionInfo = res.data
           }
         } else if (res.code === 401) {
           this.refreshToken(this.getCCDCheckInfo)
         }
       }, {
         pkId: id,
-        idOwnOrg: this.stoteId,
+        idOwnOrg: storeId,
         clientAppId: this.userInfo.appId,
         clientUserId: this.userInfo.fUserId
       })
@@ -65,7 +60,11 @@ export const checksObjMixin = {
         'Authorization': this.userInfo.token
       }, (res) => {
         if (res.code === 200) {
-          this.setChecksObj(handleCheckList(res.data, this.myCar))
+          let obj = handleCheckList(res.data, this.myCar)
+          this.setChecksObj(obj)
+          if (this.typeName === 'home' || this.typeName === 'repair') {
+            this.handleCheckInfo(obj)
+          }
         } else if (res.code === 401) {
           this.refreshToken(this._getCheckList)
         }
@@ -76,6 +75,16 @@ export const checksObjMixin = {
         clientAppId: this.userInfo.appId,
         clientUserId: this.userInfo.fUserId
       })
+    },
+    handleCheckInfo (data) {
+      for (let key in data) {
+        if (key === this.carNumber) {
+          if (data[key].ccd.length > 0) {
+            this.getCCDCheckInfo(data[key].ccd[0].pkId, data[key].ccd[0].idOwnOrg)
+          }
+          break
+        }
+      }
     },
     ...mapMutations({
       setChecksObj: 'SET_CHECKS_OBJ'

@@ -119,28 +119,19 @@ export function handleOrderPartList (arr) {
 export function handleCheckList (arr, carlist) {
   let obj = {}
   carlist.forEach(item => {
-    obj[item.carNumber] = []
+    obj[item.carNumber] = {
+      ccd: [],
+      yjd: []
+    }
     arr.forEach(check => {
       if (check.carNoWhole === item.carNumber) {
-        obj[item.carNumber].push(check)
+        if (check.maintainType === 'CCD') {
+          obj[item.carNumber]['ccd'].push(check)
+        } else if (check.maintainType === 'YJD') {
+          obj[item.carNumber]['yjd'].push(check)
+        }
       }
     })
   })
   return obj
-}
-
-export function handleNowCarCheckList (arr) {
-  let CCD_ARR = []
-  let YJD_ARR = []
-  arr.forEach(item => {
-    if (item.maintainType === 'CCD') {
-      CCD_ARR.push(item)
-    } else if (item.maintainType === 'YJD') {
-      YJD_ARR.push(item)
-    }
-  })
-  return {
-    CCD: CCD_ARR,
-    YJD: YJD_ARR
-  }
 }
