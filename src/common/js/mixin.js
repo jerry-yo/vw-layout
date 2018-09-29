@@ -288,7 +288,7 @@ export const clientMaintain = {
         'Content-Type': 'application/json'
       }, (res) => {
         if (res.code === 200) {
-          this.orderList = res.data
+          this.orderList = res.data.list
         } else if (res.code === 401) {
           this.refreshToken(this.getMaintainOrder)
         }

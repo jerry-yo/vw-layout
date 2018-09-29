@@ -9,9 +9,9 @@
       </div>
     </div>
     <div class="service-flow">
-      <span class="bg bg1">选择服务</span>
+      <span class="bg bg2">选择门店·车辆</span>
       <span>-</span>
-      <span class="bg bg2">选择门店</span>
+      <span class="bg bg1">选择服务</span>
       <span>-</span>
       <span class="bg bg3">确认订单</span>
       <span>-</span>
@@ -63,7 +63,7 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    if (from.name === 'home') {
+    if (from.name === 'home' || from.name === null) {
       next(vm => {
         vm.faultText = vm.updateOrder.faultText
         vm._getCheckList()
@@ -114,7 +114,9 @@ export default {
       }, 0)
     },
     _goDetectionMenu () {
-      // this.$router.push('/check-list?id=0&carid=0')
+      if (this.checkDetectionInfo.carCheckDetailVoList) {
+        this.$router.push('/check-list?idownorg=' + this.checkDetectionInfo.idOwnOrg + '&ccd=' + this.checkDetectionInfo.pkId + '&carnumber=' + this.checkDetectionInfo.carNoWhole)
+      }
     },
     _closeMask () {
       this.showInfo = false

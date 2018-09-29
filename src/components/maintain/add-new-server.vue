@@ -116,7 +116,7 @@ export default {
       }
     },
     _getAllServie () {
-      if (this.addNewServerLoadNum > 0) {
+      if (!this.addNewServerLoadNum) {
         return
       }
       let id = this.defaultStoreId
@@ -126,7 +126,7 @@ export default {
       }, (res) => {
         if (res.code === 200) {
           this.handleServerlist(res.data)
-          this.setAddNewServerLoadNum(this.addNewServerLoadNum + 1)
+          this.setAddNewServerLoadNum(false)
         } else if (res.code === 401) {
           this.refreshToken(this._getAllServie)
         }

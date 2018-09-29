@@ -93,7 +93,7 @@ export default {
     },
     // 获取我的车库
     _getMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, {
+      this.$get(`${this.f6Url}/api/clientUserCar`, {
         'Authorization': this.userInfo.token,
         'Content-Type': 'application/json'
       }, (res) => {
@@ -103,6 +103,9 @@ export default {
           this.updateCarList(res.data)
           this.checkArr()
         }
+      }, {
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId
       })
     },
     _deleteMyCar (id) {

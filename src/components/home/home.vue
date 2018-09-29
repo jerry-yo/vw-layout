@@ -226,7 +226,7 @@ export default {
     },
     // 获取我的车库列表
     _getMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, {
+      this.$get(`${this.f6Url}/api/clientUserCar`, {
         'Authorization': this.userInfo.token,
         'Content-Type': 'application/json'
       }, (res) => {
@@ -235,6 +235,9 @@ export default {
         } else if (res.code === 200) {
           this._setMyCar(res.data)
         }
+      }, {
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId
       })
     },
     // 处理车库列表

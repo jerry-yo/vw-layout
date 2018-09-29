@@ -205,7 +205,7 @@ export default {
     },
     // 获取我的车库
     _getMyCar () {
-      this.$get(`${this.f6Url}/api/clientUserCar?userId=${this.userInfo.fUserId}`, {
+      this.$get(`${this.f6Url}/api/clientUserCar`, {
         'Authorization': this.userInfo.token,
         'Content-Type': 'application/json'
       }, (res) => {
@@ -214,6 +214,9 @@ export default {
         } else if (res.code === 200) {
           this.updateCarList(res.data)
         }
+      }, {
+        clientAppId: this.userInfo.appId,
+        clientUserId: this.userInfo.fUserId
       })
     },
     // 车库没有车辆， 跳转到添加车辆
@@ -274,6 +277,7 @@ export default {
           this.setSelectCar(res.item.userCarId)
           this.setAllServerList([])
           this.setStaticServerList([])
+          this.setAddNewServerLoadNum(true)
         }
         this._goBack()
       }
@@ -327,7 +331,8 @@ export default {
       setLoadingState: 'SET_LOADING_STATE',
       setSelectCar: 'SET_SELECTCAR',
       setAllServerList: 'SET_ALL_SERVER_LIST',
-      setStaticServerList: 'SET_STATIC_SERVER_LIST'
+      setStaticServerList: 'SET_STATIC_SERVER_LIST',
+      setAddNewServerLoadNum: 'SET_ADD_NEW_SERVER_LOAD_NUM'
     })
   }
 }

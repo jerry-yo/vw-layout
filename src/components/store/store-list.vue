@@ -57,6 +57,7 @@ export default {
         this.setDefaultStoreId(id)
         this.setAllServerList([])
         this.setStaticServerList([])
+        this.setAddNewServerLoadNum(true)
       }
       this.$router.back()
     },
@@ -75,7 +76,8 @@ export default {
     ...mapMutations({
       setDefaultStoreId: 'SET_DEFAULTSTORE_ID',
       setAllServerList: 'SET_ALL_SERVER_LIST',
-      setStaticServerList: 'SET_STATIC_SERVER_LIST'
+      setStaticServerList: 'SET_STATIC_SERVER_LIST',
+      setAddNewServerLoadNum: 'SET_ADD_NEW_SERVER_LOAD_NUM'
     })
   },
   computed: {

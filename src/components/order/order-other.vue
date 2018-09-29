@@ -6,7 +6,7 @@
         <h3>服务门店</h3>
         <h2>奇特异{{data.businessTypeName}}门店-{{data.abbreviation}}</h2>
         <p v-if="data.balanceStatus === '7000'">合计： <span>￥ {{data.amount}}</span> </p>
-        <p v-if="data.balanceStatus === '7100'">应付： <span>￥ {{data.amountAll}}</span> </p>
+        <p v-if="data.balanceStatus === '7100'">合计： <span>￥ {{data.amountAll}}</span> </p>
       </div>
     </div>
   </div>

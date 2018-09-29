@@ -8,9 +8,9 @@
       </div>
     </div>
     <div class="service-flow">
-      <span class="bg bg1">选择服务</span>
+      <span class="bg bg2">选择门店·车辆</span>
       <span>-</span>
-      <span class="bg bg2">选择门店</span>
+      <span class="bg bg1">选择服务</span>
       <span>-</span>
       <span class="bg bg3">确认订单</span>
       <span>-</span>
@@ -71,9 +71,17 @@ export default {
       allmileagn: 2000000
     }
   },
-  created () {
-    if (this.allServerList.length !== 30) {
-      this._getAllServie()
+  beforeRouteEnter (to, from, next) {
+    if (from.name === 'addNewServer') {
+      next(vm => {
+        if (vm.allServerList.length === 0) {
+          vm._getAllServie()
+        }
+      })
+    } else {
+      next(vm => {
+        vm._getAllServie()
+      })
     }
   },
   computed: {
