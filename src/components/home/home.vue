@@ -292,7 +292,7 @@ export default {
         showButton: false,
         showMarker: false,
         showCircle: false,
-        panToLocation: true,
+        panToLocation: false,
         zoomToAccuracy: false
       })
       geolocation.getCurrentPosition((status, result) => {

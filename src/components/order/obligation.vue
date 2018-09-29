@@ -11,7 +11,7 @@
         </div>
         <div class="order-foot">
           <div class="foot">
-            <span class="car-state">{{item.billStatus === '0000' ? '服务进行中' : item.billStatus === '6300' ? '待付款' : ''}}</span>
+            <span class="car-state">{{item.balanceStatus === '7000' ? '服务进行中' : item.balanceStatus === '7200' ? '待付款' : ''}}</span>
             <div class="order-set" v-if="false">
               <div :class="false ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
             </div>

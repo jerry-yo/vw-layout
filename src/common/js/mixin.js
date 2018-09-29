@@ -268,7 +268,7 @@ export const clientMaintain = {
             stationType: item.businessTypeName === '保养' ? 1 : item.businessTypeName === '维修' ? 2 : 0,
             handleComplateDate: item.complateDate.replace(/-/, '年').replace(/-/, '月').replace(/ /, '日 ').split('.')[0]
           })
-          if (item.balanceStatus === '7000' && (item.stationType === 1 || item.stationType === 2)) {
+          if ((item.balanceStatus === '7000' || item.balanceStatus === '7200') && (item.stationType === 1 || item.stationType === 2)) {
             unOverOrder.push(item)
           } else if (item.balanceStatus === '7100' && (item.stationType === 1 || item.stationType === 2)) {
             overOrder.push(item)

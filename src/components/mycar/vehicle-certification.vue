@@ -80,7 +80,9 @@ export default {
             })
           }
         }, {
-          vin: this.vin
+          vin: this.vin,
+          clientAppId: this.userInfo.appId,
+          clientUserId: this.userInfo.fUserId
         })
       } else {
         this.$Toast({

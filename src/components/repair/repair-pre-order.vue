@@ -128,7 +128,7 @@ export default {
       if (this.updateOrder.falutDate) {
         let id = this.defaultStoreId
         let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.faultText ? this.updateOrder.faultText : ''}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.faultImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
-        this.$post(`${this.tonyUrl}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
+        this.$post(`${this.gt1Url}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
           if (res.errorCode === 0 && res.data.code === 0) {
             this.$router.push('/reservations?type=wx')
           } else if (res.errorCode === 0 && res.data.code !== 0) {

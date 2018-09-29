@@ -2,7 +2,7 @@
   <div class="store-info">
     <div class="top">
       <div class="left">
-        <img :src="'https://www.gt1.shop/api/common/download?id=' + storeInfo.icon" alt="">
+        <img :src="storeInfo.stationPic" alt="">
       </div>
       <div class="center">
         <h2>{{storeInfo.name}}</h2>

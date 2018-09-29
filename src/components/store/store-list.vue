@@ -11,7 +11,7 @@
       <ul>
         <li :class="{'active': defaultStoreId === index}" v-for="(item, index) in storeList" :key="index" >
           <div class="top">
-            <img v-lazy="'https://www.gt1.shop/api/common/download?id=' + item.img" alt="">
+            <img v-lazy="item.stationPic" alt="">
             <div class="top-right">
               <div class="store-name">
                 <p :class="item.type === 2 ? 'by' : 'repair'">{{item.name}}</p>

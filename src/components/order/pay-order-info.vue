@@ -42,21 +42,25 @@
               <span>附加费</span>
               <span>¥ {{orderInfoShow.amountAll - orderInfoShow.serverMoney - orderInfoShow.memoInfos.partMoney}}</span>
             </div>
-            <div class="other-fw green" v-if="orderType === 'ywc'">
-              <span>配件优惠</span>
-              <span>- ¥ {{orderInfoShow.partDistanceMoney}}</span>
+            <div class="other-fw green" v-if="orderInfoShow.balanceStatus === '7200' || orderInfoShow.balanceStatus === '7100'">
+              <span>优惠价</span>
+              <span>- ¥ {{orderInfoShow.favourableAll}}</span>
             </div>
-            <div class="other-fw green" v-if="orderType === 'ywc'">
-              <span>服务优惠</span>
-              <span>- ¥ {{orderInfoShow.serverDistanceMoney}}</span>
+            <div class="other-fw green" v-if="orderInfoShow.balanceStatus === '7200'">
+              <span>已实付</span>
+              <span>- ¥ {{orderInfoShow.receiveAmount}}</span>
             </div>
-            <div class="other-fw" v-if="orderType === 'dfk'">
-              <span>合计</span>
+            <div class="other-fw">
+              <span>总合计</span>
               <span>¥ {{orderInfoShow.amountAll}}</span>
             </div>
-            <div class="other-fw" v-if="orderType === 'ywc'">
-              <span>应收</span>
-              <span>¥ {{orderInfoShow.amount}}</span>
+            <div class="other-fw" v-if="orderInfoShow.balanceStatus === '7200'">
+              <span>待付款</span>
+              <span>¥ {{orderInfoShow.oweAmount}}</span>
+            </div>
+            <div class="other-fw" v-if="orderInfoShow.balanceStatus === '7100'">
+              <span>实付款</span>
+              <span>¥ {{orderInfoShow.receiveAmount}}</span>
             </div>
           </div>
           <div class="other">
@@ -108,9 +112,7 @@ export default {
         if (res.code === 401) {
           this.refreshToken(this._getOrderInfo)
         } else if (res.code === 200) {
-          console.log(res)
           this.orderInfoShow = this.handleOrderInfo(res.data)
-          console.log(res)
         }
       }, {
         pkId: this.pkId,
