@@ -9,10 +9,12 @@
       <div class="map-btn">
         <div class="map-location" @click="_getLocation"></div>
         <div class="bor"></div>
-        <div class="map-kf"></div>
+        <div class="map-kf">
+          <a href="tel: 0519-68191385"></a>
+        </div>
       </div>
     </div>
-    <washInfo v-if="washinfoShow" @closewindow="_closeAll"></washInfo>
+    <washInfo v-if="washinfoShow" @closewindow="_closeAll" :storeinfo="storeList[preMarkerId]"></washInfo>
   </div>
 </template>
 
@@ -176,7 +178,7 @@ export default {
                       <h2>${item.name}</h2>
                       <p>${item.stationAddress}</p>
                     </div>
-                    <div class="right"><h2>${km}km</h2><span class="${id === 0 ? 'show' : ''}">距您最近</span></div>
+                    <div class="right"><h2>${km ? km + 'km' : ''}</h2><span class="${id === 0 ? 'show' : ''}">距您最近</span></div>
                   </div>`
       })
       this.infoWindow.open(this.map, [item.stationPositionX, item.stationPositionY])
@@ -448,8 +450,12 @@ export default {
           background-color: #d7d7d7
         .map-kf
           flex: 1
+          display: flex
           bg-image('../../common/imgs/washcar/kf_bg')
           background-repeat: no-repeat
           background-position: center center
           background-size: 30px 33px
+          a
+            flex: 1
+
 </style>

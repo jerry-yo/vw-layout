@@ -66,7 +66,7 @@
             <div class="time-over">
               <span>到期时间</span>
               <div class="time">
-                <span>{{getFormatDate(orderInfoShow.memoInfos.expireTemp)}}</span>
+                <span>{{getFormatDate(orderInfoShow.memoInfos.expireTemp, '---expire')}}</span>
               </div>
             </div>
           </div>
@@ -90,11 +90,11 @@
         <span class="car-state">{{isExpiryTime.str}}</span>
         <div class="order-set">
           <div class="del-yy" @click="_cancelSubscribe">取消预约</div>
-          <div class="call-dz"><a :href="'tel:' + 122">联系店长</a></div>
+          <div class="call-dz"><a :href="'tel:' + orderInfoShow.responserTel">联系店长</a></div>
         </div>
       </div>
       <div class="order-foot-3" v-if="orderType === 'dfk'">
-        <div class="server"><a href="tel:0519-68191385">客服</a></div>
+        <div class="server"><a href="tel: 0519-68191385">客服</a></div>
         <div class="tips">
           <span>共{{2}}项服务</span>
           <span>￥{{100}}</span>
@@ -107,6 +107,7 @@
 </template>
 
 <script>
+import Wx from 'Wx'
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
@@ -196,20 +197,24 @@ export default {
       })
     },
     _openLocation () {
-      this.Wx.openLocation({
-        latitude: parseFloat(this.orderInfoShow.memoInfos.stationPositionY), // 纬度，浮点数，范围为90 ~ -90
-        longitude: parseFloat(this.orderInfoShow.memoInfos.stationPositionX), // 经度，浮点数，范围为180 ~ -180。
-        scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大
+      Wx.openLocation({
+        latitude: parseFloat(this.orderInfoShow.memoInfos.stationPositionY),
+        longitude: parseFloat(this.orderInfoShow.memoInfos.stationPositionX),
+        name: '',
+        address: this.orderInfoShow.stationName,
+        scale: 14,
+        infoUrl: ''
       })
     },
-    getFormatDate (temp) {
+    getFormatDate (temp, res) {
+      console.log(temp, res)
       return formatDate('YYYY年MM月DD日 hh:mm:ss', parseFloat(temp))
     },
     _cancelSubscribe () {
       let _self = this
       this.$Modal.confirm({
         title: '提示信息',
-        content: '该服务需要先添加车辆，是否立即添加车辆？',
+        content: '是否取消预约订单？',
         onCancel: () => {
           _self.$Modal.remove()
         },

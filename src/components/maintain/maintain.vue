@@ -40,7 +40,7 @@
       </div>
     </Scroll>
     <div class="place-order">
-      <div class="server">客服</div>
+      <div class="server"><a href="tel: 0519-68191385">客服</a></div>
       <div class="tips">
         <div class="nums">
           <span>共{{allServerMoney.partInfos}}件材料</span>
@@ -72,7 +72,8 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    if (from.name === 'addNewServer') {
+    console.log(to, from)
+    if (from.name === 'addNewServer' || from.name === 'changePre' || from.name === 'maintainPreOrder') {
       next(vm => {
         if (vm.allServerList.length === 0) {
           vm._getAllServie()
@@ -334,16 +335,19 @@ export default {
     display: flex
     background-color: #fff
     .server
+      display: flex
       width: 133px
       text-align: center
       padding-top: 58px
-      font-size: 20px
-      color: #626262
       border-right: 1px solid #f2f2f2
       bg-image('../../common/imgs/repair/customer_service')
       background-size: 24px 21px
       background-repeat: no-repeat
       background-position: center 25px
+      & > a
+        flex: 1
+        font-size: 20px
+        color: #626262
     .tips
       flex: 1
       display: flex

@@ -51,7 +51,7 @@ export default {
       let _self = this
       this.$Modal.confirm({
         title: '提示信息',
-        content: '该服务需要先添加车辆，是否立即添加车辆？',
+        content: '是否取消预约订单？',
         onCancel: () => {
           _self.$Modal.remove()
         },

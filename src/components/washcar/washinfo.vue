@@ -33,7 +33,14 @@
 </template>
 
 <script>
+import Wx from 'Wx'
 export default {
+  props: {
+    storeinfo: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
       washinfo: []
@@ -44,12 +51,13 @@ export default {
       this.$emit('closewindow', false)
     },
     _openLocation () {
-      this.Wx.openLocation({
-        latitude: parseFloat(this.washinfo.lat), // 纬度，浮点数，范围为90 ~ -90
-        longitude: parseFloat(this.washinfo.lng), // 经度，浮点数，范围为180 ~ -180。
-        name: this.washinfo.title, // 位置名
-        address: this.washinfo.address, // 地址详情说明
-        scale: 18 // 地图缩放级别,整形值,范围从1~28。默认为最大
+      Wx.openLocation({
+        latitude: parseFloat(this.storeinfo.stationPositionY),
+        longitude: parseFloat(this.storeinfo.stationPositionX),
+        name: this.storeinfo.name,
+        address: this.storeinfo.stationAddress,
+        scale: 14,
+        infoUrl: ''
       })
     },
     getWashInfo () {

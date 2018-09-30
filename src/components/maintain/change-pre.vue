@@ -206,7 +206,7 @@ export default {
           .btn
             width: 70px
             height: 38px
-            background-image: linear-gradient(left, #ff8d48, #ff6e41)
+            background-color: #ff8244
             font-size: 20px
             color: #ffffff
             text-align: center

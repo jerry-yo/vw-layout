@@ -105,7 +105,6 @@ export default {
         if (res.errorCode === 0) {
           if (res.data.code === 0) {
             this.$router.replace('/home')
-            console.log(res.data.data)
             this.updateUserInfo(res.data.data)
           } else {
             this.$Toast({

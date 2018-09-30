@@ -221,7 +221,7 @@ export const getOrderListForYy = {
 export const cancelOrderYy = {
   methods: {
     cancelOrderState () {
-      this.$post(`${this.tonyUrl}/api/f6-app/cancelclientOrder`, this.gt1Header, (res) => {
+      this.$post(`${this.gt1Url}/api/f6-app/cancelclientOrder`, this.gt1Header, (res) => {
         if (res.errorCode === 0) {
           if (res.data.code === 0) {
             if (this.orderType === 'yyz') {

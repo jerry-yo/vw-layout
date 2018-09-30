@@ -9,7 +9,7 @@
     </div>
     <Scroll class="store-list" ref="storelist">
       <ul>
-        <li :class="{'active': defaultStoreId === index}" v-for="(item, index) in storeList" :key="index" >
+        <li :class="{'active': defaultStoreId === index}" v-for="(item, index) in handleStoreList" :key="index" >
           <div class="top">
             <img v-lazy="item.stationPic" alt="">
             <div class="top-right">
@@ -48,6 +48,31 @@ export default {
   created () {
     this.route = this.$route.query.route
   },
+  computed: {
+    cityShow () {
+      let city = ''
+      if (this.cityInfo.selecity || this.cityInfo.city) {
+        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
+      } else {
+        return '定位中···'
+      }
+      return city.length >= 4 ? city.slice(0, 3) + '···' : city
+    },
+    handleStoreList () {
+      let arr = []
+      this.storeList.forEach(item => {
+        if (/维修/.test(item.stationName)) {
+          arr.push(item)
+        }
+      })
+      return arr
+    },
+    ...mapGetters([
+      'cityInfo',
+      'storeList',
+      'defaultStoreId'
+    ])
+  },
   methods: {
     _goBack () {
       this.$router.back()
@@ -59,7 +84,7 @@ export default {
         this.setStaticServerList([])
         this.setAddNewServerLoadNum(true)
       }
-      this.$router.back()
+      this._goBack()
     },
     _goLocaltion (item) {
       this.Wx.openLocation({
@@ -79,22 +104,6 @@ export default {
       setStaticServerList: 'SET_STATIC_SERVER_LIST',
       setAddNewServerLoadNum: 'SET_ADD_NEW_SERVER_LOAD_NUM'
     })
-  },
-  computed: {
-    cityShow () {
-      let city = ''
-      if (this.cityInfo.selecity || this.cityInfo.city) {
-        city = this.cityInfo.selecity ? this.cityInfo.selecity : this.cityInfo.city
-      } else {
-        return '定位中···'
-      }
-      return city.length >= 4 ? city.slice(0, 3) + '···' : city
-    },
-    ...mapGetters([
-      'cityInfo',
-      'storeList',
-      'defaultStoreId'
-    ])
   },
   components: {
     Scroll

@@ -216,7 +216,10 @@ export default {
         return
       }
       if (this.nowCarCheck.ccd.length > 0 || this.nowCarCheck.yjd.length > 0) {
-        this.$router.push('/check-list?idownorg=' + this.nowCarCheck.ccd[0].idOwnOrg + '&ccd=' + this.nowCarCheck.ccd[0].pkId + '&yjd=' + this.nowCarCheck.yjd[0].pkId + '&carnumber=' + this.getDefaultCarInfo.carNumber)
+        let idOwnOrg = this.nowCarCheck.ccd.length > 0 ? this.nowCarCheck.ccd[0].idOwnOrg : this.nowCarCheck.yjd[0].idOwnOrg
+        let ccdPkid = this.nowCarCheck.ccd.length > 0 ? this.nowCarCheck.ccd[0].pkId : ''
+        let yjdPkid = this.nowCarCheck.yjd.length > 0 ? this.nowCarCheck.yjd[0].pkId : ''
+        this.$router.push('/check-list?idownorg=' + idOwnOrg + '&ccd=' + ccdPkid + '&yjd=' + yjdPkid + '&carnumber=' + this.getDefaultCarInfo.carNumber)
       } else {
         this.$Toast({
           message: '暂时没有车辆检测单',
@@ -247,7 +250,6 @@ export default {
     },
     _getStoreList () {
       this.$post(`${this.gt1Url}/api/f6-app/getStoreList`, this.gt1Header, (res) => {
-        // console.log(res)
         if (res.errorCode === 0 && res.data.code === 0) {
           this.setStoreList(this._setStoreList(res.data.data))
         }
@@ -268,7 +270,7 @@ export default {
         } else {
           way = '- -'
         }
-        if (item.stationId !== 2569 && item.stationId !== 6322) {
+        if (item.stationId !== 2692 && item.stationId !== 2777) {
           let flag = reg.test(item.stationName)
           item = Object.assign(item, {
             icon: `./static/active_${flag ? 'wx' : 'by'}_store@2x.png`,

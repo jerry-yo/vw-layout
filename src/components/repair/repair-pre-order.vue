@@ -52,7 +52,7 @@
       </div>
     </Scroll>
     <div class="place-order">
-      <div class="server">客服</div>
+      <div class="server"><a href="tel: 0519-68191385">客服</a></div>
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn" @click="goRepairOrder">确认下单</div>
     </div>
@@ -376,15 +376,18 @@ export default {
     background-color: #fff
     .server
       width: 133px
+      display: flex
       text-align: center
       padding-top: 58px
-      font-size: 20px
-      color: #626262
       border-right: 1px solid #f2f2f2
       bg-image('../../common/imgs/repair/customer_service')
       background-size: 24px 21px
       background-repeat: no-repeat
       background-position: center 25px
+      & > a
+        flex: 1
+        font-size: 20px
+        color: #626262
     .tips
       flex: 1
       display: flex
