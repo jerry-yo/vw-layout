@@ -60,7 +60,7 @@ export default {
         success: function (res) {
           let img = res.localIds[0]
           if (window.__wxjs_is_wkwebview) {
-            _self.imgArr.push(res.localData.replace('jgp', 'jpeg'))
+            _self.imgArr.push(img.replace('jpg', 'jpeg'))
           } else {
             _self.imgArr.push(img)
           }

@@ -31,7 +31,7 @@ export default {
     this.api_post('/api/wxPubilc/getJSSDK', (response) => {
       if (response.errorCode === 0) {
         Wx.config({
-          debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
           appId: response.data.appid, // 必填，企业号的唯一标识，此处填写企业号corpid
           timestamp: response.data.timestamp, // 必填，生成签名的时间戳
           nonceStr: response.data.nonceStr, // 必填，生成签名的随机串

@@ -26,8 +26,6 @@ Vue.use(VueLazyLoad, {
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'https://www.gt1.shop/'
-// axios.defaults.baseURL = 'http://192.168.0.105:8080/gt/'
 Vue.prototype.baseUrl = axios.defaults.baseURL
 
 // 全局 控件
