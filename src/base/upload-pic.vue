@@ -26,7 +26,6 @@ export default {
     }
   },
   created () {
-    this.formData = new FormData()
     this.imgArr = this.updateOrder.imgArr || []
   },
   computed: {
@@ -58,24 +57,25 @@ export default {
   methods: {
     seleRepairImgs () {
       let _self = this
+      this.formData = new FormData()
       Wx.chooseImage({
         count: 1, // 默认9
         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'],
         success: function (res) {
+          let img = res.localIds[0]
           if (window.__wxjs_is_wkwebview) {
-            _self.imgArr.push(res.localIds.replace('jpg', 'jpeg'))
+            _self.imgArr.push(img.replace('jpg', 'jpeg'))
           } else {
-            _self.imgArr.push(res.localIds[0])
+            _self.imgArr.push(img)
           }
-          alert(JSON.stringify(_self.imgArr))
           Wx.getLocalImgData({
-            localId: res.localIds[0],
-            success: function (info) {
+            localId: img,
+            success: function (res) {
               if (window.__wxjs_is_wkwebview) {
-                _self.formData.append('img1', _self.base64ToBlob(info.localData))
+                _self.formData.append('img1', _self.base64ToBlob(res.localData))
               } else {
-                _self.formData.append('img1', _self.base64ToBlob('data:image/jpg;base64,' + info.localData))
+                _self.formData.append('img1', _self.base64ToBlob('data:image/jpg;base64,' + res.localData))
               }
               _self.uploadFile()
             },
@@ -100,7 +100,7 @@ export default {
     },
     // 上传图片到本地服务器
     uploadFile () {
-      this.$file('api/common/upload', this.formData, (res) => {
+      this.$file(`${this.gt1Url}/api/common/upload`, this.formData, (res) => {
         if (res.errorCode === 0) {
           this.imgList += `${res.data.id},`
           this.setUpdateOrder({

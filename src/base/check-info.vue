@@ -13,8 +13,7 @@
         <Scroll class="img-content" ref="faultImg" :data="data" :scrollX="true" :scrollY="false" v-if="showImgArr.length > 0">
           <ul class="imgs" :style="{width: showImgArr.length * 31 + '%'}">
             <li v-for="(item, index) in showImgArr" :key="index">
-              <img :src="gt1UpdateImgUrl + item" alt="" @click="showImgs(item)" v-if="from === 'order'">
-              <img :src="item" alt="" @click="showImgs(item)" v-else>
+              <img :src="item" alt="" @click="showImgs(item)">
             </li>
           </ul>
         </Scroll>
@@ -27,6 +26,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+import Wx from 'Wx'
 import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'checkInfo',
@@ -46,7 +46,7 @@ export default {
   computed: {
     showImgArr () {
       let arr = []
-      if (this.form === 'order') {
+      if (this.from === 'repair') {
         arr = this.data.imgArr
       } else {
         arr = this.data.faultImgs
@@ -60,9 +60,9 @@ export default {
     },
     showImgs (item) {
       let _self = this
-      this.Wx.previewImage({
+      Wx.previewImage({
         current: item, // 当前显示图片的http链接
-        urls: _self.data.imgs // 需要预览的图片http链接列表
+        urls: _self.showImgArr // 需要预览的图片http链接列表
       })
     }
   }

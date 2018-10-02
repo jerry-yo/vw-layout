@@ -100,15 +100,17 @@ export default {
       }, 200)
     },
     goNext () {
-      let arr = []
-      if (this.updateOrder.imgArr) {
-        arr = this.updateOrder.imgArr
+      if (this.updateOrder.imgArr && this.updateOrder.imgArr.length > 0) {
+        this.setUpdateOrder({
+          faultText: this.faultText || ''
+        })
+      } else {
+        this.setUpdateOrder({
+          faultText: this.faultText || '',
+          imgArr: [],
+          faultImgs: ''
+        })
       }
-      this.setUpdateOrder({
-        faultText: this.faultText || '',
-        imgArr: arr,
-        faultImgs: ''
-      })
       setTimeout(() => {
         this.$router.push('/repair-pre-order')
       }, 0)

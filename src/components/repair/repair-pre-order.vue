@@ -17,7 +17,7 @@
     </div>
     <Scroll class="container" ref="repairPre">
       <div class="wrapper">
-        <storeInfo :type="'noclick'"></storeInfo>
+        <storeInfo :type="'noclick'" :route="'repair'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
           <span @click="seleDate">{{updateOrder.falutDate ? updateOrder.falutDate : '选择时间'}}</span>
@@ -27,7 +27,7 @@
           <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <div class="fault-info" v-if="updateOrder.faultText.length > 0 || updateOrder.faultImgs.length > 0">
+        <div class="fault-info" v-if="updateOrder.faultText.length > 0 || updateOrder.imgArr.length > 0">
           <div class="title">
             故障概要
           </div>
@@ -85,11 +85,20 @@ export default {
     handleImgs () {
       let arr = []
       this.updateOrder.imgArr.forEach(item => {
-        if (arr.length < 3) {
+        if (arr.length < 2) {
           arr.push(item)
         }
       })
       return arr
+    },
+    selestore () {
+      let arr = []
+      this.storeList.forEach(item => {
+        if (item.type === 1) {
+          arr.push(item)
+        }
+      })
+      return arr[this.defaultStoreId]
     },
     ...mapGetters([
       'updateOrder'
@@ -126,8 +135,7 @@ export default {
     },
     goRepairOrder () {
       if (this.updateOrder.falutDate) {
-        let id = this.defaultStoreId
-        let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.faultText ? this.updateOrder.faultText : ''}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.faultImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
+        let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.faultText ? this.updateOrder.faultText : ''}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.faultImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.selestore.responserTel || ' '}\uA856${this.selestore.stationPositionX || ' '}\uA856${this.selestore.stationPositionY || ' '}`
         this.$post(`${this.gt1Url}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
           if (res.errorCode === 0 && res.data.code === 0) {
             this.$router.push('/reservations?type=wx')
@@ -146,8 +154,8 @@ export default {
           json: JSON.stringify({
             clientAppId: this.userInfo.appId,
             clientUserId: this.userInfo.fUserId,
-            orderStationId: this.storeList[id].stationId, // 用户车辆主键
-            stationName: this.storeList[id].stationName,
+            orderStationId: this.selestore.stationId, // 用户车辆主键
+            stationName: this.selestore.stationName,
             employeeId: '',
             employeeName: '',
             userContactTel: this.userInfo.userTel, // 联系电话
@@ -164,7 +172,7 @@ export default {
             orderPartList: [],
             carId: this.nowCar.carId, // 车辆ID
             distance: this.nowCar.distance, // 行驶距离
-            stationCode: this.storeList[id].stationCode, // 门店编号
+            stationCode: this.selestore.stationCode, // 门店编号
             orderReserveDate: formatDate('YYYY-MM-DD', this.updateOrder.temp), // 订单预约时间
             orderReserveStart: formatDate('YYYY-MM-DD hh:mm:ss', this.updateOrder.temp),
             orderReserveEnd: formatDate('YYYY-MM-DD hh:mm:ss', this.updateOrder.expireTemp),
@@ -352,7 +360,7 @@ export default {
                   display: block
                   width: 110px
                   height: 110px
-                  background-color: rgba(0, 255, 0, 0.5)
+                  object-fit: cover
               &.more
                 bg-image('../../common/imgs/ellipsis')
                 background-size: 27px 6px

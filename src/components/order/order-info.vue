@@ -207,7 +207,6 @@ export default {
       })
     },
     getFormatDate (temp, res) {
-      console.log(temp, res)
       return formatDate('YYYY年MM月DD日 hh:mm:ss', parseFloat(temp))
     },
     _cancelSubscribe () {
