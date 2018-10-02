@@ -39,13 +39,17 @@ export default {
   },
   computed: {
     storeInfo () {
-      let ret = {}
-      this.storeList.forEach((item, index) => {
-        if (index === this.defaultStoreId) {
-          ret = item
-        }
-      })
-      return JSON.stringify(ret) === '{}' ? {} : ret
+      if (this.route === 'repair') {
+        let arr = []
+        this.storeList.forEach(item => {
+          if (item.type === 1) {
+            arr.push(item)
+          }
+        })
+        return arr[this.defaultStoreId]
+      } else {
+        return this.storeList[this.defaultStoreId]
+      }
     },
     ...mapGetters([
       'defaultStoreId',

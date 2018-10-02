@@ -3,6 +3,7 @@
  */
 import Vue from 'vue'
 import axios from 'axios'
+import store from '../../store'
 
 // F6 接口使用 headersOther , 本地接口用headersCommon
 Vue.prototype.gt1Header = {
@@ -103,7 +104,6 @@ Vue.prototype.$put = function (url, headersCode, callback = function () {}, para
   }).then((response) => {
     callback(response.data)
   }).catch(function (error) {
-    console.log(error)
     _self.handleRrror(error)
   })
 }
@@ -143,3 +143,23 @@ Vue.prototype.$file = function (url, fromData, callback = function () {}, params
     _self.handleRrror(error)
   })
 }
+axios.interceptors.request.use((config) => {
+  // console.log('在发送请求之前做些什么', config)
+  store.commit('SET_LOADING_STATE', true)
+  return config
+}, function (error) {
+  // console.log('对请求错误做些什么', error)
+  store.commit('SET_LOADING_STATE', false)
+  return Promise.reject(error)
+})
+axios.interceptors.response.use(function (response) {
+  // console.log('对响应数据做点什么 -- response', response)
+  if (response.status === 200) {
+    store.commit('SET_LOADING_STATE', false)
+  }
+  return response
+}, function (error) {
+  // console.log('对响应错误做点什么 -- error', error)
+  store.commit('SET_LOADING_STATE', false)
+  return Promise.reject(error)
+})

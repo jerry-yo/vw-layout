@@ -1,7 +1,7 @@
 <template>
   <div class="sele-area" @click.prevent>
     <div class="container">
-      <div class="area" :class="{'active': index === active}" v-for="(item, index) in area" :key="index" @click="seleAreaBtn(index)">
+      <div class="area" :class="{'active': index === active}" v-for="(item, index) in area.value" :key="index" @click="seleAreaBtn(index)">
         {{item}}
       </div>
     </div>

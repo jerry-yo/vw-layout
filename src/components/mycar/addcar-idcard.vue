@@ -17,7 +17,7 @@
       <div class="idcard">
         <span>车牌号</span>
         <div class="idcard-area" @click="goSeleArea">
-          {{area[areaIndex]}}
+          {{area.value[areaIndex]}}
         </div>
         <div class="idcard-num">
           <input type="text" v-model.trim="carid"  maxlength="6" :placeholder="'A88888'" @change="validateCarid">
@@ -67,6 +67,7 @@ export default {
   },
   created () {
     this.type = this.$route.query.type
+    this.areaIndex = this.area.default
   },
   computed: {
     tempToDate () {

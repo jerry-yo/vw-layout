@@ -18,9 +18,11 @@ const DEFAULT_CAR = '__default_car__' // 默认车辆信息
 const SELECT_CAR = '__select_car__' // 服务选择车辆信息
 const ADD_CAR = '__add_car__' // 添加车辆信息
 const DEFAULT_STORE_ID = '__default_store_id__' // 默认服务门店ID
-const MAINTAIN_ORDER = '__maintain_order__' // 保养订单详情
+const UPDATE_ORDER = '__update_order__' // 保养订单详情
 const ALL_SERVER_LIST = '__all_server_list__' // 保养服务列表
 const STATIC_SERVER_LIST = '__static_server_list__' // 参考保养服务列表
+const ADD_NEW_SERVER_LOAD_NUM = '__add_new_server_load_num__' // 记录打开新增服务页面次数
+const CHECKS_OBJ = '__CHECK_OBJ__' // 检测单信息
 /*
   ** localStorage **
 */
@@ -158,16 +160,16 @@ export function saveDefaultStoreId (id) { // 默认门店ID
   return id
 }
 
-export function loadMaintainOrder () { // 保养订单
-  let info = sessionStorage.getItem(MAINTAIN_ORDER)
+export function loadUpdateOrder () { // 订单信息by wx
+  let info = sessionStorage.getItem(UPDATE_ORDER)
   if (info === null) {
     return {}
   } else {
     return JSON.parse(info)
   }
 }
-export function saveMaintainOrder (info) { // 保养订单
-  sessionStorage.setItem(MAINTAIN_ORDER, JSON.stringify(info))
+export function saveUpdateOrder (info) { // 订单信息by wx
+  sessionStorage.setItem(UPDATE_ORDER, JSON.stringify(info))
   return info
 }
 
@@ -196,6 +198,33 @@ export function saveStaticServerList (list) { // 保养订单
   sessionStorage.setItem(STATIC_SERVER_LIST, JSON.stringify(list))
   return list
 }
+
+export function loadAddNewServerLoadNum () { // 保养订单
+  let num = sessionStorage.getItem(ADD_NEW_SERVER_LOAD_NUM)
+  if (num === null) {
+    return true
+  } else {
+    return num
+  }
+}
+export function saveAddNewServerLoadNum (num) { // 保养订单
+  sessionStorage.setItem(ADD_NEW_SERVER_LOAD_NUM, num)
+  return num
+}
+
+export function loadChecksObj () { // 获取检测单信息
+  let obj = sessionStorage.getItem(CHECKS_OBJ)
+  if (obj === null) {
+    return {}
+  } else {
+    return JSON.parse(obj)
+  }
+}
+export function saveChecksObj (obj) { // 保存检测单信息
+  sessionStorage.setItem(CHECKS_OBJ, JSON.stringify(obj))
+  return obj
+}
+
 /*
   ---加密。解密
 */

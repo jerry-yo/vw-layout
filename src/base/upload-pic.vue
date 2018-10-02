@@ -22,7 +22,7 @@ export default {
     return {
       imgArr: [],
       formData: '',
-      imgList: '8888888888888888888888888,'
+      imgList: ''
     }
   },
   created () {
@@ -63,19 +63,19 @@ export default {
         sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有
         sourceType: ['album', 'camera'],
         success: function (res) {
-          let img = res.localIds[0]
           if (window.__wxjs_is_wkwebview) {
-            _self.imgArr.push(res.localData.replace('jgp', 'jpeg'))
+            _self.imgArr.push(res.localIds.replace('jpg', 'jpeg'))
           } else {
-            _self.imgArr.push(img)
+            _self.imgArr.push(res.localIds[0])
           }
+          alert(JSON.stringify(_self.imgArr))
           Wx.getLocalImgData({
-            localId: img,
-            success: function (res) {
+            localId: res.localIds[0],
+            success: function (info) {
               if (window.__wxjs_is_wkwebview) {
-                _self.formData.append('img1', _self.base64ToBlob(res.localData))
+                _self.formData.append('img1', _self.base64ToBlob(info.localData))
               } else {
-                _self.formData.append('img1', _self.base64ToBlob('data:image/jpg;base64,' + res.localData))
+                _self.formData.append('img1', _self.base64ToBlob('data:image/jpg;base64,' + info.localData))
               }
               _self.uploadFile()
             },

@@ -59,13 +59,17 @@ export default {
       return city.length >= 4 ? city.slice(0, 3) + '···' : city
     },
     handleStoreList () {
-      let arr = []
-      this.storeList.forEach(item => {
-        if (/维修/.test(item.stationName)) {
-          arr.push(item)
-        }
-      })
-      return arr
+      if (this.route === 'repair') {
+        let arr = []
+        this.storeList.forEach(item => {
+          if (/维修/.test(item.stationName)) {
+            arr.push(item)
+          }
+        })
+        return arr
+      } else {
+        return this.storeList
+      }
     },
     ...mapGetters([
       'cityInfo',
