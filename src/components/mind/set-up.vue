@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import Wx from 'Wx'
 import {mapActions} from 'vuex'
 export default {
   name: 'setUp',
@@ -40,8 +41,7 @@ export default {
     },
     setLoginState () {
       this.deleteUserInfo({})
-      sessionStorage.clear()
-      this._goBack()
+      Wx.closeWindow()
     },
     ...mapActions([
       'deleteUserInfo'

@@ -84,7 +84,7 @@ export default {
           servers++
           if (item.partInfo !== null && item.partInfo.isChecked) {
             partMoney += item.partInfo.sellPrice * item.partInfo.number
-            partInfos++
+            partInfos += item.partInfo.number
             partList.push(item.partInfo)
             partListStr += `${item.partInfo.customCode},`
           }

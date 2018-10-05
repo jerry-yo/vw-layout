@@ -11,6 +11,15 @@ export const updateUserInfo = function ({commit, state}, info) {
 // 删除用户信息
 
 export const deleteUserInfo = function ({commit}) {
+  let count = sessionStorage.getItem('count')
+  let routerAnimate = sessionStorage.getItem('routerAnimate')
+  let routers = sessionStorage.getItem('routers')
+  let cityInfo = sessionStorage.getItem('__city_info__')
+  sessionStorage.clear()
+  sessionStorage.setItem('__city_info__', cityInfo)
+  sessionStorage.setItem('count', count)
+  sessionStorage.setItem('routerAnimate', routerAnimate)
+  sessionStorage.setItem('routers', routers)
   saveUserInfo({})
   commit(types.SET_USER_INFO, {})
 }
@@ -64,6 +73,28 @@ export const clearOrderAllInfo = function ({commit, state}, type) {
   if (type === 'by') {
     commit(types.SET_ALL_SERVER_LIST, [])
     commit(types.SET_STATIC_SERVER_LIST, [])
-    commit(types.SET_ADD_NEW_SERVER_LOAD_NUM, 0)
+    commit(types.SET_ADD_NEW_SERVER_LOAD_NUM, true)
   }
+}
+
+export const initAddNewServer = function ({commit, state}) {
+  let allServer = state.allServerList.slice()
+  let staticServer = state.staticServerList.slice()
+  let list = []
+  allServer.forEach(item => {
+    if (item.customerServer === 'old') {
+      list.push(item)
+    }
+  })
+  staticServer.forEach(item => {
+    if (item.customerServer === 'new') {
+      list.push(item)
+    }
+  })
+  commit(types.SET_ALL_SERVER_LIST, list)
+  commit(types.SET_STATIC_SERVER_LIST, JSON.parse(JSON.stringify(list)))
+}
+
+export const clearUser = function ({commit, state}) {
+
 }

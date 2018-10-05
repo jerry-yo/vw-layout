@@ -72,7 +72,6 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    console.log(to, from)
     if (from.name === 'addNewServer' || from.name === 'changePre' || from.name === 'maintainPreOrder') {
       next(vm => {
         if (vm.allServerList.length === 0) {
@@ -107,20 +106,25 @@ export default {
       let money = 0
       let partInfos = 0
       let servers = 0
+      let editState = true
       this.allServerList.forEach(item => {
         if (item.isChecked && item.customerServer === 'old') {
+          if (item.state === 1) {
+            editState = false
+          }
           money += item.amount
           servers++
           if (item.partInfo !== null && item.partInfo.isChecked) {
             money += item.partInfo.sellPrice * item.partInfo.number
-            partInfos++
+            partInfos += item.partInfo.number
           }
         }
       })
       return {
         money: money,
         partInfos: partInfos,
-        servers: servers
+        servers: servers,
+        editState: editState
       }
     },
     ...mapGetters([
@@ -136,8 +140,15 @@ export default {
       this.$router.push(`/add-new-server`)
     },
     _goMaintainPreOrder () {
-      this.checkSeleServers()
-      this.$router.push('/maintain-pre-order')
+      if (this.allServerMoney.editState) {
+        this.checkSeleServers()
+        this.$router.push('/maintain-pre-order')
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '请先保存产品修改'
+        })
+      }
     },
     checkSeleServers () {
       let cg = []

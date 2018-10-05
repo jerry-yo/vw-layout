@@ -128,7 +128,6 @@ export default {
     },
     registerRequest () {
       this.$post(`${this.gt1Url}/api/f6-app/regist`, this.gt1Header, (res) => {
-        console.log(res)
       }, {
         userTel: this.phone,
         code: this.number

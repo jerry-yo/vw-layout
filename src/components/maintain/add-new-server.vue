@@ -42,7 +42,7 @@
 <script>
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, getServerCar} from '@/common/js/mixin'
 import {handleServerModel} from '@/common/js/servermixin'
 export default {
@@ -51,8 +51,12 @@ export default {
   data () {
     return {}
   },
-  mounted () {
-    this._getAllServie()
+  created () {
+    if (this.addNewServerLoadNum) {
+      this._getAllServie()
+    } else {
+      this.initAddNewServer()
+    }
   },
   computed: {
     newServerlist () {
@@ -105,6 +109,10 @@ export default {
               pkId: item.pkId,
               customerServer: 'old'
             })
+            this.modifyStaticServerList({
+              pkId: item.pkId,
+              customerServer: 'old'
+            })
           }
         })
         this._goBack()
@@ -116,9 +124,6 @@ export default {
       }
     },
     _getAllServie () {
-      if (!this.addNewServerLoadNum) {
-        return
-      }
       let id = this.defaultStoreId
       let url = `${this.f6Url}/api/clientOrder/getRecommendList?userCarId=${this.nowCar.userCarId}&mileage=${this.nowCar.distance}&stationId=${this.storeList[id].stationId}&clientAppId=${this.userInfo.appId}&clientUserId=${this.userInfo.fUserId}`
       this.$get(url, {
@@ -166,10 +171,13 @@ export default {
     ...mapMutations({
       setAllServerList: 'SET_ALL_SERVER_LIST',
       setStaticServerList: 'SET_STATIC_SERVER_LIST',
-      deleteAllServer: 'DELETE_ALL_SERVER',
       modifyAllServerList: 'MODIFY_ALL_SERVER_LIST',
+      modifyStaticServerList: 'MODIFY_STATIC_SERVER_LIST',
       setAddNewServerLoadNum: 'SET_ADD_NEW_SERVER_LOAD_NUM'
-    })
+    }),
+    ...mapActions([
+      'initAddNewServer'
+    ])
   },
   components: {
     serverModel,

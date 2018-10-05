@@ -107,30 +107,19 @@ export default {
     return {
       recommends: [{
         id: 1,
-        linkUrl: 'https://y.qq.com/m/act/chunwan2018/v3/index.html?ADTAG=jiaodiantu',
-        picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M0000044SNAC19jwin.jpg'
+        linkUrl: '',
+        picUrl: 'https://www.gt1.shop/images/664186574991718392.jpg'
       }, {
         id: 2,
-        linkUrl: 'http://y.qq.com/w/album.html?albummid=001u8nwR0H4x7z',
-        picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000003b2lHy424XQS.jpg'
+        linkUrl: '',
+        picUrl: 'https://www.gt1.shop/images/853897419632755959.jpg'
       }, {
         id: 3,
-        linkUrl: 'https://y.qq.com/apg/156/index.html?ADTAG=5',
-        picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000HDstc2PVKnq.jpg'
-      }, {
-        id: 4,
-        linkUrl: 'http://y.qq.com/w/album.html?albummid=003l5sT818BTyn',
-        picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000001LLLb51HkIVE.jpg'
-      }, {
-        id: 5,
-        linkUrl: 'https://c.y.qq.com/node/m/client/music_headline/index.html?_hidehd=1&_button=2&zid=619582',
-        picUrl: 'http://y.gtimg.cn/music/photo_new/T003R720x288M000000Wq2eW3VkzJ9.jpg'
+        linkUrl: '',
+        picUrl: 'https://www.gt1.shop/images/220927716029500767.jpg'
       }],
       typeName: 'home'
     }
-  },
-  beforeRouteEnter (to, from, next) {
-    next()
   },
   mounted () {
     if (this.userInfo.externalUserId) {

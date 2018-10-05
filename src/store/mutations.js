@@ -164,6 +164,16 @@ const mutations = {
     saveAllServerList(list)
     state.allServerList = list
   },
+  [types.MODIFY_STATIC_SERVER_LIST] (state, info) {
+    let list = state.staticServerList.slice()
+    list.forEach(item => {
+      if (item.pkId === info.pkId) {
+        item = Object.assign(item, info)
+      }
+    })
+    saveStaticServerList(list)
+    state.staticServerList = list
+  },
   // 修改保养服务产品信息
   [types.MODIFY_ALL_SETVER_PARTINFO] (state, info) {
     let list = state.allServerList.slice()
