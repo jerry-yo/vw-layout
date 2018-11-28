@@ -7,7 +7,7 @@
       <div class="font">我的车库</div>
       <div class="management" @click="_editCar" v-if="myCar.length > 0">{{editState ?'取消' : '编辑'}}</div>
     </div>
-    <Scroll class="car-content">
+    <Scroll class="car-content" v-show="myCar" :data="myCar" :class="myCar.length === 0 ? 'bg' : ''">
       <ul class="con">
         <li v-for="(item, index) in myCar" :key="index" v-if="check.length > 0">
           <div class="li-con" :style="{transform: editState ? 'translateX(28px)' : 'translateX(0px)', transition: 'all .3s'}">
@@ -303,6 +303,11 @@ export default {
     .car-content
       flex: 1
       overflow: hidden
+      &.bg
+        bg-image('../../common/imgs/nocar')
+        background-position: center center
+        background-repeat: no-repeat
+        background-size: 750px 381px
       ul
         position: relative
         li

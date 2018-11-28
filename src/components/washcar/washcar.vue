@@ -156,7 +156,7 @@ export default {
         offset: new AMap.Pixel(-17, -17),
         position: [item.stationPositionX, item.stationPositionY],
         content: `<div class="marker-com ${item.type === 1 ? 'wx' : 'by'}">
-                    <div class="new show" ></div>
+                    <div class="show" ></div>
                     <div class="marker-txt">
                       <span>${item.name}</span>
                     </div>
@@ -170,16 +170,31 @@ export default {
     // 地图Marker被点击后显示的相应详细信息（信息窗体）
     _setInfoWindow (item, id) {
       let km = this.formatKm(item.way)
+      let customContent = null
+      if (item.way > 0) {
+        customContent = `
+          <div class="window-info">
+            <div class="left">
+              <h2>${item.name}</h2>
+              <p>${item.stationAddress}</p>
+            </div>
+            <div class="right"><h2>${km + 'km'}</h2><span class="${id === 0 ? 'show' : ''}">距您最近</span></div>
+          </div>
+        `
+      } else {
+        customContent = `
+          <div class="window-info">
+            <div class="left">
+              <h2>${item.name}</h2>
+              <p>${item.stationAddress}</p>
+            </div>
+          </div>
+        `
+      }
       this.infoWindow = new AMap.InfoWindow({
         isCustom: true,
         offset: new AMap.Pixel(0, -24),
-        content: `<div class="window-info">
-                    <div class="left">
-                      <h2>${item.name}</h2>
-                      <p>${item.stationAddress}</p>
-                    </div>
-                    <div class="right"><h2>${km ? km + 'km' : ''}</h2><span class="${id === 0 ? 'show' : ''}">距您最近</span></div>
-                  </div>`
+        content: customContent
       })
       this.infoWindow.open(this.map, [item.stationPositionX, item.stationPositionY])
       // 地图中心点平移至指定点位置
@@ -237,6 +252,10 @@ export default {
   mounted () {
     this._setMap()
     this._getMarker()
+    if (this.cityInfo.citycode) {
+      this.washinfoShow = true
+      this.markerActive(0)
+    }
   },
   components: {
     washInfo
@@ -258,20 +277,6 @@ export default {
       bg-image('../../common/imgs/washcar/by_store')
     &.wx
       bg-image('../../common/imgs/washcar/repair_store')
-    .new
-      position: absolute
-      right: 0px
-      top: 0px
-      width: 43px
-      height: 20px
-      bg-image('../../common/imgs/washcar/new')
-      background-position: center center
-      background-repeat: no-repeat
-      background-size: 43px 20px
-      overflow: hidden
-      transform: translate3d(50%, -10%, 0)
-      &.show
-        display: none
     .marker-txt
       display: block
       position: absolute
@@ -327,7 +332,7 @@ export default {
     .left
       flex: 1
       display: flex
-      padding-left: 25px
+      padding: 0 25px
       flex-direction: column
       justify-content: center
       align-items: center

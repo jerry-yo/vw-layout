@@ -2,7 +2,7 @@
   <div class="slider" @touchmove.prevent ref="slider">
     <div class="slider-group" ref="sliderGroup" @transitionend="transitionEnd" :style="{transform: translate3d, transitionDuration: animateTime + 'ms'}"  @touchstart="touchS" @touchend="touchE" @touchmove="touchM">
       <div class="slider-dots" v-for="(item, index) in imgs" :key="index" :style="{width: groupWidth(index), transition: groupAnimateTime}">
-        <a :href="item.linkUrl">
+        <a :href="item.linkUrl.length > 0 ? item.linkUrl : 'javascript:;'">
           <img :src="item.picUrl" alt="" >
         </a>
       </div>

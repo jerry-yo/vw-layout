@@ -20,7 +20,7 @@
             <li class="title">{{item.firstLetter}}</li>
             <li class="info" v-for="logo in item.logos" :key="logo.id" @click="showBrandMask(logo)">
               <img v-lazy="carLogoUrl + logo.imageSrc" alt="">
-              <h2>{{logo.name}}</h2>
+              <h2>{{logo.brandName}}</h2>
             </li>
           </ul>
         </div>

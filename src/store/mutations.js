@@ -1,6 +1,6 @@
 import * as types from './mutation-types'
 import {saveCityInfo, saveStoreList, saveCityList, saveMyCar, saveCarBrand, saveAddCar, saveDefaultCar, saveSelectCar, saveDefaultStoreId,
-  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum, saveUpdateOrder, saveChecksObj} from '@/common/js/cache'
+  saveAllServerList, saveStaticServerList, saveAddNewServerLoadNum, saveUpdateOrder, saveChecksObj, saveMealStoreList, saveUserInfo} from '@/common/js/cache'
 const mutations = {
   [types.SET_ANIMATETYPE] (state, direction) {
     sessionStorage.setItem('routerAnimate', JSON.stringify(direction.direction))
@@ -84,6 +84,7 @@ const mutations = {
   },
   // 用户信息userinfo操作
   [types.SET_USER_INFO] (state, info) {
+    saveUserInfo(info)
     state.userInfo = info
   },
   [types.DELETE_USER_INFO] (state) {
@@ -103,8 +104,21 @@ const mutations = {
   },
   // 设置门店 storeList 列表
   [types.SET_STORELIST] (state, list) {
-    saveStoreList(list)
-    state.storeList = list
+    saveStoreList(list.sort((a, b) => {
+      return parseInt(a.way) - parseInt(b.way)
+    }))
+    state.storeList = list.sort((a, b) => {
+      return parseInt(a.way) - parseInt(b.way)
+    })
+  },
+  // 设置活动门店mealstoreList 列表
+  [types.SET_MEALSTORELIST] (state, list) {
+    saveMealStoreList(list.sort((a, b) => {
+      return parseInt(a.way) - parseInt(b.way)
+    }))
+    state.mealStoreList = list.sort((a, b) => {
+      return parseInt(a.way) - parseInt(b.way)
+    })
   },
   // 设置 修改 mycar 车库
   [types.SET_MYCAR] (state, list) {

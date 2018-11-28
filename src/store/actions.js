@@ -1,11 +1,14 @@
 import * as types from './mutation-types'
 import {handleMyCar} from '@/common/js/config'
-import {saveUserInfo} from '@/common/js/cache.js'
 
 // 用户信息更新
 export const updateUserInfo = function ({commit, state}, info) {
-  let infos = Object.assign(state.userInfo, info)
-  saveUserInfo(infos)
+  let infos
+  if (state.userInfo) {
+    infos = Object.assign(state.userInfo, info)
+  } else {
+    infos = Object.assign({}, info)
+  }
   commit(types.SET_USER_INFO, infos)
 }
 // 删除用户信息
@@ -20,8 +23,7 @@ export const deleteUserInfo = function ({commit}) {
   sessionStorage.setItem('count', count)
   sessionStorage.setItem('routerAnimate', routerAnimate)
   sessionStorage.setItem('routers', routers)
-  saveUserInfo({})
-  commit(types.SET_USER_INFO, {})
+  commit(types.SET_USER_INFO, null)
 }
 
 // 我的车库信息设置

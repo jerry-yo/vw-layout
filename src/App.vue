@@ -1,5 +1,5 @@
 <template>
-  <div id="app" flexContainer @touch.prevent.stop>
+  <div id="app" flexContainer @touchmove.prevent>
     <transition :name="'screen-' + routerAnimate">
       <router-view></router-view>
     </transition>
@@ -36,11 +36,11 @@ export default {
           timestamp: response.data.timestamp, // 必填，生成签名的时间戳
           nonceStr: response.data.nonceStr, // 必填，生成签名的随机串
           signature: response.data.signature, // 必填，签名，见附录1
-          jsApiList: ['openLocation', 'getLocation', 'hideAllNonBaseMenuItem', 'chooseImage', 'previewImage', 'uploadImage', 'getLocalImgData', 'closeWindow'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+          jsApiList: ['openLocation', 'getLocation', 'hideAllNonBaseMenuItem', 'chooseImage', 'previewImage', 'uploadImage', 'getLocalImgData', 'closeWindow', 'chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
         })
       }
     }, {
-      url: 'https://www.gt1.shop/gt1/'
+      url: 'https://www.gt1.shop/weixin/'
     })
   },
   components: {

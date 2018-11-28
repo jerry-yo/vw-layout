@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="service-flow">
-      <span class="bg bg2">选择门店·车辆</span>
+      <span class="bg bg2">选择门店</span>
       <span>-</span>
       <span class="bg bg1">选择服务</span>
       <span>-</span>
@@ -80,6 +80,18 @@ export default {
       })
     } else {
       next(vm => {
+        if (from.name === 'home') {
+          vm.$Modal.confirm({
+            title: '提示信息',
+            content: '不选服务也可以进行下单，下单成功后，还可以到店重新选择',
+            onCancel: () => {
+              vm.$Modal.remove()
+            },
+            onOk: () => {
+              vm.$Modal.remove()
+            }
+          })
+        }
         vm._getAllServie()
       })
     }

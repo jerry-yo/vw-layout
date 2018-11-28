@@ -8,10 +8,10 @@
       <div class="bg"></div>
       <div class="info">
         <div class="title">服务完成</div>
-        <div class="store">奇特异快速保养-华润店</div>
+        <div class="store">奇特异{{/维修/.test(station) ? '维修' : '保养'}}门店-{{station}}</div>
       </div>
     </div>
-    <div class="evaluate">
+    <!-- <div class="evaluate">
       <div class="star-con">
         <span>给本次服务评个星吧</span>
         <Star @starnum="getStarNum"></Star>
@@ -19,48 +19,53 @@
       <div class="text-con" ref="textcon">
         <textarea name="name" rows="5" v-model.lazy="textarea" maxlength="500" placeholder="有什么建议尽管提啦~" @focus="_focusText" @input="filterFont"></textarea>
       </div>
-    </div>
-    <div class="button">确认</div>
+    </div> -->
+    <div class="button" @click="_lookOrder">确认</div>
   </div>
 </template>
 
 <script>
-import Star from '@/base/star.vue'
+// import Star from '@/base/star.vue'
 export default {
   name: 'payOver',
   data () {
     return {
-      textarea: null
+      station: null,
+      type: null
     }
+  },
+  created () {
+    this.station = this.$route.query.station
+    this.type = this.$route.query.type
   },
   methods: {
     _goBack () {
       this.$router.go(-3)
     },
-    _goHome () {
-      this.$router.push('/home')
-    },
+    // _goHome () {
+    //   this.$router.push('/home')
+    // },
     _lookOrder () {
-      this.$router.push('/order')
-    },
-    getStarNum (id) {
-      console.log(id)
-    },
-    _focusText () {
-      let _self = this
-      setTimeout(function () {
-        let pannel = _self.$refs.textcon
-        pannel.scrollIntoView(true)
-        pannel.scrollIntoViewIfNeeded(true)
-      }, 200)
-    },
-    filterFont () {
-      console.log('666')
+      this.$router.push('/complete')
     }
-  },
-  components: {
-    Star
+    // getStarNum (id) {
+    //   console.log(id)
+    // },
+    // _focusText () {
+    //   let _self = this
+    //   setTimeout(function () {
+    //     let pannel = _self.$refs.textcon
+    //     pannel.scrollIntoView(true)
+    //     pannel.scrollIntoViewIfNeeded(true)
+    //   }, 200)
+    // },
+    // filterFont () {
+    //   console.log('666')
+    // }
   }
+  // components: {
+  //   Star
+  // }
 }
 </script>
 

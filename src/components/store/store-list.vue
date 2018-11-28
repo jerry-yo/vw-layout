@@ -11,7 +11,7 @@
       <ul>
         <li :class="{'active': defaultStoreId === index}" v-for="(item, index) in handleStoreList" :key="index" >
           <div class="top">
-            <img v-lazy="item.stationPic" alt="">
+            <img v-lazy="item.stationPic.replace('http://', 'https://')" alt="">
             <div class="top-right">
               <div class="store-name">
                 <p :class="item.type === 2 ? 'by' : 'repair'">{{item.name}}</p>
@@ -67,13 +67,16 @@ export default {
           }
         })
         return arr
-      } else {
+      } else if (this.route === 'maintain') {
         return this.storeList
+      } else if (this.route === 'meal') {
+        return this.mealStoreList
       }
     },
     ...mapGetters([
       'cityInfo',
       'storeList',
+      'mealStoreList',
       'defaultStoreId'
     ])
   },
@@ -245,8 +248,8 @@ export default {
                 padding-left: 30px
                 font-size: 24px
                 color: #ff914d
-                bg-image('../../common/imgs/orderinfo/call-dz')
-                background-size: 24px 24px
+                bg-image('../../common/imgs/orderinfo/local')
+                background-size: 20px 24px
                 background-repeat: no-repeat
                 background-position: left center
             .call-dz

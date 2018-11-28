@@ -111,9 +111,9 @@ export default {
           font-weight: bold
         p
           line-height: 30px
+          height: 90px
           font-size: 20px
           color: #444
-          word-break: break-all
           overflow : hidden
           text-overflow: ellipsis
           display: -webkit-box

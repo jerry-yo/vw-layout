@@ -28,6 +28,10 @@ export default {
       type: Boolean,
       default: false
     },
+    pullDown: {
+      type: Boolean,
+      default: false
+    },
     beforeScroll: {
       type: Boolean,
       default: false

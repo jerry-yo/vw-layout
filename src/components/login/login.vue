@@ -17,9 +17,6 @@
         获取验证码
       </div>
     </div>
-    <div class="wxlogin">
-      <div class="wx-btn" @click="_wxLogin"></div>
-    </div>
   </div>
 </template>
 
@@ -71,26 +68,6 @@ export default {
       if (this.tel.length > 11) {
         this.tel = this.tel.slice(0, 11)
       }
-    },
-    _wxLogin () {
-      // this.$post(`${this.gt1Url}/api/f6-app/bindingLogin`, 1, (res) => {
-      //   if (res.errorCode === 0) {
-      //     this.$router.push('/binding?wxId=' + res)
-      //   } else if (res.errorCode) {
-      //     this.$Toast({
-      //       message: res.errorMsg,
-      //       position: 'bottom'
-      //     })
-      //   } else {
-      //     this.$Toast({
-      //       message: '验证码获取失败',
-      //       position: 'bottom'
-      //     })
-      //   }
-      // }, {
-      //   phone: this.tel,
-      //   type: 3
-      // })
     }
   }
 }
@@ -176,16 +153,4 @@ export default {
         font-weight: 600
         line-height: 90px
         text-align: center
-    .wxlogin
-      flex: 1
-      display: flex
-      justify-content: center
-      align-items: center
-      .wx-btn
-        width: 80px
-        height: 80px
-        bg-image('../../common/imgs/wechat')
-        background-size: 80px 80px
-        background-position: center center
-        background-repeat: no-repeat
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <Scroll class="wrapper">
+  <Scroll class="wrapper" v-show="obligationOrder.unOverOrder" :data="obligationOrder.unOverOrder" :class="obligationOrder.unOverOrder.length === 0 ? 'bg' : ''">
     <ul class="container">
       <li v-for="(item, index) in obligationOrder.unOverOrder" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
@@ -12,9 +12,9 @@
         <div class="order-foot">
           <div class="foot">
             <span class="car-state">{{item.balanceStatus === '7000' ? '服务进行中' : item.balanceStatus === '7200' ? '待付款' : ''}}</span>
-            <div class="order-set" v-if="false">
-              <div :class="false ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
-            </div>
+            <!-- <div class="order-set">
+              <div :class="item.balanceStatus === '7200' ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
+            </div> -->
           </div>
         </div>
       </li>
@@ -40,11 +40,13 @@ export default {
   },
   methods: {
     goOrderInfo (res) {
-      console.log(res)
-      this.$router.push('/pay-order-info?pkid=' + res.pkId + '&type=dfk&station=' + res.abbreviation)
-    },
-    _goPay (item) {
-      console.log(item)
+      if (res.balanceStatus === '7200') {
+        let reUrl = encodeURIComponent('https://www.gt1.shop/weixin/?#/pay-order-info?pkid=' + res.pkId + '&type=dfk&station=' + res.abbreviation)
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx9ae3f25d31ca64ca&redirect_uri=' + reUrl + '&response_type=code&scope=snsapi_base&state=STATE#wechat_redirect'
+      } else {
+        this.$router.push('/pay-order-info?pkid=' + res.pkId + '&type=dfk&station=' + res.abbreviation)
+      }
+      // this.$router.push('/pay-order-info?pkid=' + res.pkId + '&type=dfk&station=' + res.abbreviation)
     }
   },
   components: {
@@ -59,6 +61,11 @@ export default {
   .wrapper
     flex: 1
     overflow: hidden
+    &.bg
+      bg-image('../../common/imgs/noorder')
+      background-position: center center
+      background-repeat: no-repeat
+      background-size: 750px 381px
   .container
     position: relative
     li

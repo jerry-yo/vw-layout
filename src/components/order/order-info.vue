@@ -15,23 +15,16 @@
             </div>
           </div>
         </div>
-        <div class="order-img" v-if="orderType === 'ywc'">
-          <div class="order-bg-2 order-bg">
-            <div class="bg-1">
-            </div>
-            <div class="bg-font">
-              <span>服务完成</span>
-              <h2>奇特异维修门店{{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, ' - ')}}</h2>
-            </div>
-          </div>
-        </div>
         <div class="order-title" v-if="orderInfoShow.stationName">
           <div class="top">
             <div class="top-name">
-              <span>奇特异维修门店{{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, ' - ')}}</span>
+              <span>{{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, '')}}</span>
               <div class="order-states" :class="{'by': orderInfoShow.memoInfos.serverState === 1, 'wx': orderInfoShow.memoInfos.serverState === 2}"></div>
             </div>
-            <div class="localtion" @click="_openLocation"></div>
+            <div class="localtion" @click="_openLocation" v-if="orderType === 'yyz'"></div>
+            <div class="callme" v-if="orderType === 'yqx'">
+              <a :href="'tel:' + orderInfoShow.responserTel">联系店长</a>
+            </div>
           </div>
           <div class="bottom">
             <span>{{orderInfoShow.orderUserName}}</span>
@@ -126,6 +119,7 @@ export default {
       orderInfoShow: {},
       cancelOrderInfo: {},
       stationCode: '',
+      stationType: false,
       faultInfoState: false
     }
   },
@@ -173,6 +167,9 @@ export default {
           this.refreshToken(this._getOrderInfo)
         } else if (res.code === 200) {
           this.orderInfoShow = this.handleOrderInfo(res.data)
+          if (/维修/.test(this.orderInfoShow.stationName)) {
+            this.stationType = true
+          }
         }
       }, {
         orderId: this.orderId,
@@ -387,6 +384,14 @@ export default {
             background-size: 43px 44px
             background-repeat: no-repeat
             background-position: right center
+          .callme
+            width: 160px
+            bg-image('../../common/imgs/orderinfo/call-dz')
+            background-size: 29px 28px
+            background-repeat: no-repeat
+            background-position: right center
+            font-size: 22px
+            line-height: 50px
         .bottom
           height: 42px
           line-height: 42px

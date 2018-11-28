@@ -94,7 +94,7 @@ export default {
           position: 'bottom',
           message: '车牌号码格式错误'
         })
-        this.carid = ''
+        this.carid = null
       }
     },
     validateWay () {
@@ -174,7 +174,7 @@ export default {
       }, {
         carBrandLogo: `${this.addCar.exhaustVolume}\uA856${this.addCar.manufacturerName}\uA856${this.addCar.year}\uA856${time}\uA856${this.addCar.evehicleSystem}\uA856${this.addCar.transmissionDesc}\uA856${this.addCar.brandName}\uA856${this.addCar.imageSrc}`,
         carId: this.addCar.mid,
-        carNumber: `${this.area[this.areaIndex]}${this.carid}`,
+        carNumber: `${this.area.value[this.areaIndex]}${this.carid}`,
         carVin: '',
         clientAppId: this.userInfo.appId,
         clientUserId: this.userInfo.fUserId,

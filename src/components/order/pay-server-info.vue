@@ -19,7 +19,7 @@
           <div class="operation">
             <div class="state1">
               <span>{{'￥' + item.workHourPrice}}</span>
-              <span class="green" v-if="true">{{'- ￥' + (item.workHourPrice - item.discountedSubtotal)}}</span>
+              <span class="green" v-if="balanceStatus === '7100' || balanceStatus === '7200'">{{'- ￥' + (item.workHourPrice - item.discountedSubtotal)}}</span>
             </div>
           </div>
         </li>
@@ -33,7 +33,7 @@
             <div class="change">
               <div class="spec">品牌：<span>{{handleArr(item.partShowName).brand}} {{handleArr(item.partShowName).gt1Code}}</span></div>
               <div class="spec">规格：<span>{{item.spec}}</span></div>
-              <div class="other"><span>数量：{{item.number}}</span><span>￥ {{item.amount}} <span class="green"> -￥ {{item.amount - (item.discountedSubtotal || item.amount)}}</span></span></div>
+              <div class="other"><span>数量：{{item.number}}</span><span>￥ {{item.amount}} <span class="green" v-if="balanceStatus === '7100' || balanceStatus === '7200'"> -￥ {{item.amount - (item.discountedSubtotal || item.amount)}}</span></span></div>
             </div>
           </div>
         </li>
@@ -56,6 +56,9 @@ export default {
     }
   },
   computed: {
+    balanceStatus () {
+      return this.seleServersInfo.balanceStatus
+    },
     handleServerInfo () {
       return this.seleServersInfo.serviceDetailVOList
     },

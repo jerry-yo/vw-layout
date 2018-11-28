@@ -35,15 +35,40 @@ const otherRouter = {
 const orderRouter = {
   path: '/order',
   name: 'order',
-  meta: {
-    requireAuth: true
-  },
   component: resolve => { require(['@/components/order/all-order'], resolve) },
   children: [
-    { path: '/order/subscribe', name: 'subscribe', component: resolve => { require(['@/components/order/subscribe'], resolve) } },
-    { path: '/order/obligation', name: 'obligation', component: resolve => { require(['@/components/order/obligation'], resolve) } },
-    { path: '/order/complete', name: 'complete', component: resolve => { require(['@/components/order/complete'], resolve) } },
-    { path: '/order/cancel', name: 'cancel', component: resolve => { require(['@/components/order/cancel'], resolve) } }
+    {
+      path: '/subscribe',
+      name: 'subscribe',
+      meta: {
+        requireAuth: true
+      },
+      component: resolve => { require(['@/components/order/subscribe'], resolve) }
+    },
+    {
+      path: '/obligation',
+      name: 'obligation',
+      meta: {
+        requireAuth: true
+      },
+      component: resolve => { require(['@/components/order/obligation'], resolve) }
+    },
+    {
+      path: '/complete',
+      name: 'complete',
+      meta: {
+        requireAuth: true
+      },
+      component: resolve => { require(['@/components/order/complete'], resolve) }
+    },
+    {
+      path: '/cancel',
+      name: 'cancel',
+      meta: {
+        requireAuth: true
+      },
+      component: resolve => { require(['@/components/order/cancel'], resolve) }
+    }
   ]
 }
 const orderInfoRouter = {
@@ -162,26 +187,46 @@ const maintain = {
 const addNewServer = {
   path: '/add-new-server',
   name: 'addNewServer',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
   component: resolve => { require(['@/components/maintain/add-new-server'], resolve) }
 }
 const serverInfo = {
   path: '/server-info',
   name: 'serverInfo',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
   component: resolve => { require(['@/components/maintain/server-info'], resolve) }
 }
 const payOrderInfo = {
   path: '/pay-order-info',
   name: 'payOrderInfo',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
   component: resolve => { require(['@/components/order/pay-order-info'], resolve) }
 }
 const payServerInfo = {
   path: '/pay-server-info',
   name: 'payServerInfo',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
   component: resolve => { require(['@/components/order/pay-server-info'], resolve) }
 }
 const changePre = {
   path: '/change-pre',
   name: 'changePre',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
   component: resolve => { require(['@/components/maintain/change-pre'], resolve) }
 }
 const payOver = {
@@ -229,6 +274,18 @@ const errorRouter = {
   path: '*',
   redirect: '/home'
 }
+
+const setmealList = {
+  path: '/setmeal-list',
+  name: 'setmealList',
+  component: resolve => { require(['@/components/setmeal/setmealList'], resolve) }
+}
+
+const setmealInfo = {
+  path: '/setmeal-info',
+  name: 'setmealInfo',
+  component: resolve => { require(['@/components/setmeal/setmealInfo'], resolve) }
+}
 export const routers = [
   loginRouter,
   registerRouter,
@@ -249,6 +306,8 @@ export const routers = [
   repairRouter,
   repairPreOrder,
   Reservations,
+  setmealInfo,
+  setmealList,
   maintainPreOrder,
   maintain,
   serverInfo,

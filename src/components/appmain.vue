@@ -1,5 +1,5 @@
 <template>
-  <div class="main" flexContainer>
+  <div class="main" flexContainer @touchmove.prevent>
     <router-view></router-view>
     <v-footer class="footer"></v-footer>
   </div>

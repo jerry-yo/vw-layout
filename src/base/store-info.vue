@@ -2,7 +2,7 @@
   <div class="store-info">
     <div class="top">
       <div class="left">
-        <img :src="storeInfo.stationPic" alt="">
+        <img v-lazy="storeInfo.stationPic.replace('http://', 'https://')" alt="">
       </div>
       <div class="center">
         <h2>{{storeInfo.name}}</h2>

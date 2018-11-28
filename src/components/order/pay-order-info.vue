@@ -12,14 +12,14 @@
             </div>
             <div class="bg-font">
               <span>服务完成</span>
-              <h2>奇特异维修门店 - {{stationName}}</h2>
+              <h2>奇特异{{/维修/.test(stationName) ? '维修' : '保养'}}门店 - {{stationName}}</h2>
             </div>
           </div>
         </div>
         <div class="order-title" v-if="orderInfoShow.serverState">
           <div class="top">
             <div class="top-name">
-              <span>奇特异维修门店 - {{stationName}}</span>
+              <span>奇特异{{/维修/.test(stationName) ? '维修' : '保养'}}门店 - {{stationName}}</span>
               <div class="order-states" :class="{'by': orderInfoShow.serverState === 1, 'wx': orderInfoShow.serverState === 2}"></div>
             </div>
           </div>
@@ -71,10 +71,18 @@
         </div>
       </div>
     </Scroll>
+    <div class="order-btn" v-if="orderInfoShow.balanceStatus === '7200'">
+      <div class="foot">
+        <div class="order-set">
+          <div :class="orderInfoShow.balanceStatus === '7200' ? 'go-pay' : 'ungo-pay'" @click="_goPay()">付款</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Wx from 'Wx'
 import Scroll from '@/base/scroll/scroll'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
@@ -88,10 +96,11 @@ export default {
       pkId: null,
       orderType: null,
       stationName: null,
+      wechatCode: null,
       orderInfoShow: {}
     }
   },
-  mounted () {
+  created () {
     this.pkId = this.$route.query.pkid
     this.orderType = this.$route.query.type
     this.stationName = this.$route.query.station
@@ -102,6 +111,39 @@ export default {
     }
   },
   methods: {
+    _goPay () {
+      let _self = this
+      let enUrl = encodeURIComponent('https://www.gt1.shop/weixin/#/pay-over?station=' + _self.stationName)
+      this.$post(`${this.gt1Url}/api/f6-app/toWxJsPay`, this.gt1Header, (res) => {
+        if (res.errorCode === 0) {
+          Wx.chooseWXPay({
+            timestamp: res.data.timestamp,
+            nonceStr: res.data.nonceStr,
+            package: res.data.packageInfo,
+            signType: 'MD5', // 注意：新版支付接口使用 MD5 加密
+            paySign: res.data.sign,
+            success: function (res) {
+              if (res.errMsg === 'chooseWXPay:ok') {
+                _self.$router.push('/pay-over?station=' + _self.stationName)
+              }
+            }
+          })
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: '支付发生未知错误'
+          })
+        }
+      }, {
+        orderId: _self.orderInfoShow.pkId,
+        userId: parseInt(_self.userInfo.fUserId),
+        price: parseFloat(_self.orderInfoShow.oweAmount),
+        code: _self.wechatCode,
+        version: parseInt(_self.orderInfoShow.tsMaintainVersion),
+        subject: `奇特异${/维修/.test(_self.stationName) ? '维修' : '保养'}门店 - ${_self.stationName}`,
+        frontUrl: enUrl
+      })
+    },
     goBack () {
       this.$router.back()
     },
@@ -113,6 +155,9 @@ export default {
           this.refreshToken(this._getOrderInfo)
         } else if (res.code === 200) {
           this.orderInfoShow = this.handleOrderInfo(res.data)
+          if (this.orderInfoShow.balanceStatus === '7200') {
+            this.wechatCode = window.location.search.split('&')[1].split('=')[1]
+          }
         }
       }, {
         pkId: this.pkId,
@@ -164,7 +209,8 @@ export default {
     goPartAndServerInfo () {
       this.setSeleServerInfo({
         stuffDetailVOList: this.orderInfoShow.stuffDetailVOList,
-        serviceDetailVOList: this.orderInfoShow.serviceDetailVOList
+        serviceDetailVOList: this.orderInfoShow.serviceDetailVOList,
+        balanceStatus: this.orderInfoShow.balanceStatus
       })
       this.$router.push('/pay-server-info')
     },
@@ -356,4 +402,36 @@ export default {
             line-height: 32px
             span
               margin-left: 15px
+    .order-btn
+      display: flex
+      justify-content: center
+      align-items: center
+      height: 98px
+      padding: 0 30px
+      background-color: #fff
+      .foot
+        flex: 1
+        display: flex
+        .order-set
+          flex: 1
+          display: flex
+          justify-content: flex-end
+          align-items: center
+          & > div
+            width: 120px
+            height: 48px
+            margin-left: 18px
+            font-size: 20px
+            line-height: 48px
+            text-align: center
+            background-size: 100% 100%
+            background-repeat: no-repeat
+            background-position: center center
+          .go-pay
+            bg-image('../../common/imgs/btn-bg')
+            color: #fff
+          .ungo-pay
+            background: #cccccc
+            border-radius: 3px
+            color: #fff
 </style>

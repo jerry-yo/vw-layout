@@ -70,6 +70,9 @@ const getters = {
   },
   checksObj (state) {
     return state.checksObj
+  },
+  mealStoreList (state) {
+    return state.mealStoreList
   }
 }
 

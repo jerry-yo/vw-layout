@@ -20,7 +20,7 @@
         <div class="testing-img" v-if="yjdId !== ''">
           <h2>漆面耗损</h2>
           <div class="image-block" v-if="maintainPhotoVoList.photoUrl !== ''">
-            <img :src="maintainPhotoVoList.photoUrl" alt="">
+            <img :src="maintainPhotoVoList.photoUrl.replace('http://', 'https://')" alt="">
           </div>
         </div>
         <div class="prev-detection" v-if="ccdId !== ''">

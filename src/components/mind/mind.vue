@@ -1,5 +1,5 @@
 <template>
-  <div class="mind">
+  <div class="mind" @touchmove.prevent>
     <div class="user-core" w-750-240 aspectratio aspect-ratio="750/240">
       <div class="user-con" aspectratio-content>
         <div class="user-head">
@@ -62,7 +62,7 @@
             <Badge  count="0" :solid="false" :color="'#ff623d'">
               <div class="img"></div>
             </Badge>
-            <span>服务中</span>
+            <span>待付款</span>
           </div>
           <!-- </router-link> -->
         </div>
@@ -98,12 +98,12 @@
       <div class="quan">
         <span>我的优惠券</span>
         <div class="quan-title title">
-          <span>暂时没有优惠券</span>
+          <span>无</span>
         </div>
       </div>
       <div class="kefu">
         <span>客服热线</span>
-        <div class="kefu-title">
+        <div class="kefu-title title">
           <a href="tel:400-180-8811">400-180-8811</a>
         </div>
       </div>
@@ -141,13 +141,13 @@ export default {
   methods: {
     _goOrder (id) {
       if (id === 1) {
-        this.$router.push('/order/subscribe')
+        this.$router.push('/subscribe')
       } else if (id === 2) {
-        this.$router.push('/order/obligation')
+        this.$router.push('/obligation')
       } else if (id === 3) {
-        this.$router.push('/order/complete')
+        this.$router.push('/complete')
       } else if (id === 4) {
-        this.$router.push('/order/cancel')
+        this.$router.push('/cancel')
       }
     },
     _goGarage () {
@@ -200,7 +200,9 @@ export default {
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"
   [w-750-240]
-    background: url(../../common/imgs/mindbg.png) no-repeat center top
+    bg-image('../../common/imgs/mindbg')
+    background-position: center top
+    background-repeat: no-repeat
     background-size: 750px 240px
     overflow: hidden
   [w-750-240]

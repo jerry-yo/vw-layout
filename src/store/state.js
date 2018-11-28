@@ -1,5 +1,5 @@
 import {loadUserInfo, loadCityList, loadCityInfo, loadStoreList, loadMyCar, loadDefaultCar, loadSelectCar, loadCarBrand, loadAddCar,
-  loadDefaultStoreId, loadUpdateOrder, loadAllServerList, loadStaticServerList, loadAddNewServerLoadNum, loadChecksObj} from '../common/js/cache'
+  loadDefaultStoreId, loadUpdateOrder, loadAllServerList, loadStaticServerList, loadAddNewServerLoadNum, loadChecksObj, loadMealStoreList} from '../common/js/cache'
 
 const state = {
   routerAnimate: 'none',
@@ -7,6 +7,7 @@ const state = {
   cityList: loadCityList(),
   cityInfo: loadCityInfo(),
   storeList: loadStoreList(),
+  mealStoreList: loadMealStoreList(),
   myCar: loadMyCar(),
   defaultCar: loadDefaultCar(),
   selectCar: loadSelectCar(),

@@ -1,5 +1,5 @@
 <template>
-  <Scroll class="wrapper">
+  <Scroll class="wrapper" v-show="handleOrderList" :data="handleOrderList" :class="handleOrderList.length === 0 ? 'bg' : ''">
     <ul class="container">
       <li v-for="(item, index) in handleOrderList" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
@@ -76,6 +76,11 @@ export default {
   .wrapper
     flex: 1
     overflow: hidden
+    &.bg
+      bg-image('../../common/imgs/noorder')
+      background-position: center center
+      background-repeat: no-repeat
+      background-size: 750px 381px
   .container
     position: relative
     li

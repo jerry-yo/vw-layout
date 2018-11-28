@@ -53,7 +53,7 @@ export default {
       this.$router.push('/home')
     },
     _lookOrder () {
-      this.$router.push('/order/subscribe')
+      this.$router.push('/subscribe')
     },
     ...mapActions([
       'clearOrderAllInfo'

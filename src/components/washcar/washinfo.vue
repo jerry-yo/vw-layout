@@ -23,10 +23,21 @@
           </li>
         </ul>
       </div>
-      <div class="footer" @click="_openLocation">
-        <span class="bg" >
-          去这里
-        </span>
+      <div class="footer">
+        <a class="footer-call" :href="'tel:' + storeinfo.responserTel">
+          <span class="bg" >
+            联系店长
+          </span>
+        </a>
+        <div class="footer-box"></div>
+        <div class="footer-txt">
+          <p>地址如有偏差，请及时联系店长</p>
+        </div>
+        <div class="footer-btn" @click="_openLocation">
+          <span class="bg" >
+            去这里
+          </span>
+        </div>
       </div>
     </div>
   </transition>
@@ -151,17 +162,51 @@ export default {
       display: flex
       justify-content: center
       align-items: center
-      height: 100px
-      bg-image('../../common/imgs/washcar/btn_bg')
-      background-repeat: no-repeat
-      background-position: center center
-      background-size: 750px 100px
-      .bg
-        bg-image('../../common/imgs/washcar/now_lat')
+      -webkit-box-shadow:0 0 10px rgba(0, 0, 0, .1)
+      -moz-box-shadow:0 0 10px rgba(0, 0, 0, .1)
+      box-shadow:0 0 10px rgba(0, 0, 0, .1)
+      .footer-call
+        width: 130px
+        bg-image('../../common/imgs/orderinfo/call-dz')
         background-repeat: no-repeat
-        background-position: left center
-        background-size: 20px 26px
-        font-size: 30px
-        color: #fffefe
-        padding-left: 40px
+        background-position: center 10px
+        background-size: 29px 28px
+        padding-top: 50px
+        font-size: 22px
+        color: #5b5b5b
+        text-align: center
+      .footer-box
+        width: 1px
+        height: 60px
+        transform: scale(0.5, 1)
+        background-color: #e3e3e3
+      .footer-txt
+        flex: 1
+        display: flex
+        justify-content: center
+        align-items: center
+        p
+          flex: 1
+          font-size: 20px
+          color: #d1d1d1
+          padding: 0px 20px
+      .footer-btn
+        width: 350px
+        display: flex
+        justify-content: center
+        align-items: center
+        height: 100px
+        bg-image('../../common/imgs/washcar/btn_bg')
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: 750px 100%
+        overflow: hidden
+        .bg
+          bg-image('../../common/imgs/washcar/now_lat')
+          background-repeat: no-repeat
+          background-position: left center
+          background-size: 20px 26px
+          font-size: 30px
+          color: #fffefe
+          padding-left: 40px
 </style>

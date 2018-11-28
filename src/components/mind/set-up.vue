@@ -40,7 +40,7 @@ export default {
       this.$router.back()
     },
     setLoginState () {
-      this.deleteUserInfo({})
+      this.deleteUserInfo()
       Wx.closeWindow()
     },
     ...mapActions([

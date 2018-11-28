@@ -9,6 +9,7 @@ Vue.use(VueRouter)
 const RouterConfig = {
   linkActiveClass: 'active-on',
   // mode: 'history',
+  // base: '/weixin/',
   routes: routers
 }
 
@@ -48,7 +49,7 @@ router.beforeEach((to, from, next) => {
     }
   }
   if (to.meta.requireAuth) {
-    if (store.state.userInfo.externalUserId) {
+    if (store.state.userInfo) {
       if (to.meta.hasCar) {
         if (store.state.myCar.length > 0) {
           next()
