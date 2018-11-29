@@ -1,4 +1,3 @@
-import Vue from 'vue'
 export const resultState = ['处理成功', '新增', '遗留']
 export const carInfo = '排量\uA856厂商\uA856年份\uA856注册时间\uA856车系\uA856变速器描述\uA856品牌名字\uA856品牌Logo'
 export function handleMyCar (data) {
@@ -25,7 +24,7 @@ export function handleWxOrder (data) {
   if (/,/.test(data[4])) {
     data[4].split(',').forEach(item => {
       if (item !== '') {
-        arr.push(Vue.prototype.gt1UpdateImgUrl + item)
+        arr.push(item)
       }
     })
   }
@@ -33,9 +32,9 @@ export function handleWxOrder (data) {
     orderTime: data[0],
     serverType: data[1],
     serverState: 2,
-    faultText: data[2],
+    updateDesc: data[2],
     imageSrc: data[3],
-    faultImgs: arr,
+    updateImgs: arr,
     expireTemp: data[5],
     responserTel: data[6],
     stationPositionX: parseFloat(data[7]),
@@ -68,6 +67,31 @@ export function handleByOrder (data) {
   }
   return obj
 }
+// `${getFormatDateNow()}\uA856${'APP预约套餐服务'}\uA856${this.updateOrder.updateTitle}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.updateDesc}\uA856${this.updateOrder.updateImgs}\uA856${this.updateOrder.updateMealPrice}\uA856${this.updateOrder.endTamp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
+
+export function handleTcOrder (data) {
+  let arr = []
+  if (/,/.test(data[5])) {
+    arr = data[5].split(',')
+    arr.pop()
+  }
+  let obj = {
+    orderTime: data[0],
+    serverType: data[1],
+    updateTitle: data[2],
+    serverState: 3,
+    imageSrc: data[3],
+    updateDesc: data[4],
+    updateImgs: arr,
+    updateMealPrice: data[6],
+    expireTemp: data[7],
+    responserTel: data[8],
+    stationPositionX: parseFloat(data[9]),
+    stationPositionY: parseFloat(data[10])
+  }
+  return obj
+}
+
 export function handleOrderRemark (remark) {
   let arr = remark.split('\uA856')
   return {

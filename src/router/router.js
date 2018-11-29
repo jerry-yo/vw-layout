@@ -286,6 +286,12 @@ const setmealInfo = {
   name: 'setmealInfo',
   component: resolve => { require(['@/components/setmeal/setmealInfo'], resolve) }
 }
+
+const confirmOrder = {
+  path: '/confirm-order',
+  name: 'confirmOrder',
+  component: resolve => { require(['@/components/confirmOrder/confirmOrder'], resolve) }
+}
 export const routers = [
   loginRouter,
   registerRouter,
@@ -306,6 +312,7 @@ export const routers = [
   repairRouter,
   repairPreOrder,
   Reservations,
+  confirmOrder,
   setmealInfo,
   setmealList,
   maintainPreOrder,

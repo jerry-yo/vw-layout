@@ -1,5 +1,5 @@
 <template>
-  <div class="maintain-pre" flexContainer>
+  <div class="repair-pre" flexContainer>
     <div class="action-bar">
       <div class="go-back" @click="_goBack"></div>
       <div class="font">
@@ -17,31 +17,31 @@
     </div>
     <Scroll class="container" ref="repairPre">
       <div class="wrapper">
-        <storeInfo :type="'noclick'"></storeInfo>
+        <storeInfo :type="'noclick'" :route="'meal'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
           <span @click="showFitTime">{{dateTime(updateOrder)}}</span>
         </div>
         <div class="car-info">
-          <div> <span>服务车辆</span><div class="right"><img v-lazy="carLogoUrl + nowCar.imageSrc" alt="">{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</div> </div>
+          <div> <span>服务车辆</span><div class="right"><img :src="carLogoUrl + nowCar.imageSrc" alt="">{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</div> </div>
           <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <div class="server-img" @click="lookServerInfo">
-          <div class="con">
-            <ul>
-              <li class="imgs" v-for="(item) in this.allServerMoney.partList" :key="item.customCode">
-                <img v-lazy="imgpartUrl + item.customCode">
-              </li>
-              <li class="no-by" v-if="this.allServerMoney.partInfos === 0 && this.allServerMoney.servers === 0"></li>
-              <li class="no-part" v-if="this.allServerMoney.partInfos === 0 && this.allServerMoney.servers !== 0"></li>
-              <li class="eiss" v-if="this.allServerMoney.partList.length > 2"></li>
-            </ul>
-            <div class="goods-info">
-              <span>共{{allServerMoney.partInfos}}个配件、{{allServerMoney.servers}}个服务</span>
-              <div >总额：<span>{{'￥' + (allServerMoney.partMoney + allServerMoney.serverMoney)}}</span></div >
+        <div class="fault-info" v-if="true">
+          <div class="title">
+            故障概要
+          </div>
+          <div class="fault-con" @click="showUpdateInfo">
+            <p class="fault-text">{{updateOrder.updateDesc}}</p>
+            <div class="fault-img" v-if="updateOrder.updateImgArr.length > 0">
+              <ul :class="updateOrder.updateImgArr.length > 2 ? 'more': ''">
+                <li v-for="(item, index) in handleImgs" :key="index">
+                  <img :src="gt1UpdateImgUrl + item" alt="" >
+                </li>
+              </ul>
             </div>
           </div>
+          <div class="go-img-info"></div>
         </div>
       </div>
     </Scroll>
@@ -50,104 +50,66 @@
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn" @click="_goPreOrder">确认下单</div>
     </div>
+    <checkInfo v-if="faultInfoState" :data="updateOrder" @closemask="closeUpdateInfo"></checkInfo>
     <keepFitTime v-if="fitTime" @close="closeMask" :store="storeInfos"></keepFitTime>
   </div>
 </template>
 
 <script>
 import Scroll from '@/base/scroll/scroll'
-import {mapGetters, mapMutations} from 'vuex'
-import {getServerCar, expireToken} from '@/common/js/mixin'
 import storeInfo from '@/base/store-info'
+import seleDetectionMenu from '@/base/sele-detection-menu'
+import checkInfo from '@/base/check-info'
 import keepFitTime from '@/base/keep-fit-time'
-import {datePicker, getFormatDateNow, timeToStamp} from '@/common/js/date'
+import {datePicker, timeToStamp, getFormatDateNow} from '@/common/js/date'
+import {mapGetters, mapMutations} from 'vuex'
+import {getServerCar} from '@/common/js/mixin'
+const EXPIRE_DATE = 7 * 24 * 60 * 60 * 1000
+const DEFAULT_HOUR = 13 * 60 * 60 * 1000
 export default {
-  name: 'maintain-pre',
-  mixins: [getServerCar, expireToken],
+  name: 'repairPreOrder',
+  mixins: [getServerCar],
   data () {
     return {
-      imgs: [0, 1, 2, 3],
+      datePickerShow: false,
+      faultInfoState: false,
       fitTime: false
     }
   },
   computed: {
-    allServerMoney () {
-      let partMoney = 0
-      let serverMoney = 0
-      let partInfos = 0
-      let servers = 0
-      let partList = []
-      let partListStr = ''
-      this.allServerList.forEach(item => {
-        if (item.isChecked && item.customerServer === 'old') {
-          serverMoney += item.amount
-          servers++
-          if (item.partInfo !== null && item.partInfo.isChecked) {
-            partMoney += item.partInfo.sellPrice * item.partInfo.number
-            partInfos += item.partInfo.number
-            partList.push(item.partInfo)
-            partListStr += `${item.partInfo.customCode},`
-          }
+    handleImgs () {
+      let arr = []
+      this.updateOrder.updateImgArr.forEach(item => {
+        if (arr.length < 2) {
+          arr.push(item)
         }
       })
-      return {
-        partMoney: partMoney,
-        serverMoney: serverMoney,
-        partInfos: partInfos,
-        servers: servers,
-        partList: partList,
-        partListStr: partListStr
-      }
-    },
-    serverOrder () {
-      let list = []
-      this.allServerList.forEach(item => {
-        if (item.isChecked && item.customerServer === 'old') {
-          if (item.partInfo !== null && item.partInfo.isChecked) {
-            let remark = `${item.pkId}\uA856${item.partInfo.customCode}\uA856${item.partInfo.brand}\uA856${item.partInfo.supplierCode}\uA856${item.partInfo.spec || ' '}`
-            list.push({
-              type: 2,
-              number: item.partInfo.number,
-              genaraprice: item.partInfo.sellPrice,
-              retailprice: item.partInfo.sellPrice,
-              projectid: item.partInfo.pkId,
-              projectname: item.partInfo.name,
-              remark: remark
-            })
-            list.push({
-              type: 0,
-              projectname: item.name,
-              genaraprice: item.amount,
-              retailprice: item.amount,
-              number: 1,
-              projectid: item.pkId,
-              remark: item.partInfo.pkId
-            })
-          } else {
-            list.push({
-              type: 0,
-              projectname: item.name,
-              genaraprice: item.amount,
-              retailprice: item.amount,
-              number: 1,
-              projectid: item.pkId
-            })
-          }
-        }
-      })
-      return list
+      return arr
     },
     storeInfos () {
-      return this.storeList[this.defaultStoreId]
+      if (this.updateOrder.mealStoreIds === '0') {
+        return this.storeList[this.defaultStoreId]
+      } else {
+        return this.mealStoreList[this.defaultStoreId]
+      }
+    },
+    selestore () {
+      let arr = []
+      this.storeList.forEach(item => {
+        if (item.type === 1) {
+          arr.push(item)
+        }
+      })
+      return arr[this.defaultStoreId]
     },
     ...mapGetters([
-      'allServerList',
-      'updateOrder'
+      'updateOrder',
+      'mealStoreList'
     ])
   },
   methods: {
-    _goBack () {
-      this.$router.go(-1)
+    seleDate () {
+      this.datePickerShow = true
     },
     dateTime (res) {
       let str = ''
@@ -157,65 +119,6 @@ export default {
         str = `${res.today ? '今' : '明'}天  ${res.startPoint2}`
       }
       return str
-    },
-    _goPreOrder () {
-      let id = this.defaultStoreId
-      if (this.updateOrder.startPoint2) {
-        let memo = `${getFormatDateNow()}\uA856${'APP预约保养服务'}\uA856${this.nowCar.imageSrc}\uA856${this.allServerMoney.servers}\uA856${this.allServerMoney.serverMoney}\uA856${this.allServerMoney.partInfos}\uA856${this.allServerMoney.partMoney}\uA856${this.allServerMoney.partListStr}\uA856${this.updateOrder.endTamp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
-        this.$post(`${this.gt1Url}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
-          if (res.errorCode === 0 && res.data.code === 0) {
-            this.$router.push('/reservations?type=by')
-          } else if (res.errorCode === 0 && res.data.code !== 0) {
-            this.$Toast({
-              position: 'bottom',
-              message: res.data.msg
-            })
-          } else {
-            this.$Toast({
-              position: 'bottom',
-              message: '服务器错误'
-            })
-          }
-        }, {
-          json: JSON.stringify({
-            clientAppId: this.userInfo.appId,
-            clientUserId: this.userInfo.fUserId,
-            orderStationId: this.storeList[id].stationId, // 用户车辆主键
-            stationName: this.storeList[id].stationName,
-            employeeId: '',
-            employeeName: '',
-            userContactTel: this.userInfo.userTel, // 联系电话
-            orderUserName: this.userInfo.userName, // 订单用户名
-            userCarUnmber: this.nowCar.carNumber, // 车牌号
-            userCarId: this.nowCar.userCarId,
-            userId: this.userInfo.userId,
-            OrderStatus: 4,
-            memo: memo,
-            orderReserveTime: '',
-            price: this.allServerMoney.partMoney + this.allServerMoney.serverMoney, // 价格
-            depositAmt: 0,
-            deleteFlag: 0,
-            orderPartList: this.serverOrder,
-            carId: this.nowCar.carId, // 车辆ID
-            distance: this.nowCar.distance, // 行驶距离
-            stationCode: this.storeList[id].stationCode, // 门店编号
-            orderReserveDate: this.updateOrder.dateTime, // 订单预约时间
-            orderReserveStart: this.updateOrder.startTime,
-            orderReserveEnd: this.updateOrder.endTime,
-            employeeMemo: '员工备注',
-            finishmemo: '完成备注',
-            receivememo: '接受备注'
-          })
-        })
-      } else {
-        this.$Toast({
-          message: '请选择预约时间',
-          position: 'bottom'
-        })
-      }
-    },
-    showFitTime () {
-      this.fitTime = true
     },
     closeMask (res) {
       if (res.startPoint2) {
@@ -244,32 +147,115 @@ export default {
       }
       this.fitTime = false
     },
-    lookServerInfo () {
-      if (!this.allServerMoney.partInfos && !this.allServerMoney.servers) {
-        this.$Toast({
-          position: 'bottom',
-          message: '无具体服务项目和材料'
+    _goPreOrder () {
+      let id = this.defaultStoreId
+      if (this.updateOrder.startPoint2) {
+        let memo = `${getFormatDateNow()}\uA856${'APP预约套餐服务'}\uA856${this.updateOrder.updateTitle}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.updateDesc}\uA856${this.updateOrder.updateImgs}\uA856${this.updateOrder.updateMealPrice}\uA856${this.updateOrder.endTamp}\uA856${this.storeList[id].responserTel || ' '}\uA856${this.storeList[id].stationPositionX || ' '}\uA856${this.storeList[id].stationPositionY || ' '}`
+        this.$post(`${this.gt1Url}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
+          if (res.errorCode === 0 && res.data.code === 0) {
+            this.$router.push('/reservations?type=tc')
+          } else if (res.errorCode === 0 && res.data.code !== 0) {
+            this.$Toast({
+              position: 'bottom',
+              message: res.data.msg
+            })
+          } else {
+            this.$Toast({
+              position: 'bottom',
+              message: '服务器错误'
+            })
+          }
+        }, {
+          json: JSON.stringify({
+            clientAppId: this.userInfo.appId,
+            clientUserId: this.userInfo.fUserId,
+            orderStationId: this.storeList[id].stationId, // 用户车辆主键
+            stationName: this.storeList[id].stationName,
+            employeeId: '',
+            employeeName: '',
+            userContactTel: this.userInfo.userTel, // 联系电话
+            orderUserName: this.userInfo.userName, // 订单用户名
+            userCarUnmber: this.nowCar.carNumber, // 车牌号
+            userCarId: this.nowCar.userCarId,
+            userId: this.userInfo.userId,
+            OrderStatus: 4,
+            memo: memo,
+            orderReserveTime: '',
+            price: 0, // 价格
+            depositAmt: 0,
+            deleteFlag: 0,
+            orderPartList: [],
+            carId: this.nowCar.carId, // 车辆ID
+            distance: this.nowCar.distance, // 行驶距离
+            stationCode: this.storeList[id].stationCode, // 门店编号
+            orderReserveDate: this.updateOrder.dateTime, // 订单预约时间
+            orderReserveStart: this.updateOrder.startTime,
+            orderReserveEnd: this.updateOrder.endTime,
+            employeeMemo: '',
+            finishmemo: '',
+            receivememo: ''
+          })
         })
       } else {
-        this.$router.push('/server-info')
+        this.$Toast({
+          message: '请选择预约时间',
+          position: 'bottom'
+        })
       }
+    },
+    closePicker (res) {
+      this.datePickerShow = false
+      let date = datePicker()
+      let nowTemp = timeToStamp(date.nowYear, date.nowMonth, date.nowDay)
+      let expireTemp = timeToStamp(date.nowYear + 1, date.nowMonth, date.nowDay)
+      if (res.temp >= nowTemp && res.temp < expireTemp) {
+        this.setUpdateOrder(Object.assign(res, {
+          expireTemp: res.temp + EXPIRE_DATE + DEFAULT_HOUR,
+          temp: res.temp + DEFAULT_HOUR
+        }))
+      } else if (res.temp >= expireTemp) {
+        this.$Toast({
+          position: 'bottom',
+          message: '预约日期不得超过一年'
+        })
+      } else {
+        this.$Toast({
+          position: 'bottom',
+          message: '预约日期不得小于当前时间'
+        })
+      }
+    },
+    _goBack () {
+      this.$router.back()
+    },
+    showUpdateInfo () {
+      this.faultInfoState = true
+    },
+    closeUpdateInfo () {
+      this.faultInfoState = false
+    },
+    showFitTime () {
+      this.fitTime = true
     },
     ...mapMutations({
       setUpdateOrder: 'SET_UPDATE_ORDER'
     })
   },
+  mounted () {
+  },
   components: {
-    Scroll,
+    storeInfo,
+    checkInfo,
+    seleDetectionMenu,
     keepFitTime,
-    storeInfo
+    Scroll
   }
 }
 </script>
 
 <style scoped lang="stylus" ref="stylesheet/stylus">
 @import "../../common/stylus/mixin.styl"
-
-.maintain-pre
+.repair-pre
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
@@ -371,68 +357,76 @@ export default {
               width: 50px
               height: overflow
               margin-right: 15px
-      .server-img
-        height: 190px
-        display: flex
+      .fault-info
+        overflow: hidden
         background-color: #fff
-        padding: 18px 30px
-        .con
-          flex: 1
-          display: flex
-          flex-direction: column
+        .title
+          height: 78px
+          background-color: #f2f2f2
+          padding: 0 30px
+          padding-top: 30px
+          line-height: 48px
+          font-size: 24px
+          color: #ababab
+          font-weight: bold
+        .fault-con
+          overflow: hidden
+          margin: 0 30px 0px 30px
           bg-image('../../common/imgs/mind/leftright')
-          background-repeat: no-repeat
           background-size: 15px 24px
+          background-repeat: no-repeat
           background-position: right center
-          ul
-            height: 120px
+          .fault-text
+            background-color: #fff
+            margin: 20px 0px
+            width: 600px
+            font-size: 22px
+            color: #5b5b5b
+            line-height: 1.5em
+            overflow: hidden
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-line-clamp: 2
+            -webkit-box-orient: vertical
+          .fault-img
+            height: 144px
             display: flex
-            .imgs
-              box-sizing: border-box
-              width: 120px
-              height: 120px
-              margin-right: 10px
-            .no-part
-              box-sizing: border-box
-              width: 120px
-              height: 120px
-              bg-image('../../common/imgs/order/have_server')
-              background-repeat: no-repeat
-              background-size: 120px 120px
-              background-position: center center
-            .no-by
-              box-sizing: border-box
-              width: 120px
-              height: 120px
-              bg-image('../../common/imgs/order/no_by')
-              background-repeat: no-repeat
-              background-size: 120px 120px
-              background-position: center center
-            .eiss
-              width: 27px
-              bg-image('../../common/imgs/ellipsis')
-              background-repeat: no-repeat
-              background-size: 27px 6px
-              background-position: center center
-          .goods-info
-            flex: 1
-            display: flex
-            padding-top: 10px
-            font-size: 18px
-            & > span
-              flex: 1
-              color: #5b5b5b
-            & > div
-              color: #5b5b5b
-              span
-                color: #ff3e3e
+            padding-bottom: 34px
+            & > ul
+              padding-right: 35px
+              display: flex
+              li
+                width: 110px
+                margin-right: 10px
+                img
+                  display: block
+                  width: 110px
+                  height: 110px
+                  object-fit: cover
+              &.more
+                bg-image('../../common/imgs/ellipsis')
+                background-size: 27px 6px
+                background-repeat: no-repeat
+                background-position: right center
+      .checkout-menu
+        overflow: hidden
+        .title
+          height: 66px
+          padding: 0 30px
+          padding-top: 20px
+          font-size: 22px
+          color: #ababab
+          line-height: 46px
+          span
+            letter-spacing: 3px
+            margin-left: 15px
   .place-order
     height: 98px
     display: flex
     background-color: #fff
     .server
-      display: flex
       width: 133px
+      display: flex
       text-align: center
       padding-top: 58px
       border-right: 1px solid #f2f2f2

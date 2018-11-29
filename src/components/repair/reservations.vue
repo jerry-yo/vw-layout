@@ -10,7 +10,7 @@
       <div class="bg"></div>
       <div class="info">
         <div class="store">{{type === 'by' ? '奇特异保养店-' : '奇特异维修店-'}}{{storeList[defaultStoreId].name}}</div>
-        <div class="time" v-if="type === 'by'">预约时间：{{updateOrder.today ? '今天' : '明天'}}<span>{{updateOrder.startPoint2}}</span></div>
+        <div class="time" v-if="type === 'by' || type === 'tc'">预约时间：{{updateOrder.today ? '今天' : '明天'}}<span>{{updateOrder.startPoint2}}</span></div>
         <div class="time" v-else>预约时间：{{updateOrder.falutDate}}</div>
       </div>
     </div>
@@ -56,7 +56,8 @@ export default {
       this.$router.push('/subscribe')
     },
     ...mapActions([
-      'clearOrderAllInfo'
+      'clearOrderAllInfo',
+      'clearMealInfo'
     ])
   },
   beforeDestroy () {
@@ -64,6 +65,8 @@ export default {
       this.clearOrderAllInfo('wx')
     } else if (this.type === 'by') {
       this.clearOrderAllInfo('by')
+    } else if (this.type === 'tc') {
+      this.clearMealInfo()
     }
   }
 }

@@ -1,7 +1,7 @@
 import Wx from 'Wx'
 import {formatDate} from '@/common/js/date'
 import {mapActions, mapGetters, mapMutations} from 'vuex'
-import {handleWxOrder, handleByOrder} from '@/common/js/config'
+import {handleWxOrder, handleByOrder, handleTcOrder} from '@/common/js/config'
 // 微信权限操作
 export const wxMixin = {
   mounted () {
@@ -166,9 +166,10 @@ export const getOrderListForYy = {
     handleOrderList () {
       let arr = []
       this.orderList.forEach(order => {
-        if ((order.orderStatus === 4 || order.orderStatus === 5) && order.carNumber !== '京A88888') {
+        if ((order.orderStatus === 4 || order.orderStatus === 5)) {
           let wxReg = /维修/
           let byReg = /保养/
+          let tcReg = /套餐/
           let memo = order.memo.split('\uA856')
           if (wxReg.test(memo[1])) {
             arr.push(Object.assign(order, {
@@ -178,6 +179,11 @@ export const getOrderListForYy = {
           if (byReg.test(memo[1])) {
             arr.push(Object.assign(order, {
               memoInfos: handleByOrder(memo)
+            }))
+          }
+          if (tcReg.test(memo[1])) {
+            arr.push(Object.assign(order, {
+              memoInfos: handleTcOrder(memo)
             }))
           }
         }

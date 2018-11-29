@@ -1,12 +1,12 @@
 <template>
   <div class="order-wx">
     <div class="by-top">
-      <ul class="by-left" v-if="data.faultImgs.length > 0">
-        <li v-for="(item, index) in data.faultImgs" :key="index"><img v-lazy="item" alt=""/></li>
+      <ul class="by-left" v-if="data.updateImgs.length > 0">
+        <li v-for="(item, index) in data.updateImgs" :key="index"><img :src="gt1UpdateImgUrl + item" alt=""/></li>
       </ul>
       <div class="noimgs" v-else :class="showType.defaultImg === 1 ? 'bg-1' : 'bg-2'"></div>
-      <div class="by-con" :class="{'ellipsis': data.faultImgs.length > 2}">
-        <h2 v-if="data.faultText.length === 0">{{showType.title}}</h2>
+      <div class="by-con" :class="{'ellipsis': data.updateImgs.length > 2}">
+        <h2 v-if="data.updateDesc.length === 0">{{showType.title}}</h2>
         <p>{{showType.txt}}</p>
       </div>
       <div class="by-right" v-if="false">
@@ -33,12 +33,12 @@ export default {
       let title = ''
       let txt = ''
       let defaultImg = 1
-      if (this.data.faultText.length === 0) {
+      if (this.data.updateDesc.length === 0) {
         defaultImg = 1
         title = '到店检查'
         txt = '可提前联系店长简要描述需求奥， 以便店长提供更好的服务'
       } else {
-        txt = this.data.faultText
+        txt = this.data.updateDesc
         defaultImg = 2
       }
       return {

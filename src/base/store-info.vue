@@ -30,7 +30,7 @@ export default {
       default: 'click'
     },
     route: {
-      default: 'normal'
+      default: 'maintain'
     }
   },
   data () {
@@ -47,22 +47,23 @@ export default {
           }
         })
         return arr[this.defaultStoreId]
-      } else {
+      } else if (this.route === 'maintain') {
         return this.storeList[this.defaultStoreId]
+      } else if (this.route === 'meal') {
+        return this.mealStoreList[this.defaultStoreId]
       }
     },
     ...mapGetters([
       'defaultStoreId',
       'cityInfo',
-      'storeList'
+      'storeList',
+      'mealStoreList'
     ])
   },
   methods: {
     goStoreList () {
       this.$router.push('/store-list?route=' + this.route)
     }
-  },
-  created () {
   }
 }
 </script>

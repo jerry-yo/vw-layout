@@ -19,7 +19,7 @@
           <div class="top">
             <div class="top-name">
               <span>{{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, '')}}</span>
-              <div class="order-states" :class="{'by': orderInfoShow.memoInfos.serverState === 1, 'wx': orderInfoShow.memoInfos.serverState === 2}"></div>
+              <div class="order-states" :class="{'by': orderInfoShow.memoInfos.serverState === 1, 'wx': orderInfoShow.memoInfos.serverState === 2, 'tc': orderInfoShow.memoInfos.serverState === 3}"></div>
             </div>
             <div class="localtion" @click="_openLocation" v-if="orderType === 'yyz'"></div>
             <div class="callme" v-if="orderType === 'yqx'">
@@ -32,15 +32,19 @@
           </div>
         </div>
         <div class="order-con" v-if="orderInfoShow.memoInfos"  @click="goPartAndServerInfo">
-          <orderBy v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 1" :data="orderInfoShow.memoInfos" :money="'other'"></orderBy>
-          <orderWx v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 2" :data="orderInfoShow.memoInfos">
+          <orderBy v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 1 " :data="orderInfoShow.memoInfos" :money="'other'"></orderBy>
+          <orderWx v-if="(orderType === 'yyz' || orderType === 'yqx') && (orderInfoShow.memoInfos.serverState === 2 || orderInfoShow.memoInfos.serverState === 3)" :data="orderInfoShow.memoInfos">
           </orderWx>
         </div>
         <div class="order-other" v-if="orderInfoShow.memoInfos">
           <div class="other-info">
-            <div class="other-fw" v-if="orderType === 'yyz' || orderType === 'yqx'">
+            <div class="other-fw" v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState !== 3">
               <span>项目服务费</span>
               <span>{{orderInfoShow.memoInfos.serverState === 1 ? '￥' + orderInfoShow.memoInfos.serverMoney : '待定'}}</span>
+            </div>
+            <div class="other-fw" v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 3">
+              <span>套餐优惠价</span>
+              <span>￥{{orderInfoShow.memoInfos.updateMealPrice}}</span>
             </div>
             <div class="other-yhq" v-if="false">
               <div class="yhq-con">
@@ -106,7 +110,7 @@ import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
 import checkInfo from '@/base/check-info'
 import {expireToken, cancelOrderYy} from '@/common/js/mixin'
-import {handleWxOrder, handleByOrder, handleOrderPartList} from '@/common/js/config'
+import {handleWxOrder, handleByOrder, handleOrderPartList, handleTcOrder} from '@/common/js/config'
 import {formatDate} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
 export default {
@@ -186,6 +190,9 @@ export default {
       if (/保养/.test(arr[1])) {
         memoInfos = handleByOrder(arr)
       }
+      if (/套餐/.test(arr[1])) {
+        memoInfos = handleTcOrder(arr)
+      }
       return Object.assign(data, {
         memoInfos: memoInfos,
         stationCode: this.stationCode,
@@ -225,8 +232,8 @@ export default {
       if (this.orderInfoShow.memoInfos.serverState === 1) {
         this.setSeleServerInfo(this.orderInfoShow.handleOrderPartList)
         this.$router.push('/server-info')
-      } else if (this.orderInfoShow.memoInfos.serverState === 2) {
-        if (this.orderInfoShow.memoInfos.faultImgs.length === 0 && this.orderInfoShow.memoInfos.faultText.length === 0) {
+      } else if (this.orderInfoShow.memoInfos.serverState === 2 || this.orderInfoShow.memoInfos.serverState === 3) {
+        if (this.orderInfoShow.memoInfos.updateImgs.length === 0 && this.orderInfoShow.memoInfos.updateDesc.length === 0) {
           this.$Toast({
             position: 'bottom',
             message: '暂无故障描述'
@@ -378,6 +385,8 @@ export default {
                 bg-image('../../common/imgs/order/repair')
               &.xc
                 bg-image('../../common/imgs/order/wash')
+              &.tc
+                bg-image('../../common/imgs/order/by')
           .localtion
             width: 60px
             bg-image('../../common/imgs/orderinfo/localtion')

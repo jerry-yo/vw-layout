@@ -10,7 +10,7 @@
       </div>
       <div class="operation">
         <div class="state1" v-show="!hasCheck || server.state === -1 ">
-          <span>{{`服务费￥${server.amount}`}}</span>
+          <span>{{`服务费￥${server.amount}`}}起</span>
         </div>
         <div class="state2" v-show="server.state === 0 && hasCheck">
           <div class="edit" @click.stop="_editServer">编辑</div>
@@ -41,7 +41,7 @@
             </div>
             <!-- <div class="tips">{{'1'}}辆“思域”选择了此产品</div> -->
             <div class="buy-info">
-              <span>￥{{server.partInfo.sellPrice}}</span>
+              <span>￥{{server.partInfo.sellPrice}}起</span>
               <span>{{`X  ${server.partInfo.number}`}}</span>
             </div>
           </div>

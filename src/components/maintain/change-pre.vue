@@ -24,7 +24,7 @@
               </div>
               <!-- <div class="tips">{{'1'}}辆“思域”选择了此产品</div> -->
               <div class="buy-info">
-                <span>￥{{item.sellPrice}}</span>
+                <span>￥{{item.sellPrice}}起</span>
                 <span>{{`X  ${item.number}`}}</span>
               </div>
             </div>

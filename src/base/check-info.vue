@@ -5,15 +5,15 @@
         <h2 class="title">
           <span>故障概要</span>
         </h2>
-        <Scroll class="content" ref="faultText" :data="data" v-if="data.faultText.length > 0">
+        <Scroll class="content" ref="faultText" :data="data" v-if="data.updateDesc.length > 0">
           <div class="wrapper">
-            <p>{{data.faultText}}</p>
+            <p>{{data.updateDesc}}</p>
           </div>
         </Scroll>
         <Scroll class="img-content" ref="faultImg" :data="data" :scrollX="true" :scrollY="false" v-if="showImgArr.length > 0">
           <ul class="imgs" :style="{width: showImgArr.length * 31 + '%'}">
             <li v-for="(item, index) in showImgArr" :key="index">
-              <img :src="item" alt="" @click="showImgs(item)">
+              <img :src="gt1UpdateImgUrl + item" alt="" @click="showImgs(item)">
             </li>
           </ul>
         </Scroll>
@@ -45,13 +45,7 @@ export default {
   },
   computed: {
     showImgArr () {
-      let arr = []
-      if (this.from === 'repair') {
-        arr = this.data.imgArr
-      } else {
-        arr = this.data.faultImgs
-      }
-      return arr
+      return this.data.updateImgs
     }
   },
   methods: {

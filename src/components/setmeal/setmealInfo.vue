@@ -20,14 +20,14 @@
           <div class="setmeal-store">
             <div class="setmeal-select">
               <div class="setmeal-select-left">门店选择</div>
-              <div class="setmeal-select-right" @click="selectMealStore">{{selectStore}}</div>
+              <div class="setmeal-select-right" @click="selectMealStore">{{selectStoreName}}</div>
             </div>
           </div>
           <div class="setmeal-box"></div>
           <div class="setmeal-car">
             <div class="setmeal-select">
               <div class="setmeal-select-left">车辆选择</div>
-              <div class="setmeal-select-right" @click="selectMealCar">{{selectCar}}</div>
+              <div class="setmeal-select-right" @click="selectMealCar">{{selectCarInfo}}</div>
             </div>
           </div>
         </div>
@@ -51,7 +51,7 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import Iframe from '@/base/iframe'
-import {mapGetters, mapMutations} from 'vuex'
+import {mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
   name: 'setmealList',
   data () {
@@ -67,22 +67,39 @@ export default {
     }
   },
   computed: {
-    selectCar () {
-      return '请选择门店'
-    },
-    selectStore () {
+    selectCarInfo () {
       if (this.userInfo) {
-        if (this.mealStoreList.length > 0) {
-          let id = this.defaultStoreId
-          return this.mealStoreList[id].name
+        if (this.myCar.length > 0) {
+          let carinfo
+          let id = this.selectCar > 0 ? this.selectCar : this.defaultCar
+          for (let item of this.myCar) {
+            if (item.userCarId === id) {
+              carinfo = item
+              break
+            }
+          }
+          return `${carinfo.brandName}${carinfo.evehicleSystem} ${carinfo.exhaustVolume} ${carinfo.carNumber}`
         }
         return '请选择车辆'
       }
       return '请选择车辆'
     },
+    selectStoreName () {
+      if (this.userInfo) {
+        if (this.mealStoreList.length > 0) {
+          let id = this.defaultStoreId
+          return this.mealStoreList[id].name
+        }
+        return '请选择门店'
+      }
+      return '请选择门店'
+    },
     ...mapGetters([
       'storeList',
       'userInfo',
+      'selectCar',
+      'defaultCar',
+      'myCar',
       'defaultStoreId',
       'mealStoreList'
     ])
@@ -90,6 +107,7 @@ export default {
   methods: {
     _goBack () {
       this.$router.back()
+      this.clearMealInfo()
     },
     getSetmealInfo () {
       this.$post(`${this.gt1Url}/api/f6-app/getSetmealInfo`, this.gt1Header, (res) => {
@@ -129,15 +147,64 @@ export default {
       if (!this.userInfo) {
         return
       }
+      this.$router.push('/garage?type=select')
+    },
+    showMadal (message, fn) {
+      this.$Modal.confirm({
+        title: '提示信息',
+        content: message,
+        onCancel: () => {
+          this.$Modal.remove()
+        },
+        onOk: () => {
+          fn()
+          this.$Modal.remove()
+        }
+      })
+    },
+    showToast (message) {
+      this.$Toast({
+        message: message,
+        position: 'bottom'
+      })
     },
     goYuyueServer () {
       if (!this.userInfo) {
+        this.showMadal('此服务需登录，是否登录？', () => {
+          this.$router.push('/login')
+        })
         return
       }
+      if (this.mealStoreList.length === 0) {
+        this.showToast('请选择门店')
+        return
+      }
+      if (this.myCar.length === 0) {
+        this.showToast('请先添加车辆')
+        return
+      }
+      let imgs = this.setmealInfo.imgs.length > 0 ? this.setmealInfo.imgs + ',' : ''
+      let imgArr = imgs.split(',')
+      if (imgs.length > 0) {
+        imgArr.pop()
+      }
+      this.setUpdateOrder({
+        updateTitle: this.setmealInfo.title.replace('-', '-----') + '-----',
+        updateDesc: this.setmealInfo.introduce,
+        updateImgs: imgs,
+        updateImgArr: imgArr,
+        updateMealPrice: this.setmealInfo.preferentialPrice,
+        mealStoreIds: this.setmealInfo.storeIds
+      })
+      this.$router.push('/confirm-order')
     },
     ...mapMutations({
-      setMealStoreList: 'SET_MEALSTORELIST'
-    })
+      setMealStoreList: 'SET_MEALSTORELIST',
+      setUpdateOrder: 'SET_UPDATE_ORDER'
+    }),
+    ...mapActions([
+      'clearMealInfo'
+    ])
   },
   components: {
     Scroll,
@@ -315,6 +382,7 @@ export default {
       background-image: -webkit-linear-gradient(left, #ff7653, #ff5752)
       font-size: 36px
       color: #ffffff
+      touch-action: none
       &.gray
         -webkit-filter:grayscale(1)
 </style>

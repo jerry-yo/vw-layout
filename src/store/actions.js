@@ -97,6 +97,13 @@ export const initAddNewServer = function ({commit, state}) {
   commit(types.SET_STATIC_SERVER_LIST, JSON.parse(JSON.stringify(list)))
 }
 
+export const clearMealInfo = function ({commit, state}) {
+  commit(types.SET_DEFAULTSTORE_ID, 0)
+  commit(types.SET_SELECTCAR, 0)
+  commit(types.SET_MEALSTORELIST, [])
+  commit(types.DELETE_UPDATE_ORDER)
+}
+
 export const clearUser = function ({commit, state}) {
 
 }
