@@ -90,10 +90,10 @@
           </div>
           <div class="taocan-img">
             <div class="img1" @click="goSetMealInfo(0)"><img :src="gt1UpdateImgUrl + setmeals[0].extendImg" alt=""> </div>
-            <div class="img2" @click="goSetMealInfo(1)"><img :src="gt1UpdateImgUrl + setmeals[1].extendImg" alt=""> </div>
+            <!-- <div class="img2" @click="goSetMealInfo(1)"><img :src="gt1UpdateImgUrl + setmeals[1].extendImg" alt=""> </div> -->
           </div>
           <div class="taocan-last" @click="goSetMealInfo(2)">
-            <img :src="gt1UpdateImgUrl + setmeals[2].extendImg" alt="">
+            <!-- <img :src="gt1UpdateImgUrl + setmeals[2].extendImg" alt=""> -->
           </div>
         </div>
       </div>
@@ -282,8 +282,8 @@ export default {
     _getBanner () {
       this.$post(`${this.gt1Url}/api/f6-app/getFocusandSetmealList`, this.gt1Header, (res) => {
         if (res.errorCode === 0 && res.data.code === 0) {
-          this.recommends = res.data.data.focus
-          this.setmeals = res.data.data.setmeals
+          this.recommends = res.data.data.focus ? res.data.data.focus : []
+          this.setmeals = res.data.data.setmeals ? res.data.data.setmeals : []
         }
       }, {
         location: 1,

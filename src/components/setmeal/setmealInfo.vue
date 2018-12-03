@@ -7,7 +7,7 @@
     <Scroll class="list" :data="setmealInfo" ref="scroll">
       <div class="con">
         <div class="cover-img">
-          <img src="../../common/imgs/mindbg@2x.png" alt="">
+          <SwiperSider v-if="recommends.length > 0" :recommends="recommends" :duration="'500'"></SwiperSider>
         </div>
         <div class="cover-info">
           <div class="price">
@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <!-- <Iframe v-if="setmealInfo.detailUrl" :url="setmealInfo.detailUrl" @setHeight="setHeight"></Iframe> -->
+        <!-- <Iframe v-if="true" :url="'https://data.cubsdiary.com/xcdl/'" @setHeight="setHeight"></Iframe> -->
       </div>
     </Scroll>
     <div class="footer">
@@ -51,12 +51,14 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import Iframe from '@/base/iframe'
+import SwiperSider from '@/base/slider/slider-common'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
   name: 'setmealList',
   data () {
     return {
       setmealInfo: {},
+      recommends: [],
       id: null
     }
   },
@@ -113,6 +115,7 @@ export default {
       this.$post(`${this.gt1Url}/api/f6-app/getSetmealInfo`, this.gt1Header, (res) => {
         if (res.errorCode === 0 && res.data.code === 0) {
           this.setmealInfo = res.data.data
+          this.recommends = res.data.data.imgs.split(',')
         }
       }, {
         id: this.id
@@ -208,6 +211,7 @@ export default {
   },
   components: {
     Scroll,
+    SwiperSider,
     Iframe
   }
 }

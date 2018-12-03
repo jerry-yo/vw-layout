@@ -1,6 +1,6 @@
 <template>
   <div class="v-html">
-    <iframe ref="iframe" src="https://m.imooc.com/" @load="loaded" scrolling="no" class="iframe" :height="html+ 100"></iframe>
+    <iframe ref="iframe" :src="url" @load="loaded" scrolling="no" class="iframe" :height="html"></iframe>
   </div>
 </template>
 
@@ -39,5 +39,6 @@ export default {
       position: relative
       width: 100%
       z-index: -1
+      background-color: #fff
 
 </style>
