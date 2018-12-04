@@ -10,7 +10,7 @@
       </div>
     </div>
     <Scroll ref="infoList" :data="tabActive ? handleServerInfo : handlePartInfo" class="container" flexContainer>
-      <ul class="menu-list" v-if="tabActive">
+      <ul class="" v-if="tabActive" :class="handleServerInfo.length === 0 ? 'menu-list nofuwu' : 'menu-list'">
         <li class="menu" v-for="(item, index) in handleServerInfo" :key="index">
           <div class="server-info">
             <div class="title">{{item.serviceName}}</div>
@@ -24,7 +24,7 @@
           </div>
         </li>
       </ul>
-      <ul class="part-list" v-if="!tabActive">
+      <ul v-if="!tabActive" :class="handlePartInfo.length === 0 ? 'part-list nocailiao' : 'part-list'">
         <li v-for="(item, index) in handlePartInfo" :key="index">
           <div class="img">
             <img :src="imgpartUrl + handleArr(item.partShowName).customCode" alt="">
@@ -150,6 +150,11 @@ export default {
     display: flex
     .menu-list
       width: 100%
+      &.nofuwu
+        bg-image('../../common/imgs/nofuwu')
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: 750px 381px
       .menu
         height: 90px
         display: flex
@@ -197,6 +202,11 @@ export default {
             color: #65d976
     .part-list
       width: 100%
+      &.nocailiao
+        bg-image('../../common/imgs/nocailiao')
+        background-repeat: no-repeat
+        background-position: center center
+        background-size: 750px 381px
       li
         height: 192px
         display: flex

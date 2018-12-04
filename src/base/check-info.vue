@@ -3,7 +3,7 @@
     <div class="check-info-mask">
       <div class="mask-con">
         <h2 class="title">
-          <span>故障概要</span>
+          <span>{{title}}</span>
         </h2>
         <Scroll class="content" ref="faultText" :data="data" v-if="data.updateDesc.length > 0">
           <div class="wrapper">
@@ -41,11 +41,18 @@ export default {
     from: {
       type: String,
       default: 'repair'
+    },
+    title: {
+      type: String,
+      default: '故障概要'
     }
   },
   computed: {
     showImgArr () {
-      return this.data.updateImgs
+      if (this.from === 'order') {
+        return this.data.updateImgs
+      }
+      return this.data.updateImgArr
     }
   },
   methods: {

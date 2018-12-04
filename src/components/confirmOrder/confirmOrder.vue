@@ -50,7 +50,7 @@
       <div class="tips">预约不会产生任何费用 具体情况请到店后有技师介绍</div>
       <div class="btn" @click="_goPreOrder">确认下单</div>
     </div>
-    <checkInfo v-if="faultInfoState" :data="updateOrder" @closemask="closeUpdateInfo"></checkInfo>
+    <checkInfo v-if="faultInfoState" :data="updateOrder" :title="'详情显示'" @closemask="closeUpdateInfo"></checkInfo>
     <keepFitTime v-if="fitTime" @close="closeMask" :store="storeInfos"></keepFitTime>
   </div>
 </template>

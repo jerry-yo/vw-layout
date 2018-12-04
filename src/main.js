@@ -20,8 +20,6 @@ Vue.use(VueLazyLoad, {
   loading: require('@/common/imgs/default.png')
 })
 
-Vue.config.productionTip = false
-
 // 全局 控件
 Vue.prototype.$Toast = Toast
 Vue.prototype.$Modal = Modal

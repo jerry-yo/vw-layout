@@ -99,7 +99,7 @@
         <div class="btn">付款</div>
       </div>
     </div>
-    <checkInfo v-if="faultInfoState" :data="orderInfoShow.memoInfos" :from="'order'" @closemask="closeCheckInfo"></checkInfo>
+    <checkInfo v-if="faultInfoState" :data="orderInfoShow.memoInfos" :title="'详情显示'" :from="'order'" @closemask="closeCheckInfo"></checkInfo>
   </div>
 </template>
 
@@ -233,6 +233,7 @@ export default {
         this.setSeleServerInfo(this.orderInfoShow.handleOrderPartList)
         this.$router.push('/server-info')
       } else if (this.orderInfoShow.memoInfos.serverState === 2 || this.orderInfoShow.memoInfos.serverState === 3) {
+        console.log(this.orderInfoShow.memoInfos)
         if (this.orderInfoShow.memoInfos.updateImgs.length === 0 && this.orderInfoShow.memoInfos.updateDesc.length === 0) {
           this.$Toast({
             position: 'bottom',
@@ -240,6 +241,7 @@ export default {
           })
         } else {
           this.faultInfoState = true
+          console.log(this.faultInfoState)
         }
       }
     },

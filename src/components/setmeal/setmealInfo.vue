@@ -31,7 +31,7 @@
             </div>
           </div>
         </div>
-        <!-- <Iframe v-if="true" :url="'https://data.cubsdiary.com/xcdl/'" @setHeight="setHeight"></Iframe> -->
+        <Iframe v-if="setmealInfo.detailUrl" :url="setmealInfo.detailUrl" @setHeight="setHeight"></Iframe>
       </div>
     </Scroll>
     <div class="footer">
@@ -126,6 +126,7 @@ export default {
     },
     selectMealStore () {
       if (!this.userInfo) {
+        this.showToast('请先登录')
         return
       }
       if (this.setmealInfo.storeIds === '0') {
@@ -148,6 +149,7 @@ export default {
     },
     selectMealCar () {
       if (!this.userInfo) {
+        this.showToast('请先登录')
         return
       }
       this.$router.push('/garage?type=select')

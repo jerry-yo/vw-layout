@@ -5,10 +5,10 @@
         <div class="order-title" @click="goOrderInfo(item)">
           <div class="img"><img :src="carLogoUrl + item.memoInfos.imageSrc" alt="">  </div>
           <span class="car-id">{{item.carNumber}}</span>
-          <div class="order-states" :class="{'by': item.memoInfos.serverState === 1, 'wx': item.memoInfos.serverState === 2}"></div>
+          <div class="order-states" :class="{'by': item.memoInfos.serverState === 1, 'wx': item.memoInfos.serverState === 2, 'tc': item.memoInfos.serverState === 3}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
-          <orderWx v-if="item.memoInfos.serverState === 2" :data="item.memoInfos">
+          <orderWx v-if="item.memoInfos.serverState === 2 || item.memoInfos.serverState === 3" :data="item.memoInfos">
           </orderWx>
           <orderBy v-if="item.memoInfos.serverState === 1" :data="item.memoInfos">
           </orderBy>
