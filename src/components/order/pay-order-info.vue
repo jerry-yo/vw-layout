@@ -141,7 +141,8 @@ export default {
         code: _self.wechatCode,
         version: parseInt(_self.orderInfoShow.tsMaintainVersion),
         subject: `奇特异${/维修/.test(_self.stationName) ? '维修' : '保养'}门店 - ${_self.stationName}`,
-        frontUrl: enUrl
+        frontUrl: enUrl,
+        outTradeNo: _self.orderInfoShow.billNo
       })
     },
     goBack () {

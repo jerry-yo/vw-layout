@@ -1,5 +1,5 @@
 <template>
-  <div class="slider" @touchmove.prevent ref="slider">
+  <div class="slider-swiper" @touchmove.prevent ref="slider">
     <div class="slider-group" ref="sliderGroup" @transitionend="transitionEnd" :style="{transform: translate3d, transitionDuration: animateTime + 'ms'}"  @touchstart="touchS" @touchend="touchE" @touchmove="touchM">
       <div class="slider-dots" v-for="(item, index) in imgs" :key="index" :style="{width: groupWidth(index), transition: groupAnimateTime}">
         <a :href="item.linkUrl.length > 0 ? item.linkUrl : 'javascript:;'">
@@ -304,10 +304,10 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped  lang="stylus" ref="stylesheet/stylus">
-  .slider
+  .slider-swiper
     position: relative
     width: 100%
-    height: 150px
+    height: 100%
     padding: 5px 0px
     overflow: hidden
     .pagination

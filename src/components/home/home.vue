@@ -9,8 +9,8 @@
     </div>
     <Scroll class="container_1" ref="home">
       <div class="con">
-        <div class="slider" v-if="handleRecommends.length > 0">
-          <Swiper :autoplay="5000" :duration="500" :slidetype="'left'" :recommends="handleRecommends" :color="'#fff'" :pagination="true">
+        <div class="slider">
+          <Swiper v-if="handleRecommends.length" :autoplay="5000" :duration="500" :slidetype="'left'" :recommends="handleRecommends" :color="'#fff'" :pagination="true">
           </Swiper>
         </div>
         <div class="car-info">

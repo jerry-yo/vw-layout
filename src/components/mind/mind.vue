@@ -7,10 +7,10 @@
           <div class="user-sz" @click="_goSetUp"></div>
         </div>
         <div class="user-info">
-          <div class="user-img">
+          <div class="user-img" v-if="userInfo">
             <img v-lazy="userInfo.imgSource" alt="">
           </div>
-          <div class="user-xm" v-if="userInfo.externalUserId">
+          <div class="user-xm" v-if="userInfo">
             <span>{{userInfo.nickName}}</span>
             <div class="user-card">
               <span></span>
@@ -128,7 +128,7 @@ export default {
     return {}
   },
   mounted () {
-    if (this.userInfo.userTel) {
+    if (this.userInfo) {
       this.getUserInfo()
     }
   },
