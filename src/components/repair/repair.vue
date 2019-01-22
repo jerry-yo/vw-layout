@@ -1,13 +1,7 @@
 <template>
   <div class="repair" flexContainer :style="{height: clientHeight + 'px'}" @touch.prevent>
     <CheckMask v-if="showInfo" @closemask="_closeMask" :data="faultInfo"></CheckMask>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font" @click="_goSelectCar">
-        <h2>{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</h2>
-        <p><span>{{nowCar.carNumber}}</span><span>丨</span><span>{{nowCar.distance}}km</span></p>
-      </div>
-    </div>
+    <headerBar :contentInfo="nowCar" contentColor="#5b5b5b" @leftClick="_goBack" @contentClick="_goSelectCar"></headerBar>
     <div class="service-flow">
       <span class="bg bg2">选择门店</span>
       <span>-</span>
@@ -44,6 +38,7 @@
 import Scroll from '@/base/scroll/scroll'
 import uploadPic from '@/base/upload-pic'
 import storeInfo from '@/base/store-info'
+import headerBar from '@/base/headerBar'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
@@ -144,7 +139,8 @@ export default {
     seleDetectionMenu,
     Scroll,
     CheckMask,
-    storeInfo
+    storeInfo,
+    headerBar
   }
 }
 </script>
@@ -161,36 +157,6 @@ export default {
     height: 200px
     overflow: hidden
     overflow-y: scroll
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    .font
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      h2
-        font-size: 30px
-        line-height: 42px
-        color: #5b5b5b
-        font-weight: bolder
-        transform: skewX(-10deg)
-      p
-        font-size: 22px
-        color: #5b5b5b
-        line-height: 34px
-        span:nth-child(2)
-          margin: 0 15px
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .service-flow
     height: 70px
     background-color: #fff1e4

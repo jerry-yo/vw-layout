@@ -1,9 +1,6 @@
 <template>
   <div class="order-info" flexContainer>
-    <div class="title">
-      <div class="back" @click="goBack" ></div>
-      <span>订单详情</span>
-    </div>
+    <headerBar contentTitle="订单详情" contentColor="#5b5b5b" @leftClick="goBack"></headerBar>
     <Scroll class="order-content" ref="orderWarpper" :data="orderInfoShow">
       <div class="order-con">
         <div class="order-img" v-if="(orderType === 'yyz' && isExpiryTime.flag) || orderType === 'yqx'">
@@ -106,6 +103,7 @@
 <script>
 import Wx from 'Wx'
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
 import checkInfo from '@/base/check-info'
@@ -233,7 +231,6 @@ export default {
         this.setSeleServerInfo(this.orderInfoShow.handleOrderPartList)
         this.$router.push('/server-info')
       } else if (this.orderInfoShow.memoInfos.serverState === 2 || this.orderInfoShow.memoInfos.serverState === 3) {
-        console.log(this.orderInfoShow.memoInfos)
         if (this.orderInfoShow.memoInfos.updateImgs.length === 0 && this.orderInfoShow.memoInfos.updateDesc.length === 0) {
           this.$Toast({
             position: 'bottom',
@@ -241,7 +238,6 @@ export default {
           })
         } else {
           this.faultInfoState = true
-          console.log(this.faultInfoState)
         }
       }
     },
@@ -256,7 +252,8 @@ export default {
     orderBy,
     orderWx,
     Scroll,
-    checkInfo
+    checkInfo,
+    headerBar
   }
 }
 </script>
@@ -268,34 +265,6 @@ export default {
     height: 100vh
     background-color: #f4f4f4
     overflow: hidden
-    .title
-      position: relative
-      height: 88px
-      background-color: #fff
-      margin-bottom: 10px
-      & > span
-        position: absolute
-        left: 0
-        top: 0
-        right: 0
-        bottom: 0
-        margin: auto
-        display: inline-block
-        width: 160px
-        height: 88px
-        text-align: center
-        line-height: 88px
-        font-weight: 600
-        font-size: 36px
-        color: #5b5b5b
-        transform: skewX(-15deg)
-      .back
-        width: 120px
-        height: 100%
-        bg-image('../../common/imgs/order/back')
-        background-size: 18px 30px
-        background-repeat: no-repeat
-        background-position: 30px center
     .order-content
       flex: 1
       overflow: hidden

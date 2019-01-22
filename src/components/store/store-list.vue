@@ -1,12 +1,11 @@
 <template>
   <div class="store" flexContainer>
-    <div class="tabbar">
-      <span class="goback" @click="_goBack"></span>
-      <h2 class="title">选择门店</h2>
-      <div class="address" @click="_seleCity">
+    <headerBar contentTitle="选择门店" contentColor="#5b5b5b" @leftClick="_goBack">
+      <div class="address" @click="_seleCity" slot="right">
         {{cityShow}}
+        <i></i>
       </div>
-    </div>
+    </headerBar>
     <Scroll class="store-list" ref="storelist">
       <ul>
         <li :class="{'active': defaultStoreId === index}" v-for="(item, index) in handleStoreList" :key="index" >
@@ -37,6 +36,7 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapGetters, mapMutations} from 'vuex'
 export default {
   name: 'storeList',
@@ -113,7 +113,8 @@ export default {
     })
   },
   components: {
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -124,31 +125,22 @@ export default {
     background-color: #f4f4f4
     flex-direction: column
     height: 100vh
-    .tabbar
+    .address
+      position: absolute
+      right: 0
+      top: 0
+      width: 160px
       height: 88px
-      line-height: 88px
       display: flex
-      background-color: #fff
-      margin-bottom: 10px
-      .goback
-        width: 120px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-size: 18px 30px
-        background-position: 30px center
-      .title
-        flex: 1
-        text-align: center
-        line-height: 88px
-        font-weight: 600
-        font-size: 36px
-        color: #5b5b5b
-        transform: skewX(-15deg)
-      .address
-        margin-right: 30px
-        padding-right: 26px
-        font-size: 22px
-        color: #fd9068
+      justify-content: center
+      align-items: center
+      font-size: 22px
+      color: #fd9068
+      & > i
+        display: inline-block
+        width: 12px
+        height: 6px
+        margin-left: 10px
         bg-image('../../common/imgs/home/sj-bottom')
         background-repeat: no-repeat
         background-size: 12px 6px

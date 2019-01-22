@@ -2,13 +2,7 @@
 
 <template>
   <div class="detection-record" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        <h2>{{getDefaultCarInfo.manufacturerName + ' - ' + getDefaultCarInfo.evehicleSystem}}</h2>
-        <p><span>{{getDefaultCarInfo.carNumber}}</span><span>丨</span><span>{{getDefaultCarInfo.distance}}km</span></p>
-      </div>
-    </div>
+    <headerBar :contentInfo="getDefaultCarInfo" @leftClick="_goBack"></headerBar>
     <div class="nav-bar">
       <div class="yjd-bar" :class="isflag ? 'active' : 'usual'" @click="isflag = true">预检单</div>
       <div class="ccd-bar" :class="!isflag ? 'active' : 'usual'" @click="isflag = false">查车单</div>
@@ -32,6 +26,7 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {checksObjMixin} from '@/common/js/checkmixin'
 import {mapGetters} from 'vuex'
 export default {
@@ -82,7 +77,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -93,36 +89,6 @@ export default {
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    .font
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      h2
-        font-size: 30px
-        line-height: 42px
-        color: #5b5b5b
-        font-weight: bolder
-        transform: skewX(-10deg)
-      p
-        font-size: 22px
-        color: #5b5b5b
-        line-height: 34px
-        span:nth-child(2)
-          margin: 0 15px
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .nav-bar
     display: flex
     padding: 0 30px

@@ -3,12 +3,7 @@
 <template>
   <div class="addcar-idcard" flexContainer>
     <seleArea v-if="showAreaBtn" @goback="getBackInfo" :areaindex="areaIndex"></seleArea>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="tabbar">
-        添加车辆
-      </div>
-    </div>
+    <headerBar contentTitle="添加车辆" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="container">
       <div class="car-name">
         <img :src="carLogoUrl + addCar.imageSrc" alt="">
@@ -46,6 +41,7 @@
 
 <script>
 import seleArea from '@/base/sele-area'
+import headerBar from '@/base/headerBar'
 import {mapGetters} from 'vuex'
 import {expireToken} from '@/common/js/mixin'
 import datePickerMask from '@/base/date-picker'
@@ -187,7 +183,8 @@ export default {
   },
   components: {
     seleArea,
-    datePickerMask
+    datePickerMask,
+    headerBar
   }
 }
 </script>
@@ -198,27 +195,6 @@ export default {
   background-color: #f2f2f2
   flex-direction: column
   height: 100vh
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    margin-bottom: 10px
-    .go-back
-      width: 120px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
-    .tabbar
-      flex: 1
-      display: flex
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      font-weight: 600
-      font-size: 36px
-      color: #5b5b5b
-      transform: skewX(-15deg)
   .container
     position: relative
     flex: 1

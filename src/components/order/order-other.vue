@@ -4,7 +4,7 @@
       <div class="noimgs bg-1"></div>
       <div class="order-info">
         <h3>服务门店</h3>
-        <h2>奇特异{{data.businessTypeName}}门店-{{data.abbreviation}}</h2>
+        <h2>奇特异车业-{{data.abbreviation}}</h2>
         <p>合计： <span>￥ {{data.amountAll}}</span> </p>
       </div>
     </div>

@@ -12,9 +12,6 @@
         <div class="order-foot">
           <div class="foot">
             <span class="car-state">{{item.handleComplateDate}}</span>
-            <div class="order-set" v-if="false">
-              <div :class="false ? 'go-pay' : 'ungo-pay'" @click="_goPay(item)">付款</div>
-            </div>
           </div>
         </div>
       </li>
@@ -108,25 +105,5 @@ export default {
           line-height: 78px
           color: #acacac
           font-size: 20px
-        .order-set
-          flex: 1
-          display: flex
-          justify-content: flex-end
-          align-items: center
-          & > div
-            width: 120px
-            height: 48px
-            margin-left: 18px
-            font-size: 20px
-            line-height: 48px
-            text-align: center
-            background-size: 100% 100%
-            background-repeat: no-repeat
-            background-position: center center
-          .look-order
-            width: 160px
-            border: 1px solid #ff8040
-            border-radius: 5px
-            color: #ff8040
 
 </style>

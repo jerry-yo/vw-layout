@@ -1,11 +1,6 @@
 <template>
   <div class="maintain-pre" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        订单详情
-      </div>
-    </div>
+    <headerBar contentTitle="订单详情" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="service-flow">
       <span class="bg bg2">选择门店</span>
       <span>-</span>
@@ -56,6 +51,7 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapGetters, mapMutations} from 'vuex'
 import {getServerCar, expireToken} from '@/common/js/mixin'
 import storeInfo from '@/base/store-info'
@@ -261,7 +257,8 @@ export default {
   components: {
     Scroll,
     keepFitTime,
-    storeInfo
+    storeInfo,
+    headerBar
   }
 }
 </script>
@@ -273,28 +270,6 @@ export default {
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    .font
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      font-size: 36px
-      color: #5b5b5b
-      font-weight: bolder
-      transform: skewX(-10deg)
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .service-flow
     height: 70px
     background-color: #fff1e4

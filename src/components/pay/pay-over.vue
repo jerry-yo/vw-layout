@@ -1,9 +1,6 @@
 <template>
   <div class="pay-over" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">支付完成</div>
-    </div>
+    <headerBar contentTitle="支付完成" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="container">
       <div class="bg"></div>
       <div class="info">
@@ -11,21 +8,12 @@
         <div class="store">奇特异{{/维修/.test(station) ? '维修' : '保养'}}门店-{{station}}</div>
       </div>
     </div>
-    <!-- <div class="evaluate">
-      <div class="star-con">
-        <span>给本次服务评个星吧</span>
-        <Star @starnum="getStarNum"></Star>
-      </div>
-      <div class="text-con" ref="textcon">
-        <textarea name="name" rows="5" v-model.lazy="textarea" maxlength="500" placeholder="有什么建议尽管提啦~" @focus="_focusText" @input="filterFont"></textarea>
-      </div>
-    </div> -->
     <div class="button" @click="_lookOrder">确认</div>
   </div>
 </template>
 
 <script>
-// import Star from '@/base/star.vue'
+import headerBar from '@/base/headerBar'
 export default {
   name: 'payOver',
   data () {
@@ -42,30 +30,13 @@ export default {
     _goBack () {
       this.$router.go(-3)
     },
-    // _goHome () {
-    //   this.$router.push('/home')
-    // },
     _lookOrder () {
       this.$router.push('/complete')
     }
-    // getStarNum (id) {
-    //   console.log(id)
-    // },
-    // _focusText () {
-    //   let _self = this
-    //   setTimeout(function () {
-    //     let pannel = _self.$refs.textcon
-    //     pannel.scrollIntoView(true)
-    //     pannel.scrollIntoViewIfNeeded(true)
-    //   }, 200)
-    // },
-    // filterFont () {
-    //   console.log('666')
-    // }
+  },
+  components: {
+    headerBar
   }
-  // components: {
-  //   Star
-  // }
 }
 </script>
 
@@ -76,28 +47,6 @@ export default {
     height: 100vh
     background-color: #f4f4f4
     overflow: hidden
-    .action-bar
-      display: flex
-      height: 88px
-      background-color: #fff
-      .font
-        flex: 1
-        display: flex
-        flex-direction: column
-        justify-content: center
-        align-items: center
-        margin-right: 120px
-        font-size: 36px
-        color: #5b5b5b
-        font-weight: bolder
-        transform: skewX(-10deg)
-      .go-back
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
     .container
       height: 200px
       display: flex

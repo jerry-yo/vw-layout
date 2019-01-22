@@ -1,10 +1,7 @@
 <template>
   <div class="my-info" flexContainer>
     <myInfoMask v-if="modifyInfo" @closemask="_closeMask" :id="id" :info="modifyType"></myInfoMask>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">个人资料</div>
-    </div>
+    <headerBar contentTitle="个人资料" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="container">
       <div class="my_avatar">
         <div class="avatar">
@@ -32,6 +29,7 @@
 
 <script>
 import myInfoMask from '@/components/mind/my-info-mask'
+import headerBar from '@/base/headerBar'
 import {mapGetters, mapActions} from 'vuex'
 import {expireToken} from '@/common/js/mixin'
 export default {
@@ -112,28 +110,6 @@ export default {
       })
     },
     toggleAvatar () {
-      // let _self = this
-      // this.Wx.chooseImage({
-      //   count: 1, // 默认9
-      //   sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-      //   sourceType: ['album', 'camera'],
-      //   success: function (res) {
-      //     _self.localId = res.localIds[0]
-      //     if (window.__wxjs_is_wkwebview) {
-      //       _self.Wx.getLocalImgData({
-      //         localId: _self.localId,
-      //         success: function (res) {
-      //           var localData = res.localData
-      //           _self.localId = localData.replace('jgp', 'jpeg')
-      //         },
-      //         fail: function (res) {
-      //         }
-      //       })
-      //     } else {
-      //       _self.localId = res.localIds[0]
-      //     }
-      //   }
-      // })
       this.$Toast({
         position: 'bottom',
         message: '请到GT1 APP修改头像'
@@ -144,7 +120,8 @@ export default {
     ])
   },
   components: {
-    myInfoMask
+    myInfoMask,
+    headerBar
   }
 }
 </script>
@@ -156,28 +133,6 @@ export default {
     height: 100vh
     background-color: #f4f4f4
     overflow: hidden
-    .action-bar
-      display: flex
-      height: 88px
-      background-color: #fff
-      .font
-        flex: 1
-        display: flex
-        flex-direction: column
-        justify-content: center
-        align-items: center
-        margin-right: 120px
-        font-size: 36px
-        color: #5b5b5b
-        font-weight: bolder
-        transform: skewX(-10deg)
-      .go-back
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
     .container
       flex: 1
       .my_avatar

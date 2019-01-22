@@ -1,11 +1,6 @@
 <template>
   <div class="add-new-server" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        添加新服务
-      </div>
-    </div>
+    <headerBar contentTitle="添加新服务" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <Scroll class="container" ref="addservice" :data="newServerlist">
       <div class="wrapper">
         <serverModel
@@ -42,6 +37,7 @@
 <script>
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, getServerCar} from '@/common/js/mixin'
 import {handleServerModel} from '@/common/js/servermixin'
@@ -181,7 +177,8 @@ export default {
   },
   components: {
     serverModel,
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -193,28 +190,6 @@ export default {
     position: relative
     background-color: #f4f4f4
     flex-direction: column
-    .action-bar
-      display: flex
-      height: 88px
-      background-color: #fff
-      .font
-        flex: 1
-        display: flex
-        flex-direction: column
-        justify-content: center
-        align-items: center
-        margin-right: 120px
-        font-size: 36px
-        color: #5b5b5b
-        font-weight: bolder
-        transform: skewX(-10deg)
-      .go-back
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
     .container
       flex: 1
       overflow: hidden

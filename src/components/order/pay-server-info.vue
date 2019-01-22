@@ -1,14 +1,13 @@
 <template>
   <div class="addcar-tabbar" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="tabbar">
+    <headerBar @leftClick="_goBack">
+      <div class="tabbar" slot="content">
         <div class="con">
           <div class="left" :class="{active: tabActive}" @click="_goTab(1)">项目</div>
           <div class="right" :class="{active: !tabActive}"  @click="_goTab(2)">材料</div>
         </div>
       </div>
-    </div>
+    </headerBar>
     <Scroll ref="infoList" :data="tabActive ? handleServerInfo : handlePartInfo" class="container" flexContainer>
       <ul class="" v-if="tabActive" :class="handleServerInfo.length === 0 ? 'menu-list nofuwu' : 'menu-list'">
         <li class="menu" v-for="(item, index) in handleServerInfo" :key="index">
@@ -45,10 +44,12 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import {mapGetters} from 'vuex'
+import headerBar from '@/base/headerBar'
 export default {
   name: 'payServerInfo',
   components: {
-    Scroll
+    Scroll,
+    headerBar
   },
   data () {
     return {
@@ -103,50 +104,44 @@ export default {
   background-color: #f2f2f2
   flex-direction: column
   height: 100vh
-  .action-bar
+  .tabbar
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    bottom: 0
+    margin: auto
+    width: 400px
     display: flex
-    height: 88px
-    background-color: #fff
-    margin-bottom: 10px
-    .go-back
-      width: 120px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
-    .tabbar
-      flex: 1
+    justify-content: center
+    align-items: center
+    .con
+      width: 300px
       display: flex
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      .con
-        width: 300px
-        display: flex
-        height: 60px
-        border: 1px solid #ff8040
-        border-radius: 5px
-        .left
-          flex: 1
-          border-right: 1px solid #ff8040
-          text-align: center
-          line-height: 60px
-          font-size: 26px
-          color: #ff7e37
-          &.active
-            color: #ffffff
-            background: -webkit-linear-gradient(left, #ff944a, #ff5c3a)
-        .right
-          flex: 1
-          text-align: center
-          line-height: 60px
-          font-size: 26px
-          color: #ff7e37
-          &.active
-            color: #ffffff
-            background: -webkit-linear-gradient(left, #ff5c3a, #ff944a)
+      height: 60px
+      border: 1px solid #ff8040
+      border-radius: 5px
+      .left
+        flex: 1
+        text-align: center
+        line-height: 60px
+        font-size: 26px
+        color: #ff7e37
+        &.active
+          color: #ffffff
+          background: -webkit-linear-gradient(left, #ff944a, #ff5c3a)
+      .right
+        flex: 1
+        text-align: center
+        line-height: 60px
+        font-size: 26px
+        color: #ff7e37
+        &.active
+          color: #ffffff
+          background: -webkit-linear-gradient(left, #ff5c3a, #ff944a)
   .container
     flex: 1
+    margin-top: 10px
     display: flex
     .menu-list
       width: 100%

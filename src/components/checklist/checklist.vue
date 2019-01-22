@@ -2,13 +2,7 @@
 <template>
   <div class="check-list" flexContainer>
     <CheckMask v-if="showInfo" @closemask="_closeMask" :data="faultInfo"></CheckMask>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        <h2>{{`${getDefaultCarInfo.manufacturerName} - ${getDefaultCarInfo.evehicleSystem}`}}</h2>
-        <p><span>{{getDefaultCarInfo.carNumber}}</span><span>丨</span><span>{{getDefaultCarInfo.distance}}km</span></p>
-      </div>
-    </div>
+    <headerBar :contentInfo="getDefaultCarInfo" @leftClick="_goBack"></headerBar>
     <Scroll class="container" :data="maintainPhotoVoList" v-if="maintainPhotoVoList">
       <div  class="con">
         <div class="prev-detection" v-if="yjdId !== ''">
@@ -41,6 +35,7 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import SeleDetection from '@/base/sele-detection-menu'
+import headerBar from '@/base/headerBar'
 import CheckMask from '@/base/check-info'
 import {mapGetters} from 'vuex'
 import {expireToken} from '@/common/js/mixin'
@@ -146,7 +141,8 @@ export default {
   components: {
     Scroll,
     SeleDetection,
-    CheckMask
+    CheckMask,
+    headerBar
   }
 }
 </script>
@@ -158,39 +154,6 @@ export default {
     height: 100vh
     background-color: #f4f4f4
     overflow: hidden
-    .action-bar
-      position: relative
-      display: flex
-      height: 88px
-      background-color: #fff
-      z-index: 100
-      margin-bottom: 10px
-      .font
-        flex: 1
-        display: flex
-        flex-direction: column
-        justify-content: center
-        align-items: center
-        margin-right: 120px
-        h2
-          font-size: 30px
-          line-height: 42px
-          color: #5b5b5b
-          font-weight: bolder
-          transform: skewX(-10deg)
-        p
-          font-size: 22px
-          color: #5b5b5b
-          line-height: 34px
-          span:nth-child(2)
-            margin: 0 15px
-      .go-back
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
     .container
       flex: 1
       overflow: hidden

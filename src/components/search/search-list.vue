@@ -1,14 +1,12 @@
 
 <template>
   <div class="add-car-sharing" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="serach-input">
+    <headerBar rightTitle="搜索" @leftClick="_goBack" @rightClick="searchBtn">
+      <div class="serach-input" slot="content">
         <input type="text" v-model="serachVal" :placeholder="selePlaceHolder">
         <div class="close-btn" v-show="serachVal.length > 0" @click="clearSearchVal"></div>
       </div>
-      <div class="search" @click="searchBtn">搜索</div>
-    </div>
+    </headerBar>
     <Scroll class="list">
       <div class="his-list" v-if="serachVal.length < 1">
         <ul>
@@ -49,6 +47,7 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapGetters, mapMutations} from 'vuex'
 import {debounce} from '@/common/js/arr'
 export default {
@@ -195,7 +194,8 @@ export default {
     })
   },
   components: {
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -210,57 +210,40 @@ export default {
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
-  .action-bar
-    position: relative
+  .serach-input
+    position: absolute
+    left: 0
+    right: 0
+    top: 0
+    bottom: 0
+    margin: auto
+    width: 450px
     display: flex
-    height: 88px
-    background-color: #fff
-    margin-bottom: 10px
-    z-index: 100
-    .serach-input
-      position: relative
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      input
-        width: 100%
-        height: 60px
-        padding: 0 20px
-        border: 1px solid #cfcfcf
-        background-color: #f2f2f2
-        border-radius: 8px
-        overflow: hidden
-        outline: none
-        &::-webkit-input-placeholder
-          font-size: 26px
-          color: #bbbbbb
-      .close-btn
-        position: absolute
-        right: 0
-        top: 14px
-        width: 60px
-        height: 60px
-        bg-image('../../common/imgs/mind/search_close')
-        background-repeat: no-repeat
-        background-position: center center
-        background-size: 30px 30px
-    .go-back
-      width: 100px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
+    flex-direction: column
+    justify-content: center
+    align-items: center
+    input
+      width: 100%
+      height: 60px
+      padding: 0 20px
+      border: 1px solid #cfcfcf
+      background-color: #f2f2f2
+      border-radius: 8px
+      overflow: hidden
+      outline: none
+      &::-webkit-input-placeholder
+        font-size: 26px
+        color: #bbbbbb
+    .close-btn
+      position: absolute
+      right: 0
+      top: 14px
+      width: 60px
+      height: 60px
+      bg-image('../../common/imgs/mind/search_close')
       background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
-    .search
-      width: 100px
-      padding-right: 30px
-      display: flex
-      justify-content: flex-end
-      align-items: center
-      font-size: 24px
-      color: #ff7937
+      background-position: center center
+      background-size: 30px 30px
   .list
     flex: 1
     overflow: hidden

@@ -220,6 +220,19 @@ const payServerInfo = {
   },
   component: resolve => { require(['@/components/order/pay-server-info'], resolve) }
 }
+const repairReport = {
+  path: '/repair-report',
+  name: 'repairReport',
+  meta: {
+    requireAuth: true
+  },
+  props: route => ({
+    stationName: route.query.station,
+    billNo: route.query.gdid,
+    carNoWhole: route.query.car
+  }),
+  component: resolve => { require(['@/components/order/repair-report'], resolve) }
+}
 const changePre = {
   path: '/change-pre',
   name: 'changePre',
@@ -312,6 +325,7 @@ export const routers = [
   repairRouter,
   repairPreOrder,
   Reservations,
+  repairReport,
   confirmOrder,
   setmealInfo,
   setmealList,

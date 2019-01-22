@@ -128,6 +128,22 @@ export default {
     },
     registerRequest () {
       this.$post(`${this.gt1Url}/api/f6-app/regist`, this.gt1Header, (res) => {
+        if (res.errorCode === 0) {
+          if (res.data.code === 0) {
+            this.$router.replace('/home')
+            this.updateUserInfo(res.data.data)
+          } else {
+            this.$Toast({
+              position: 'bottom',
+              message: res.data.msg
+            })
+          }
+        } else {
+          this.$Toast({
+            position: 'bottom',
+            message: res.errorCode
+          })
+        }
       }, {
         userTel: this.phone,
         code: this.number

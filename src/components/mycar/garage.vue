@@ -1,11 +1,7 @@
 // 我的车库
 <template>
   <div class="garage">
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">我的车库</div>
-      <div class="vehicle-management" v-if="garageType === 'add'" @click="_goManagement">管理</div>
-    </div>
+    <headerBar leftIcon="white" rightColor="white" contentTitle="我的车库" backgroundColor="none" :rightTitle="garageType === 'add' ? '管理' :''"  @leftClick="_goBack" @rightClick="_goManagement"></headerBar>
     <div class="container">
       <div class="swiper">
         <Slider :recommends="carList" @tapcard="tapCard" @carid="getCarId" :type="garageType" @setdefault="setDefault"></Slider>
@@ -63,6 +59,7 @@
 
 <script>
 import Slider from '@/base/slider/slider-view'
+import headerBar from '@/base/headerBar'
 import {mapActions, mapGetters, mapMutations} from 'vuex'
 import {expireToken, modifyCarInfo} from '@/common/js/mixin'
 import datePickerMask from '@/base/date-picker'
@@ -71,7 +68,8 @@ export default {
   name: 'garage',
   components: {
     Slider,
-    datePickerMask
+    datePickerMask,
+    headerBar
   },
   mixins: [expireToken, modifyCarInfo],
   data () {
@@ -349,43 +347,6 @@ export default {
     background-repeat: no-repeat
     background-position: center top
     background-size: 750px 281px
-    .action-bar
-      position: relative
-      height: 88px
-      .font
-        position: absolute
-        left: 0
-        top: 0
-        right: 0
-        bottom: 0
-        margin: auto
-        width: 180px
-        height: 88px
-        line-height: 88px
-        text-align: center
-        font-size: 36px
-        color: #ffffff
-        font-weight: bold
-        transform: skewX(-10deg)
-      .go-back
-        display: inline-block
-        float: left
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/car/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
-      .vehicle-management
-        display: inline-block
-        float: right
-        width: 120px
-        height: 88px
-        padding-right: 30px
-        font-size: 26px
-        color: #fff
-        line-height: 88px
-        text-align: right
     .container
       flex: 1
       display: flex

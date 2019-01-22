@@ -1,10 +1,6 @@
 <template>
   <div class="detection-record" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font"></div>
-      <div class="search" @click="_goSearch"></div>
-    </div>
+    <headerBar rightIcon="search" @leftClick="_goBack" @rightClick="_goSearch"></headerBar>
     <div class="container" ref="container" :class="showMap ? 'show' : ''">
       <div class="map-btn">
         <div class="map-location" @click="_getLocation"></div>
@@ -22,6 +18,7 @@
 import AMap from 'AMap'
 import washInfo from './washinfo'
 import {mapGetters} from 'vuex'
+import headerBar from '@/base/headerBar'
 export default {
   data () {
     return {
@@ -258,7 +255,8 @@ export default {
     }
   },
   components: {
-    washInfo
+    washInfo,
+    headerBar
   }
 }
 </script>
@@ -388,43 +386,6 @@ export default {
     background-color: #f4f4f4
     flex-direction: column
     height: 100vh
-    .action-bar
-      position: relative
-      display: flex
-      height: 88px
-      background-color: #fff
-      z-index: 100
-      .font
-        flex: 1
-        display: flex
-        flex-direction: column
-        justify-content: center
-        align-items: center
-        h2
-          font-size: 30px
-          line-height: 42px
-          color: #5b5b5b
-          font-weight: bolder
-          transform: skewX(-10deg)
-        p
-          font-size: 22px
-          color: #5b5b5b
-          line-height: 34px
-          span:nth-child(2)
-            margin: 0 15px
-      .go-back
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
-      .search
-        width: 120px
-        bg-image('../../common/imgs/washcar/search')
-        background-repeat: no-repeat
-        background-position: 54px center
-        background-size: 36px 36px
     .container
       flex: 1
       transition: all .3s

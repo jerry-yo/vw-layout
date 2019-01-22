@@ -2,10 +2,7 @@
 
 <template>
   <div class="car-owner" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">车主认证</div>
-    </div>
+    <headerBar contentTitle="车主认证" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="container">
       <vehicleCertification :vin-type="vinType"></vehicleCertification>
     </div>
@@ -14,6 +11,7 @@
 
 <script>
 import vehicleCertification from './vehicle-certification'
+import headerBar from '@/base/headerBar'
 export default {
   name: 'carOwner',
   data () {
@@ -30,7 +28,8 @@ export default {
     this.vinType = parseInt(this.$route.query.carid)
   },
   components: {
-    vehicleCertification
+    vehicleCertification,
+    headerBar
   }
 }
 </script>
@@ -41,34 +40,6 @@ export default {
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
-  .action-bar
-    position: relative
-    height: 88px
-    background-color: #fff
-    .font
-      position: absolute
-      left: 0
-      top: 0
-      right: 0
-      bottom: 0
-      margin: auto
-      width: 180px
-      height: 88px
-      line-height: 88px
-      text-align: center
-      font-size: 36px
-      color: #5b5b5b
-      font-weight: bold
-      transform: skewX(-10deg)
-    .go-back
-      display: inline-block
-      float: left
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .container
     flex: 1
     display: flex

@@ -2,12 +2,7 @@
 
 <template>
   <div class="addcar-age" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="tabbar">
-        选择年份
-      </div>
-    </div>
+    <headerBar contentTitle="选择年份" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="car-name">
       <img :src="carLogoUrl + addCar.imageSrc" alt="">
       <h2>{{`${addCar.brandName} - ${addCar.evehicleSystem} - ${ addCar.exhaustVolume}`}}</h2>
@@ -27,6 +22,7 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapMutations, mapGetters} from 'vuex'
 import {queryCarModal} from '@/common/js/mixin'
 export default {
@@ -72,7 +68,8 @@ export default {
     ])
   },
   components: {
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -83,26 +80,6 @@ export default {
   background-color: #f2f2f2
   flex-direction: column
   height: 100vh
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    .go-back
-      width: 120px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
-    .tabbar
-      flex: 1
-      display: flex
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      font-weight: 600
-      font-size: 36px
-      color: #5b5b5b
-      transform: skewX(-15deg)
   .car-name
     height: 100px
     display: flex

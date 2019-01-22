@@ -1,9 +1,6 @@
 <template>
   <div class="setmeal-list" flexContainer @touchmove.prevent>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <span>全部套餐</span>
-    </div>
+    <headerBar contentTitle="全部套餐" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <Scroll class="list" :data="setmealList">
       <ul class="con">
         <li  class="list-info" v-for="item in setmealList" :key="item.id" @click="goSetmealInfo(item.id)">
@@ -26,6 +23,7 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 export default {
   name: 'setmealList',
   data () {
@@ -57,7 +55,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -68,38 +67,10 @@ export default {
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
-  .action-bar
-    position: relative;
-    display: flex
-    height: 88px
-    background-color: #fff
-    margin-bottom: 10px
-    & > span
-      position: absolute
-      left: 0
-      top: 0
-      right: 0
-      bottom: 0
-      margin: auto
-      display: inline-block
-      width: 160px
-      height: 86px
-      text-align: center
-      line-height: 86px
-      font-weight: 600
-      font-size: 36px
-      color: #5b5b5b
-      transform: skewX(-15deg)
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .list
     flex: 1
     overflow: hidden
+    margin-top: 10px
     .con
       position: relative
     .list-info

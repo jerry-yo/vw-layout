@@ -1,9 +1,6 @@
 <template>
   <div class="order-info" flexContainer>
-    <div class="title">
-      <div class="back" @click="goBack" ></div>
-      <span>订单详情</span>
-    </div>
+    <headerBar contentTitle="订单详情" contentColor="#5b5b5b" @leftClick="goBack"></headerBar>
     <Scroll class="order-content" ref="orderWarpper" :data="orderInfoShow">
       <div class="order-con">
         <div class="order-img" v-if="orderType === 'ywc'">
@@ -12,14 +9,14 @@
             </div>
             <div class="bg-font">
               <span>服务完成</span>
-              <h2>奇特异{{/维修/.test(stationName) ? '维修' : '保养'}}门店 - {{stationName}}</h2>
+              <h2>奇特异车业 - {{stationName}}</h2>
             </div>
           </div>
         </div>
         <div class="order-title" v-if="orderInfoShow.serverState">
           <div class="top">
             <div class="top-name">
-              <span>奇特异{{/维修/.test(stationName) ? '维修' : '保养'}}门店 - {{stationName}}</span>
+              <span>奇特异车业 - {{stationName}}</span>
               <div class="order-states" :class="{'by': orderInfoShow.serverState === 1, 'wx': orderInfoShow.serverState === 2}"></div>
             </div>
           </div>
@@ -40,7 +37,7 @@
           <div class="other-info color" >
             <div class="other-fw">
               <span>附加费</span>
-              <span>¥ {{orderInfoShow.amountAll - orderInfoShow.serverMoney - orderInfoShow.memoInfos.partMoney}}</span>
+              <span>¥ {{(orderInfoShow.amountAll - orderInfoShow.serverMoney - orderInfoShow.memoInfos.partMoney).toFixed(2)}}</span>
             </div>
             <div class="other-fw green" v-if="orderInfoShow.balanceStatus === '7200' || orderInfoShow.balanceStatus === '7100'">
               <span>优惠价</span>
@@ -78,12 +75,20 @@
         </div>
       </div>
     </div>
+    <div class="order-btn" v-if="orderType === 'ywc' && orderInfoShow.serverState === 2">
+      <div class="foot">
+        <div class="order-set">
+          <div class="go-pay" @click="_goRepairReport">查看维修日志</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import Wx from 'Wx'
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
 import {expireToken} from '@/common/js/mixin'
@@ -215,6 +220,9 @@ export default {
       })
       this.$router.push('/pay-server-info')
     },
+    _goRepairReport () {
+      this.$router.push(`/repair-report?station=第一维修中心&gdid=${this.orderInfoShow.billNo}&car=${this.orderInfoShow.carNoWhole}`)
+    },
     ...mapMutations({
       setSeleServerInfo: 'SET_SELE_SERVERS_INFO'
     })
@@ -222,7 +230,8 @@ export default {
   components: {
     orderBy,
     orderWx,
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -234,34 +243,6 @@ export default {
     height: 100vh
     background-color: #f4f4f4
     overflow: hidden
-    .title
-      position: relative
-      height: 88px
-      background-color: #fff
-      margin-bottom: 10px
-      & > span
-        position: absolute
-        left: 0
-        top: 0
-        right: 0
-        bottom: 0
-        margin: auto
-        display: inline-block
-        width: 160px
-        height: 88px
-        text-align: center
-        line-height: 88px
-        font-weight: 600
-        font-size: 36px
-        color: #5b5b5b
-        transform: skewX(-15deg)
-      .back
-        width: 120px
-        height: 100%
-        bg-image('../../common/imgs/order/back')
-        background-size: 18px 30px
-        background-repeat: no-repeat
-        background-position: 30px center
     .order-content
       flex: 1
       overflow: hidden
@@ -419,7 +400,7 @@ export default {
           justify-content: flex-end
           align-items: center
           & > div
-            width: 120px
+            width: 180px
             height: 48px
             margin-left: 18px
             font-size: 20px

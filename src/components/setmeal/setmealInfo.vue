@@ -1,9 +1,6 @@
 <template>
   <div class="setmeal-list" flexContainer >
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <span>{{setmealInfo.title}}</span>
-    </div>
+    <headerBar :contentTitle="setmealInfo.title" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <Scroll class="list" :data="setmealInfo" ref="scroll">
       <div class="con">
         <div class="cover-img">
@@ -51,6 +48,7 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import Iframe from '@/base/iframe'
+import headerBar from '@/base/headerBar'
 import SwiperSider from '@/base/slider/slider-common'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 export default {
@@ -214,7 +212,8 @@ export default {
   components: {
     Scroll,
     SwiperSider,
-    Iframe
+    Iframe,
+    headerBar
   }
 }
 </script>
@@ -225,36 +224,6 @@ export default {
   background-color: #f4f4f4
   flex-direction: column
   height: 100vh
-  .action-bar
-    position: relative;
-    display: flex
-    height: 88px
-    background-color: #fff
-    margin-bottom: 10px
-    box-shadow:0 0 10px 0 rgba(0, 0, 0, .1)
-    & > span
-      position: absolute
-      left: 0
-      top: 0
-      right: 0
-      bottom: 0
-      margin: auto
-      display: inline-block
-      width: 300px
-      height: 86px
-      text-align: center
-      line-height: 86px
-      font-weight: 600
-      font-size: 36px
-      color: #5b5b5b
-      transform: skewX(-15deg)
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .list
     flex: 1
     overflow: hidden

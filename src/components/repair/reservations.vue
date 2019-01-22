@@ -1,11 +1,6 @@
 <template>
   <div class="reservations" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        预约成功
-      </div>
-    </div>
+    <headerBar contentTitle="预约成功" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="container">
       <div class="bg"></div>
       <div class="info">
@@ -28,8 +23,12 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
+import headerBar from '@/base/headerBar'
 export default {
   name: 'reservations',
+  components: {
+    headerBar
+  },
   data () {
     return {
       type: ''
@@ -78,28 +77,6 @@ export default {
   height: 100vh
   background-color: #f4f4f4
   flex-direction: column
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    .font
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      font-size: 36px
-      color: #5b5b5b
-      font-weight: bolder
-      transform: skewX(-10deg)
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/repair/close1')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 26px 26px
   .container
     height: 200px
     display: flex

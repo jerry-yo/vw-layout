@@ -1,12 +1,6 @@
 <template>
   <div class="maintain" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font" @click="_goSelectCar">
-        <h2>{{`${nowCar.manufacturerName} - ${nowCar.evehicleSystem}`}}</h2>
-        <p><span>{{nowCar.carNumber}}</span><span>丨</span><span>{{nowCar.distance}}km</span></p>
-      </div>
-    </div>
+    <headerBar :contentInfo="nowCar" @contentClick="_goSelectCar" @leftClick="_goBack"></headerBar>
     <div class="service-flow">
       <span class="bg bg2">选择门店</span>
       <span>-</span>
@@ -60,6 +54,7 @@
 import serverModel from '@/base/server-model'
 import Scroll from '@/base/scroll/scroll'
 import storeInfo from '@/base/store-info'
+import headerBar from '@/base/headerBar'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, getServerCar} from '@/common/js/mixin'
 import {handleServerModel} from '@/common/js/servermixin'
@@ -264,7 +259,8 @@ export default {
   components: {
     serverModel,
     Scroll,
-    storeInfo
+    storeInfo,
+    headerBar
   }
 }
 </script>
@@ -276,36 +272,6 @@ export default {
   position: relative
   background-color: #f4f4f4
   flex-direction: column
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    .font
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      h2
-        font-size: 30px
-        line-height: 42px
-        color: #5b5b5b
-        font-weight: bolder
-        transform: skewX(-10deg)
-      p
-        font-size: 22px
-        color: #5b5b5b
-        line-height: 34px
-        span:nth-child(2)
-          margin: 0 15px
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .service-flow
     height: 70px
     background-color: #fff1e4

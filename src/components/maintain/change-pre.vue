@@ -1,11 +1,6 @@
 <template>
   <div class="change-pre" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">
-        更换配件
-      </div>
-    </div>
+    <headerBar contentTitle="更换配件" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <Scroll class="container" ref="addservice" :data="changeProList">
       <ul class="wrapper">
         <li v-for="item in changeProList" :key="item.idMdmPart">
@@ -40,13 +35,15 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapMutations} from 'vuex'
 import {expireToken, getServerCar} from '@/common/js/mixin'
 export default {
   name: 'changePre',
   mixins: [expireToken, getServerCar],
   components: {
-    Scroll
+    Scroll,
+    headerBar
   },
   data () {
     return {
@@ -109,28 +106,6 @@ export default {
   position: relative
   background-color: #f4f4f4
   flex-direction: column
-  .action-bar
-    display: flex
-    height: 88px
-    background-color: #fff
-    .font
-      flex: 1
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      margin-right: 120px
-      font-size: 36px
-      color: #5b5b5b
-      font-weight: bolder
-      transform: skewX(-10deg)
-    .go-back
-      width: 120px
-      height: 88px
-      bg-image('../../common/imgs/order/back')
-      background-repeat: no-repeat
-      background-position: 30px center
-      background-size: 18px 30px
   .container
     flex: 1
     overflow: hidden

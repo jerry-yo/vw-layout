@@ -3,7 +3,7 @@
     <div class="xc-left" :class="'wash-bg-' + washCarInfo.icon">
     </div>
     <div class="xc-con">
-      <h3>{{washCarInfo.title}}</h3>
+      <h3>{{washCarInfo.title}}{{'ss'}}</h3>
       <p>{{washCarInfo.txt}}</p>
     </div>
     <div class="xc-right">

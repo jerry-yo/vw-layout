@@ -1,9 +1,6 @@
 <template>
     <div class="order" flexContainer>
-      <div class="action-bar">
-        <div class="back" @click="_goBack" ></div>
-        <span>选择城市</span>
-      </div>
+      <headerBar contentTitle="选择城市" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
       <div class="search-bar" @click="goSearchCity">
         <div class="btn">
           <span>搜索</span>
@@ -36,6 +33,7 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapGetters, mapMutations} from 'vuex'
 import {getData} from '@/common/js/arr'
 export default {
@@ -134,7 +132,8 @@ export default {
     }
   },
   components: {
-    Scroll
+    Scroll,
+    headerBar
   }
 }
 </script>
@@ -146,34 +145,6 @@ export default {
     height: 100vh
     background-color: #f4f4f4
     overflow: hidden
-    .action-bar
-      position: relative
-      height: 88px
-      background-color: #fff
-      & > span
-        position: absolute
-        left: 0
-        top: 0
-        right: 0
-        bottom: 0
-        margin: auto
-        display: inline-block
-        width: 160px
-        height: 86px
-        text-align: center
-        line-height: 86px
-        font-weight: 600
-        font-size: 36px
-        color: #5b5b5b
-        transform: skewX(-15deg)
-      .back
-        width: 120px
-        height: 100%
-        bg-image('../../common/imgs/order/back')
-        background-size: 18px 30px
-        background-repeat: no-repeat
-        background-position: 30px center
-        color: #5b5b5b
     .search-bar
       height: 84px
       margin-bottom: 10px

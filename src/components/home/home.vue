@@ -1,12 +1,11 @@
 <template>
   <div class="home" @touch.prevent>
-    <div class="home-top">
-      <div class="sele-city" @click="_goSeleCity">
+    <headerBar leftIcon="white" contentTitle="GT1养车" backgroundColor="none" :contentFontSize="20">
+      <div class="sele-city" @click="_goSeleCity" slot="left">
         {{cityShow.length >= 4 ? cityShow.slice(0, 3) + '···' : cityShow}}
         <span></span>
       </div>
-      <span>GT1养车</span>
-    </div>
+    </headerBar>
     <Scroll class="container_1" ref="home">
       <div class="con">
         <div class="slider">
@@ -90,11 +89,11 @@
           </div>
           <div class="taocan-img">
             <div class="img1" @click="goSetMealInfo(0)"><img :src="gt1UpdateImgUrl + setmeals[0].extendImg" alt=""> </div>
-            <div class="img2" @click="goSetMealInfo(1)"><img :src="gt1UpdateImgUrl + setmeals[1].extendImg" alt=""> </div>
+            <!-- <div class="img2" @click="goSetMealInfo(1)"><img :src="gt1UpdateImgUrl + setmeals[1].extendImg" alt=""> </div> -->
           </div>
-          <div class="taocan-last" @click="goSetMealInfo(2)">
+          <!-- <div class="taocan-last" @click="goSetMealInfo(2)">
             <img :src="gt1UpdateImgUrl + setmeals[2].extendImg" alt="">
-          </div>
+          </div> -->
         </div>
       </div>
     </Scroll>
@@ -104,6 +103,7 @@
 <script>
 import Scroll from '@/base/scroll/scroll'
 import Badge from '@/base/badge'
+import headerBar from '@/base/headerBar'
 import Swiper from '@/base/swiper/swiper-slider-animate'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
 import {expireToken, defaultCarInfo} from '@/common/js/mixin'
@@ -116,7 +116,8 @@ export default {
   components: {
     Badge,
     Swiper,
-    Scroll
+    Scroll,
+    headerBar
   },
   data () {
     return {
@@ -386,53 +387,27 @@ export default {
     background-position:center top
     background-color: #f2f2f2
     overflow: hidden
-    .home-top
+    .sele-city
+      margin-top: 16px
+      display: inline-block
       position: relative
-      height: 88px
-      .sele-city
-        margin-top: 16px
-        display: inline-block
-        position: relative
-        margin-left: 30px
-        background-color: rgba(255, 255, 255, 0.85)
-        border-radius: 5px
-        font-size: 22px
-        color: #fd9068
-        padding: 16px 46px 16px 20px
-        span
-          position: absolute
-          right: 0
-          top: 0
-          display: inline-block
-          width: 32px
-          height: 54px
-          bg-image('../../common/imgs/home/sj-bottom')
-          background-size: 12px 6px
-          background-repeat: no-repeat
-          background-position: left center
-      & > span
+      margin-left: 30px
+      background-color: rgba(255, 255, 255, 0.85)
+      border-radius: 5px
+      font-size: 22px
+      color: #fd9068
+      padding: 16px 46px 16px 20px
+      span
         position: absolute
-        left: 0
         right: 0
         top: 0
-        bottom: 0
-        margin: auto
         display: inline-block
-        width: 180px
-        line-height: 88px
-        color: #fff
-        font-size: 40px
-        font-weight: 600
-        transform: skewX(-15deg)
-      .message
-        float: right
-        width: 80px
-        height: 88px
-        margin-right: 30px
-        bg-image('../../common/imgs/mind/xx')
-        background-size: 42px 42px
+        width: 32px
+        height: 54px
+        bg-image('../../common/imgs/home/sj-bottom')
+        background-size: 12px 6px
         background-repeat: no-repeat
-        background-position: right center
+        background-position: left center
     .container_1
       flex: 1
       overflow: hidden

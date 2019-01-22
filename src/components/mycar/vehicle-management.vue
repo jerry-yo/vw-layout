@@ -2,11 +2,7 @@
 
 <template>
   <div class="vehicle-management" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">我的车库</div>
-      <div class="management" @click="_editCar" v-if="myCar.length > 0">{{editState ?'取消' : '编辑'}}</div>
-    </div>
+    <headerBar contentTitle="我的车库" contentColor="#5b5b5b" :rightTitle="myCar.length === 0 ? '' : editState ?'取消' : '编辑'"  @leftClick="_goBack" @rightClick="_editCar"></headerBar>
     <Scroll class="car-content" v-show="myCar" :data="myCar" :class="myCar.length === 0 ? 'bg' : ''">
       <ul class="con">
         <li v-for="(item, index) in myCar" :key="index" v-if="check.length > 0">
@@ -40,12 +36,14 @@
 
 <script>
 import Scroll from '@/base/scroll/scroll'
+import headerBar from '@/base/headerBar'
 import {mapActions, mapGetters} from 'vuex'
 import {expireToken, modifyCarInfo} from '@/common/js/mixin'
 export default {
   name: 'vehicleManagement',
   components: {
-    Scroll
+    Scroll,
+    headerBar
   },
   mixins: [expireToken, modifyCarInfo],
   data () {
@@ -246,46 +244,6 @@ export default {
     background-color: #f4f4f4
     flex-direction: column
     height: 100vh
-    .action-bar
-      position: relative
-      height: 88px
-      background-color: #fff
-      margin-bottom: 10px
-      .font
-        position: absolute
-        left: 0
-        top: 0
-        right: 0
-        bottom: 0
-        margin: auto
-        width: 180px
-        height: 88px
-        line-height: 88px
-        text-align: center
-        font-size: 36px
-        color: #5b5b5b
-        font-weight: bold
-        transform: skewX(-10deg)
-      .go-back
-        display: inline-block
-        float: left
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
-      .management
-        display: inline-block
-        float: right
-        width: 120px
-        height: 88px
-        padding-right: 30px
-        font-size: 26px
-        color: #5b5b5b
-        line-height: 88px
-        text-align: right
-        background-color: #fff
     .submit-btn
       bg-image('../../common/imgs/washcar/btn_bg')
       background-repeat: no-repeat
@@ -301,6 +259,7 @@ export default {
         color: #ffffff
         transform: skewX(-10deg)
     .car-content
+      margin-top: 10px
       flex: 1
       overflow: hidden
       &.bg

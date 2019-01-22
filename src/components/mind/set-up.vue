@@ -1,9 +1,6 @@
 <template>
   <div class="set-up" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="font">设置</div>
-    </div>
+    <headerBar contentTitle="设置" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="container">
       <div class="list">
         <span>清楚缓存</span>
@@ -28,6 +25,7 @@
 
 <script>
 import Wx from 'Wx'
+import headerBar from '@/base/headerBar'
 import {mapActions} from 'vuex'
 export default {
   name: 'setUp',
@@ -48,6 +46,7 @@ export default {
     ])
   },
   components: {
+    headerBar
   }
 }
 </script>
@@ -59,28 +58,6 @@ export default {
     height: 100vh
     background-color: #f4f4f4
     overflow: hidden
-    .action-bar
-      display: flex
-      height: 88px
-      background-color: #fff
-      .font
-        flex: 1
-        display: flex
-        flex-direction: column
-        justify-content: center
-        align-items: center
-        margin-right: 120px
-        font-size: 36px
-        color: #5b5b5b
-        font-weight: bolder
-        transform: skewX(-10deg)
-      .go-back
-        width: 120px
-        height: 88px
-        bg-image('../../common/imgs/order/back')
-        background-repeat: no-repeat
-        background-position: 30px center
-        background-size: 18px 30px
     .container
       flex: 1
       margin-top: 20px

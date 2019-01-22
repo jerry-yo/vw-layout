@@ -10,13 +10,13 @@
             <p>{{data.updateDesc}}</p>
           </div>
         </Scroll>
-        <Scroll class="img-content" ref="faultImg" :data="data" :scrollX="true" :scrollY="false" v-if="showImgArr.length > 0">
+        <!-- <Scroll class="img-content" ref="faultImg" :data="data" :scrollX="true" :scrollY="false" v-if="showImgArr.length > 0">
           <ul class="imgs" :style="{width: showImgArr.length * 31 + '%'}">
             <li v-for="(item, index) in showImgArr" :key="index">
-              <img :src="gt1UpdateImgUrl + item" alt="" @click="showImgs(item)">
+              <img :src="item" alt="" @click="showImgs(item)">
             </li>
           </ul>
-        </Scroll>
+        </Scroll> -->
         <div class="close-btn" @click="_closeMask">
           知道了
         </div>
@@ -26,7 +26,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-import Wx from 'Wx'
+// import Wx from 'Wx'
 import Scroll from '@/base/scroll/scroll'
 export default {
   name: 'checkInfo',
@@ -48,23 +48,28 @@ export default {
     }
   },
   computed: {
-    showImgArr () {
-      if (this.from === 'order') {
-        return this.data.updateImgs
-      }
-      return this.data.updateImgArr
-    }
+    // showImgArr () {
+    //   let imgs = this.data.imgArr
+    //   let arr = []
+    //   if (this.from === 'order') {
+    //     imgs = this.data.updateImgs
+    //   }
+    //   imgs.forEach(item => {
+    //     arr.push(this.gt1UpdateImgUrl + item)
+    //   })
+    //   return arr
+    // }
   },
   methods: {
     _closeMask () {
       this.$emit('closemask', false)
     },
     showImgs (item) {
-      let _self = this
-      Wx.previewImage({
-        current: item, // 当前显示图片的http链接
-        urls: _self.showImgArr // 需要预览的图片http链接列表
-      })
+      // let _self = this
+      // Wx.previewImage({
+      //   current: item, // 当前显示图片的http链接
+      //   urls: _self.showImgArr // 需要预览的图片http链接列表
+      // })
     }
   }
 }
@@ -86,7 +91,7 @@ export default {
     top: 0
     bottom: 0
     background-color: rgba(0,0,0,.5)
-    z-index: 1010
+    z-index: 999999
     transition: all .3s
     .mask-con
       padding: 10px 30px 10px 30px
