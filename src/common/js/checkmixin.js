@@ -10,13 +10,6 @@ export const checksObjMixin = {
       checkDetectionInfo: {}
     }
   },
-  watch: {
-    getDefaultCarInfo: function (newVal, oldVal) {
-      if (newVal.defaultFlag === 1) {
-        this._getCheckList()
-      }
-    }
-  },
   computed: {
     nowCarCheck () {
       let obj = {}

@@ -2,12 +2,6 @@
 
 <template>
   <div class="addcar-displacement" flexContainer>
-    <div class="action-bar">
-      <div class="go-back" @click="_goBack"></div>
-      <div class="tabbar">
-        选择发动机排量
-      </div>
-    </div>
     <headerBar contentTitle="选择发动机排量" contentColor="#5b5b5b" @leftClick="_goBack"></headerBar>
     <div class="car-name">
       <img :src="carLogoUrl + addCar.imageSrc" alt="">

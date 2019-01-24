@@ -6,9 +6,8 @@ const ToastConstructor = Vue.extend(ToastDom)
 ToastConstructor.prototype.close = function () {
   this.visible = false
   let _self = this
-  this.$el.addEventListener('transitionend', () => {
-    _self.$el.remove()
-  })
+  console.log(this.$el)
+  _self.$el.remove()
 }
 const Toast = (options = {}) => {
   var instance = new ToastConstructor().$mount(document.createElement('div'))
@@ -22,6 +21,7 @@ const Toast = (options = {}) => {
   Vue.nextTick(() => {
     instance.visible = true
     instance.timer = setTimeout(function () {
+      clearTimeout(instance.timer)
       instance.close()
     }, duration * 1000)
   })

@@ -148,7 +148,7 @@ export default {
           display: inline-block
           width: 317px
           height: 200px
-        font-size: 14px
+        font-size: 28px
         color: #5b5b5b
         line-height: 100px
     .repair-report-con
@@ -213,7 +213,7 @@ export default {
             text-align: right
       .repair-riji
         & > h2
-          font-size: 16px
+          font-size: 32px
           font-weight: bold
           padding: 30px 30px 0px
           height: 80px
@@ -224,12 +224,12 @@ export default {
           padding: 20px 30px
           .report-1, .report-2
             text-indent: 2em
-            font-size: 14px
+            font-size: 28px
             color: #666666
             line-height: 40px
       .repair-imgs
         & > h2
-          font-size: 16px
+          font-size: 32px
           font-weight: bold
           padding: 30px 30px 0px
           height: 80px
@@ -239,6 +239,6 @@ export default {
         height: 300px
         padding: 40px 30px
         color: #999
-        font-size: 12px
+        font-size: 24px
         line-height: 40px
 </style>

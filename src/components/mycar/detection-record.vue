@@ -7,14 +7,14 @@
       <div class="yjd-bar" :class="isflag ? 'active' : 'usual'" @click="isflag = true">预检单</div>
       <div class="ccd-bar" :class="!isflag ? 'active' : 'usual'" @click="isflag = false">查车单</div>
     </div>
-    <Scroll class="list" :data="nowCarCheck">
-      <ul class="con" v-if="isflag">
+    <Scroll class="list" :data="nowCarCheck" v-if="nowCarCheck.yjd && nowCarCheck.ccd">
+      <ul class="con" v-if="isflag" :class="nowCarCheck.yjd.length ? 'bgimage' : 'bgimage'">
         <li  class="list-info" v-for="(item, index) in nowCarCheck.yjd" :key="index" @click="_goLookInfo(item, 'yjd')" >
           <div class="left">{{`${item.abbreviation}-${item.naEmployee}`}}</div>
           <div class="right">{{item.billDate}}</div>
         </li>
       </ul>
-      <ul class="con" v-else>
+      <ul class="con" v-else :class="nowCarCheck.ccd.length ? '' : 'bgimage'">
         <li  class="list-info" v-for="(item, index) in nowCarCheck.ccd" :key="index" @click="_goLookInfo(item, 'ccd')" >
           <div class="left">{{`${item.abbreviation}-${item.naEmployee}`}}</div>
           <div class="right">{{item.billDate}}</div>
@@ -39,16 +39,10 @@ export default {
     }
   },
   beforeRouteEnter (to, from, next) {
-    if (from.name !== 'checkList') {
-      next(vm => {
-        vm.carNumber = to.query.carid
-        vm._getCheckList()
-      })
-    } else {
-      next(vm => {
-        vm.carNumber = to.query.carid
-      })
-    }
+    next(vm => {
+      vm.carNumber = to.query.carid
+      vm._getCheckList()
+    })
   },
   computed: {
     getDefaultCarInfo () {
@@ -109,6 +103,13 @@ export default {
     overflow: hidden
     .con
       position: relative
+    .bgimage
+      width: 100%
+      height: 100%
+      bg-image('../../common/imgs/jcdbg')
+      background-position: center center
+      background-repeat: no-repeat
+      background-size: 750px 381px
     .list-info
       padding: 0 30px
       display: flex

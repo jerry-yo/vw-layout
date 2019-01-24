@@ -44,7 +44,7 @@ export default {
       this.$router.go(-1)
     }
   },
-  mounted: function () {
+  created () {
     this.addType = this.$route.query.type
   },
   components: {

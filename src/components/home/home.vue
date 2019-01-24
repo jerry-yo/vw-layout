@@ -89,11 +89,11 @@
           </div>
           <div class="taocan-img">
             <div class="img1" @click="goSetMealInfo(0)"><img :src="gt1UpdateImgUrl + setmeals[0].extendImg" alt=""> </div>
-            <!-- <div class="img2" @click="goSetMealInfo(1)"><img :src="gt1UpdateImgUrl + setmeals[1].extendImg" alt=""> </div> -->
+            <div class="img2" @click="goSetMealInfo(1)"><img :src="gt1UpdateImgUrl + setmeals[1].extendImg" alt=""> </div>
           </div>
-          <!-- <div class="taocan-last" @click="goSetMealInfo(2)">
+          <div class="taocan-last" @click="goSetMealInfo(2)">
             <img :src="gt1UpdateImgUrl + setmeals[2].extendImg" alt="">
-          </div> -->
+          </div>
         </div>
       </div>
     </Scroll>
@@ -138,6 +138,7 @@ export default {
     }
     this._getStoreList()
     this._getBanner()
+    this._getCheckList()
   },
   computed: {
     checkCount () {

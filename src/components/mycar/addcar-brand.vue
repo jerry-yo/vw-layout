@@ -78,6 +78,9 @@ export default {
     })
   },
   mounted () {
+    if (this.addType === 'sele') {
+      this.showMask = true
+    }
     this.queryModal()
   },
   computed: {

@@ -22,12 +22,12 @@
           <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <div class="fault-info" v-if="updateOrder.faultText.length > 0 || updateOrder.imgArr.length > 0">
+        <div class="fault-info" v-if="updateOrder.updateDesc.length > 0 || updateOrder.imgArr.length > 0">
           <div class="title">
             故障概要
           </div>
           <div class="fault-con" @click="showFaultInfo">
-            <p class="fault-text">{{updateOrder.faultText}}</p>
+            <p class="fault-text">{{updateOrder.updateDesc}}</p>
             <div class="fault-img" v-if="updateOrder.imgArr.length > 0">
               <ul :class="updateOrder.imgArr.length > 2 ? 'more': ''">
                 <li v-for="(item, index) in handleImgs" :key="index">
@@ -125,10 +125,10 @@ export default {
     },
     goRepairOrder () {
       if (this.updateOrder.falutDate) {
-        let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.faultText ? this.updateOrder.faultText : ''}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.faultImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.selestore.responserTel || ' '}\uA856${this.selestore.stationPositionX || ' '}\uA856${this.selestore.stationPositionY || ' '}`
+        let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.updateDesc ? this.updateOrder.updateDesc : ''}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.updateImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.selestore.responserTel || ' '}\uA856${this.selestore.stationPositionX || ' '}\uA856${this.selestore.stationPositionY || ' '}`
         this.$post(`${this.gt1Url}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
           if (res.errorCode === 0 && res.data.code === 0) {
-            this.$router.push('/reservations?type=wx')
+            // this.$router.push('/reservations?type=wx')
           } else if (res.errorCode === 0 && res.data.code !== 0) {
             this.$Toast({
               position: 'bottom',
@@ -171,7 +171,6 @@ export default {
             receivememo: '接受备注'
           })
         })
-        this.$router.push('/reservations?type=wx')
       } else {
         this.$Toast({
           message: '请选择预约时间',
@@ -181,7 +180,6 @@ export default {
     },
     showFaultInfo () {
       this.faultInfoState = true
-      console.log(this.faultInfoState, this.updateOrder)
     },
     closeCheckInfo () {
       this.faultInfoState = false

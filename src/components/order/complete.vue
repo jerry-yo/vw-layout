@@ -37,7 +37,7 @@ export default {
   },
   methods: {
     goOrderInfo (res) {
-      this.$router.push('/pay-order-info?pkid=' + res.pkId + '&type=ywc&station=' + res.abbreviation)
+      this.$router.push('/pay-order-info?pkid=' + res.pkId + '&type=ywc&station=' + res.orgName.split('公司')[1])
     },
     showDetectionRecord (item) {
       this.$router.push('/check-list?id=0&carid=0')

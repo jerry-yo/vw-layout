@@ -15,7 +15,7 @@
       <div class="wrapper">
         <storeInfo :route="'repair'"></storeInfo>
         <div class="textarea" flexContainer ref="chatpannel" @touch.stop>
-          <textarea class="text" name="name" rows="5" v-model="faultText" maxlength="500" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @focus="focusText"></textarea>
+          <textarea class="text" name="name" rows="5" v-model="faultText" maxlength="500" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @blur="blurAdjust"></textarea>
         </div>
         <uploadPic ref="upImage"></uploadPic>
         <div class="detection-record" v-if="checkDetectionInfo.carCheckDetailVoList">
@@ -41,12 +41,13 @@ import storeInfo from '@/base/store-info'
 import headerBar from '@/base/headerBar'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'
+import {filteremoji} from '@/common/js/arr'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import {getServerCar, defaultCarInfo} from '@/common/js/mixin'
+import {getServerCar, defaultCarInfo, inputOnblur} from '@/common/js/mixin'
 import {checksObjMixin} from '@/common/js/checkmixin'
 export default {
   name: 'repair',
-  mixins: [defaultCarInfo, getServerCar, checksObjMixin],
+  mixins: [defaultCarInfo, getServerCar, checksObjMixin, inputOnblur],
   data () {
     return {
       clientHeight: null,
@@ -60,12 +61,12 @@ export default {
   beforeRouteEnter (to, from, next) {
     if (from.name === 'home' || from.name === null) {
       next(vm => {
-        vm.faultText = vm.updateOrder.faultText
+        vm.faultText = vm.updateOrder.updateDesc
         vm._getCheckList()
       })
     } else {
       next(vm => {
-        vm.faultText = vm.updateOrder.faultText
+        vm.faultText = vm.updateOrder.updateDesc
         vm.handleCheckInfo(vm.checksObj)
       })
     }
@@ -86,24 +87,17 @@ export default {
     _goSelectCar () {
       this.$router.push('/garage?type=select')
     },
-    focusText () {
-      let _self = this
-      setTimeout(function () {
-        let pannel = _self.$refs.chatpannel
-        pannel.scrollIntoView(true)
-        pannel.scrollIntoViewIfNeeded(true)
-      }, 200)
-    },
     goNext () {
+      let textArea = filteremoji(this.faultText)
       if (this.updateOrder.imgArr && this.updateOrder.imgArr.length > 0) {
         this.setUpdateOrder({
-          faultText: this.faultText || ''
+          updateDesc: textArea || ''
         })
       } else {
         this.setUpdateOrder({
-          faultText: this.faultText || '',
+          updateDesc: textArea || '',
           imgArr: [],
-          faultImgs: ''
+          updateImgs: ''
         })
       }
       setTimeout(() => {

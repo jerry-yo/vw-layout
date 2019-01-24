@@ -104,7 +104,7 @@ export default {
         if (res.errorCode === 0) {
           this.imgList += `${res.data.id},`
           this.setUpdateOrder({
-            faultImgs: this.imgList,
+            updateImgs: this.imgList,
             imgArr: this.imgArr
           })
         } else {

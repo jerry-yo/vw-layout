@@ -11,7 +11,7 @@
     <div class="section">
       <h1>注册账号</h1>
       <div class="input">
-        <input type="number" v-model="tel" placeholder="请输入您的手机号"  pattern="[0-9]*"  @input="_maxlength">
+        <input type="number" v-model="tel" placeholder="请输入您的手机号"  pattern="[0-9]*"  @input="_maxlength" @blur="blurAdjust">
       </div>
       <div class="btn" @click="_getCode">
         获取验证码
@@ -21,8 +21,10 @@
 </template>
 
 <script>
+import {inputOnblur} from '@/common/js/mixin'
 export default {
   name: 'register',
+  mixins: [inputOnblur],
   data () {
     return {
       tel: ''
@@ -36,7 +38,7 @@ export default {
       this.$router.replace('/login')
     },
     _getCode () {
-      if (/^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(17([0-1,3]|[6-8]))|(18[0-9]))\d{8}$/.test(this.tel)) {
+      if (/^[1][3-9]{1}\d{9}$/.test(this.tel)) {
         this.$post(`${this.gt1Url}/api/f6-app/getMobileMsg`, this.gt1Header, (res) => {
           if (res.errorCode === 0) {
             this.$router.push('/setcode?phone=' + this.tel + '&type=1')

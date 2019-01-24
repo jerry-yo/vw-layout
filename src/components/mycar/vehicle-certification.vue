@@ -9,7 +9,7 @@
       <div class="info-2">
         <span>VIN号</span>
         <div class="input">
-          <input type="text" v-model="vin" placeholder="请输入VIN码" maxlength="17" @change="validateVin">
+          <input type="text" v-model="vin" placeholder="请输入VIN码" maxlength="17" @change="validateVin" @blur="blurAdjust">
         </div>
       </div>
     </div>
@@ -23,10 +23,10 @@
 
 <script>
 import {mapMutations, mapGetters} from 'vuex'
-import {modifyCarInfo} from '@/common/js/mixin'
+import {modifyCarInfo, inputOnblur} from '@/common/js/mixin'
 export default {
   name: 'vehicleCertification',
-  mixins: [modifyCarInfo],
+  mixins: [modifyCarInfo, inputOnblur],
   props: {
     vinType: {
       type: Number

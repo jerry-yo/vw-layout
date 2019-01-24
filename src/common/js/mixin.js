@@ -15,6 +15,31 @@ export const wxMixin = {
     }
   }
 }
+
+export const inputOnblur = {
+  methods: {
+    blurAdjust (e) {
+      let blurTimeout = setTimeout(() => {
+        let tagName = document.activeElement.tagName
+        let result = 'pc'
+        if (tagName === 'INPUT' || tagName === 'TEXTAREA') {
+          return
+        }
+        if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
+          // 判断iPhone|iPad|iPod|iOS
+          result = 'ios'
+        } else if (/(Android)/i.test(navigator.userAgent)) {
+          // 判断Android
+          result = 'android'
+        }
+        if (result === 'ios') {
+          document.activeElement.scrollIntoViewIfNeeded(true)
+          clearTimeout(blurTimeout)
+        }
+      }, 100)
+    }
+  }
+}
 // 刷新token
 export const expireToken = {
   computed: {

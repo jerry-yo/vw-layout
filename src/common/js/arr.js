@@ -30,3 +30,12 @@ export function getData (el, name, val) {
     return el.getAttribute(name)
   }
 }
+
+export function filteremoji (value) {
+  let ranges = [
+    '\ud83c[\udf00-\udfff]',
+    '\ud83d[\udc00-\ude4f]',
+    '\ud83d[\ude80-\udeff]'
+  ]
+  return value.replace(new RegExp(ranges.join('|'), 'g'), '')
+}

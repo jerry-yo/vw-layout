@@ -221,7 +221,7 @@ export default {
       this.$router.push('/pay-server-info')
     },
     _goRepairReport () {
-      this.$router.push(`/repair-report?station=第一维修中心&gdid=${this.orderInfoShow.billNo}&car=${this.orderInfoShow.carNoWhole}`)
+      this.$router.push(`/repair-report?station=${this.stationName}&gdid=${this.orderInfoShow.billNo}&car=${this.orderInfoShow.carNoWhole}`)
     },
     ...mapMutations({
       setSeleServerInfo: 'SET_SELE_SERVERS_INFO'

@@ -23,7 +23,7 @@
       <div class="car-way">
         <span>行驶里程</span>
         <div class="input">
-          <input type="text" v-model="way" :placeholder="0" @change="validateWay">
+          <input type="text" v-model="way" :placeholder="0" @change="validateWay" @blur="blurAdjust">
         </div>
         <span>km</span>
       </div>
@@ -43,12 +43,12 @@
 import seleArea from '@/base/sele-area'
 import headerBar from '@/base/headerBar'
 import {mapGetters} from 'vuex'
-import {expireToken} from '@/common/js/mixin'
+import {expireToken, inputOnblur} from '@/common/js/mixin'
 import datePickerMask from '@/base/date-picker'
 import {getFormatDateToRepair, datePicker, timeToStamp} from '@/common/js/date'
 export default {
   name: 'addcarIdcard',
-  mixins: [expireToken],
+  mixins: [expireToken, inputOnblur],
   data () {
     return {
       showAreaBtn: false,
@@ -161,11 +161,7 @@ export default {
         if (res.code === 401) {
           this.refreshToken(this._setMyCar)
         } else if (res.code === 200) {
-          if (this.type === 'vin') {
-            this.$router.go(-2)
-          } else {
-            this.$router.go(-4)
-          }
+          this.$router.replace('/garage?type=add')
         }
       }, {
         carBrandLogo: `${this.addCar.exhaustVolume}\uA856${this.addCar.manufacturerName}\uA856${this.addCar.year}\uA856${time}\uA856${this.addCar.evehicleSystem}\uA856${this.addCar.transmissionDesc}\uA856${this.addCar.brandName}\uA856${this.addCar.imageSrc}`,

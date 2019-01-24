@@ -1,6 +1,6 @@
 <template>
   <div class="detection-record" flexContainer>
-    <headerBar rightIcon="search" @leftClick="_goBack" @rightClick="_goSearch"></headerBar>
+    <headerBar rightIcon="search" @leftClick="_goBack" @rightClick="_goSearch" style="position: relative;zIndex: 100"></headerBar>
     <div class="container" ref="container" :class="showMap ? 'show' : ''">
       <div class="map-btn">
         <div class="map-location" @click="_getLocation"></div>
@@ -45,7 +45,7 @@ export default {
       this.$router.push('/search-list?format=' + 'store')
     },
     _goBack () {
-      this.$router.back()
+      this.$router.replace('/home')
     },
     _setMap () {
       let _self = this
@@ -249,7 +249,7 @@ export default {
   mounted () {
     this._setMap()
     this._getMarker()
-    if (this.cityInfo.citycode) {
+    if (this.cityInfo.citycode && this.washType !== 'serach') {
       this.washinfoShow = true
       this.markerActive(0)
     }

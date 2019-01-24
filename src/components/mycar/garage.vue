@@ -43,7 +43,7 @@
         <div class="car-far">
           <span>行驶里程</span>
           <div class="input">
-            <input type="number" v-model="modifyWay" :placeholder="carList[carId].distance" @change="handleModifyWay">
+            <input type="number" v-model="modifyWay" :placeholder="carList[carId].distance" @change="handleModifyWay" @blur="blurAdjust">
           </div>
           <span>km</span>
         </div>
@@ -61,7 +61,7 @@
 import Slider from '@/base/slider/slider-view'
 import headerBar from '@/base/headerBar'
 import {mapActions, mapGetters, mapMutations} from 'vuex'
-import {expireToken, modifyCarInfo} from '@/common/js/mixin'
+import {expireToken, modifyCarInfo, inputOnblur} from '@/common/js/mixin'
 import datePickerMask from '@/base/date-picker'
 import {datePicker, timeToStamp, getFormatDateToRepair} from '@/common/js/date'
 export default {
@@ -71,7 +71,7 @@ export default {
     datePickerMask,
     headerBar
   },
-  mixins: [expireToken, modifyCarInfo],
+  mixins: [expireToken, modifyCarInfo, inputOnblur],
   data () {
     return {
       carId: 0,
@@ -285,7 +285,11 @@ export default {
     },
     // 返回个人中心
     _goBack () {
-      this.$router.go(-1)
+      if (this.garageType === 'select') {
+        this.$router.go(-1)
+      } else {
+        this.$router.replace('/mind')
+      }
     },
     // 车辆管理
     _goManagement () {

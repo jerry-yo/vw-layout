@@ -124,9 +124,9 @@ export default {
         })
       } else if (this.format === 'brand') {
         this.lists.forEach((brand) => {
-          if (reg.test(brand.name)) {
+          if (reg.test(brand.brandName)) {
             this.showList.push(Object.assign(brand, {
-              spanname: brand.name.replace(reg, `<span class="red">${str}</span>`)
+              spanname: brand.brandName.replace(reg, `<span class="red">${str}</span>`)
             }))
           }
         })
@@ -172,6 +172,11 @@ export default {
         })
         this.$router.push('/home')
       } else if (this.format === 'brand') {
+        this.setAddCar({
+          brandName: item.brandName,
+          firstLetter: item.firstLetter,
+          imageSrc: item.imageSrc
+        })
         this.$router.push('/addcar-tabbar?type=' + 'sele')
       }
       this.searchBtn()
@@ -187,6 +192,7 @@ export default {
       this.serachModel(item)
     },
     ...mapMutations({
+      setAddCar: 'SET_ADDCAR',
       modifyCityInfo: 'MODIFY_CITYINFO',
       setSerachHis: 'SET_SERACHHIS',
       setSerachInfo: 'SET_SERACHINFO',
