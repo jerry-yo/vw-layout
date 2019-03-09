@@ -12,6 +12,8 @@
           </orderWx>
           <orderBy v-if="item.memoInfos.serverState === 1" :data="item.memoInfos">
           </orderBy>
+          <orderXc v-if="item.memoInfos.serverState === 4" :info="item.memoInfos">
+          </orderXc>
         </div>
         <div class="order-foot">
           <div class="foot">
@@ -28,6 +30,7 @@
 <script>
 import orderBy from './order-by'
 import orderWx from './order-wx'
+import orderXc from './order-xc'
 import Scroll from '@/base/scroll/scroll'
 import {expireToken, getOrderListForYy} from '@/common/js/mixin'
 
@@ -48,6 +51,7 @@ export default {
   components: {
     orderBy,
     orderWx,
+    orderXc,
     Scroll
   }
 }

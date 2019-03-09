@@ -4,8 +4,8 @@
     <div class="container">
       <div class="bg"></div>
       <div class="info">
-        <div class="store">{{type === 'by' ? '奇特异保养店-' : '奇特异维修店-'}}{{storeList[defaultStoreId].name}}</div>
-        <div class="time" v-if="type === 'by' || type === 'tc'">预约时间：{{updateOrder.today ? '今天' : '明天'}}<span>{{updateOrder.startPoint2}}</span></div>
+        <div class="store">{{server === 'by' || server === 'xc' ? '奇特异保养店-' : '奇特异维修店-'}}{{storeList[defaultStoreId].name}}</div>
+        <div class="time" v-if="server === 'by' || server === 'tc'">预约时间：{{updateOrder.today ? '今天' : '明天'}}<span>{{updateOrder.startPoint2}}</span></div>
         <div class="time" v-else>预约时间：{{updateOrder.falutDate}}</div>
       </div>
     </div>
@@ -29,9 +29,10 @@ export default {
   components: {
     headerBar
   },
-  data () {
-    return {
-      type: ''
+  props: {
+    server: {
+      type: String,
+      default: ''
     }
   },
   computed: {
@@ -40,9 +41,6 @@ export default {
       'defaultStoreId',
       'storeList'
     ])
-  },
-  created () {
-    this.type = this.$route.query.type
   },
   methods: {
     _goBack () {
@@ -60,11 +58,11 @@ export default {
     ])
   },
   beforeDestroy () {
-    if (this.type === 'wx') {
+    if (this.server === 'wx' || this.server === 'xc') {
       this.clearOrderAllInfo('wx')
-    } else if (this.type === 'by') {
+    } else if (this.server === 'by') {
       this.clearOrderAllInfo('by')
-    } else if (this.type === 'tc') {
+    } else if (this.server === 'tc') {
       this.clearMealInfo()
     }
   }

@@ -4,7 +4,7 @@
       <li v-for="(item, index) in obligationOrder.overOrder" :key="index">
         <div class="order-title" @click="goOrderInfo(item)">
           <span class="car-id">{{item.carNoWhole}}</span>
-          <div class="order-states" :class="{'by': item.stationType === 1, 'wx': item.stationType === 2}"></div>
+          <div class="order-states" :class="{'by': item.stationType === 1, 'wx': item.stationType === 2, 'xc': item.stationType === 3}"></div>
         </div>
         <div class="order-content"  @click="goOrderInfo(item)">
           <orderOther :data="item" :index="index"></orderOther>

@@ -1,7 +1,7 @@
 import Wx from 'Wx'
 import {formatDate} from '@/common/js/date'
 import {mapActions, mapGetters, mapMutations} from 'vuex'
-import {handleWxOrder, handleByOrder, handleTcOrder} from '@/common/js/config'
+import {handleWxOrder, handleByOrder, handleTcOrder, handleXcOrder} from '@/common/js/config'
 // 微信权限操作
 export const wxMixin = {
   mounted () {
@@ -195,6 +195,7 @@ export const getOrderListForYy = {
           let wxReg = /维修/
           let byReg = /保养/
           let tcReg = /套餐/
+          let xcReg = /洗车/
           let memo = order.memo.split('\uA856')
           if (wxReg.test(memo[1])) {
             arr.push(Object.assign(order, {
@@ -209,6 +210,11 @@ export const getOrderListForYy = {
           if (tcReg.test(memo[1])) {
             arr.push(Object.assign(order, {
               memoInfos: handleTcOrder(memo)
+            }))
+          }
+          if (xcReg.test(memo[1])) {
+            arr.push(Object.assign(order, {
+              memoInfos: handleXcOrder(memo)
             }))
           }
         }
@@ -295,13 +301,13 @@ export const clientMaintain = {
       let unOverOrder = []
       this.orderList.forEach((item, index) => {
         if (item.carNoWhole !== '京A88888') {
-          item = Object.assign(item, {
-            stationType: item.businessTypeName === '保养' ? 1 : item.businessTypeName === '维修' ? 2 : 0,
+          item = Object.assign({}, item, {
+            stationType: item.businessTypeName === '保养' ? 1 : item.businessTypeName === '维修' ? 2 : item.businessTypeName === '洗车' ? 3 : 0,
             handleComplateDate: item.complateDate.replace(/-/, '年').replace(/-/, '月').replace(/ /, '日 ').split('.')[0]
           })
-          if ((item.balanceStatus === '7000' || item.balanceStatus === '7200') && (item.stationType === 1 || item.stationType === 2)) {
+          if ((item.balanceStatus === '7000' || item.balanceStatus === '7200') && (item.stationType > 0 && item.stationType < 4)) {
             unOverOrder.push(item)
-          } else if (item.balanceStatus === '7100' && (item.stationType === 1 || item.stationType === 2)) {
+          } else if (item.balanceStatus === '7100' && (item.stationType > 0 && item.stationType < 4)) {
             overOrder.push(item)
           }
         }

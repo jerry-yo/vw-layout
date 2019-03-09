@@ -17,7 +17,7 @@
           <div class="top">
             <div class="top-name">
               <span>奇特异车业 - {{stationName}}</span>
-              <div class="order-states" :class="{'by': orderInfoShow.serverState === 1, 'wx': orderInfoShow.serverState === 2}"></div>
+              <div class="order-states" :class="{'by': orderInfoShow.serverState === 1, 'wx': orderInfoShow.serverState === 2, 'xc': orderInfoShow.serverState === 3}"></div>
             </div>
           </div>
           <div class="bottom">
@@ -90,7 +90,7 @@ import Wx from 'Wx'
 import Scroll from '@/base/scroll/scroll'
 import headerBar from '@/base/headerBar'
 import orderBy from '@/components/order/order-by'
-import orderWx from '@/components/order/order-wx'
+import orderXc from '@/components/order/order-xc'
 import {expireToken} from '@/common/js/mixin'
 import {mapMutations} from 'vuex'
 export default {
@@ -183,6 +183,8 @@ export default {
         serverState = 1
       } else if (data.businessTypeName === '维修') {
         serverState = 2
+      } else if (data.businessTypeName === '洗车') {
+        serverState = 3
       }
       data.serviceDetailVOList.forEach(item => {
         serverMoney += item.workHourPrice
@@ -229,7 +231,7 @@ export default {
   },
   components: {
     orderBy,
-    orderWx,
+    orderXc,
     Scroll,
     headerBar
   }
@@ -246,6 +248,7 @@ export default {
     .order-content
       flex: 1
       overflow: hidden
+      margin-top: 10px
       .order-con
         position: relative
       .order-img

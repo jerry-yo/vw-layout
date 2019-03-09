@@ -37,5 +37,5 @@ export function filteremoji (value) {
     '\ud83d[\udc00-\ude4f]',
     '\ud83d[\ude80-\udeff]'
   ]
-  return value.replace(new RegExp(ranges.join('|'), 'g'), '')
+  return value ? value.replace(new RegExp(ranges.join('|'), 'g'), '') : ''
 }

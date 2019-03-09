@@ -51,7 +51,7 @@
               <h3>低价好配件</h3>
             </li>
             <li @click="_goRepair">
-              <div class="img">
+              <div class="img box">
                 <!-- <div class="action"></div> -->
               </div>
               <h2>维修</h2>
@@ -130,6 +130,7 @@ export default {
   mounted () {
     if (this.userInfo) {
       this._getMyCar()
+      this._getCheckList()
     }
     if (!this.cityInfo.citycode) {
       this._setMap()
@@ -138,7 +139,6 @@ export default {
     }
     this._getStoreList()
     this._getBanner()
-    this._getCheckList()
   },
   computed: {
     checkCount () {
@@ -510,7 +510,6 @@ export default {
             flex-direction: column
             justify-content: center
             align-items: center
-
             &:nth-child(1)
               .img
                 bg-image('../../common/imgs/home/xc')

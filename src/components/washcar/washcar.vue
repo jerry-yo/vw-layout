@@ -1,6 +1,6 @@
 <template>
   <div class="detection-record" flexContainer>
-    <headerBar rightIcon="search" @leftClick="_goBack" @rightClick="_goSearch" style="position: relative;zIndex: 100"></headerBar>
+    <headerBar rightIcon="search" :contentInfo=" this.myCar.length ? nowCar : {}" contentColor="#5b5b5b" @leftClick="_goBack" @rightClick="_goSearch" @contentClick="_goSelectCar" style="position: relative;zIndex: 100"></headerBar>
     <div class="container" ref="container" :class="showMap ? 'show' : ''">
       <div class="map-btn">
         <div class="map-location" @click="_getLocation"></div>
@@ -16,10 +16,13 @@
 
 <script>
 import AMap from 'AMap'
+import Wx from 'Wx'
 import washInfo from './washinfo'
-import {mapGetters} from 'vuex'
+import {mapGetters, mapActions} from 'vuex'
+import {getServerCar} from '@/common/js/mixin'
 import headerBar from '@/base/headerBar'
 export default {
+  mixins: [getServerCar],
   data () {
     return {
       map: null,
@@ -28,7 +31,6 @@ export default {
       showMap: false,
       markerDom: [],
       preMarkerId: -1,
-      infoWindow: null,
       washinfoShow: false,
       washForShow: null,
       markers: [],
@@ -45,7 +47,16 @@ export default {
       this.$router.push('/search-list?format=' + 'store')
     },
     _goBack () {
-      this.$router.replace('/home')
+      this.clearOrderAllInfo('wx')
+      setTimeout(() => {
+        this.$router.replace('/home')
+      }, 0)
+    },
+    _goSelectCar () {
+      if (!this.userInfo) {
+        return
+      }
+      this.$router.push('/garage?type=select')
     },
     _setMap () {
       let _self = this
@@ -76,41 +87,6 @@ export default {
             size: new AMap.Size(22, 34)
           })
         })
-      }
-    },
-    // 地图Marker点击响应事件
-    _onClick (e) {
-      this.washinfoShow = true
-      this._reductionMarker()
-      // 激活点击
-      let id = e.target.getExtData()
-      this.markerActive(id)
-    },
-    // 地图Marker点击后样式设置
-    markerActive (id) {
-      let _self = this
-      this.markerDom[id].setMap(null)
-      this.markerDom[id] = new AMap.Marker({
-        map: _self.map,
-        offset: new AMap.Pixel(-22, -22),
-        position: [_self.markers[id].stationPositionX, _self.markers[id].stationPositionY],
-        icon: new AMap.Icon({
-          image: _self.markers[id].icon,
-          size: new AMap.Size(44, 44)
-        }),
-        extData: id,
-        clickable: true
-      })
-      this.preMarkerId = id
-      // 显示信息窗体
-      this._setInfoWindow(this.markers[id], id)
-    },
-    // 还原上一个地图被点击Marker点样式
-    _reductionMarker () {
-      let preId = this.preMarkerId
-      if (preId !== -1) {
-        this.markerDom[preId].setMap(null)
-        this._setMarker(this.markers[preId], preId)
       }
     },
     // 获取当前定位
@@ -164,52 +140,82 @@ export default {
       // 监听地图Marker点被点击事件
       _self.markerDom[index].on('click', this._onClick)
     },
-    // 地图Marker被点击后显示的相应详细信息（信息窗体）
-    _setInfoWindow (item, id) {
+    // 地图Marker点击响应事件
+    _onClick (e) {
+      this.washinfoShow = true
+      this._reductionMarker()
+      // 激活点击
+      let id = e.target.getExtData()
+      this.markerActive(id)
+    },
+    // 地图Marker点击后样式设置
+    markerActive (id) {
+      let item = this.markers[id]
+      let _self = this
       let km = this.formatKm(item.way)
       let customContent = null
       if (item.way > 0) {
-        customContent = `
-          <div class="window-info">
+        customContent = `<div class="window-info">
+          <div class="info-top">
             <div class="left">
               <h2>${item.name}</h2>
               <p>${item.stationAddress}</p>
             </div>
-            <div class="right"><h2>${km + 'km'}</h2><span class="${id === 0 ? 'show' : ''}">距您最近</span></div>
+            <div class="right">
+              <h2>${km + 'km'}</h2>
+              <span class="${id === 0 ? 'show' : ''}">距您最近</span>
+              <div class="go-btn">导航</div>
+            </div>
           </div>
-        `
+          <div class="marker-bg ${item.type === 1 ? 'wx' : 'by'}"></div>
+          </div>`
       } else {
-        customContent = `
-          <div class="window-info">
+        customContent = `<div class="window-info">
             <div class="left">
               <h2>${item.name}</h2>
               <p>${item.stationAddress}</p>
             </div>
-          </div>
-        `
+          </div>`
       }
-      this.infoWindow = new AMap.InfoWindow({
-        isCustom: true,
-        offset: new AMap.Pixel(0, -24),
-        content: customContent
+      this.markerDom[id].setMap(null)
+      let shape = new AMap.MarkerShape({
+        coords: [216, 20, 20],
+        type: 'circle'
       })
-      this.infoWindow.open(this.map, [item.stationPositionX, item.stationPositionY])
-      // 地图中心点平移至指定点位置
+      this.markerDom[id] = new AMap.Marker({
+        map: _self.map,
+        offset: new AMap.Pixel(-128, -133),
+        position: [item.stationPositionX, item.stationPositionY],
+        content: customContent,
+        extData: id,
+        shape: shape,
+        clickable: true
+      })
+      this.markerDom[id].on('click', function () {
+        _self._openLocation(item)
+      })
+      this.preMarkerId = id
+      // 显示信息窗体
+      this._setPanTo(item, id)
+    },
+    // 还原上一个地图被点击Marker点样式
+    _reductionMarker () {
+      let preId = this.preMarkerId
+      if (preId !== -1) {
+        this.markerDom[preId].setMap(null)
+        this._setMarker(this.markers[preId], preId)
+      }
+    },
+    // 地图Marker被点击后显示的相应详细信息（信息窗体）
+    _setPanTo (item, id) {
       this.map.panTo([item.stationPositionX, item.stationPositionY])
       // 以像素为单位，沿x方向和y方向移动地图，x向右为正，y向下为正
-      this.map.panBy(0, -80)
-    },
-    _closeInfoWindow () {
-      // 关闭信息窗体
-      this.infoWindow.close()
+      this.map.panBy(0, -70)
     },
     _closeAll () {
       // 关闭所有显示状态
-      if (this.infoWindow) {
-        this.washinfoShow = false
-        this.infoWindow.close()
-        this._reductionMarker()
-      }
+      this.washinfoShow = false
+      this._reductionMarker()
     },
     formatKm (way) {
       return (parseInt(way) / 1000).toFixed(2)
@@ -224,13 +230,32 @@ export default {
       })
       this.washinfoShow = true
       this.markerActive(id)
-    }
+    },
+    // 打开微信导航
+    _openLocation (item) {
+      Wx.openLocation({
+        latitude: parseFloat(item.stationPositionY),
+        longitude: parseFloat(item.stationPositionX),
+        name: item.name,
+        address: item.stationAddress,
+        scale: 14,
+        infoUrl: ''
+      })
+    },
+    ...mapActions([
+      'clearOrderAllInfo'
+    ])
   },
   computed: {
+    carNumber () {
+      return this.nowCar.carNumber
+    },
     ...mapGetters([
       'cityInfo',
       'serachInfo',
-      'storeList'
+      'storeList',
+      'userInfo',
+      'myCar'
     ])
   },
   beforeRouteEnter (to, from, next) {
@@ -301,84 +326,85 @@ export default {
         border-bottom-color: rgba(0, 0, 0, 0)
         border-left-color: rgba(0, 0, 0, 0)
         border-right-color: rgba(0, 0, 0, 0)
-      .state
-        position: absolute
-        left: 50%
-        top: -25px
-        width: 70px
-        height: 30px
-        font-size: 20px
-        color: #FFF
-        line-height: 30px
-        text-align: center
-        transform: translateX(-50%)
-        &.bg1
-          background-color: #85e7ac
-        &.bg2
-          background-color: #ff8474
   .window-info
-    position: relative
     display: flex
+    flex-direction: column
+    padding-top: 50px
     width: 512px
-    height: 165px
-    bg-image('../../common/imgs/washcar/infowindow')
-    background-repeat: no-repeat
-    background-position: center center
-    background-size: 512px 165px
-    padding-bottom: 25px
+    height: 310px
     z-index: 101
-    .left
+    .info-top
+      position: relative
       flex: 1
       display: flex
-      padding: 0 25px
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      border-bottom: 1px solid #f2f2f2
-      h2
-        width: 330px
-        height: 34px
-        font-size: 28px
-        color: #6c6c6c
-        line-height: 34px
-        overflow: hidden
-        text-overflow: ellipsis
-        white-space: nowrap
-      p
-        font-size: 22px
-        color: #bebebe
-        line-height: 30px
-    .right
-      display: flex
-      flex-direction: column
-      justify-content: center
-      align-items: center
-      width: 140px
-      .h2
-        font-size: 26px
-        color: #bebebe
-      span
-        font-size: 22px
-        color: #ff8d48
-        margin-top: 10px
-        display: none
-        &.show
-          display: block
-    .state
-      position: absolute
-      right: 0px
-      top: -18px
-      width: 70px
-      height: 30px
-      font-size: 20px
-      color: #FFF
-      line-height: 30px
-      text-align: center
-      transform: translateX(-50%)
-      &.bg1
-        background-color: #85e7ac
-      &.bg2
-        background-color: #ff8474
+      bg-image('../../common/imgs/washcar/infowindow')
+      background-repeat: no-repeat
+      background-position: center center
+      background-size: 512px 165px
+      .left
+        flex: 1
+        display: flex
+        padding: 0 25px
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        h2
+          width: 330px
+          height: 34px
+          font-size: 28px
+          color: #6c6c6c
+          line-height: 34px
+        p
+          width: 330px
+          height: 60px
+          font-size: 22px
+          color: #bebebe
+          line-height: 30px
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+      .right
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        width: 140px
+        .h2
+          font-size: 26px
+          color: #bebebe
+        span
+          font-size: 22px
+          color: #ff8d48
+          margin-top: 10px
+          display: none
+          &.show
+            display: block
+      .go-btn
+        position: absolute
+        right: 40px
+        top: -50px
+        width: 80px
+        height: 80px
+        background-color: rgb(255, 102, 42)
+        border-radius: 50%
+        box-shadow: 0 3px 5px 0 rgba(255, 102, 42 , .6)
+        padding-top: 50px
+        background-image: url('../../common/imgs/washcar/gobtn.png')
+        background-position: center 5px
+        background-repeat: no-repeat
+        background-size: 48px 48px
+        font-size: 20px
+        color: #ffffff
+        text-align: center
+    .marker-bg
+      height: 88px
+      background-position: center center
+      background-repeat: no-repeat
+      background-size: 88px 88px
+      &.by
+        bg-image('../../common/imgs/washcar/active_by_store')
+      &.wx
+        bg-image('../../common/imgs/washcar/active_wx_store')
 </style>
 <style scoped lang="stylus" ref="stylesheet/stylus">
   @import "../../common/stylus/mixin.styl"

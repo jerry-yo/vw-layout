@@ -163,11 +163,21 @@ const repairRouter = {
 const repairPreOrder = {
   path: '/repair-pre-order',
   name: 'repairPreOrder',
+  meta: {
+    requireAuth: true,
+    hasCar: true
+  },
+  props: route => ({
+    server: route.query.server
+  }),
   component: resolve => { require(['@/components/repair/repair-pre-order'], resolve) }
 }
 const Reservations = {
   path: '/reservations',
   name: 'Reservations',
+  props: route => ({
+    server: route.query.server
+  }),
   component: resolve => { require(['@/components/repair/reservations'], resolve) }
 }
 const maintainPreOrder = {

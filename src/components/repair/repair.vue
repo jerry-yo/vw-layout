@@ -13,7 +13,7 @@
     </div>
     <Scroll class="container" ref="repair" :preventDefault="false">
       <div class="wrapper">
-        <storeInfo :route="'repair'"></storeInfo>
+        <storeInfo :route="'maintain'"></storeInfo>
         <div class="textarea" flexContainer ref="chatpannel" @touch.stop>
           <textarea class="text" name="name" rows="5" v-model="faultText" maxlength="500" placeholder="简单概述您的车辆故障，提供图片能帮助维修中心为您 提前进货哦" @blur="blurAdjust"></textarea>
         </div>
@@ -43,11 +43,11 @@ import seleDetectionMenu from '@/base/sele-detection-menu'
 import CheckMask from '@/base/check-info'
 import {filteremoji} from '@/common/js/arr'
 import {mapGetters, mapMutations, mapActions} from 'vuex'
-import {getServerCar, defaultCarInfo, inputOnblur} from '@/common/js/mixin'
+import {getServerCar, inputOnblur} from '@/common/js/mixin'
 import {checksObjMixin} from '@/common/js/checkmixin'
 export default {
   name: 'repair',
-  mixins: [defaultCarInfo, getServerCar, checksObjMixin, inputOnblur],
+  mixins: [getServerCar, checksObjMixin, inputOnblur],
   data () {
     return {
       clientHeight: null,
@@ -101,7 +101,7 @@ export default {
         })
       }
       setTimeout(() => {
-        this.$router.push('/repair-pre-order')
+        this.$router.push('/repair-pre-order?server=wx')
       }, 0)
     },
     _goDetectionMenu () {

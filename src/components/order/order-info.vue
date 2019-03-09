@@ -15,7 +15,7 @@
         <div class="order-title" v-if="orderInfoShow.stationName">
           <div class="top">
             <div class="top-name">
-              <span>{{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, '')}}</span>
+              <span>奇特异车业 - {{orderInfoShow.stationName.replace(/奇特异车业科技（江苏）股份有限公司/, '')}}</span>
               <div class="order-states" :class="{'by': orderInfoShow.memoInfos.serverState === 1, 'wx': orderInfoShow.memoInfos.serverState === 2, 'tc': orderInfoShow.memoInfos.serverState === 3}"></div>
             </div>
             <div class="localtion" @click="_openLocation" v-if="orderType === 'yyz'"></div>
@@ -29,9 +29,10 @@
           </div>
         </div>
         <div class="order-con" v-if="orderInfoShow.memoInfos"  @click="goPartAndServerInfo">
-          <orderBy v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 1 " :data="orderInfoShow.memoInfos" :money="'other'"></orderBy>
+          <orderBy v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 1" :data="orderInfoShow.memoInfos" :money="'other'"></orderBy>
           <orderWx v-if="(orderType === 'yyz' || orderType === 'yqx') && (orderInfoShow.memoInfos.serverState === 2 || orderInfoShow.memoInfos.serverState === 3)" :data="orderInfoShow.memoInfos">
           </orderWx>
+          <orderXc v-if="(orderType === 'yyz' || orderType === 'yqx') && orderInfoShow.memoInfos.serverState === 4" :info="orderInfoShow.memoInfos" :money="'other'"></orderXc>
         </div>
         <div class="order-other" v-if="orderInfoShow.memoInfos">
           <div class="other-info">
@@ -106,9 +107,10 @@ import Scroll from '@/base/scroll/scroll'
 import headerBar from '@/base/headerBar'
 import orderBy from '@/components/order/order-by'
 import orderWx from '@/components/order/order-wx'
+import orderXc from '@/components/order/order-xc'
 import checkInfo from '@/base/check-info'
 import {expireToken, cancelOrderYy} from '@/common/js/mixin'
-import {handleWxOrder, handleByOrder, handleOrderPartList, handleTcOrder} from '@/common/js/config'
+import {handleWxOrder, handleByOrder, handleOrderPartList, handleTcOrder, handleXcOrder} from '@/common/js/config'
 import {formatDate} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
 export default {
@@ -191,6 +193,9 @@ export default {
       if (/套餐/.test(arr[1])) {
         memoInfos = handleTcOrder(arr)
       }
+      if (/洗车/.test(arr[1])) {
+        memoInfos = handleXcOrder(arr)
+      }
       return Object.assign(data, {
         memoInfos: memoInfos,
         stationCode: this.stationCode,
@@ -251,6 +256,7 @@ export default {
   components: {
     orderBy,
     orderWx,
+    orderXc,
     Scroll,
     checkInfo,
     headerBar
@@ -266,6 +272,7 @@ export default {
     background-color: #f4f4f4
     overflow: hidden
     .order-content
+      margin-top: 10px
       flex: 1
       overflow: hidden
       .order-con

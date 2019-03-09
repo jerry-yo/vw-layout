@@ -110,7 +110,7 @@
       <div class="banben">
         <span>版本信息</span>
         <div class="banben-title title">
-          <span>2.0.1</span>
+          <span>2.4.0</span>
         </div>
       </div>
     </div>

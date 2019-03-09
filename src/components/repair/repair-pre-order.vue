@@ -12,7 +12,7 @@
     </div>
     <Scroll class="container" ref="repairPre">
       <div class="wrapper">
-        <storeInfo :type="'noclick'" :route="'repair'"></storeInfo>
+        <storeInfo :type="'noclick'" :route="'maintain'"></storeInfo>
         <div class="bespoke-date">
           <span>预约时间</span>
           <span @click="seleDate">{{updateOrder.falutDate ? updateOrder.falutDate : '选择时间'}}</span>
@@ -22,7 +22,8 @@
           <div> <span>车牌号</span><span class="right">{{nowCar.carNumber}}</span> </div>
           <div> <span>联系人</span><span class="right">{{userInfo.userTel}}</span> </div>
         </div>
-        <div class="fault-info" v-if="updateOrder.updateDesc.length > 0 || updateOrder.imgArr.length > 0">
+        <wxInfo v-if="server === 'xc'" :info="updateOrder"></wxInfo>
+        <div class="fault-info" v-if="server === 'wx' && (updateOrder.updateDesc.length > 0 || updateOrder.imgArr.length > 0)">
           <div class="title">
             故障概要
           </div>
@@ -57,14 +58,24 @@ import headerBar from '@/base/headerBar'
 import seleDetectionMenu from '@/base/sele-detection-menu'
 import datePickerMask from '@/base/date-picker'
 import checkInfo from '@/base/check-info'
+import wxInfo from '@/components/order/order-xc'
 import {datePicker, timeToStamp, getFormatDateNow, formatDate} from '@/common/js/date'
 import {mapGetters, mapMutations} from 'vuex'
 import {getServerCar} from '@/common/js/mixin'
-const EXPIRE_DATE = 7 * 24 * 60 * 60 * 1000
+const EXPIRE_DATE = {
+  wx: 7 * 24 * 60 * 60 * 1000,
+  xc: 24 * 60 * 60 * 1000
+}
 const DEFAULT_HOUR = 13 * 60 * 60 * 1000
 export default {
   name: 'repairPreOrder',
   mixins: [getServerCar],
+  props: {
+    server: {
+      type: String,
+      default: ''
+    }
+  },
   data () {
     return {
       datePickerShow: false,
@@ -82,13 +93,7 @@ export default {
       return arr
     },
     selestore () {
-      let arr = []
-      this.storeList.forEach(item => {
-        if (item.type === 1) {
-          arr.push(item)
-        }
-      })
-      return arr[this.defaultStoreId]
+      return this.storeList[this.defaultStoreId]
     },
     ...mapGetters([
       'updateOrder'
@@ -105,7 +110,7 @@ export default {
       let expireTemp = timeToStamp(date.nowYear + 1, date.nowMonth, date.nowDay)
       if (res.temp >= nowTemp && res.temp < expireTemp) {
         this.setUpdateOrder(Object.assign(res, {
-          expireTemp: res.temp + EXPIRE_DATE + DEFAULT_HOUR,
+          expireTemp: res.temp + EXPIRE_DATE[this.server] + DEFAULT_HOUR,
           temp: res.temp + DEFAULT_HOUR
         }))
       } else if (res.temp >= expireTemp) {
@@ -126,9 +131,12 @@ export default {
     goRepairOrder () {
       if (this.updateOrder.falutDate) {
         let memo = `${getFormatDateNow()}\uA856${'APP预约维修服务'}\uA856${this.updateOrder.updateDesc ? this.updateOrder.updateDesc : ''}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.updateImgs}\uA856${this.updateOrder.expireTemp}\uA856${this.selestore.responserTel || ' '}\uA856${this.selestore.stationPositionX || ' '}\uA856${this.selestore.stationPositionY || ' '}`
+        if (this.server === 'xc') {
+          memo = `${getFormatDateNow()}\uA856${'APP预约洗车服务'}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.img}\uA856${this.updateOrder.title}\uA856${this.updateOrder.content}\uA856${this.updateOrder.expireTemp}\uA856${this.selestore.responserTel || ' '}\uA856${this.selestore.stationPositionX || ' '}\uA856${this.selestore.stationPositionY || ' '}`
+        }
         this.$post(`${this.gt1Url}/api/f6-app/addclientOrder`, this.gt1Header, (res) => {
           if (res.errorCode === 0 && res.data.code === 0) {
-            // this.$router.push('/reservations?type=wx')
+            this.$router.push('/reservations?server=' + this.server)
           } else if (res.errorCode === 0 && res.data.code !== 0) {
             this.$Toast({
               position: 'bottom',
@@ -188,15 +196,14 @@ export default {
       setUpdateOrder: 'SET_UPDATE_ORDER'
     })
   },
-  mounted () {
-  },
   components: {
     storeInfo,
     checkInfo,
     seleDetectionMenu,
     Scroll,
     datePickerMask,
-    headerBar
+    headerBar,
+    wxInfo
   }
 }
 </script>

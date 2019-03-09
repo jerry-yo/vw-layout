@@ -91,6 +91,28 @@ export function handleTcOrder (data) {
   }
   return obj
 }
+// memo = `${getFormatDateNow()}\uA856${'APP预约洗车服务'}\uA856${this.nowCar.imageSrc}\uA856${this.updateOrder.img}\uA856${this.updateOrder.title}\uA856${this.updateOrder.content}\uA856${this.updateOrder.expireTemp}\uA856${this.selestore.responserTel || ' '}\uA856${this.selestore.stationPositionX || ' '}\uA856${this.selestore.stationPositionY || ' '}`
+export function handleXcOrder (data) {
+  let arr = []
+  if (/,/.test(data[5])) {
+    arr = data[5].split(',')
+    arr.pop()
+  }
+  let obj = {
+    orderTime: data[0],
+    serverType: data[1],
+    serverState: 4,
+    imageSrc: data[2],
+    img: data[3],
+    title: data[4],
+    content: data[5],
+    expireTemp: data[6],
+    responserTel: data[7],
+    stationPositionX: parseFloat(data[8]),
+    stationPositionY: parseFloat(data[9])
+  }
+  return obj
+}
 
 export function handleOrderRemark (remark) {
   let arr = remark.split('\uA856')

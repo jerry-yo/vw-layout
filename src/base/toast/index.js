@@ -6,7 +6,6 @@ const ToastConstructor = Vue.extend(ToastDom)
 ToastConstructor.prototype.close = function () {
   this.visible = false
   let _self = this
-  console.log(this.$el)
   _self.$el.remove()
 }
 const Toast = (options = {}) => {

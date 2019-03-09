@@ -7,7 +7,7 @@
       </div>
       <div class="content">
         <ul>
-          <li v-for="(item, index) in washinfo" :key="index">
+          <li v-for="(item, index) in washinfo" :key="item.id" @click="radioCheck(item, index)">
             <div class="left">
               <div class="img">
                 <img :src="gt1UpdateImgUrl + item.img" alt="">
@@ -18,7 +18,10 @@
               </div>
             </div>
             <div class="right">
-              ￥{{item.price}}
+              <span>￥{{item.price}}</span>
+              <span :class="`radio ${item.check ? 'radio-checked' : ''}`" >
+                <span class="radio-inner"></span>
+              </span>
             </div>
           </li>
         </ul>
@@ -33,10 +36,8 @@
         <div class="footer-txt">
           <p>地址如有偏差，请及时联系店长</p>
         </div>
-        <div class="footer-btn" @click="_openLocation">
-          <span class="bg" >
-            去这里
-          </span>
+        <div class="footer-btn" @click="_goYuyue">
+          去预约
         </div>
       </div>
     </div>
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-import Wx from 'Wx'
+import {mapGetters, mapMutations} from 'vuex'
 export default {
   props: {
     storeinfo: {
@@ -57,27 +58,62 @@ export default {
       washinfo: []
     }
   },
+  computed: {
+    ...mapGetters([
+      'userInfo',
+      'myCar'
+    ])
+  },
   methods: {
     closewindow () {
       this.$emit('closewindow', false)
     },
-    _openLocation () {
-      Wx.openLocation({
-        latitude: parseFloat(this.storeinfo.stationPositionY),
-        longitude: parseFloat(this.storeinfo.stationPositionX),
-        name: this.storeinfo.name,
-        address: this.storeinfo.stationAddress,
-        scale: 14,
-        infoUrl: ''
-      })
+    _goYuyue () {
+      if (this.userInfo && this.myCar.length) {
+        let id = this.$parent.preMarkerId
+        this.setDefaultStoreId(id)
+        for (let value of this.washinfo) {
+          if (value.check) {
+            this.setUpdateOrder(value)
+          }
+        }
+      }
+      this.$router.push('/repair-pre-order?server=xc')
     },
     getWashInfo () {
       this.$post(`${this.gt1Url}/api/f6-app/getcarWashList`, this.gt1Header, (res) => {
         if (res.errorCode === 0 && res.data.code === 0) {
           this.washinfo = res.data.data
+          this.washinfo.forEach((item, index) => {
+            if (index === 0) {
+              item.check = true
+            } else {
+              item.check = false
+            }
+          })
         }
       })
-    }
+    },
+    radioCheck (item, index) {
+      if (item.check) {
+        return
+      }
+      this.washinfo.forEach((res, id) => {
+        if (id === index) {
+          this.$set(this.washinfo, id, Object.assign({}, this.washinfo[id], {
+            check: true
+          }))
+        } else {
+          this.$set(this.washinfo, id, Object.assign({}, this.washinfo[id], {
+            check: false
+          }))
+        }
+      })
+    },
+    ...mapMutations({
+      setUpdateOrder: 'SET_UPDATE_ORDER',
+      setDefaultStoreId: 'SET_DEFAULTSTORE_ID'
+    })
   },
   created () {
     this.getWashInfo()
@@ -131,12 +167,64 @@ export default {
           height: 170px
           padding: 0 30px 0px 0px
           .right
+            height: 140px
             width: 100px
             display: flex
-            justify-content: flex-end
-            align-items: center
+            flex-direction: column
+            justify-content: center
+            align-items: flex-end
             font-size: 22px
             color: #ff7a7a
+            .radio
+              display:inline-block
+              margin-right:4px
+              white-space:nowrap
+              position:relative
+              line-height:1
+              vertical-align:middle
+              cursor:pointer
+              margin-top: 20px
+              .radio-inner
+                display:inline-block
+                width:28px
+                height:28px
+                position:relative
+                top:0
+                left:0
+                background-color:#fff
+                border:1px solid #dcdee2
+                border-radius: 50%
+                -webkit-transition:all .2s ease-in-out
+                transition:all .2s ease-in-out
+              .radio-inner:after
+                box-sizing: border-box
+                position:absolute
+                width: 20px
+                height:20px
+                left:2px
+                top:2px
+                border-radius: 50%
+                display:table
+                border-top:0
+                border-left:0
+                content:' '
+                background-color: rgb(255, 102, 42)
+                opacity:0
+                -webkit-transition:all .2s ease-in-out
+                transition:all .2s ease-in-out
+                -webkit-transform:scale(0)
+                -ms-transform:scale(0)
+                transform:scale(0)
+            .radio-checked
+              .radio-inner
+                border-color: rgb(255, 102, 42)
+              .radio-inner:after
+                opacity:1
+                -webkit-transform:scale(1)
+                -ms-transform:scale(1)
+                transform:scale(1)
+                -webkit-transition:all .2s ease-in-out
+                transition:all .2s ease-in-out
           .left
             flex: 1
             display: flex
@@ -201,12 +289,6 @@ export default {
         background-position: center center
         background-size: 750px 100%
         overflow: hidden
-        .bg
-          bg-image('../../common/imgs/washcar/now_lat')
-          background-repeat: no-repeat
-          background-position: left center
-          background-size: 20px 26px
-          font-size: 30px
-          color: #fffefe
-          padding-left: 40px
+        font-size: 30px
+        color: #fffefe
 </style>
